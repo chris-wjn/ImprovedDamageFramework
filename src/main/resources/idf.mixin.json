@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.cwjn.idf.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinLivingEntity",
+    "MixinPlayer",
+    "MixinMob",
+    "MixinItemStack",
+    "MixinEnchantment"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "idf.mixin-refmap.json"
+}

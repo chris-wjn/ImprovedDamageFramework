@@ -1,0 +1,42 @@
+{
+  "idf.attribute.fire_damage": "Fire Damage",
+  "idf.attribute.water_damage": "Water Damage",
+  "idf.attribute.lightning_damage": "Lightning Damage",
+  "idf.attribute.magic_damage": "Magic Damage",
+  "idf.attribute.dark_damage": "Dark Damage",
+  "idf.attribute.fire_resistance": "Fire Resistance",
+  "idf.attribute.water_resistance": "Water Resistance",
+  "idf.attribute.lightning_resistance": "Lightning Resistance",
+  "idf.attribute.magic_resistance": "Magic Resistance",
+  "idf.attribute.dark_resistance": "Dark Resistance",
+
+  "idf.physical_damage_tooltip": "⚔ Physical Damage: ",
+  "idf.fire_damage_tooltip": "⚔ Fire Damage: ",
+  "idf.water_damage_tooltip": "⚔ Water Damage: ",
+  "idf.lightning_damage_tooltip": "⚔ Lightning Damage: ",
+  "idf.magic_damage_tooltip": "⚔ Magic Damage: ",
+  "idf.dark_damage_tooltip": "⚔ Dark Damage: ",
+
+  "idf.physical_resistance_tooltip": "◑ Physical Resistance ",
+  "idf.fire_resistance_tooltip": "◑ Fire Resistance ",
+  "idf.water_resistance_tooltip": "◑ Water Resistance ",
+  "idf.lightning_resistance_tooltip": "◑ Lightning Resistance ",
+  "idf.magic_resistance_tooltip": "◑ Magic Resistance ",
+  "idf.dark_resistance_tooltip": "◑ Dark Resistance ",
+
+  "idf.defense_tooltip": "◑ Defense ",
+  "idf.attack_speed_tooltip": "⚔ Attack Speed ",
+
+
+  "idf.description.tooltip":  "⋯⋯⋯⋯⋯⋘ Description ⋙⋯⋯⋯⋯⋯",
+  "idf.enchantments.tooltip": "⋯⋯⋯⋯⋯⋘ Enchantments ⋙⋯⋯⋯",
+  "idf.attributes.tooltip":   "⋯⋯⋯⋯⋯⋯⋘ Attributes ⋙⋯⋯⋯⋯⋯⋯",
+
+  "idf.black_diamond": "❖",
+  "idf.fleur_de_lis": "⚜",
+  "idf.right_arrow": "➢",
+  "idf.damage.symbol": "⚔",
+  "idf.resistance.symbol": "Ω",
+  "idf.defense.symbol":"◐"
+
+}
