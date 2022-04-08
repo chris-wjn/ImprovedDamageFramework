@@ -1,5 +1,7 @@
 package com.cwjn.idf.Attributes;
 
+import com.cwjn.idf.Config.EntityData;
+import com.cwjn.idf.Config.JSONHandler;
 import com.cwjn.idf.ImprovedDamageFramework;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +16,8 @@ public class AttributeAttachEvent {
     public static void attachAttributes(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             //damage
+            //TODO: grab values from json to put here!
+            EntityData data = JSONHandler.getEntityData(entityType.getRegistryName());
             event.add(entityType, AttributeRegistry.FIRE_DAMAGE.get());
             event.add(entityType, AttributeRegistry.WATER_DAMAGE.get());
             event.add(entityType, AttributeRegistry.LIGHTNING_DAMAGE.get());

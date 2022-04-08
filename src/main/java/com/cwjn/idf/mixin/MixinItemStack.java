@@ -25,16 +25,15 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static net.minecraft.world.item.ItemStack.ATTRIBUTE_MODIFIER_FORMAT;
@@ -125,7 +124,7 @@ public abstract class MixinItemStack {
             }
         }
 
-        if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
+        /*if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
             if (this.hasTag() && this.tag.contains("idf.equipment")) list.add(Util.withColor(new TranslatableComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
             for(EquipmentSlot equipmentslot : EquipmentSlot.values()) { //check all equipment slots
                 Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
@@ -232,6 +231,48 @@ public abstract class MixinItemStack {
                     }
                 }
             }
+        }*/
+        if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
+            if (this.hasTag() && this.tag.contains("idf.equipment"))
+                list.add(Util.withColor(new TranslatableComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+            //NOTE! we change the way tooltips are calculated so that we can attach more than 1 attribute modifier per attribute.
+            //double maxHp = 0, knockbackResistance = 0, moveSpeed = 0, flySpeed = 0, knockback = 0, resistance = 0, defense = 0, luck = 0; //default attributes
+            //double AS = 0, AD = 0, FD = 0, WD = 0, LD = 0, MD = 0, DD = 0; //attack attributes
+            //double FR = 0, WR = 0, LR = 0, MR = 0, DR = 0;
+            Map<Attribute, Double> mappedAttributes = new HashMap<>(32);
+            for (EquipmentSlot equipmentslot : EquipmentSlot.values()) { //for each item, we want to check the modifiers it gives for every equipment slot.
+                Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
+                if (!multimap.isEmpty()) { //make sure there is at least one entry in the map
+                    for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) { //iterate through each attribute and attribute modifier pair.
+                        AttributeModifier attributemodifier = entry.getValue(); //get the modifier in this iteration
+                        Attribute attribute = entry.getKey();
+                        double modifierAmount = attributemodifier.getAmount(); //get the amount that it modifies by
+
+                        double postOperationFactoring;
+                        if (attributemodifier.getOperation() == AttributeModifier.Operation.ADDITION) { //if this is supposed to be added as a flat addition
+                            if (entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE)) {
+                                postOperationFactoring = modifierAmount * 100.0D;
+                            } else {
+                                postOperationFactoring = modifierAmount;
+                            }
+                        } else { //otherwise, take the value as a percentage. e.g. 0.5 -> 50%
+                            postOperationFactoring = modifierAmount * 100.0D;
+                        }
+
+                        if (modifierAmount != 0) {
+                            if (mappedAttributes.containsKey(attribute)) {
+                                mappedAttributes.put(attribute, (postOperationFactoring + mappedAttributes.get(attribute)));
+                            } else {
+                                mappedAttributes.put(attribute, postOperationFactoring);
+                            }
+                        }
+                    }
+                }
+            }
+            //TODO: make tooltip green if stat is a bonus, and red if it is a negative. Also add +/- signs in front. Add % to knockback and other relevant attributes.
+            appendDamageStats(list, mappedAttributes, player);
+            appendResistanceStats(list, mappedAttributes);
+            appendGenericStats(list, mappedAttributes);
         }
 
         if (item.hasTag()) {
@@ -277,6 +318,112 @@ public abstract class MixinItemStack {
 
         net.minecraftforge.event.ForgeEventFactory.onItemTooltip(item, player, list, tooltipMode);
         return list;
+    }
+
+    private void appendGenericStats(List<Component> list, Map<Attribute, Double> mappedAttributes) {
+        if (mappedAttributes.containsKey(Attributes.MAX_HEALTH)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.maxhp_tooltip"), Color.INDIANRED);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.MAX_HEALTH))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(Attributes.MOVEMENT_SPEED)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.movespeed_tooltip"), Color.GHOSTWHITE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.MOVEMENT_SPEED))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(Attributes.LUCK)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.luck_tooltip"), Color.BLUE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.LUCK))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+    }
+
+    private void appendResistanceStats(List<Component> list, Map<Attribute, Double> mappedAttributes) {
+        if (mappedAttributes.containsKey(Attributes.ARMOR_TOUGHNESS)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.defense_tooltip"), Color.GHOSTWHITE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.ARMOR_TOUGHNESS))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(Attributes.ARMOR)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.physical_resistance_tooltip"), Color.DARKORANGE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.ARMOR))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.FIRE_RESISTANCE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.fire_resistance_tooltip"), Color.ORANGERED);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.FIRE_RESISTANCE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.WATER_RESISTANCE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.water_resistance_tooltip"), Color.STEELBLUE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.WATER_RESISTANCE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.LIGHTNING_RESISTANCE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.lightning_resistance_tooltip"), Color.YELLOW);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.LIGHTNING_RESISTANCE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.MAGIC_RESISTANCE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.magic_resistance_tooltip"), Color.MAGICBLUE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.MAGIC_RESISTANCE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.DARK_RESISTANCE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.dark_resistance_tooltip"), Color.DARKVIOLET);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.DARK_RESISTANCE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(Attributes.KNOCKBACK_RESISTANCE)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.knockback_resistance_tooltip"), Color.WHITESMOKE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.KNOCKBACK_RESISTANCE))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+    }
+
+    private void appendDamageStats(List<Component> list, Map<Attribute, Double> mappedAttributes, Player player) {
+        if (mappedAttributes.containsKey(Attributes.ATTACK_DAMAGE)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.physical_damage_tooltip"), Color.DARKORANGE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.ATTACK_DAMAGE))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.FIRE_DAMAGE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.fire_damage_tooltip"), Color.ORANGERED);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.FIRE_DAMAGE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.WATER_DAMAGE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.water_damage_tooltip"), Color.STEELBLUE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.WATER_DAMAGE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.LIGHTNING_DAMAGE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.lightning_damage_tooltip"), Color.YELLOW);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.LIGHTNING_DAMAGE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.MAGIC_DAMAGE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.magic_damage_tooltip"), Color.MAGICBLUE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.LIGHTNING_DAMAGE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(AttributeRegistry.DARK_DAMAGE.get())) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.dark_damage_tooltip"), Color.DARKVIOLET);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(AttributeRegistry.LIGHTNING_DAMAGE.get()))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(Attributes.ATTACK_SPEED)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.attack_speed_tooltip"), Color.WHITESMOKE);
+            double baseAtkSpeed = 0;
+            if (player != null) baseAtkSpeed = player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
+            MutableComponent value = Util.withColor(new TranslatableComponent(df.format(mappedAttributes.get(Attributes.ATTACK_SPEED) + baseAtkSpeed)), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
+        if (mappedAttributes.containsKey(Attributes.ATTACK_KNOCKBACK)) {
+            MutableComponent name = Util.withColor(new TranslatableComponent("idf.knockback_tooltip"), Color.WHITESMOKE);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.ATTACK_KNOCKBACK))), Color.LIGHTGREEN);
+            list.add(name.append(value));
+        }
     }
 
     private static Collection<Component> expandBlockState(String p_41762_) {

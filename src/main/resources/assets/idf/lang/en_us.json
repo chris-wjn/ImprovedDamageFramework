@@ -25,7 +25,13 @@
   "idf.dark_resistance_tooltip": "◑ Dark Resistance ",
 
   "idf.defense_tooltip": "◑ Defense ",
+  "idf.knockback_resistance_tooltip": "◑ Knockback Resistance ",
   "idf.attack_speed_tooltip": "⚔ Attack Speed ",
+  "idf.knockback_tooltip": "⚔ Knockback ",
+
+  "idf.maxhp_tooltip": "♥ Health",
+  "idf.luck_tooltip": "☘ Luck",
+  "idf.movespeed_tooltip": "⚜ Movement Speed",
 
 
   "idf.description.tooltip":  "⋯⋯⋯⋯⋯⋘ Description ⋙⋯⋯⋯⋯⋯",
