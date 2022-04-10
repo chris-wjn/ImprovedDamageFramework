@@ -124,122 +124,12 @@ public abstract class MixinItemStack {
             }
         }
 
-        /*if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
-            if (this.hasTag() && this.tag.contains("idf.equipment")) list.add(Util.withColor(new TranslatableComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
-            for(EquipmentSlot equipmentslot : EquipmentSlot.values()) { //check all equipment slots
-                Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
-                if (!multimap.isEmpty()) { //make sure there is at least one entry in the map
-                    //list.add((new TranslatableComponent("item.modifiers." + equipmentslot.getName())).withStyle(ChatFormatting.GRAY));
-                    for(Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) { //iterate through each attribute and attribute modifier pair
-                        AttributeModifier attributemodifier = entry.getValue(); //get the modifier in this iteration
-                        Attribute attribute = entry.getKey();
-                        double modifierAmount = attributemodifier.getAmount(); //get the amount that it modifies by
-
-                        double percentageModifierAmount;
-                        if (attributemodifier.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {
-                            if (entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE)) {
-                                percentageModifierAmount = modifierAmount * 10.0D;
-                            } else {
-                                percentageModifierAmount = modifierAmount;
-                            }
-                        } else {
-                            percentageModifierAmount = modifierAmount * 100.0D;
-                        }
-                        MutableComponent name;
-                        MutableComponent value;
-                        switch (attribute.getDescriptionId()) {
-                            case "attribute.name.generic.attack_damage":
-                                name = Util.withColor(new TranslatableComponent("idf.physical_damage_tooltip"), Color.DARKORANGE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "attribute.name.generic.attack_speed":
-                                name = Util.withColor(new TranslatableComponent("idf.attack_speed_tooltip"), Color.WHITESMOKE);
-                                double baseAtkSpeed = 0;
-                                if (player != null) baseAtkSpeed = player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
-                                value = Util.withColor(new TranslatableComponent(df.format(attributemodifier.getAmount()+baseAtkSpeed), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.fire_damage":
-                                name = Util.withColor(new TranslatableComponent("idf.fire_damage_tooltip"), Color.ORANGERED);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.water_damage":
-                                name = Util.withColor(new TranslatableComponent("idf.water_damage_tooltip"), Color.STEELBLUE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.lightning_damage":
-                                name = Util.withColor(new TranslatableComponent("idf.lightning_damage_tooltip"), Color.YELLOW);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.magic_damage":
-                                name = Util.withColor(new TranslatableComponent("idf.magic_damage_tooltip"), Color.MAGICBLUE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.dark_damage":
-                                name = Util.withColor(new TranslatableComponent("idf.dark_damage_tooltip"), Color.DARKVIOLET);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "attribute.name.generic.armor_toughness":
-                                name = Util.withColor(new TranslatableComponent("idf.defense_tooltip"), Color.GHOSTWHITE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "attribute.name.generic.armor":
-                                name = Util.withColor(new TranslatableComponent("idf.physical_resistance_tooltip"), Color.DARKORANGE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.fire_resistance":
-                                name = Util.withColor(new TranslatableComponent("idf.fire_resistance_tooltip"), Color.ORANGERED);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.water_resistance":
-                                name = Util.withColor(new TranslatableComponent("idf.water_resistance_tooltip"), Color.STEELBLUE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.lightning_resistance":
-                                name = Util.withColor(new TranslatableComponent("idf.lightning_resistance_tooltip"), Color.YELLOW);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.magic_resistance":
-                                name = Util.withColor(new TranslatableComponent("idf.magic_resistance_tooltip"), Color.MAGICBLUE);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            case "idf.attribute.dark_resistance":
-                                name = Util.withColor(new TranslatableComponent("idf.dark_resistance_tooltip"), Color.DARKVIOLET);
-                                value = Util.withColor(new TranslatableComponent("" + attributemodifier.getAmount(), df.format(percentageModifierAmount)), Color.LIGHTGREEN);
-                                list.add(name.append(value));
-                                break;
-                            default:
-                                if (modifierAmount > 0.0D) {
-                                    list.add((new TranslatableComponent("attribute.modifier.plus." + attributemodifier.getOperation().toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(percentageModifierAmount), new TranslatableComponent(entry.getKey().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
-                                } else if (modifierAmount < 0.0D) {
-                                    percentageModifierAmount *= -1.0D;
-                                    list.add((new TranslatableComponent("attribute.modifier.take." + attributemodifier.getOperation().toValue(), ATTRIBUTE_MODIFIER_FORMAT.format(percentageModifierAmount), new TranslatableComponent(entry.getKey().getDescriptionId()))).withStyle(ChatFormatting.RED));
-                                }
-                        }
-                    }
-                }
-            }
-        }*/
         if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
             if (this.hasTag() && this.tag.contains("idf.equipment"))
                 list.add(Util.withColor(new TranslatableComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
             //NOTE! we change the way tooltips are calculated so that we can attach more than 1 attribute modifier per attribute.
-            //double maxHp = 0, knockbackResistance = 0, moveSpeed = 0, flySpeed = 0, knockback = 0, resistance = 0, defense = 0, luck = 0; //default attributes
-            //double AS = 0, AD = 0, FD = 0, WD = 0, LD = 0, MD = 0, DD = 0; //attack attributes
-            //double FR = 0, WR = 0, LR = 0, MR = 0, DR = 0;
             Map<Attribute, Double> mappedAttributes = new HashMap<>(32);
+            HashMap<UUID, Boolean> done = new HashMap<>(32);
             for (EquipmentSlot equipmentslot : EquipmentSlot.values()) { //for each item, we want to check the modifiers it gives for every equipment slot.
                 Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
                 if (!multimap.isEmpty()) { //make sure there is at least one entry in the map
@@ -247,9 +137,8 @@ public abstract class MixinItemStack {
                         AttributeModifier attributemodifier = entry.getValue(); //get the modifier in this iteration
                         Attribute attribute = entry.getKey();
                         double modifierAmount = attributemodifier.getAmount(); //get the amount that it modifies by
-
-                        double postOperationFactoring;
-                        if (attributemodifier.getOperation() == AttributeModifier.Operation.ADDITION) { //if this is supposed to be added as a flat addition
+                        double postOperationFactoring = modifierAmount;
+                        /*if (attributemodifier.getOperation() == AttributeModifier.Operation.ADDITION) { //if this is supposed to be added as a flat addition
                             if (entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE)) {
                                 postOperationFactoring = modifierAmount * 100.0D;
                             } else {
@@ -257,9 +146,13 @@ public abstract class MixinItemStack {
                             }
                         } else { //otherwise, take the value as a percentage. e.g. 0.5 -> 50%
                             postOperationFactoring = modifierAmount * 100.0D;
+                        }*/
+                        if (attributemodifier.getOperation() != AttributeModifier.Operation.ADDITION || entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE)) {
+                            postOperationFactoring = modifierAmount * 100.0D;
                         }
 
-                        if (modifierAmount != 0) {
+                        if (modifierAmount != 0 && !done.containsKey(attributemodifier.getId())) {
+                            done.put(attributemodifier.getId(), true);
                             if (mappedAttributes.containsKey(attribute)) {
                                 mappedAttributes.put(attribute, (postOperationFactoring + mappedAttributes.get(attribute)));
                             } else {

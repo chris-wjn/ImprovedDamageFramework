@@ -95,7 +95,7 @@ public abstract class MixinPlayer {
 
 
                     //for some reason we start tracking the target's health here, even though we don't use it yet
-                    //we also check if we have fire aspect, and if we do (any level), we set the target on fire for 1 second?
+                    //we also check if we have fire aspect, and if we do (any level), we set the target on fire for 1 tick?
                     float targetHealth = 0.0F;
                     boolean targetOnFire = false;
                     int fireAspectLevel = EnchantmentHelper.getFireAspect(player);
