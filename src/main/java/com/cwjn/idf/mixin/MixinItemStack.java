@@ -103,13 +103,13 @@ public abstract class MixinItemStack {
                         try {
                             MutableComponent mutablecomponent1 = Component.Serializer.fromJson(s);
                             if (mutablecomponent1 != null) {
-                                if (this.tag.contains("idf.equipment")) {
+                                //if (this.tag.contains("idf.equipment")) {
                                     list.add(Util.withColor(new TranslatableComponent("idf.description.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
                                     //TODO: add weapon scaling and other info here.
                                     list.add(Util.withColor(mutablecomponent1, Color.LIGHTGRAY));
-                                } else {
-                                    list.add(Util.withColor(mutablecomponent1, Color.LIGHTGRAY));
-                                }
+                                //} else {
+                                //    list.add(Util.withColor(mutablecomponent1, Color.LIGHTGRAY));
+                                //}
                             }
                         } catch (Exception exception) {
                             compoundtag.remove("Lore");
@@ -118,7 +118,7 @@ public abstract class MixinItemStack {
                 }
             }
             if (shouldShowInTooltip(j, ItemStack.TooltipPart.ENCHANTMENTS)) {
-                if (!EnchantmentHelper.getEnchantments(item).isEmpty()) {
+                if (!EnchantmentHelper.getEnchantments(item).isEmpty() && !(item.getItem() instanceof EnchantedBookItem)) {
                     list.add(Util.withColor(new TranslatableComponent("idf.enchantments.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
                     ItemStack.appendEnchantmentNames(list, item.getEnchantmentTags());
                     list.add(new TextComponent(""));
@@ -214,6 +214,7 @@ public abstract class MixinItemStack {
         net.minecraftforge.event.ForgeEventFactory.onItemTooltip(item, player, list, tooltipMode);
         return list;
     }
+
 
     private void appendGenericStats(List<Component> list, Map<Attribute, Double> mappedAttributes) {
         if (mappedAttributes.containsKey(Attributes.MAX_HEALTH)) {
