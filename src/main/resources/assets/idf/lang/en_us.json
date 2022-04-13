@@ -9,6 +9,10 @@
   "idf.attribute.lightning_resistance": "Lightning Resistance",
   "idf.attribute.magic_resistance": "Magic Resistance",
   "idf.attribute.dark_resistance": "Dark Resistance",
+  "idf.attribute.evasion": "Evasion",
+  "idf.attribute.lifesteal": "Lifesteal",
+  "idf.attribute.penetrating": "IDF.PENETRATING",
+  "idf.attribute.slowing": "Slowing",
 
   "idf.physical_damage_tooltip": "⚔ Physical Damage: ",
   "idf.fire_damage_tooltip": "⚔ Fire Damage: ",

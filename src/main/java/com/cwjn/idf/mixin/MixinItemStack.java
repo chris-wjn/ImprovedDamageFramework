@@ -5,6 +5,7 @@ import com.cwjn.idf.Color;
 import com.cwjn.idf.Util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Streams;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
@@ -17,6 +18,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -323,22 +325,21 @@ public abstract class MixinItemStack {
         try {
             BlockStateParser blockstateparser = (new BlockStateParser(new StringReader(p_41762_), true)).parse(true);
             BlockState blockstate = blockstateparser.getState();
-            ResourceLocation resourcelocation = blockstateparser.getTag();
+            TagKey<Block> tagkey = blockstateparser.getTag();
             boolean flag = blockstate != null;
-            boolean flag1 = resourcelocation != null;
-            if (flag || flag1) {
-                if (flag) {
-                    return Lists.newArrayList(blockstate.getBlock().getName().withStyle(ChatFormatting.DARK_GRAY));
-                }
+            boolean flag1 = tagkey != null;
+            if (flag) {
+                return Lists.newArrayList(blockstate.getBlock().getName().withStyle(ChatFormatting.DARK_GRAY));
+            }
 
-                Tag<Block> tag = BlockTags.getAllTags().getTag(resourcelocation);
-                if (tag != null) {
-                    Collection<Block> collection = tag.getValues();
-                    if (!collection.isEmpty()) {
-                        return collection.stream().map(Block::getName).map((p_41717_) -> {
-                            return p_41717_.withStyle(ChatFormatting.DARK_GRAY);
-                        }).collect(Collectors.toList());
-                    }
+            if (flag1) {
+                List<Component> list = Streams.stream(Registry.BLOCK.getTagOrEmpty(tagkey)).map((p_204120_) -> {
+                    return p_204120_.value().getName();
+                }).map((p_204125_) -> {
+                    return p_204125_.withStyle(ChatFormatting.DARK_GRAY);
+                }).collect(Collectors.toList());
+                if (!list.isEmpty()) {
+                    return list;
                 }
             }
         } catch (CommandSyntaxException commandsyntaxexception) {
