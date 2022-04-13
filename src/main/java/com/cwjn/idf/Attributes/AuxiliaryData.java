@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public class AuxiliaryData {
 
-    private String damageClass;
+    private String damageClass = "strike";
 
     public String getDamageClass() {
         return damageClass;

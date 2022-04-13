@@ -15,6 +15,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AttributeAttachEvent {
 
+
+
     @SubscribeEvent
     public static void attachAttributes(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
