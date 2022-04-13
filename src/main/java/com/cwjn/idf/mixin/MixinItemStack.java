@@ -18,7 +18,6 @@ import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -322,7 +321,7 @@ public abstract class MixinItemStack {
         }
     }
 
-    private static Collection<Component> expandBlockState(String p_41762_) {
+    /*private static Collection<Component> expandBlockState(String p_41762_) {
         try {
             BlockStateParser blockstateparser = (new BlockStateParser(new StringReader(p_41762_), true)).parse(true);
             BlockState blockstate = blockstateparser.getState();
@@ -341,6 +340,33 @@ public abstract class MixinItemStack {
                 }).collect(Collectors.toList());
                 if (!list.isEmpty()) {
                     return list;
+                }
+            }
+        } catch (CommandSyntaxException commandsyntaxexception) {
+        }
+
+        return Lists.newArrayList((new TextComponent("missingno")).withStyle(ChatFormatting.DARK_GRAY));
+    }*/
+    private static Collection<Component> expandBlockState(String p_41762_) {
+        try {
+            BlockStateParser blockstateparser = (new BlockStateParser(new StringReader(p_41762_), true)).parse(true);
+            BlockState blockstate = blockstateparser.getState();
+            ResourceLocation resourcelocation = blockstateparser.getTag();
+            boolean flag = blockstate != null;
+            boolean flag1 = resourcelocation != null;
+            if (flag || flag1) {
+                if (flag) {
+                    return Lists.newArrayList(blockstate.getBlock().getName().withStyle(ChatFormatting.DARK_GRAY));
+                }
+
+                Tag<Block> tag = BlockTags.getAllTags().getTag(resourcelocation);
+                if (tag != null) {
+                    Collection<Block> collection = tag.getValues();
+                    if (!collection.isEmpty()) {
+                        return collection.stream().map(Block::getName).map((p_41717_) -> {
+                            return p_41717_.withStyle(ChatFormatting.DARK_GRAY);
+                        }).collect(Collectors.toList());
+                    }
                 }
             }
         } catch (CommandSyntaxException commandsyntaxexception) {
