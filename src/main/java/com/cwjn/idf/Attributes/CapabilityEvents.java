@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +28,26 @@ public class CapabilityEvents {
                     event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "auxiliary"), new CapabilityProvider());
                 }
                 entity.getCapability(CapabilityProvider.AUXILIARY_DATA).ifPresent(h -> h.setDamageClass(data.getDamageClass()));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onJoinWorld(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof LivingEntity) {
+            LivingEntity entity = (LivingEntity) event.getEntity();
+            EntityData data = JSONHandler.getEntityData(entity.getType().getRegistryName()); //get the mob's json data
+            if (data != null) { //check that we actually have json data for the mob. This should also stop the player from being affected by this
+                entity.getAttribute(AttributeRegistry.FIRE_DAMAGE.get()).setBaseValue(data.getDamageValues()[0]);
+                entity.getAttribute(AttributeRegistry.WATER_DAMAGE.get()).setBaseValue(data.getDamageValues()[1]);
+                entity.getAttribute(AttributeRegistry.LIGHTNING_DAMAGE.get()).setBaseValue(data.getDamageValues()[2]);
+                entity.getAttribute(AttributeRegistry.MAGIC_DAMAGE.get()).setBaseValue(data.getDamageValues()[3]);
+                entity.getAttribute(AttributeRegistry.DARK_DAMAGE.get()).setBaseValue(data.getDamageValues()[4]);
+                entity.getAttribute(AttributeRegistry.FIRE_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[0]);
+                entity.getAttribute(AttributeRegistry.WATER_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[1]);
+                entity.getAttribute(AttributeRegistry.LIGHTNING_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[2]);
+                entity.getAttribute(AttributeRegistry.MAGIC_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[3]);
+                entity.getAttribute(AttributeRegistry.DARK_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[4]);
             }
         }
     }

@@ -3,6 +3,7 @@ package com.cwjn.idf.Attributes;
 import com.cwjn.idf.Config.EntityData;
 import com.cwjn.idf.Config.JSONHandler;
 import com.cwjn.idf.ImprovedDamageFramework;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -14,8 +15,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AttributeAttachEvent {
-
-
 
     @SubscribeEvent
     public static void attachAttributes(EntityAttributeModificationEvent event) {
