@@ -48,6 +48,11 @@ public class CapabilityEvents {
                 entity.getAttribute(AttributeRegistry.LIGHTNING_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[2]);
                 entity.getAttribute(AttributeRegistry.MAGIC_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[3]);
                 entity.getAttribute(AttributeRegistry.DARK_RESISTANCE.get()).setBaseValue(data.getResistanceValues()[4]);
+                entity.getAttribute(AttributeRegistry.STRIKE_MULT.get()).setBaseValue(data.getDamageClassMult()[0]);
+                entity.getAttribute(AttributeRegistry.PIERCE_MULT.get()).setBaseValue(data.getDamageClassMult()[1]);
+                entity.getAttribute(AttributeRegistry.SLASH_MULT.get()).setBaseValue(data.getDamageClassMult()[2]);
+                entity.getAttribute(AttributeRegistry.CRUSH_MULT.get()).setBaseValue(data.getDamageClassMult()[3]);
+                entity.getAttribute(AttributeRegistry.GENERIC_MULT.get()).setBaseValue(data.getDamageClassMult()[4]);
             }
         }
     }

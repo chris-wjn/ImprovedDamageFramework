@@ -109,10 +109,17 @@ public abstract class MixinPlayer {
 
                     //this is where we actually set the target to be hurt, and check to see if the hurt event went through
                     Vec3 direction = target.getDeltaMovement();
-                    //TODO: set damageClass based on weapon
-                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", player, fd, wd, ld, md, dd, "strike"), ad);
-                    if (targetWasHurt) {
+                    boolean targetWasHurt;
+                    if (player.getItemInHand(player.getUsedItemHand()) != null) {
+                        ItemStack item = player.getItemInHand(player.getUsedItemHand());
+                        if (item.getOrCreateTag().contains("idf.damage_class")) {
+                            targetWasHurt = target.hurt(new IDFEntityDamageSource("player", player, fd, wd, ld, md, dd, item.getTag().getString("idf.damage_class")), ad);
+                        } else {
+                            targetWasHurt = target.hurt(new IDFEntityDamageSource("player", player, fd, wd, ld, md, dd, "strike"), ad);
+                        }
+                    } else targetWasHurt = target.hurt(new IDFEntityDamageSource("player", player, fd, wd, ld, md, dd, "strike"), ad);
 
+                    if (targetWasHurt) {
                         //knockback the target and if the player was sprinting, stop their sprint
                         if (knockback > 0) {
                             if (target instanceof LivingEntity) {

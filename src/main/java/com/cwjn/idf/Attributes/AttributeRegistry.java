@@ -29,6 +29,12 @@ public class AttributeRegistry {
     public static final RegistryObject<Attribute> MAGIC_RESISTANCE = register("idf.magic_resistance", () -> new RangedAttribute("idf.attribute.magic_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> DARK_RESISTANCE = register("idf.dark_resistance", () -> new RangedAttribute("idf.attribute.dark_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
 
+    public static final RegistryObject<Attribute> STRIKE_MULT = register("idf.strike_mult", () -> new RangedAttribute("idf.attribute.strike_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> PIERCE_MULT = register("idf.pierce_mult", () -> new RangedAttribute("idf.attribute.pierce_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> SLASH_MULT = register("idf.slash_mult", () -> new RangedAttribute("idf.attribute.slash_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> CRUSH_MULT = register("idf.crush_mult", () -> new RangedAttribute("idf.attribute.crush_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> GENERIC_MULT = register("idf.generic_mult", () -> new RangedAttribute("idf.attribute.generic_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+
     public static final RegistryObject<Attribute> EVASION = register("idf.evasion", () -> new RangedAttribute("idf.attribute.evasion", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //public static final RegistryObject<Attribute> ADAPTING = register("idf.adapting", () -> new RangedAttribute("idf.attribute.adapting", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //public static final RegistryObject<Attribute> REGENERATING = register("idf.regenerating", () -> new RangedAttribute("idf.attribute.regenerating", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));

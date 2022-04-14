@@ -28,14 +28,6 @@ public class ImprovedDamageFramework {
         return LOGGER;
     }
 
-    public static final CreativeModeTab MOD_TAB = new CreativeModeTab(MOD_ID) {
-        @Override
-        @OnlyIn(Dist.CLIENT)
-        public ItemStack makeIcon() {
-            return null;
-        }
-    };
-
     public ImprovedDamageFramework() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         AttributeRegistry.ATTRIBUTES.register(bus);

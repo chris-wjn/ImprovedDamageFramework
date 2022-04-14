@@ -2,6 +2,10 @@ package com.cwjn.idf.Attributes;
 
 import net.minecraft.nbt.CompoundTag;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class AuxiliaryData {
 
     private String damageClass = "strike";
@@ -15,7 +19,7 @@ public class AuxiliaryData {
     }
 
     public void copyFrom(AuxiliaryData source) {
-        damageClass = source.damageClass;
+        damageClass = source.getDamageClass();
     }
 
     public void saveNBTData(CompoundTag tag) {

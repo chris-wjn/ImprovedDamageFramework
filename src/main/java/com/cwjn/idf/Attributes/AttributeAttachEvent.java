@@ -31,6 +31,12 @@ public class AttributeAttachEvent {
             event.add(entityType, AttributeRegistry.LIGHTNING_RESISTANCE.get());
             event.add(entityType, AttributeRegistry.MAGIC_RESISTANCE.get());
             event.add(entityType, AttributeRegistry.DARK_RESISTANCE.get());
+            //DAMAGE CLASS MULTIPLIERS
+            event.add(entityType, AttributeRegistry.STRIKE_MULT.get());
+            event.add(entityType, AttributeRegistry.PIERCE_MULT.get());
+            event.add(entityType, AttributeRegistry.SLASH_MULT.get());
+            event.add(entityType, AttributeRegistry.CRUSH_MULT.get());
+            event.add(entityType, AttributeRegistry.GENERIC_MULT.get());
             //AUXILIARY
             event.add(entityType, AttributeRegistry.EVASION.get());
             event.add(entityType, AttributeRegistry.LIFESTEAL.get());

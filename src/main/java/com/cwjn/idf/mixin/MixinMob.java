@@ -1,6 +1,10 @@
 package com.cwjn.idf.mixin;
 
 import com.cwjn.idf.Attributes.AttributeRegistry;
+import com.cwjn.idf.Attributes.AuxiliaryData;
+import com.cwjn.idf.Attributes.CapabilityProvider;
+import com.cwjn.idf.Config.EntityData;
+import com.cwjn.idf.Config.JSONHandler;
 import com.cwjn.idf.Damage.IDFEntityDamageSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,8 +44,10 @@ public abstract class MixinMob {
         if (i > 0) {
             target.setSecondsOnFire(i * 4);
         }
-        //TODO: set damageClass based on mob
-        IDFEntityDamageSource source = new IDFEntityDamageSource("mob", entity, fd, wd, ld, md, dd, "strike");
+        String damageClass = "strike";
+        AuxiliaryData data = entity.getCapability(CapabilityProvider.AUXILIARY_DATA).orElse(null);
+        if (data != null) damageClass = data.getDamageClass();
+        IDFEntityDamageSource source = new IDFEntityDamageSource("mob", entity, fd, wd, ld, md, dd, damageClass);
         boolean flag = target.hurt(source, ad);
         if (flag) {
             if (knockback > 0.0F && target instanceof LivingEntity) {

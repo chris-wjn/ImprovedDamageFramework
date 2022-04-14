@@ -47,7 +47,7 @@ public class JSONHandler {
         for (EntityType<?> entityType : ForgeRegistries.ENTITIES.getValues()) {
             MobCategory type = entityType.getCategory();
             if (type != MobCategory.MISC) { //make sure this isnt an arrow entity or something
-                defaultEntityData.put(entityType.getRegistryName().toString(), new EntityData(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike", 0.0D, 0.0D, 0.0D, 0.0D, 0.0D));
+                defaultEntityData.put(entityType.getRegistryName().toString(), new EntityData(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike", 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
