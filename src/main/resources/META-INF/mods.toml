@@ -28,3 +28,9 @@ Because Minecraft's damage system is a little boring
     versionRange="[1.18.1,1.19)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.idf]]
+    modId="tetra"
+    mandatory=true
+    versionRange="[1.18.1, 1.19)"
+    ordering="BEFORE"
+    side="BOTH"

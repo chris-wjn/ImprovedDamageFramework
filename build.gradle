@@ -77,6 +77,10 @@ repositories {
         name = "blamejared maven"
         url = "https://maven.blamejared.com/"
     }
+    maven {
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
 }
 
 dependencies {
@@ -86,6 +90,7 @@ dependencies {
     //implementation fg.deobf("curse.maven:itemframes-532127:3675785")
     implementation fg.deobf("se.mickelus.mutil:mutil:1.18.1-4.5.0-pre.1")
     implementation fg.deobf("se.mickelus.tetra:tetra:1.18.1-4.8.1")
+    implementation fg.deobf("mezz.jei:jei-1.18.1:9.4.1.112")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

@@ -279,7 +279,7 @@ public abstract class MixinItemStack {
     private void appendDamageStats(List<Component> list, Map<Attribute, Double> mappedAttributes, Player player) {
         if (mappedAttributes.containsKey(Attributes.ATTACK_DAMAGE)) {
             MutableComponent name = Util.withColor(new TranslatableComponent("idf.physical_damage_tooltip"), Color.DARKORANGE);
-            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.ATTACK_DAMAGE))), Color.LIGHTGREEN);
+            MutableComponent value = Util.withColor(new TranslatableComponent("" + df.format(mappedAttributes.get(Attributes.ATTACK_DAMAGE) + 1)), Color.LIGHTGREEN);
             list.add(name.append(value));
         }
         if (mappedAttributes.containsKey(AttributeRegistry.FIRE_DAMAGE.get())) {

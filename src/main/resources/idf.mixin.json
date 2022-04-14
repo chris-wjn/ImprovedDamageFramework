@@ -8,7 +8,8 @@
     "MixinMob",
     "MixinItemStack",
     "MixinEnchantment",
-    "MixinAxolotl"
+    "MixinAxolotl",
+    "MixinIronGolem"
   ],
   "injectors": {
     "defaultRequire": 1
