@@ -14,6 +14,18 @@
   "idf.attribute.penetrating": "IDF.PENETRATING",
   "idf.attribute.slowing": "Slowing",
 
+  "idf.stats.fire_damage": "Fire Damage",
+  "idf.stats.fire_damage.tooltip": "Attacking an entity with this item deals §e%s §rfire damage",
+  "idf.stats.water_damage": "Water Damage",
+  "idf.stats.water_damage.tooltip": "Attacking an entity with this item deals §e%s §rwater damage",
+  "idf.stats.lightning_damage": "Lightning Damage",
+  "idf.stats.lightning_damage.tooltip": "Attacking an entity with this item deals §e%s §rlightning damage",
+  "idf.stats.magic_damage": "Magic Damage",
+  "idf.stats.magic_damage.tooltip": "Attacking an entity with this item deals §e%s §rmagic damage",
+  "idf.stats.dark_damage": "Dark Damage",
+  "idf.stats.dark_damage.tooltip": "Attacking an entity with this item deals §e%s §rdark damage",
+
+
   "idf.physical_damage_tooltip": "⚔ Physical Damage: ",
   "idf.fire_damage_tooltip": "⚔ Fire Damage: ",
   "idf.water_damage_tooltip": "⚔ Water Damage: ",

@@ -4,53 +4,49 @@ import com.cwjn.idf.Attributes.AttributeRegistry;
 import com.cwjn.idf.Damage.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.world.damagesource.CombatTracker;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity {
-
-    @Shadow public abstract boolean hurt(DamageSource p_21016_, float p_21017_);
+public class MixinLivingEntity {
 
     /**
      * @author cwjn
      */
     @Overwrite //TODO: implement resistance potion effect and maybe protection enchantments?
-    protected void actuallyHurt(DamageSource source, float amount) {
-        LivingEntity entity = (LivingEntity)((Object)this);
-        if (!entity.isInvulnerableTo(source)) { //if the target is invulnerable to this damage type, dont bother hurting them
-            amount = net.minecraftforge.common.ForgeHooks.onLivingHurt(entity, source, amount); //run the forge LivingHurtEvent hook
+    private void actuallyHurt(DamageSource source, float amount, CallbackInfo callback) {
+        if (!((LivingEntity)(Object)this).isInvulnerableTo(source)) { //if the target is invulnerable to this damage type, dont bother hurting them
+            amount = net.minecraftforge.common.ForgeHooks.onLivingHurt(((LivingEntity)(Object)this), source, amount); //run the forge LivingHurtEvent hook
             if (amount <= 0) return;
             System.out.println("ORIGINAL DAMAGE SOURCE: " + amount + " of " + source.msgId);
-            amount = filterDamageType(entity, source, amount);
+            amount = filterDamageType(((LivingEntity)(Object)this), source, amount);
             //amount = this.getDamageAfterArmorAbsorb(source, amount); //moved to filterDamageType
             //amount = this.getDamageAfterMagicAbsorb(source, amount); //should be unused?
-            float postAbsorptionDamageAmount = Math.max(amount - entity.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
-            entity.setAbsorptionAmount(entity.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount)); //remove the entity's absorption hearts used
+            float postAbsorptionDamageAmount = Math.max(amount - this.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
+            this.setAbsorptionAmount(this.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount)); //remove the entity's absorption hearts used
             float amountTankedWithAbsorption = amount - postAbsorptionDamageAmount; //track how much damage the entity tanked with absorption
             if (amountTankedWithAbsorption > 0.0F && amountTankedWithAbsorption < 3.4028235E37F && source.getEntity() instanceof ServerPlayer) { //award stat screen numbers to player
                 ((ServerPlayer)source.getEntity()).awardStat(Stats.CUSTOM.get(Stats.DAMAGE_DEALT_ABSORBED), Math.round(amountTankedWithAbsorption * 10.0F));
             }
 
-            postAbsorptionDamageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(entity, source, postAbsorptionDamageAmount); //run the living damage event on the final damage amount
+            postAbsorptionDamageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(((LivingEntity)(Object)this), source, postAbsorptionDamageAmount); //run the living damage event on the final damage amount
             if (postAbsorptionDamageAmount != 0.0F) {
-                float health = entity.getHealth(); //get the entity's current health
-                entity.getCombatTracker().recordDamage(source, health, postAbsorptionDamageAmount); //record how much damage was taken
-                entity.setHealth(health - postAbsorptionDamageAmount); //set the new health value for the entity
-                entity.setAbsorptionAmount(entity.getAbsorptionAmount() - postAbsorptionDamageAmount);
-                entity.gameEvent(GameEvent.ENTITY_DAMAGED, source.getEntity());
+                float health = this.getHealth(); //get the entity's current health
+                this.getCombatTracker().recordDamage(source, health, postAbsorptionDamageAmount); //record how much damage was taken
+                this.setHealth(health - postAbsorptionDamageAmount); //set the new health value for the entity
+                this.setAbsorptionAmount(this.getAbsorptionAmount() - postAbsorptionDamageAmount);
+                ((LivingEntity)(Object)this).gameEvent(GameEvent.ENTITY_DAMAGED, source.getEntity());
             }
         }
     }
@@ -65,10 +61,12 @@ public abstract class MixinLivingEntity {
             //PLAYER AND MOB
             case "player":
                 System.out.println("NEW DAMAGE SOURCE: " + amount + " physical damage of player");
-                return runDamageCalculations(entity, (IDFEntityDamageSource) source, amount);
+                if (source instanceof IDFEntityDamageSource) return runDamageCalculations(entity, (IDFEntityDamageSource) source, amount);
+                else return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
             case "mob":
                 System.out.println("NEW DAMAGE SOURCE: " + amount + " physical damage of mob");
-                return runDamageCalculations(entity, (IDFEntityDamageSource) source, amount);
+                if (source instanceof IDFEntityDamageSource) return runDamageCalculations(entity, (IDFEntityDamageSource) source, amount);
+                else return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
             //PHYSICAL SOURCES
             case "starve":
             case "outOfWorld":
@@ -209,8 +207,6 @@ public abstract class MixinLivingEntity {
         return amount + source.getFire() + source.getWater() + source.getLightning() + source.getMagic() + source.getDark();
     }
 
-    @Shadow protected abstract void hurtArmor(DamageSource p_21122_, float p_21123_);
-
     private float sum(float[] a) {
         float returnFloat = 0;
         for (float f : a) {
@@ -218,5 +214,31 @@ public abstract class MixinLivingEntity {
         }
         return returnFloat;
     }
+
+    @Shadow
+    protected void hurtArmor(DamageSource p_21122_, float p_21123_) {
+        throw new IllegalStateException("Mixin failed to shadow hurtArmor(DamageSource d, float f)");
+    }
+    @Shadow
+    public float getAbsorptionAmount() {
+        throw new IllegalStateException("Mixin failed to shadow getAbsorptionAmount()");
+    }
+    @Shadow
+    public void setAbsorptionAmount(float p_21328_) {
+        throw new IllegalStateException("Mixin failed to shadow setAbsorptionAmount()");
+    }
+    @Shadow
+    public float getHealth() {
+        throw new IllegalStateException("Mixin failed to shadow getHealth()");
+    }
+    @Shadow
+    public CombatTracker getCombatTracker() {
+        throw new IllegalStateException("Mixin failed to shadow getCombatTracker()");
+    }
+    @Shadow
+    public void setHealth(float p_21154_) {
+        throw new IllegalStateException("Mixin failed to shadow setHealth(float f)");
+    }
+
 
 }

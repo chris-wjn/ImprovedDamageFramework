@@ -22,6 +22,7 @@ public class AttributeRegistry {
     public static final RegistryObject<Attribute> LIFESTEAL = register("idf.lifesteal", () -> new RangedAttribute("idf.attribute.lifesteal", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> SLOWING = register("idf.slowing", () -> new RangedAttribute("idf.attribute.slowing", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> PENETRATING = register("idf.penetrating", () -> new RangedAttribute("idf.attribute.penetrating", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> CRIT_CHANCE = register("idf.crit_chance", () -> new RangedAttribute("idf.attribute.crit_chance", 0.0D, 0.0D, 1.0D).setSyncable(true));
 
     public static final RegistryObject<Attribute> FIRE_RESISTANCE = register("idf.fire_resistance", () -> new RangedAttribute("idf.attribute.fire_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> WATER_RESISTANCE = register("idf.water_resistance", () -> new RangedAttribute("idf.attribute.water_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));

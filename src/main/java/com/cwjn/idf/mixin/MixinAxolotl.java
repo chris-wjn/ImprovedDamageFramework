@@ -10,27 +10,28 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Axolotl.class)
 public class MixinAxolotl {
 
     @Overwrite
-    public boolean doHurtTarget(Entity target) {
-        LivingEntity entity = (LivingEntity)((Object)this);
-        float ad = (float)entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        float fd = (float)entity.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
-        float wd = (float)entity.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
-        float ld = (float)entity.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
-        float md = (float)entity.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
-        float dd = (float)entity.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
+    private void doHurtTarget(Entity target, CallbackInfoReturnable<Boolean> callback) {
+        LivingEntity thisEntity = (LivingEntity)((Object)this);
+        float ad = (float)thisEntity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float fd = (float)thisEntity.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
+        float wd = (float)thisEntity.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
+        float ld = (float)thisEntity.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
+        float md = (float)thisEntity.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
+        float dd = (float)thisEntity.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
 
-        IDFEntityDamageSource source = new IDFEntityDamageSource("mob", entity, fd, wd, ld, md, dd, "strike");
+        IDFEntityDamageSource source = new IDFEntityDamageSource("mob", thisEntity, fd, wd, ld, md, dd, "strike");
         boolean flag = target.hurt(source, ad);
         if (flag) {
-            entity.doEnchantDamageEffects(entity, target);
-            entity.playSound(SoundEvents.AXOLOTL_ATTACK, 1.0F, 1.0F);
+            thisEntity.doEnchantDamageEffects(thisEntity, target);
+            thisEntity.playSound(SoundEvents.AXOLOTL_ATTACK, 1.0F, 1.0F);
         }
-        return flag;
+        callback.setReturnValue(flag);
     }
 
 }

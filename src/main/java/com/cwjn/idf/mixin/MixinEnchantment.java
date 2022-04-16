@@ -10,25 +10,25 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Enchantment.class)
 public class MixinEnchantment {
-
     /**
      * @author cwJn
      */
     @Overwrite
-    public Component getFullname(int level) {
-        Enchantment enchantment = (Enchantment)((Object)this);
-        TranslatableComponent component = new TranslatableComponent(enchantment.getDescriptionId());
-        if (enchantment.isCurse()) {
+    private void getFullname(int level, CallbackInfoReturnable<Component> callback) {
+        TranslatableComponent component = new TranslatableComponent(this.getDescriptionId());
+        if (this.isCurse()) {
             component.withStyle(ChatFormatting.RED);
         } else {
             component.withStyle(ChatFormatting.GRAY);
         }
 
         MutableComponent mutablecomponent;
-        double maxLevel = enchantment.getMaxLevel();
+        double maxLevel = this.getMaxLevel();
         double currentLevel = level;
         double levelAsPercentage = currentLevel/maxLevel;
 
@@ -45,8 +45,20 @@ public class MixinEnchantment {
                 mutablecomponent = Util.withColor(component, Color.MAGICBLUE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.MAGICBLUE));
             }
         }
+        callback.setReturnValue(mutablecomponent);
+    }
 
-        return mutablecomponent;
+    @Shadow
+    public String getDescriptionId() {
+        throw new IllegalStateException("Mixin failed to shadow getDescriptionId()");
+    }
+    @Shadow
+    public boolean isCurse() {
+        throw new IllegalStateException("Mixin failed to shadow isCurse()");
+    }
+    @Shadow
+    public int getMaxLevel() {
+        throw new IllegalStateException("Mixin failed to shadow getMaxLevel()");
     }
 
 }

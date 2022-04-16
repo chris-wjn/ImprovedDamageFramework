@@ -3,6 +3,7 @@ package com.cwjn.idf;
 import com.cwjn.idf.Attributes.AttributeRegistry;
 import com.cwjn.idf.Config.Config;
 import com.cwjn.idf.Network.IDFPackerHandler;
+import com.cwjn.idf.tetraIntegration.Gui;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +17,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.system.CallbackI;
+import se.mickelus.tetra.blocks.workbench.gui.WorkbenchStatsGui;
 
 
 @Mod("idf")
@@ -40,6 +43,7 @@ public class ImprovedDamageFramework {
         IDFPackerHandler.init();
         LOGGER.info("Loading Improved Damage Framework...");
         Config.init();
+        Gui.register();
     }
 
     private void serverSetup(final FMLDedicatedServerSetupEvent event) {

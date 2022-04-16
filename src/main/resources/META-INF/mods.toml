@@ -31,6 +31,6 @@ Because Minecraft's damage system is a little boring
 [[dependencies.idf]]
     modId="tetra"
     mandatory=true
-    versionRange="[1.18.1, 1.19)"
+    versionRange="[4.8.1,)"
     ordering="BEFORE"
     side="BOTH"
