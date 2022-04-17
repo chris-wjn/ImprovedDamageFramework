@@ -20,7 +20,6 @@ public class AttributeRegistry {
     public static final RegistryObject<Attribute> DARK_DAMAGE = register("idf.dark_damage", () -> new RangedAttribute("idf.attribute.dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
 
     public static final RegistryObject<Attribute> LIFESTEAL = register("idf.lifesteal", () -> new RangedAttribute("idf.attribute.lifesteal", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> SLOWING = register("idf.slowing", () -> new RangedAttribute("idf.attribute.slowing", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> PENETRATING = register("idf.penetrating", () -> new RangedAttribute("idf.attribute.penetrating", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> CRIT_CHANCE = register("idf.crit_chance", () -> new RangedAttribute("idf.attribute.crit_chance", 0.0D, 0.0D, 1.0D).setSyncable(true));
 

@@ -19,7 +19,7 @@ public class MixinEnchantment {
      * @author cwJn
      */
     @Overwrite
-    private void getFullname(int level, CallbackInfoReturnable<Component> callback) {
+    public Component getFullname(int level) {
         TranslatableComponent component = new TranslatableComponent(this.getDescriptionId());
         if (this.isCurse()) {
             component.withStyle(ChatFormatting.RED);
@@ -45,7 +45,7 @@ public class MixinEnchantment {
                 mutablecomponent = Util.withColor(component, Color.MAGICBLUE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.MAGICBLUE));
             }
         }
-        callback.setReturnValue(mutablecomponent);
+        return mutablecomponent;
     }
 
     @Shadow

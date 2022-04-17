@@ -60,7 +60,7 @@ public class JSONHandler {
                               armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                               armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (armorVal > 0) {
-                defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0));
+                defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
@@ -69,7 +69,7 @@ public class JSONHandler {
             double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                     weapon1.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (damageVal > 0 || item instanceof BowItem || item instanceof CrossbowItem) {
-                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, "strike"));
+                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, "strike", 0, 0, 0));
             }
         }
         entityMap.clear();
@@ -111,7 +111,7 @@ public class JSONHandler {
                     armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                     armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (armorVal > 0) {
-                defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0));
+                defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
@@ -120,7 +120,7 @@ public class JSONHandler {
             double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                     weapon1.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (damageVal > 0 || item instanceof BowItem || item instanceof CrossbowItem) {
-                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, "strike"));
+                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, "strike", 0, 0, 0));
             }
         }
         serverResistanceMap.clear();

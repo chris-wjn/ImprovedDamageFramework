@@ -33,7 +33,9 @@ public class EntityData {
         return resistanceValues;
     }
 
-    public double[] getDamageClassMult() { return damageClassMult; }
+    public double[] getDamageClassMult() {
+        return damageClassMult;
+    }
 
     public String getDamageClass() {
         return damageClass;

@@ -31,6 +31,9 @@ public class SendServerDamageJsonMessage {
             buffer.writeDouble(data.getDamageValues()[3]);
             buffer.writeDouble(data.getDamageValues()[4]);
             buffer.writeCharSequence(data.getDamageClass(), Charset.defaultCharset());
+            buffer.writeDouble(data.getAuxiliary()[0]);
+            buffer.writeDouble(data.getAuxiliary()[1]);
+            buffer.writeDouble(data.getAuxiliary()[2]);
         }
     }
     public static SendServerDamageJsonMessage decode(FriendlyByteBuf buffer) {
@@ -43,8 +46,11 @@ public class SendServerDamageJsonMessage {
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),
-                    buffer.readCharSequence(6, Charset.defaultCharset()).toString())); //we ensure all damage class strings are six characters.
-                                                                                                //kind of a shit way to do this but this charsequence thing is trash so i dont care
+                    buffer.readCharSequence(6, Charset.defaultCharset()).toString(), //we ensure all damage class strings are six characters.
+                                                                                              //kind of a shit way to do this but this charsequence thing is trash so i dont care
+                    buffer.readDouble(),
+                    buffer.readDouble(),
+                    buffer.readDouble()));
         }
         return new SendServerDamageJsonMessage(returnMap);
     }

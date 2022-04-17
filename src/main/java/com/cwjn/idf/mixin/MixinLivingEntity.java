@@ -25,14 +25,12 @@ public class MixinLivingEntity {
      * @author cwjn
      */
     @Overwrite //TODO: implement resistance potion effect and maybe protection enchantments?
-    private void actuallyHurt(DamageSource source, float amount, CallbackInfo callback) {
+    protected void actuallyHurt(DamageSource source, float amount) {
         if (!((LivingEntity)(Object)this).isInvulnerableTo(source)) { //if the target is invulnerable to this damage type, dont bother hurting them
             amount = net.minecraftforge.common.ForgeHooks.onLivingHurt(((LivingEntity)(Object)this), source, amount); //run the forge LivingHurtEvent hook
             if (amount <= 0) return;
             System.out.println("ORIGINAL DAMAGE SOURCE: " + amount + " of " + source.msgId);
             amount = filterDamageType(((LivingEntity)(Object)this), source, amount);
-            //amount = this.getDamageAfterArmorAbsorb(source, amount); //moved to filterDamageType
-            //amount = this.getDamageAfterMagicAbsorb(source, amount); //should be unused?
             float postAbsorptionDamageAmount = Math.max(amount - this.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
             this.setAbsorptionAmount(this.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount)); //remove the entity's absorption hearts used
             float amountTankedWithAbsorption = amount - postAbsorptionDamageAmount; //track how much damage the entity tanked with absorption
@@ -51,7 +49,7 @@ public class MixinLivingEntity {
         }
     }
 
-    private float filterDamageType(LivingEntity entity, DamageSource source, float amount) {
+    public float filterDamageType(LivingEntity entity, DamageSource source, float amount) {
         //TODO: this
         if (source instanceof IndirectEntityDamageSource) {
             System.out.println("IndirectEntityDamageSource");
@@ -143,7 +141,7 @@ public class MixinLivingEntity {
         }
     }
 
-    private float runDamageCalculations(LivingEntity entity, IDFInterface source, float amount) {
+    public float runDamageCalculations(LivingEntity entity, IDFInterface source, float amount) {
         if (!source.isTrue()) {
             double fireRes = entity.getAttributeValue(AttributeRegistry.FIRE_RESISTANCE.get());
             double waterRes = entity.getAttributeValue(AttributeRegistry.WATER_RESISTANCE.get());
@@ -207,7 +205,7 @@ public class MixinLivingEntity {
         return amount + source.getFire() + source.getWater() + source.getLightning() + source.getMagic() + source.getDark();
     }
 
-    private float sum(float[] a) {
+    public float sum(float[] a) {
         float returnFloat = 0;
         for (float f : a) {
             returnFloat+=f;

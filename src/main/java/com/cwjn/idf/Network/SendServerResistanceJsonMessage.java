@@ -28,6 +28,7 @@ public class SendServerResistanceJsonMessage {
             buffer.writeDouble(data.getResistanceValues()[2]);
             buffer.writeDouble(data.getResistanceValues()[3]);
             buffer.writeDouble(data.getResistanceValues()[4]);
+            buffer.writeDouble(data.getAuxiliary()[0]);
         }
     }
     public static SendServerResistanceJsonMessage decode(FriendlyByteBuf buffer) {
@@ -35,6 +36,7 @@ public class SendServerResistanceJsonMessage {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++) {
             returnMap.put(buffer.readResourceLocation(), new ResistanceData(
+                    buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),

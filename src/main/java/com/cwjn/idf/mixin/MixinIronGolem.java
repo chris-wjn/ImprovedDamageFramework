@@ -1,6 +1,8 @@
 package com.cwjn.idf.mixin;
 
 import com.cwjn.idf.Attributes.AttributeRegistry;
+import com.cwjn.idf.Attributes.AuxiliaryData;
+import com.cwjn.idf.Attributes.CapabilityProvider;
 import com.cwjn.idf.Damage.IDFEntityDamageSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -15,25 +17,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(IronGolem.class)
 public class MixinIronGolem {
 
+    /**
+     * @author cwjn
+     */
     @Overwrite
-    private void doHurtTarget(Entity target, CallbackInfoReturnable<Boolean> callback) {
+    public boolean doHurtTarget(Entity target) {
         LivingEntity thisEntity = (LivingEntity)((Object)this);
         this.attackAnimationTick = 10;
         thisEntity.level.broadcastEntityEvent(thisEntity, (byte)4);
+        String damageClass = "strike";
+        AuxiliaryData data = thisEntity.getCapability(CapabilityProvider.AUXILIARY_DATA).orElse(null);
+        if (data != null) damageClass = data.getDamageClass();
         float ad = (float)thisEntity.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float fd = (float)thisEntity.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
         float wd = (float)thisEntity.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
         float ld = (float)thisEntity.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
         float md = (float)thisEntity.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
         float dd = (float)thisEntity.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
-        IDFEntityDamageSource source = new IDFEntityDamageSource("mob", thisEntity, fd, wd, ld, md, dd, "strike");
+        IDFEntityDamageSource source = new IDFEntityDamageSource("mob", thisEntity, fd, wd, ld, md, dd, damageClass);
         boolean flag = target.hurt(source, ad);
         if (flag) {
             target.setDeltaMovement(target.getDeltaMovement().add(0.0D, (double)0.4F, 0.0D));
             thisEntity.doEnchantDamageEffects(thisEntity, target);
         }
         thisEntity.playSound(SoundEvents.IRON_GOLEM_ATTACK, 1.0F, 1.0F);
-        callback.setReturnValue(flag);
+        return flag;
     }
 
     @Shadow

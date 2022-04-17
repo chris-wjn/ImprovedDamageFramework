@@ -13,6 +13,11 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         super(msgId, entity);
     }
 
+    public IDFEntityDamageSource(String msgId, Entity entity, String dc) {
+        super(msgId, entity);
+        damageClass = dc;
+    }
+
     public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, String dc) {
         super(msgId, entity);
         fire = f;

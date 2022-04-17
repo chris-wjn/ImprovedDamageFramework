@@ -41,7 +41,6 @@ public class AttributeAttachEvent {
             event.add(entityType, AttributeRegistry.EVASION.get());
             event.add(entityType, AttributeRegistry.LIFESTEAL.get());
             event.add(entityType, AttributeRegistry.PENETRATING.get());
-            event.add(entityType, AttributeRegistry.SLOWING.get());
             event.add(entityType, AttributeRegistry.CRIT_CHANCE.get());
         }
     }

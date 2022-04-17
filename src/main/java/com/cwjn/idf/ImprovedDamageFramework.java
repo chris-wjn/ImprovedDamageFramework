@@ -4,6 +4,7 @@ import com.cwjn.idf.Attributes.AttributeRegistry;
 import com.cwjn.idf.Config.Config;
 import com.cwjn.idf.Network.IDFPackerHandler;
 import com.cwjn.idf.tetraIntegration.Gui;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,6 +27,7 @@ public class ImprovedDamageFramework {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "idf";
+    public static final ResourceLocation FONT_IDF = new ResourceLocation("idf", "font");
 
     public static Logger getLog() {
         return LOGGER;

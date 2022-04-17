@@ -27,7 +27,7 @@ public class MixinMob {
      * @author cwjn
      */
     @Overwrite
-    private void doHurtTarget(Entity target, CallbackInfoReturnable<Boolean> callback) {
+    public boolean doHurtTarget(Entity target) {
         Mob thisMob = (Mob)(Object)this;
         float ad = (float)thisMob.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float fd = (float)thisMob.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
@@ -64,7 +64,7 @@ public class MixinMob {
             thisMob.doEnchantDamageEffects(thisMob, target);
             thisMob.setLastHurtMob(target);
         }
-        callback.setReturnValue(flag);
+        return flag;
     }
 
     @Shadow private void maybeDisableShield(Player p_21425_, ItemStack p_21426_, ItemStack p_21427_) {
