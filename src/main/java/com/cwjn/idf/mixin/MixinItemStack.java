@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import static net.minecraft.world.item.ItemStack.ATTRIBUTE_MODIFIER_FORMAT;
+
 @Mixin(ItemStack.class)
 public class MixinItemStack {
 
@@ -101,11 +103,10 @@ public class MixinItemStack {
         }
 
         if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
-            if (this.hasTag() && this.tag.contains("idf.equipment"))
+            if (this.hasTag() && this.tag.contains("idf.equipment")) {
                 list.add(Util.withColor(new TranslatableComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
-            //NOTE! we change the way tooltips are calculated so that we can attach more than 1 attribute modifier per attribute.
+            }
             Map<Attribute, Double> mappedAttributes = new HashMap<>(32);
-            HashMap<UUID, Boolean> done = new HashMap<>(32);
             for (EquipmentSlot equipmentslot : EquipmentSlot.values()) { //for each item, we want to check the modifiers it gives for every equipment slot.
                 Multimap<Attribute, AttributeModifier> multimap = this.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
                 if (!multimap.isEmpty()) { //make sure there is at least one entry in the map
@@ -179,12 +180,21 @@ public class MixinItemStack {
 
     private void appendAttributes(@NotNull Player player, List<Component> list, Map<Attribute, Double> mappedAttributes) {
         if (player == null) return;
-        MutableComponent damageComponent = new TextComponent("");
-        appendDamageComponent(player, list, mappedAttributes, damageComponent);
-        MutableComponent auxiliaryComponent = new TextComponent("");
-        appendAuxiliaryComponent(player, list, mappedAttributes, auxiliaryComponent);
-        MutableComponent defensiveComponent = new TextComponent("");
-        appendDefensiveComponent(mappedAttributes, list, defensiveComponent);
+        if (mappedAttributes.containsKey(Attributes.ATTACK_DAMAGE) || mappedAttributes.containsKey(AttributeRegistry.FIRE_DAMAGE.get()) || mappedAttributes.containsKey(AttributeRegistry.MAGIC_DAMAGE.get()) || mappedAttributes.containsKey(AttributeRegistry.WATER_DAMAGE.get())
+        || mappedAttributes.containsKey(AttributeRegistry.LIGHTNING_DAMAGE.get()) || mappedAttributes.containsKey(AttributeRegistry.DARK_DAMAGE.get())) {
+            MutableComponent damageComponent = new TextComponent("");
+            appendDamageComponent(player, list, mappedAttributes, damageComponent);
+        }
+        if (mappedAttributes.containsKey(Attributes.ATTACK_SPEED) || mappedAttributes.containsKey(Attributes.KNOCKBACK_RESISTANCE) || mappedAttributes.containsKey(AttributeRegistry.EVASION.get())
+        || mappedAttributes.containsKey(Attributes.MOVEMENT_SPEED) || mappedAttributes.containsKey(Attributes.MAX_HEALTH) || mappedAttributes.containsKey(Attributes.LUCK)) {
+            MutableComponent auxiliaryComponent = new TextComponent("");
+            appendAuxiliaryComponent(player, list, mappedAttributes, auxiliaryComponent);
+        }
+        if (mappedAttributes.containsKey(Attributes.ARMOR) || mappedAttributes.containsKey(Attributes.ARMOR_TOUGHNESS) || mappedAttributes.containsKey(AttributeRegistry.FIRE_RESISTANCE.get()) ||
+        mappedAttributes.containsKey(AttributeRegistry.WATER_RESISTANCE.get()) || mappedAttributes.containsKey(AttributeRegistry.LIGHTNING_RESISTANCE.get()) || mappedAttributes.containsKey(AttributeRegistry.MAGIC_RESISTANCE.get()) || mappedAttributes.containsKey(AttributeRegistry.DARK_RESISTANCE.get())) {
+            MutableComponent defensiveComponent = new TextComponent("");
+            appendDefensiveComponent(mappedAttributes, list, defensiveComponent);
+        }
     }
 
     private void appendDefensiveComponent(Map<Attribute, Double> mappedAttributes, List<Component> list, MutableComponent defensiveComponent) {
@@ -200,7 +210,7 @@ public class MixinItemStack {
             defensiveComponent.append(new TranslatableComponent("idf.defense_icon").withStyle(symbolStyle));
         }
         if (mappedAttributes.containsKey(Attributes.ARMOR)) {
-            double value = mappedAttributes.get(Attributes.ARMOR) * 4;
+            double value = mappedAttributes.get(Attributes.ARMOR) * 3;
             if (value < 0) {
                 defensiveComponent.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), ChatFormatting.RED));
             } else {
@@ -262,7 +272,7 @@ public class MixinItemStack {
         if (mappedAttributes.containsKey(Attributes.ATTACK_SPEED)) {
             double value = mappedAttributes.get(Attributes.ATTACK_SPEED) + player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
             auxiliaryComponent.append(Util.withColor(new TextComponent("" + df.format(value)), Color.WHITESMOKE));
-            auxiliaryComponent.append(new TranslatableComponent("idf.attack_speed_icon"));
+            auxiliaryComponent.append(new TranslatableComponent("idf.attack_speed_icon").withStyle(symbolStyle));
         }
         if (mappedAttributes.containsKey(Attributes.ATTACK_KNOCKBACK)) {
             double value = mappedAttributes.get(Attributes.ATTACK_KNOCKBACK);

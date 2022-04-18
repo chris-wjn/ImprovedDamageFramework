@@ -3,11 +3,8 @@ package com.cwjn.idf.mixin;
 import com.cwjn.idf.Attributes.AttributeRegistry;
 import com.cwjn.idf.Attributes.AuxiliaryData;
 import com.cwjn.idf.Attributes.CapabilityProvider;
-import com.cwjn.idf.Config.EntityData;
-import com.cwjn.idf.Config.JSONHandler;
 import com.cwjn.idf.Damage.IDFEntityDamageSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -18,7 +15,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
 public class MixinMob {

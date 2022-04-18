@@ -9,6 +9,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -31,6 +34,7 @@ public class MixinLivingEntity {
             if (amount <= 0) return;
             System.out.println("ORIGINAL DAMAGE SOURCE: " + amount + " of " + source.msgId);
             amount = filterDamageType(((LivingEntity)(Object)this), source, amount);
+            if (amount <= 0) return;
             float postAbsorptionDamageAmount = Math.max(amount - this.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
             this.setAbsorptionAmount(this.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount)); //remove the entity's absorption hearts used
             float amountTankedWithAbsorption = amount - postAbsorptionDamageAmount; //track how much damage the entity tanked with absorption
@@ -51,6 +55,13 @@ public class MixinLivingEntity {
 
     public float filterDamageType(LivingEntity entity, DamageSource source, float amount) {
         //TODO: this
+        if (source.isProjectile()) {
+            double projectileLevel = 0;
+            for (ItemStack item : entity.getArmorSlots()) {
+                projectileLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, item);
+            }
+            amount -= 0.5D*projectileLevel;
+        }
         if (source instanceof IndirectEntityDamageSource) {
             System.out.println("IndirectEntityDamageSource");
             return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
@@ -148,7 +159,7 @@ public class MixinLivingEntity {
             double lightningRes = entity.getAttributeValue(AttributeRegistry.LIGHTNING_RESISTANCE.get());
             double magicRes = entity.getAttributeValue(AttributeRegistry.MAGIC_RESISTANCE.get());
             double darkRes = entity.getAttributeValue(AttributeRegistry.DARK_RESISTANCE.get());
-            double physicalRes = entity.getAttributeValue(Attributes.ARMOR) * 0.04;
+            double physicalRes = entity.getAttributeValue(Attributes.ARMOR) * 0.03;
             double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
             String damageClass = source.getDamageClass();
             Map<String, Double> mappedMultipliers = new HashMap<>(5);

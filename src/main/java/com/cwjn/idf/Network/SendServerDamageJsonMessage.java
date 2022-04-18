@@ -2,7 +2,6 @@ package com.cwjn.idf.Network;
 
 import com.cwjn.idf.Config.DamageData;
 import com.cwjn.idf.Config.JSONHandler;
-import com.cwjn.idf.Config.ResistanceData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;

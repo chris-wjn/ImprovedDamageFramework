@@ -1,8 +1,6 @@
 package com.cwjn.idf.Config;
 
 import com.cwjn.idf.ImprovedDamageFramework;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;

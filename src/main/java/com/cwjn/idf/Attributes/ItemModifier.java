@@ -3,16 +3,13 @@ package com.cwjn.idf.Attributes;
 import com.cwjn.idf.Config.DamageData;
 import com.cwjn.idf.Config.JSONHandler;
 import com.cwjn.idf.Config.ResistanceData;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
-import org.checkerframework.checker.units.qual.A;
 import se.mickelus.tetra.items.modular.ItemModularHandheld;
 
 import java.util.UUID;
@@ -39,21 +36,23 @@ public class ItemModifier {
     @SubscribeEvent
     public static void ItemModifierEvent(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack(); //get the item from the event
-        if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT) {
-            if (cachedItem == item) {
-                return;
+        if (LivingEntity.getEquipmentSlotForItem(item) == event.getSlotType()) {
+            if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT) {
+                if (cachedItem == item) {
+                    return;
+                }
             }
-        }
-        if (item.getItem() instanceof ItemModularHandheld) {
-            item.getOrCreateTag().putBoolean("idf.equipment", true);
-            //TODO: update a damage class based on the tetra modules.
-        }
-        if (JSONHandler.damageMap.containsKey(item.getItem().getRegistryName())) {
-            cachedItem = item;
-            item.getOrCreateTag().putBoolean("idf.equipment", true);
-            item.getOrCreateTag().putString("idf.damage_class", JSONHandler.damageMap.get(item.getItem().getRegistryName()).getDamageClass());
-            DamageData data = JSONHandler.getDamageData(item.getItem().getRegistryName());
-            if (event.getSlotType() == EquipmentSlot.MAINHAND) {
+            if (!item.getOrCreateTag().contains("idf.has_damage") && item.getItem() instanceof ItemModularHandheld) {
+                item.getOrCreateTag().putBoolean("idf.equipment", true);
+                item.getOrCreateTag().putBoolean("idf.has_damage", true);
+                //TODO: update a damage class based on the tetra modules.
+            }
+            if (!item.getOrCreateTag().contains("idf.has_damage") && JSONHandler.damageMap.containsKey(item.getItem().getRegistryName())) {
+                cachedItem = item;
+                item.getOrCreateTag().putBoolean("idf.equipment", true);
+                item.getOrCreateTag().putBoolean("idf.has_damage", true);
+                item.getOrCreateTag().putString("idf.damage_class", JSONHandler.damageMap.get(item.getItem().getRegistryName()).getDamageClass());
+                DamageData data = JSONHandler.getDamageData(item.getItem().getRegistryName());
                 event.addModifier(AttributeRegistry.FIRE_DAMAGE.get(), new AttributeModifier(baseFireDamage, () -> "base_fire_damage", data.getDamageValues()[0], AttributeModifier.Operation.ADDITION));
                 event.addModifier(AttributeRegistry.WATER_DAMAGE.get(), new AttributeModifier(baseWaterDamage, () -> "base_water_damage", data.getDamageValues()[1], AttributeModifier.Operation.ADDITION));
                 event.addModifier(AttributeRegistry.LIGHTNING_DAMAGE.get(), new AttributeModifier(baseLightningDamage, () -> "base_lightning_damage", data.getDamageValues()[2], AttributeModifier.Operation.ADDITION));
@@ -63,12 +62,11 @@ public class ItemModifier {
                 event.addModifier(AttributeRegistry.PENETRATING.get(), new AttributeModifier(basePenetration, () -> "base_penetration", data.getAuxiliary()[1], AttributeModifier.Operation.ADDITION));
                 event.addModifier(AttributeRegistry.CRIT_CHANCE.get(), new AttributeModifier(baseCrit, () -> "base_crit_chance", data.getAuxiliary()[2], AttributeModifier.Operation.ADDITION));
             }
-        }
-        if (JSONHandler.resistanceMap.containsKey(item.getItem().getRegistryName())) {
-            cachedItem = item;
-            item.getOrCreateTag().putBoolean("idf.equipment", true);
-            ResistanceData data = JSONHandler.getResistanceData(item.getItem().getRegistryName());
-            if (item.getEquipmentSlot() == event.getSlotType()) {
+            if (!item.getOrCreateTag().contains("idf.has_resistance") && JSONHandler.resistanceMap.containsKey(item.getItem().getRegistryName())) {
+                cachedItem = item;
+                item.getOrCreateTag().putBoolean("idf.equipment", true);
+                item.getOrCreateTag().putBoolean("idf.has_resistance", true);
+                ResistanceData data = JSONHandler.getResistanceData(item.getItem().getRegistryName());
                 event.addModifier(AttributeRegistry.FIRE_RESISTANCE.get(), new AttributeModifier(baseFireResistance, () -> "base_fire_resistance", data.getResistanceValues()[0], AttributeModifier.Operation.ADDITION));
                 event.addModifier(AttributeRegistry.WATER_RESISTANCE.get(), new AttributeModifier(baseWaterResistance, () -> "base_water_resistance", data.getResistanceValues()[1], AttributeModifier.Operation.ADDITION));
                 event.addModifier(AttributeRegistry.LIGHTNING_RESISTANCE.get(), new AttributeModifier(baseLightningResistance, () -> "base_lightning_resistance", data.getResistanceValues()[2], AttributeModifier.Operation.ADDITION));
