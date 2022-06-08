@@ -5,8 +5,8 @@ import net.cwjn.idf.Damage.IDFDamageSource;
 
 public class WaterDamageSource extends IDFConversionDamageSource {
 
-    public WaterDamageSource(String msgId, float w, float p, String dc) {
-        super(msgId, 0, w, 0, 0, 0, p, dc);
+    public WaterDamageSource(String msgId, float p, String dc) {
+        super(msgId, 0, 1, 0, 0, 0, p, dc);
     }
 
 }

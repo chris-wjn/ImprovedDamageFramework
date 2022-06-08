@@ -5,8 +5,8 @@ import net.cwjn.idf.Damage.IDFDamageSource;
 
 public class LightningDamageSource extends IDFConversionDamageSource {
 
-    public LightningDamageSource(String msgId, float l, float p, String dc) {
-        super(msgId, 0, 0, l, 0, 0, p, dc);
+    public LightningDamageSource(String msgId, float p, String dc) {
+        super(msgId, 0, 0, 1, 0, 0, p, dc);
     }
 
 }
