@@ -3,20 +3,23 @@ buildscript {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.0'
-group = 'com.cwjn.idf' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = '0.0.1-1.18.2'
+group = 'net.cwjn.idf' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'idf'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
@@ -24,7 +27,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'parchment', version: '2022.05.22-1.18.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
     runs {
@@ -81,18 +84,21 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.10'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.25'
 
-    //implementation fg.deobf("curse.maven:iceberg-520110:3675774") 1.18.2
-    //implementation fg.deobf("curse.maven:itemframes-532127:3675785") 1.18.2
-    implementation fg.deobf("curse.maven:iceberg-520110:3632396")
-    implementation fg.deobf("curse.maven:legendarytt-532127:3653194")
-    implementation fg.deobf("se.mickelus.mutil:mutil:1.18.1-4.5.0-pre.1")
-    implementation fg.deobf("se.mickelus.tetra:tetra:1.18.1-4.8.1")
-    implementation fg.deobf("mezz.jei:jei-1.18.1:9.4.1.112")
+    implementation fg.deobf("curse.maven:iceberg-520110:3675774") //1.18.2
+    implementation fg.deobf("curse.maven:itemframes-532127:3675785") //1.18.2
+    implementation fg.deobf("se.mickelus.mutil:mutil:1.18.2-4.5.0")
+    implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.0")
+    implementation fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0:api")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

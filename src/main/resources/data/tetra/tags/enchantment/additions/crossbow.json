@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "idf:fire_damage_flat",
+    "idf:fire_damage_mult",
+    "idf:water_damage_flat",
+    "idf:water_damage_mult",
+    "idf:lightning_damage_flat",
+    "idf:lightning_damage_mult",
+    "idf:magic_damage_flat",
+    "idf:magic_damage_mult",
+    "idf:dark_damage_flat",
+    "idf:dark_damage_mult"
+  ]
+}

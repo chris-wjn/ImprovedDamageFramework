@@ -1,21 +1,13 @@
 {
   "required": true,
-  "package": "com.cwjn.idf.mixin",
+  "package": "net.cwjn.idf.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinAxolotl",
-    "MixinBee",
-    "MixinCat",
-    "MixinDolphin",
+    "MixinDamageSource",
     "MixinEnchantment",
-    "MixinIronGolem",
     "MixinItemStack",
     "MixinLivingEntity",
-    "MixinMob",
-    "MixinOcelot",
-    "MixinPlayer",
-    "MixinPolarBear",
-    "MixinWolf"
+    "MixinPlayer"
   ],
   "injectors": {
     "defaultRequire": 1
