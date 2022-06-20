@@ -1,0 +1,9 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:optimus.ttf",
+      "oversample": 3
+    }
+  ]
+}

@@ -1,8 +1,11 @@
 package net.cwjn.idf.mixin;
 
-import net.cwjn.idf.Attributes.AttributeRegistry;
-import net.cwjn.idf.Damage.*;
-import net.cwjn.idf.Damage.helpers.*;
+import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.attribute.AttributeRegistry;
+import net.cwjn.idf.capability.AuxiliaryProvider;
+import net.cwjn.idf.config.json.SourceCatcherData;
+import net.cwjn.idf.damage.*;
+import net.cwjn.idf.event.ServerEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +16,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -24,6 +27,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,55 +38,43 @@ import java.util.Map;
 
 @Mixin(Player.class)
 public class MixinPlayer {
-
-    @Shadow
-    public boolean isInvulnerableTo(DamageSource p_36249_) {
-        throw new IllegalStateException("Mixin failed to shadow isInvulnerableTo(DamageSource d)");
-    }
-
-    @Shadow
-    public void setAbsorptionAmount(float p_36396_) {
-        throw new IllegalStateException("Mixin failed to shadow setAbsorptionAmount(float f)");
-    }
-
-    @Shadow
-    public float getAbsorptionAmount() {
-        throw new IllegalStateException("Mixin failed to shadow getAbsorptionAmount(float f)");
-    }
-
     /**
      * @author cwJn
     */
     @Overwrite
     protected void actuallyHurt(DamageSource source, float amount) {
-        if (!this.isInvulnerableTo(source)) {
-            amount = net.minecraftforge.common.ForgeHooks.onLivingHurt((Player)(Object)this, source, amount);
+        Player thisPlayer = (Player)(Object) this;
+        if (!thisPlayer.isInvulnerableTo(source)) {
+            amount = net.minecraftforge.common.ForgeHooks.onLivingHurt(thisPlayer, source, amount);
+            amount = calculateDamage(thisPlayer, source, amount);
             if (amount <= 0) return;
-            System.out.println("ORIGINAL DAMAGE SOURCE: " + amount + " of " + source.msgId);
-            amount = filterDamageType(((LivingEntity)(Object)this), source, amount);
-            if (amount <= 0) return;
-            System.out.println("player was hurt for " + amount);
-            float postAbsorptionDamageAmount = Math.max(amount - this.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
-            this.setAbsorptionAmount(this.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount));
-            postAbsorptionDamageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage((Player)(Object)this, source, postAbsorptionDamageAmount);
+            float postAbsorptionDamageAmount = Math.max(amount - thisPlayer.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
+            thisPlayer.setAbsorptionAmount(thisPlayer.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount));
+            postAbsorptionDamageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(thisPlayer, source, postAbsorptionDamageAmount);
             float amountTankedWithAbsorption = amount - postAbsorptionDamageAmount;
             if (amountTankedWithAbsorption > 0.0F && amountTankedWithAbsorption < 3.4028235E37F) {
-                this.awardStat(Stats.DAMAGE_ABSORBED, Math.round(amountTankedWithAbsorption * 10.0F));
+                thisPlayer.awardStat(Stats.DAMAGE_ABSORBED, Math.round(amountTankedWithAbsorption * 10.0F));
             }
             if (postAbsorptionDamageAmount != 0.0F) {
-                this.causeFoodExhaustion(source.getFoodExhaustion());
-                float health = ((Player)(Object)this).getHealth();
-                ((Player)(Object)this).getCombatTracker().recordDamage(source, health, postAbsorptionDamageAmount);
-                ((Player)(Object)this).setHealth(health - postAbsorptionDamageAmount); // Forge: moved to fix MC-121048
+                thisPlayer.causeFoodExhaustion(source.getFoodExhaustion());
+                float health = thisPlayer.getHealth();
+                (thisPlayer).getCombatTracker().recordDamage(source, health, postAbsorptionDamageAmount);
+                (thisPlayer).setHealth(health - postAbsorptionDamageAmount); // Forge: moved to fix MC-121048
                 if (postAbsorptionDamageAmount < 3.4028235E37F) {
-                    this.awardStat(Stats.DAMAGE_TAKEN, Math.round(postAbsorptionDamageAmount * 10.0F));
+                    thisPlayer.awardStat(Stats.DAMAGE_TAKEN, Math.round(postAbsorptionDamageAmount * 10.0F));
                 }
             }
         }
     }
 
-    public float filterDamageType(LivingEntity entity, DamageSource source, float amount) {
-        //TODO: this
+    public float calculateDamage(Player entity, DamageSource source, float amount) {
+        Logger log = ImprovedDamageFramework.getLog();
+        if (ServerEvents.debugMode) {
+            log.debug("----------------------");
+            log.debug(entity.getName() + "was attacked.");
+            log.debug("SOURCE IS: " + source.msgId);
+            log.debug("source instance of IDFInterface? " + (source instanceof IDFInterface));
+        }
         if (source.isProjectile()) {
             double projectileLevel = 0;
             for (ItemStack item : entity.getArmorSlots()) {
@@ -89,159 +82,120 @@ public class MixinPlayer {
             }
             amount -= 0.5D*projectileLevel;
         }
-        if (source instanceof IndirectEntityDamageSource) {
-            System.out.println("IndirectEntityDamageSource");
-            return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
+        if (source.isFall()) {
+            double fallLevel = 0;
+            for (ItemStack item : entity.getArmorSlots()) {
+                fallLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FALL_PROTECTION, item);
+            }
+            amount -= 0.5D*fallLevel;
         }
-        switch (source.msgId) {
-            //PLAYER AND MOB
-            case "player":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " physical damage of player");
-                if (source instanceof IDFEntityDamageSource) return runDamageCalculations(entity, (IDFEntityDamageSource) source, amount);
-                else return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
-            case "mob":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " physical damage of mob");
-                if (source instanceof IDFEntityDamageSource) return runDamageCalculations(entity, (IDFEntityDamageSource) source, amount);
-                else return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
-                //PHYSICAL SOURCES
-            case "starve":
-            case "outOfWorld":
-            case "badRespawnPoint":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " physical true damage of " + "starve/outOfWorld/badRespawnPoint");
-                return runDamageCalculations(entity, new IDFDamageSource("genric").setTrue(), amount);
-            case "cactus":
-            case "sweetBerryBush":
-            case "arrow":
-            case "trident":
-            case "stalagmite":
-            case "fallingStalactite":
-            case "sting":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " physical pierce damage of " + "cactus/sweetBerryBush/arrow/trident/stalagmite/fallingStalactite/sting");
-                return runDamageCalculations(entity, new IDFDamageSource("pierce"), amount);
-            case "fall":
-            case "flyIntoWall":
-            case "generic":
-            case "anvil":
-            case "fallingBlock":
-            case "thrown":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " physical strike damage of " + "fall/flyIntoWall/generic/anvil/fallingBlock/thrown");
-                return runDamageCalculations(entity, new IDFDamageSource("strike"), amount);
-            case "inWall":
-            case "cramming":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " physical crush damage of " + "inWall/cramming");
-                return runDamageCalculations(entity, new IDFDamageSource("_crush"), amount);
-            //FIRE SOURCES
-            case "inFire":
-            case "onFire":
-            case "lava":
-            case "hotFloor":
-            case "dryout":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " fire generic damage of " + "inFire/onFire/lava/hotFloor/dryout");
-                return runDamageCalculations(entity, new FireDamageSource(amount, "genric"), 0);
-            case "fireball":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " fire strike damage of " + "fireball");
-                return runDamageCalculations(entity, new FireDamageSource(amount, "strike"), 0);
-            //WATER SOURCES
-            case "drown":
-            case "freeze":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " water generic damage of " + "drown/freeze");
-                return runDamageCalculations(entity, new WaterDamageSource(amount, "genric"), 0);
-            //LIGHTNING SOURCES
-            case "lightningBolt":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " lightning pierce damage of " + "lightningBolt");
-                return runDamageCalculations(entity, new LightningDamageSource(amount, "pierce"), 0);
-            //MAGIC SOURCES
-            case "magic":
-            case "indirectMagic":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " magic generic damage of " + "magic/indirectMagic");
-                return runDamageCalculations(entity, new MagicDamageSource(amount, "genric"), 0);
-            case "thorns":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " magic pierce damage of " + "thorns");
-                return runDamageCalculations(entity, new MagicDamageSource(amount, "pierce"), 0);
-            //DARK SOURCES
-            case "witherSkull":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " dark strike damage of " + "witherSkull");
-                return runDamageCalculations(entity, new DarkDamageSource(amount, "strike"), 0);
-            case "wither":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " dark generic damage of " + "wither");
-                return runDamageCalculations(entity, new DarkDamageSource(amount, "genric"), 0);
-            //MIXED SOURCES
-            case "explosion":
-            case "explosion.player":
-            case "fireworks":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " half physical half fire strike damage of " + "explosion/fireworks");
-                return runDamageCalculations(entity, new IDFDamageSource(amount/2, 0, 0, 0, 0, "strike"), amount/2);
-            case "dragonBreath":
-                System.out.println("NEW DAMAGE SOURCE: " + amount + " half fire half magic generic damage of " + "dragonBreath");
-                return runDamageCalculations(entity, new IDFDamageSource(amount/2, 0, 0, amount/2, 0, "genric"), 0);
-            default:
-                throw new RuntimeException("Unchecked damage type!");
+        if (!(source instanceof IDFInterface)) { //if this is an unchecked source, default to a physical strike
+            source = SourceCatcherData.convert(source);
+            if (ServerEvents.debugMode) {
+                log.debug("Converted source to IDFInterface implemented source.");
+            }
         }
-    }
-
-    public float runDamageCalculations(LivingEntity entity, IDFInterface source, float amount) {
-        if (!source.isTrue()) {
-            double fireRes = entity.getAttributeValue(AttributeRegistry.FIRE_RESISTANCE.get());
-            double waterRes = entity.getAttributeValue(AttributeRegistry.WATER_RESISTANCE.get());
-            double lightningRes = entity.getAttributeValue(AttributeRegistry.LIGHTNING_RESISTANCE.get());
-            double magicRes = entity.getAttributeValue(AttributeRegistry.MAGIC_RESISTANCE.get());
-            double darkRes = entity.getAttributeValue(AttributeRegistry.DARK_RESISTANCE.get());
-            double physicalRes = entity.getAttributeValue(Attributes.ARMOR) * 0.03;
-            double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
-            double pen = source.getPen()/100;
-            String damageClass = source.getDamageClass();
-            Map<String, Double> mappedMultipliers = new HashMap<>(5);
-            mappedMultipliers.put("strike", entity.getAttributeValue(AttributeRegistry.STRIKE_MULT.get()));
-            mappedMultipliers.put("pierce", entity.getAttributeValue(AttributeRegistry.PIERCE_MULT.get()));
-            mappedMultipliers.put("_slash", entity.getAttributeValue(AttributeRegistry.SLASH_MULT.get()));
-            mappedMultipliers.put("_crush", entity.getAttributeValue(AttributeRegistry.CRUSH_MULT.get()));
-            mappedMultipliers.put("genric", entity.getAttributeValue(AttributeRegistry.GENERIC_MULT.get()));
-            float returnAmount = 0;
-            float dv[] = {amount, source.getFire(), source.getWater(), source.getLightning(), source.getMagic(), source.getDark()};
+        float fireDamage = 0, waterDamage = 0, lightningDamage = 0, magicDamage = 0, darkDamage = 0, physicalDamage = 0, pen = 0;
+        String damageClass = "strike";
+        IDFInterface newSource = (IDFInterface) source; //at this point, it is guaranteed that we have an implementation of IDFInterface
+        if (newSource.isConversion()) { //check if source is a conversion type
+            fireDamage = newSource.getFire() * amount;
+            waterDamage = newSource.getWater() * amount;
+            lightningDamage = newSource.getLightning() * amount;
+            magicDamage = newSource.getMagic() * amount;
+            darkDamage = newSource.getDark() * amount;
+            physicalDamage = amount - (fireDamage + waterDamage + lightningDamage + magicDamage + darkDamage);
+            pen = newSource.getPen()/100;
+            damageClass = newSource.getDamageClass();
+        } else {
+            fireDamage = newSource.getFire();
+            waterDamage = newSource.getWater();
+            lightningDamage = newSource.getLightning();
+            magicDamage = newSource.getMagic();
+            darkDamage = newSource.getDark();
+            physicalDamage = amount;
+            pen = newSource.getPen()/100;
+            damageClass = newSource.getDamageClass();
+        }
+        float[] dv = {fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage};
+        Map<String, Double> mappedMultipliers = new HashMap<>(5);
+        mappedMultipliers.put("strike", entity.getAttributeValue(AttributeRegistry.STRIKE_MULT.get()));
+        mappedMultipliers.put("pierce", entity.getAttributeValue(AttributeRegistry.PIERCE_MULT.get()));
+        mappedMultipliers.put("_slash", entity.getAttributeValue(AttributeRegistry.SLASH_MULT.get()));
+        mappedMultipliers.put("_crush", entity.getAttributeValue(AttributeRegistry.CRUSH_MULT.get()));
+        mappedMultipliers.put("genric", entity.getAttributeValue(AttributeRegistry.GENERIC_MULT.get()));
+        if (ServerEvents.debugMode) {
+            log.debug("----------------------");
+            log.debug("PRE-MODIFIERS DAMAGE: (fire, water, ltng, mag, dark, phys)");
+        }
+        if (ServerEvents.debugMode) {
             for (int i = 0; i < 6; i++) {
-                dv[i] *= mappedMultipliers.get(damageClass);
+                log.debug(dv[i]);
             }
-            hurtArmor(new IDFDamageSource(damageClass), sum(dv));
-            if (dv[0] > 0) {
-                float physicalDamage = dv[0] - (float)defense;
-                if (physicalDamage > 0) {
-                    returnAmount += (physicalDamage * (1 - (physicalRes * (1 - pen))));
-                }
-            }
-            if (dv[1] > 0) {
-                float fireDamage = dv[1] - (float)defense;
-                if (fireDamage > 0) {
-                    returnAmount += (fireDamage * (1 - fireRes/100));
-                }
-            }
-            if (dv[2] > 0) {
-                float waterDamage = dv[2] - (float)defense;
-                if (waterDamage > 0) {
-                    returnAmount += (waterDamage * (1 - waterRes/100));
-                }
-            }
-            if (dv[3] > 0) {
-                float lightningDamage = dv[3] - (float)defense;
-                if (lightningDamage > 0) {
-                    returnAmount += (lightningDamage * (1 - lightningRes/100));
-                }
-            }
-            if (dv[4] > 0) {
-                float magicDamage = dv[4] - (float)defense;
-                if (magicDamage > 0) {
-                    returnAmount += (magicDamage * (1 - magicRes/100));
-                }
-            }
-            if (dv[5] > 0) {
-                float darkDamage = dv[5] - (float)defense;
-                if (darkDamage > 0) {
-                    returnAmount += (darkDamage * (1 - darkRes/100));
-                }
-            }
-            System.out.println("final damage is: " + returnAmount);
-            return returnAmount;
         }
-        return amount + source.getFire() + source.getWater() + source.getLightning() + source.getMagic() + source.getDark();
+        if (ServerEvents.debugMode) {
+            log.debug("----------------------");
+            log.debug("DAMAGE CLASS: " + damageClass);
+            log.debug("STRIKE MULTIPLIER: " + entity.getAttributeValue(AttributeRegistry.STRIKE_MULT.get()));
+            log.debug("PIERCE MULTIPLIER: " + entity.getAttributeValue(AttributeRegistry.PIERCE_MULT.get()));
+            log.debug("SLASH MULTIPLIER: " + entity.getAttributeValue(AttributeRegistry.SLASH_MULT.get()));
+            log.debug("CRUSH MULTIPLIER: " + entity.getAttributeValue(AttributeRegistry.CRUSH_MULT.get()));
+            log.debug("GENERIC MULTIPLIER: " + entity.getAttributeValue(AttributeRegistry.GENERIC_MULT.get()));
+            log.debug("----------------------");
+        }
+        for (int i = 0; i < 6; i++) {
+            dv[i] *= mappedMultipliers.get(damageClass);
+        }
+        if (newSource.isTrue()) {
+            return sum(dv);
+        }
+        double[] rv = {entity.getAttributeValue(AttributeRegistry.FIRE_RESISTANCE.get())/100, entity.getAttributeValue(AttributeRegistry.WATER_RESISTANCE.get())/100,
+                entity.getAttributeValue(AttributeRegistry.LIGHTNING_RESISTANCE.get())/100, entity.getAttributeValue(AttributeRegistry.MAGIC_RESISTANCE.get())/100,
+                entity.getAttributeValue(AttributeRegistry.DARK_RESISTANCE.get())/100, entity.getAttributeValue(Attributes.ARMOR) * 0.03};
+        double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+        if (ServerEvents.debugMode) {
+            log.debug("TARGET RESISTANCES: (def, fire, water, ltng, mag, dark, phys");
+            log.debug(defense);
+        }
+        if (ServerEvents.debugMode) {
+            for (int i = 0; i < 6; i++) {
+                log.debug(rv[i]);
+            }
+        }
+        if (entity.hasEffect(MobEffects.DAMAGE_RESISTANCE)) {
+            double resistanceLevel = ((double)entity.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() + 1)/5;
+            for (int i = 0; i < 6; i++) {
+                rv[i] *= (1 + resistanceLevel);
+            }
+        }
+        if (ServerEvents.debugMode) {
+            log.debug("----------------------");
+            log.debug("POST-MODIFIERS DAMAGE: (fire, water, ltng, mag, dark, phys)");
+        }
+        hurtArmor(source, sum(dv));
+        float returnValue = 0;
+        if (ServerEvents.debugMode) {
+            for (int i = 0; i < 5; i++) {
+                if (dv[i] > 0) {
+                    returnValue += (dv[i] * (1 - rv[i]));
+                    log.debug((dv[i] * (1 - rv[i])));
+                }
+            }
+        } else {
+            for (int i = 0; i < 5; i++) {
+                if (dv[i] > 0) {
+                    returnValue += (dv[i] * (1 - rv[i]));
+                }
+            }
+        }
+        if (dv[5] > 0) {
+            float ad = (float) (dv[5] - defense);
+            float physicalRes = (float) (rv[5] * (1 - pen));
+            returnValue += (ad * (1 - physicalRes));
+            if (ServerEvents.debugMode) log.debug((ad * (1 - physicalRes)));
+        }
+        if (ServerEvents.debugMode) log.debug("final damage: " + returnValue);
+        return returnValue;
     }
 
     public float sum(float[] a) {
@@ -278,7 +232,7 @@ public class MixinPlayer {
                 }
 
                 //factor in the player's attack strength scalar (the little sword icon under crosshair)
-                float scalar = this.getAttackStrengthScale(0.5F);
+                float scalar = thisPlayer.getAttackStrengthScale(0.5F);
                 ad *= 0.2F + scalar * scalar * 0.8F;
                 fd *= 0.2F + scalar * scalar * 0.8F;
                 wd *= 0.2F + scalar * scalar * 0.8F;
@@ -286,9 +240,9 @@ public class MixinPlayer {
                 md *= 0.2F + scalar * scalar * 0.8F;
                 dd *= 0.2F + scalar * scalar * 0.8F;
                 damageBonus *= scalar;
-                this.resetAttackStrengthTicker();
+                thisPlayer.resetAttackStrengthTicker();
 
-                if (ad > 0.0F || damageBonus > 0.0F) { //only run if there's actually damage
+                if (ad > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || damageBonus > 0.0F) { //only run if there's actually damage
 
                     //check for knockback
                     boolean fullStrength = scalar > 0.9F;
@@ -301,12 +255,7 @@ public class MixinPlayer {
                         sprintAttack = true;
                     }
 
-                    //check if the attack is a crit - TODO: change way crits work?
-                    //boolean isCrit = fullStrength && thisPlayer.fallDistance > 0.0F && !thisPlayer.isOnGround() && !thisPlayer.onClimbable() && !thisPlayer.isInWater() && !thisPlayer.hasEffect(MobEffects.BLINDNESS) && !thisPlayer.isPassenger() && target instanceof LivingEntity;
-                    boolean isCrit = (thisPlayer.getAttributeValue(AttributeRegistry.CRIT_CHANCE.get())/100) >= Math.random();
-                    System.out.println("Crit chance was " + thisPlayer.getAttributeValue(AttributeRegistry.CRIT_CHANCE.get()) + "%" + ", and the crit result was " + isCrit);
-                    //isCrit = isCrit && !thisPlayer.isSprinting();
-                    //we still need to run this event, but we can change the conditions for a crit with the lines above.
+                    boolean isCrit = (thisPlayer.getAttributeValue(AttributeRegistry.CRIT_CHANCE.get())/100) >= Math.random() && target instanceof LivingEntity;
                     net.minecraftforge.event.entity.player.CriticalHitEvent hitResult = net.minecraftforge.common.ForgeHooks.getCriticalHit(thisPlayer, target, isCrit, isCrit ? 1.5F : 1.0F);
                     isCrit = hitResult != null;
                     if (isCrit) {
@@ -317,7 +266,7 @@ public class MixinPlayer {
                     ad += damageBonus;
                     boolean isSweepAttack = false;
                     double d0 = (double)(thisPlayer.walkDist - thisPlayer.walkDistO);
-                    if (fullStrength && !isCrit && !sprintAttack && thisPlayer.isOnGround() && d0 < (double)thisPlayer.getSpeed()) {
+                    if (fullStrength && !sprintAttack && thisPlayer.isOnGround() && d0 < (double)thisPlayer.getSpeed()) {
                         ItemStack itemstack = thisPlayer.getItemInHand(InteractionHand.MAIN_HAND);
                         isSweepAttack = itemstack.canPerformAction(net.minecraftforge.common.ToolActions.SWORD_SWEEP);
                     }
@@ -338,15 +287,8 @@ public class MixinPlayer {
 
                     //this is where we actually set the target to be hurt, and check to see if the hurt event went through
                     Vec3 direction = target.getDeltaMovement();
-                    boolean targetWasHurt;
-                    if (thisPlayer.getItemInHand(thisPlayer.getUsedItemHand()) != null) {
-                        ItemStack item = thisPlayer.getItemInHand(thisPlayer.getUsedItemHand());
-                        if (item.getOrCreateTag().contains("idf.damage_class")) {
-                            targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, item.getTag().getString("idf.damage_class"), pen), ad);
-                        } else {
-                            targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, "strike", pen), ad);
-                        }
-                    } else targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, "strike", pen), ad);
+                    String damageClass = thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
+                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, pen, damageClass), ad);
 
                     if (targetWasHurt) {
                         //knockback the target and if the player was sprinting, stop their sprint
@@ -379,12 +321,13 @@ public class MixinPlayer {
                             for(LivingEntity livingentity : thisPlayer.level.getEntitiesOfClass(LivingEntity.class, thisPlayer.getItemInHand(InteractionHand.MAIN_HAND).getSweepHitBox(thisPlayer, target))) {
                                 if (livingentity != thisPlayer && livingentity != target && !thisPlayer.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).isMarker()) && thisPlayer.distanceToSqr(livingentity) < 9.0D) {
                                     livingentity.knockback((double)0.4F, (double)Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F))));
-                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, "strike", pen), sweepingAD);
+                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, pen,
+                                            thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass()), sweepingAD);
                                 }
                             }
 
                             thisPlayer.level.playSound((Player)null, thisPlayer.getX(), thisPlayer.getY(), thisPlayer.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, thisPlayer.getSoundSource(), 1.0F, 1.0F);
-                            this.sweepAttack();
+                            thisPlayer.sweepAttack();
                         }
 
                         //update relevant clients
@@ -397,7 +340,7 @@ public class MixinPlayer {
                         //if the attack was a crit play the crit sound
                         if (isCrit) {
                             thisPlayer.level.playSound((Player)null, thisPlayer.getX(), thisPlayer.getY(), thisPlayer.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, thisPlayer.getSoundSource(), 1.0F, 1.0F);
-                            this.crit(target);
+                            thisPlayer.crit(target);
                         }
 
                         //if the attack wasn't a crit or sweeping, play a sound based on whether the attack was full strength or not
@@ -411,7 +354,7 @@ public class MixinPlayer {
 
                         //if there is was a damage bonus from enchantments, use the magic crit effects
                         if (damageBonus > 0.0F) {
-                            this.magicCrit(target);
+                            thisPlayer.magicCrit(target);
                         }
 
                         //update the player's last hurt mob, and do some post hurt effects or something
@@ -441,7 +384,7 @@ public class MixinPlayer {
                         //now we set the target on fire again ?XD
                         if (target instanceof LivingEntity) {
                             float newTargetHealth = targetHealth - ((LivingEntity)target).getHealth();
-                            this.awardStat(Stats.DAMAGE_DEALT, Math.round(newTargetHealth * 10.0F));
+                            thisPlayer.awardStat(Stats.DAMAGE_DEALT, Math.round(newTargetHealth * 10.0F));
                             if (fireAspectLevel > 0) {
                                 target.setSecondsOnFire(fireAspectLevel * 4);
                             }
@@ -452,7 +395,7 @@ public class MixinPlayer {
                             }
                         }
 
-                        this.causeFoodExhaustion(0.1F);
+                        thisPlayer.causeFoodExhaustion(0.1F);
                     } else {
                         thisPlayer.level.playSound((Player)null, thisPlayer.getX(), thisPlayer.getY(), thisPlayer.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, thisPlayer.getSoundSource(), 1.0F, 1.0F);
                         if (targetOnFire) {
@@ -463,44 +406,11 @@ public class MixinPlayer {
             }
         }
     }
-    @Shadow
-    public float getAttackStrengthScale(float p_36404_) {
-        throw new IllegalStateException("Mixin failed to shadow getAttackStrengthScale(float f)");
-    }
-
-    @Shadow
-    public void resetAttackStrengthTicker() {
-        throw new IllegalStateException("Mixin failed to shadow resetAttackStrengthTicker()");
-    }
-
-    @Shadow
-    public void sweepAttack() {
-        throw new IllegalStateException("Mixin failed to shadow sweepAttack()");
-    }
-
-    @Shadow
-    public void crit(Entity p_36156_) {
-        throw new IllegalStateException("Mixin failed to shadow crit(Entity e)");
-    }
-
-    @Shadow
-    public void magicCrit(Entity p_36253_) {
-        throw new IllegalStateException("Mixin failed to shadow magiCrit(Entity e)");
-    }
-
-    @Shadow
-    public void awardStat(ResourceLocation r, int p_36146_) {
-        throw new IllegalStateException("Mixin failed to shadow awardStat(ResourceLocation r, int i");
-    }
-
-    @Shadow
-    public void causeFoodExhaustion(float p_36400_) {
-        throw new IllegalStateException("Mixin failed to shadow causeFoodExhaustion(float f)");
-    }
 
     @Shadow
     protected void hurtArmor(DamageSource p_21122_, float p_21123_) {
         throw new IllegalStateException("Mixin failed to shadow hurtArmor(DamageSource d, float f)");
     }
+
 
 }

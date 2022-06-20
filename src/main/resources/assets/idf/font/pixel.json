@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:pixelfont.ttf",
+      "oversample": 3,
+      "size": 6
+    }
+  ]
+}

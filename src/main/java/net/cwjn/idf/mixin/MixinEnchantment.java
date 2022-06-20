@@ -18,15 +18,16 @@ public class MixinEnchantment {
      */
     @Overwrite
     public Component getFullname(int level) {
-        TranslatableComponent component = new TranslatableComponent(this.getDescriptionId());
-        if (this.isCurse()) {
+        Enchantment thisEnchant = (Enchantment) (Object) this;
+        TranslatableComponent component = new TranslatableComponent(thisEnchant.getDescriptionId());
+        if (thisEnchant.isCurse()) {
             component.withStyle(ChatFormatting.RED);
         } else {
             component.withStyle(ChatFormatting.GRAY);
         }
 
         MutableComponent mutablecomponent;
-        double maxLevel = this.getMaxLevel();
+        double maxLevel = thisEnchant.getMaxLevel();
         double currentLevel = level;
         double levelAsPercentage = currentLevel/maxLevel;
 
@@ -45,18 +46,4 @@ public class MixinEnchantment {
         }
         return mutablecomponent;
     }
-
-    @Shadow
-    public String getDescriptionId() {
-        throw new IllegalStateException("Mixin failed to shadow getDescriptionId()");
-    }
-    @Shadow
-    public boolean isCurse() {
-        throw new IllegalStateException("Mixin failed to shadow isCurse()");
-    }
-    @Shadow
-    public int getMaxLevel() {
-        throw new IllegalStateException("Mixin failed to shadow getMaxLevel()");
-    }
-
 }

@@ -1,7 +1,8 @@
 package net.cwjn.idf.tetraIntegration;
 
-import net.cwjn.idf.Attributes.AttributeRegistry;
-import net.cwjn.idf.Enchantments.EnchantmentRegistry;
+import net.cwjn.idf.attribute.AttributeRegistry;
+import net.cwjn.idf.enchantment.EnchantmentRegistry;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import se.mickelus.tetra.blocks.workbench.gui.WorkbenchStatsGui;
@@ -32,6 +33,9 @@ public class Tetra {
         IStatGetter lightningDamageGetter = sum(new StatGetterAttribute(AttributeRegistry.LIGHTNING_DAMAGE.get()), lightningFlatGetter);
         IStatGetter magicDamageGetter = sum(new StatGetterAttribute(AttributeRegistry.MAGIC_DAMAGE.get()), magicFlatGetter);
         IStatGetter darkDamageGetter = sum(new StatGetterAttribute(AttributeRegistry.DARK_DAMAGE.get()), darkFlatGetter);
+        IStatGetter penGetter = new StatGetterAttribute(AttributeRegistry.PENETRATING.get());
+        IStatGetter critChanceGetter = new StatGetterAttribute(AttributeRegistry.CRIT_CHANCE.get());
+        IStatGetter lifestealGetter = new StatGetterAttribute(AttributeRegistry.LIFESTEAL.get());
         GuiStatBar fireDamage = new GuiStatBar(0, 0, barLength, "idf.stats.fire_damage",
                 0, 40, false, fireDamageGetter, LabelGetterBasic.decimalLabel,
                 new TooltipGetterDecimal("idf.stats.fire_damage.tooltip", fireDamageGetter));
@@ -62,6 +66,15 @@ public class Tetra {
         GuiStatBar darkMultiplier = new GuiStatBar(0, 0, barLength, "idf.stats.dark_damage",
                 0, 25, false, darkMultGetter, LabelGetterBasic.percentageLabel,
                 new TooltipGetterPercentage("idf.stats.dark_damage.tooltip", darkMultGetter));
+        GuiStatBar pen = new GuiStatBar(0, 0, barLength, "idf.stats.pen",
+                0, 100, false, penGetter, LabelGetterBasic.percentageLabel,
+                new TooltipGetterPercentage("idf.stats.pen.tooltip", penGetter));
+        GuiStatBar critChance = new GuiStatBar(0, 0, barLength, "idf.stats.crit_chance",
+                0, 100, false, critChanceGetter, LabelGetterBasic.percentageLabel,
+                new TooltipGetterPercentage("idf.stats.crit_chance.tooltip", critChanceGetter));
+        GuiStatBar lifesteal = new GuiStatBar(0, 0, barLength, "idf.stats.lifesteal",
+                0, 100, false, lifestealGetter, LabelGetterBasic.percentageLabel,
+                new TooltipGetterPercentage("idf.stats.lifesteal.tooltip", lifestealGetter));
         WorkbenchStatsGui.addBar(fireDamage);
         WorkbenchStatsGui.addBar(waterDamage);
         WorkbenchStatsGui.addBar(lightningDamage);
@@ -72,6 +85,9 @@ public class Tetra {
         WorkbenchStatsGui.addBar(lightningMultiplier);
         WorkbenchStatsGui.addBar(magicMultiplier);
         WorkbenchStatsGui.addBar(darkMultiplier);
+        WorkbenchStatsGui.addBar(pen);
+        WorkbenchStatsGui.addBar(critChance);
+        WorkbenchStatsGui.addBar(lifesteal);
     }
 
 }

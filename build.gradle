@@ -92,13 +92,14 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.25'
 
-    implementation fg.deobf("curse.maven:iceberg-520110:3675774") //1.18.2
-    implementation fg.deobf("curse.maven:itemframes-532127:3675785") //1.18.2
+    //implementation fg.deobf("curse.maven:iceberg-520110:3675774") //1.18.2
+    //implementation fg.deobf("curse.maven:itemframes-532127:3675785") //1.18.2
     implementation fg.deobf("se.mickelus.mutil:mutil:1.18.2-4.5.0")
-    implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.0")
+    implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.2")
     implementation fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0:api")
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency

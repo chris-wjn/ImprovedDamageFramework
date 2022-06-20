@@ -3,11 +3,17 @@
   "package": "net.cwjn.idf.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinBowItem",
+    "MixinCrossbowItem",
     "MixinDamageSource",
     "MixinEnchantment",
+    "MixinItemModularHandheld",
     "MixinItemStack",
     "MixinLivingEntity",
-    "MixinPlayer"
+    "MixinModularBowItem",
+    "MixinModularCrossbowItem",
+    "MixinPlayer",
+    "MixinSweepingEffect"
   ],
   "injectors": {
     "defaultRequire": 1
