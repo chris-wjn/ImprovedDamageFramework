@@ -24,31 +24,31 @@ import java.util.UUID;
 @Mod.EventBusSubscriber
 public class ItemModifier {
 
-    public static UUID baseFireDamage = UUID.randomUUID();
-    public static UUID baseWaterDamage = UUID.randomUUID();
-    public static UUID baseLightningDamage = UUID.randomUUID();
-    public static UUID baseMagicDamage = UUID.randomUUID();
-    public static UUID baseDarkDamage = UUID.randomUUID();
-    public static UUID baseLifesteal = UUID.randomUUID();
-    public static UUID basePenetration = UUID.randomUUID();
-    public static UUID baseCrit = UUID.randomUUID();
-    public static UUID baseFireResistance = UUID.randomUUID();
-    public static UUID baseWaterResistance = UUID.randomUUID();
-    public static UUID baseLightningResistance = UUID.randomUUID();
-    public static UUID baseMagicResistance = UUID.randomUUID();
-    public static UUID baseDarkResistance = UUID.randomUUID();
-    public static UUID baseEvasion = UUID.randomUUID();
-    public static UUID baseMaxHP = UUID.randomUUID();
-    public static UUID baseMovespeed = UUID.randomUUID();
-    public static UUID baseKnockbackResistance = UUID.randomUUID();
-    public static UUID baseLuck = UUID.randomUUID();
-    public static UUID baseStrikeMult = UUID.randomUUID();
-    public static UUID basePierceMult = UUID.randomUUID();
-    public static UUID baseCrushMult = UUID.randomUUID();
-    public static UUID baseSlashMult = UUID.randomUUID();
-    public static UUID baseGenericMult = UUID.randomUUID();
-    private static ItemStack cachedItem;
+    public static final UUID baseFireDamage = UUID.randomUUID();
+    public static final UUID baseWaterDamage = UUID.randomUUID();
+    public static final UUID baseLightningDamage = UUID.randomUUID();
+    public static final UUID baseMagicDamage = UUID.randomUUID();
+    public static final UUID baseDarkDamage = UUID.randomUUID();
+    public static final UUID baseLifesteal = UUID.randomUUID();
+    public static final UUID basePenetration = UUID.randomUUID();
+    public static final UUID baseCrit = UUID.randomUUID();
+    public static final UUID baseFireResistance = UUID.randomUUID();
+    public static final UUID baseWaterResistance = UUID.randomUUID();
+    public static final UUID baseLightningResistance = UUID.randomUUID();
+    public static final UUID baseMagicResistance = UUID.randomUUID();
+    public static final UUID baseDarkResistance = UUID.randomUUID();
+    public static final UUID baseEvasion = UUID.randomUUID();
+    public static final UUID baseMaxHP = UUID.randomUUID();
+    public static final UUID baseMovespeed = UUID.randomUUID();
+    public static final UUID baseKnockbackResistance = UUID.randomUUID();
+    public static final UUID baseLuck = UUID.randomUUID();
+    public static final UUID baseStrikeMult = UUID.randomUUID();
+    public static final UUID basePierceMult = UUID.randomUUID();
+    public static final UUID baseCrushMult = UUID.randomUUID();
+    public static final UUID baseSlashMult = UUID.randomUUID();
+    public static final UUID baseGenericMult = UUID.randomUUID();
     private static final Gson gson = new Gson();
+    private static ItemStack cachedItem;
     private static final ItemPredicateModular isPierce = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(ItemModifier.class.getClassLoader()
             .getResourceAsStream("data/idf/predicates/pierce.json")))), JsonObject.class));
     private static final ItemPredicateModular isSlash = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(ItemModifier.class.getClassLoader()
@@ -73,6 +73,7 @@ public class ItemModifier {
                 }
             }
             if (item.getItem() instanceof ModularItem) {
+                cachedItem = item;
                 item.getOrCreateTag().putBoolean("idf.equipment", true);
                 item.getOrCreateTag().putBoolean("idf.has_damage", true);
                 if (isSlash.matches(item)) {

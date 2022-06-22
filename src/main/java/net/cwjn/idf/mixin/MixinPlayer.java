@@ -118,7 +118,7 @@ public class MixinPlayer {
             damageClass = newSource.getDamageClass();
         }
         float[] dv = {fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage};
-        Map<String, Double> mappedMultipliers = new HashMap<>(5);
+        Map<String, Double> mappedMultipliers = new HashMap<>(3);
         mappedMultipliers.put("strike", entity.getAttributeValue(AttributeRegistry.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", entity.getAttributeValue(AttributeRegistry.PIERCE_MULT.get()));
         mappedMultipliers.put("_slash", entity.getAttributeValue(AttributeRegistry.SLASH_MULT.get()));
@@ -152,7 +152,7 @@ public class MixinPlayer {
         double[] rv = {entity.getAttributeValue(AttributeRegistry.FIRE_RESISTANCE.get())/100, entity.getAttributeValue(AttributeRegistry.WATER_RESISTANCE.get())/100,
                 entity.getAttributeValue(AttributeRegistry.LIGHTNING_RESISTANCE.get())/100, entity.getAttributeValue(AttributeRegistry.MAGIC_RESISTANCE.get())/100,
                 entity.getAttributeValue(AttributeRegistry.DARK_RESISTANCE.get())/100, entity.getAttributeValue(Attributes.ARMOR) * 0.03};
-        double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+        double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS)/3;
         if (ServerEvents.debugMode) {
             log.debug("TARGET RESISTANCES: (def, fire, water, ltng, mag, dark, phys");
             log.debug(defense);

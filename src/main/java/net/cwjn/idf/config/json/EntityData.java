@@ -6,7 +6,7 @@ public class EntityData {
     private double[] resistanceValues = new double[5];
     private double[] damageClassMult = new double[5];
     private String damageClass;
-    public EntityData(double f, double w, double l, double m, double d, String c, double fr, double wr, double lr, double mr, double dr, double dcS, double dcP, double dcSl, double dcC, double dcG) {
+    public EntityData(double f, double w, double l, double m, double d, String c, double fr, double wr, double lr, double mr, double dr, double dcS, double dcP, double dcC, double dcSl, double dcG) {
         damageValues[0] = f;
         damageValues[1] = w;
         damageValues[2] = l;
@@ -20,8 +20,8 @@ public class EntityData {
         resistanceValues[4] = dr;
         damageClassMult[0] = dcS;
         damageClassMult[1] = dcP;
-        damageClassMult[2] = dcSl;
-        damageClassMult[3] = dcC;
+        damageClassMult[2] = dcC;
+        damageClassMult[3] = dcSl;
         damageClassMult[4] = dcG;
     }
 

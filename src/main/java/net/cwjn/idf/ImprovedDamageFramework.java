@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +41,6 @@ public class ImprovedDamageFramework {
         EnchantmentRegistry.ENCHANTMENTS.register(bus);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -50,17 +50,12 @@ public class ImprovedDamageFramework {
         event.enqueueWork(AttributeRegistry::setSyncables);
         IDFPackerHandler.init();
         LOGGER.info("Loading Improved Damage Framework...");
-        Config.init();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatsScreen.class);
         Tetra.registerClient();
         Keybinds.register(event);
-    }
-
-    private void serverSetup(final FMLDedicatedServerSetupEvent event) {
-        Config.initServer();
     }
 
 }

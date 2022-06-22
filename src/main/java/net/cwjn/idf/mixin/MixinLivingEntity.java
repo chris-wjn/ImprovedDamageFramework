@@ -106,7 +106,11 @@ public class MixinLivingEntity {
             damageClass = newSource.getDamageClass();
         }
         float[] dv = {fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage};
-        Map<String, Double> mappedMultipliers = new HashMap<>(5);
+        if (entity.getAttribute(AttributeRegistry.STRIKE_MULT.get()) == null) {
+            System.out.println(entity.getType().getRegistryName() + " somehow doesn't have attributes?");
+            return sum(dv);
+        }
+        Map<String, Double> mappedMultipliers = new HashMap<>(3);
         mappedMultipliers.put("strike", entity.getAttributeValue(AttributeRegistry.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", entity.getAttributeValue(AttributeRegistry.PIERCE_MULT.get()));
         mappedMultipliers.put("_slash", entity.getAttributeValue(AttributeRegistry.SLASH_MULT.get()));
@@ -140,7 +144,7 @@ public class MixinLivingEntity {
         double[] rv = {entity.getAttributeValue(AttributeRegistry.FIRE_RESISTANCE.get())/100, entity.getAttributeValue(AttributeRegistry.WATER_RESISTANCE.get())/100,
                         entity.getAttributeValue(AttributeRegistry.LIGHTNING_RESISTANCE.get())/100, entity.getAttributeValue(AttributeRegistry.MAGIC_RESISTANCE.get())/100,
                         entity.getAttributeValue(AttributeRegistry.DARK_RESISTANCE.get())/100, entity.getAttributeValue(Attributes.ARMOR) * 0.03};
-        double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+        double defense = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS)/3;
         if (ServerEvents.debugMode) {
             log.debug("TARGET RESISTANCES: ");
             log.debug(defense);

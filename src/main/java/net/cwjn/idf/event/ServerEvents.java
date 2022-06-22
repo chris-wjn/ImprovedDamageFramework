@@ -6,9 +6,12 @@ import net.cwjn.idf.command.UpdateJsonFilesCommand;
 import net.cwjn.idf.config.CommonConfig;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
@@ -33,7 +36,7 @@ public class ServerEvents {
             String msgID = source.getMsgId();
             if (acceptableSources.contains(msgID)) {
                 if (event.getSource().getEntity() == null) {
-                    attacked.invulnerableTime = 0;
+                    attacked.invulnerableTime = 10;
                     return;
                 } else {
                     String attackerName = event.getSource().getEntity().getType().getRegistryName().toString();
@@ -41,8 +44,18 @@ public class ServerEvents {
                         if (ServerEvents.debugMode) ImprovedDamageFramework.getLog().debug("MOB IS BLACKLISTED");
                         return;
                     }
-                    else attacked.invulnerableTime = 0;
+                    else attacked.invulnerableTime = 10;
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onAttack(AttackEntityEvent event) {
+        Player player = event.getPlayer();
+        if (!player.level.isClientSide()) {
+            if (player.getAttackStrengthScale(0.5f) < 0.3) {
+                event.setCanceled(true);
             }
         }
     }
@@ -56,7 +69,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void nerfKnockback(LivingKnockBackEvent event) {
-        event.setStrength(event.getStrength() * 0.5f);
+        event.setStrength(event.getStrength() * 0.75f);
     }
 
 }

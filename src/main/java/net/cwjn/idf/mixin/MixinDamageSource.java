@@ -1,9 +1,7 @@
 package net.cwjn.idf.mixin;
 
 import net.cwjn.idf.attribute.AttributeRegistry;
-import net.cwjn.idf.capability.AuxiliaryProvider;
-import net.cwjn.idf.capability.ArrowHelperProvider;
-import net.cwjn.idf.capability.ProjectileHelper;
+import net.cwjn.idf.capability.*;
 import net.cwjn.idf.damage.IDFDamageSource;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.cwjn.idf.damage.IDFIndirectEntityDamageSource;
@@ -35,8 +33,8 @@ public class MixinDamageSource {
         float magic = (float) bee.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
         float dark = (float) bee.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
         float pen = (float) bee.getAttributeValue(AttributeRegistry.PENETRATING.get());
-        String damageClass = bee.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? bee.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike";
-        return new IDFEntityDamageSource("sting", bee, fire, water, lightning, magic, dark, pen, damageClass);
+        AuxiliaryData data = bee.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+        return new IDFEntityDamageSource("sting", bee, fire, water, lightning, magic, dark, pen, data.getDamageClass());
     }
 
     /**
@@ -44,14 +42,18 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource mobAttack(LivingEntity mob) {
-        float fire = (float) mob.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
-        float water = (float) mob.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
-        float lightning = (float) mob.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
-        float magic = (float) mob.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
-        float dark = (float) mob.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
-        float pen = (float) mob.getAttributeValue(AttributeRegistry.PENETRATING.get());
-        String damageClass = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike";
-        return new IDFEntityDamageSource("mob", mob, fire, water, lightning, magic, dark, pen, damageClass);
+        if (mob.getAttribute(AttributeRegistry.FIRE_DAMAGE.get()) == null) {
+            System.out.println(mob.getType().getRegistryName() + " doesn't have attributes?");
+            return new IDFEntityDamageSource("mob", mob, 0, 0, 0, 0, 0, 0, "strike");
+        }
+        final float fire = (float) mob.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
+        final float water = (float) mob.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
+        final float lightning = (float) mob.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
+        final float magic = (float) mob.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
+        final float dark = (float) mob.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
+        final float pen = (float) mob.getAttributeValue(AttributeRegistry.PENETRATING.get());
+        AuxiliaryData data = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+        return new IDFEntityDamageSource("mob", mob, fire, water, lightning, magic, dark, pen, data.getDamageClass());
     }
 
     /**
@@ -67,13 +69,18 @@ public class MixinDamageSource {
         float pen = 0;
         String damageClass = "strike";
         if (indirectSource != null) {
+            if (indirectSource.getAttribute(AttributeRegistry.FIRE_DAMAGE.get()) == null) {
+                System.out.println(indirectSource.getType().getRegistryName() + " doesn't have attributes?");
+                return new IDFIndirectEntityDamageSource("mob", source, indirectSource, fire, water, lightning, magic, dark, pen, damageClass);
+            }
             fire = (float) indirectSource.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
             water = (float) indirectSource.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
             lightning = (float) indirectSource.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
             magic = (float) indirectSource.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
             dark = (float) indirectSource.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
             pen = (float) indirectSource.getAttributeValue(AttributeRegistry.PENETRATING.get());
-            damageClass = indirectSource.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? source.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike";
+            AuxiliaryData data = indirectSource.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+            damageClass = data.getDamageClass();
         }
         return new IDFIndirectEntityDamageSource("mob", source, indirectSource, fire, water, lightning, magic, dark, pen, damageClass);
     }
@@ -89,9 +96,9 @@ public class MixinDamageSource {
         float magic = 0;
         float dark = 0;
         float pen = 0;
-        String damageClass = "strike";
-        if (indirectSource instanceof LivingEntity livingSource) {
-            ProjectileHelper helper = livingSource.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(null);
+        String damageClass = "pierce";
+        if (indirectSource instanceof Player livingSource) {
+            ProjectileHelper helper = livingSource.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
             fire = helper.getFire();
             water = helper.getWater();
             lightning = helper.getLightning();
@@ -114,9 +121,9 @@ public class MixinDamageSource {
         float magic = 0;
         float dark = 0;
         float pen = 0;
-        String damageClass = "strike";
-        if (indirectSource instanceof LivingEntity livingSource) {
-            ProjectileHelper helper = livingSource.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(null);
+        String damageClass = "pierce";
+        if (indirectSource instanceof Player livingSource) {
+            ProjectileHelper helper = livingSource.getCapability(TridentHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
             fire = helper.getFire();
             water = helper.getWater();
             lightning = helper.getLightning();
@@ -126,22 +133,6 @@ public class MixinDamageSource {
             damageClass = helper.getDamageClass();
         }
         return (new IDFIndirectEntityDamageSource("trident", source, indirectSource, fire, water, lightning, magic, dark, pen, damageClass)).setProjectile();
-    }
-
-
-    /**
-     * @author cwJn
-     */
-    @Overwrite
-    public static DamageSource playerAttack(Player player) {
-        float fire = (float) player.getAttributeValue(AttributeRegistry.FIRE_DAMAGE.get());
-        float water = (float) player.getAttributeValue(AttributeRegistry.WATER_DAMAGE.get());
-        float lightning = (float) player.getAttributeValue(AttributeRegistry.LIGHTNING_DAMAGE.get());
-        float magic = (float) player.getAttributeValue(AttributeRegistry.MAGIC_DAMAGE.get());
-        float dark = (float) player.getAttributeValue(AttributeRegistry.DARK_DAMAGE.get());
-        float pen = (float) player.getAttributeValue(AttributeRegistry.PENETRATING.get());
-        String damageClass = player.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
-        return new IDFEntityDamageSource("player", player, fire, water, lightning, magic, dark, pen, damageClass);
     }
 
     /**

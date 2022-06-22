@@ -1,6 +1,5 @@
 package net.cwjn.idf.event;
 
-import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.AttributeRegistry;
 import net.cwjn.idf.network.DisplayEvasionParticlesMessage;
 import net.cwjn.idf.network.IDFPackerHandler;

@@ -57,7 +57,7 @@ public class JSONHandler {
         for (EntityType<?> entityType : ForgeRegistries.ENTITIES.getValues()) {
             MobCategory type = entityType.getCategory();
             if (type != MobCategory.MISC) { //make sure this isnt an arrow entity or something
-                defaultEntityData.put(entityType.getRegistryName().toString(), new EntityData(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike", 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D));
+                defaultEntityData.put(entityType.getRegistryName().toString(), new EntityData(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike", 30.0D, 30.0D, 30.0D, 30.0D, 30.0D, 1.0D, 1.0D, 1.0D, 1.0D, 1.0D));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
@@ -70,7 +70,17 @@ public class JSONHandler {
                               armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                               armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (armorVal > 0) {
-                defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                if (item.getRegistryName().toString().contains("iron") || (item.getRegistryName().toString().contains("chainmail")) || (item.getRegistryName().toString().contains("netherite"))) {
+                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0.05, 0, 0.1, -0.05, 0));
+                } else if (item.getRegistryName().toString().contains("leather")) {
+                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, -0.05, 0.1, -0.03, 0, 0));
+                } else if (item.getRegistryName().toString().contains("diamond")) {
+                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.07, 0.0, -0.05, 0.02, 0));
+                } else if (item.getRegistryName().toString().contains("gold")) {
+                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.1, -0.1, 0.03, -0.1, 0));
+                } else {
+                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                }
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
@@ -79,7 +89,14 @@ public class JSONHandler {
             double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                     weapon1.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (damageVal > 0 || item instanceof BowItem || item instanceof CrossbowItem) {
-                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, "strike", 0, 0, 0));
+                String dc = "strike";
+                if (item.getRegistryName().toString().contains("sword") || item.getRegistryName().toString().contains("axe")) {
+                    dc = "_slash";
+                }
+                if (item.getRegistryName().toString().contains("pickaxe") || (item.getRegistryName().toString().contains("bow"))) {
+                    dc = "pierce";
+                }
+                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, dc, 0, 0, 0));
             }
         }
         entityMap.clear();
@@ -133,7 +150,14 @@ public class JSONHandler {
             double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                     weapon1.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (damageVal > 0 || item instanceof BowItem || item instanceof CrossbowItem) {
-                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, "strike", 0, 0, 0));
+                String dc = "strike";
+                if (item.getRegistryName().toString().contains("sword") || item.getRegistryName().toString().contains("axe")) {
+                    dc = "_slash";
+                }
+                if (item.getRegistryName().toString().contains("pickaxe") || (item.getRegistryName().toString().contains("bow"))) {
+                    dc = "pierce";
+                }
+                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, dc, 0, 0, 0));
             }
         }
         serverResistanceMap.clear();
