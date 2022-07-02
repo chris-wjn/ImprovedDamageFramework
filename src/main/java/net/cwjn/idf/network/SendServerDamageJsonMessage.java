@@ -1,11 +1,12 @@
 package net.cwjn.idf.network;
 
-import net.cwjn.idf.config.json.DamageData;
+import net.cwjn.idf.config.json.data.DamageData;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,29 +25,32 @@ public class SendServerDamageJsonMessage {
         for (Map.Entry<ResourceLocation, DamageData> entry : message.map.entrySet()) {
             buffer.writeResourceLocation(entry.getKey());
             DamageData data = entry.getValue();
-            buffer.writeDouble(data.getDamageValues()[0]);
-            buffer.writeDouble(data.getDamageValues()[1]);
-            buffer.writeDouble(data.getDamageValues()[2]);
-            buffer.writeDouble(data.getDamageValues()[3]);
-            buffer.writeDouble(data.getDamageValues()[4]);
-            buffer.writeCharSequence(data.getDamageClass(), Charset.defaultCharset());
-            buffer.writeDouble(data.getAuxiliary()[0]);
-            buffer.writeDouble(data.getAuxiliary()[1]);
-            buffer.writeDouble(data.getAuxiliary()[2]);
+            buffer.writeDouble(data.getFire());
+            buffer.writeDouble(data.getWater());
+            buffer.writeDouble(data.getLightning());
+            buffer.writeDouble(data.getMagic());
+            buffer.writeDouble(data.getDark());
+            buffer.writeDouble(data.getAttackDamage());
+            //buffer.writeCharSequence(data.getDamageClass(), Charset.defaultCharset());
+            writeString(data.getDamageClass(), buffer);
+            buffer.writeDouble(data.getLifesteal());
+            buffer.writeDouble(data.getArmourPenetration());
+            buffer.writeDouble(data.getCritChance());
         }
     }
     public static SendServerDamageJsonMessage decode(FriendlyByteBuf buffer) {
         Map<ResourceLocation, DamageData> returnMap = new HashMap<>();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++) {
-            returnMap.put(buffer.readResourceLocation(), new DamageData(
-                    buffer.readDouble(),
-                    buffer.readDouble(),
-                    buffer.readDouble(),
-                    buffer.readDouble(),
-                    buffer.readDouble(),
-                    buffer.readCharSequence(6, Charset.defaultCharset()).toString(), //we ensure all damage class strings are six characters.
-                                                                                              //kind of a shit way to do this but this charsequence thing is trash so i dont care
+            returnMap.put(buffer.readResourceLocation() , new DamageData(
+                    buffer.readDouble(), //fire
+                    buffer.readDouble(), //water
+                    buffer.readDouble(), //lightning
+                    buffer.readDouble(), //magic
+                    buffer.readDouble(), //dark
+                    buffer.readDouble(), //attack damage
+                    //buffer.readCharSequence(6, Charset.defaultCharset()).toString();
+                    readString(buffer),
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble()));
@@ -58,6 +62,28 @@ public class SendServerDamageJsonMessage {
         NetworkEvent.Context ctx = contextSupplier.get();
         JSONHandler.updateClientDamageData(message.map);
         ctx.setPacketHandled(true);
+    }
+
+    /*
+        Below methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
+     */
+    private static String readString(FriendlyByteBuf buffer) {
+        String string = "";
+        char c = buffer.readChar();
+
+        while(c != '\0') {
+            string += c;
+            c = buffer.readChar();
+        }
+
+        return string;
+    }
+
+    private static void writeString(String string, FriendlyByteBuf buffer) {
+        for (int i = 0; i < string.length(); i++) {
+            buffer.writeChar(string.charAt(i));
+        }
+        buffer.writeChar('\0');
     }
 
 }

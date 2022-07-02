@@ -8,10 +8,12 @@ public interface IDFInterface {
     float getMagic();
     float getDark();
     float getPen();
+    float getLifesteal();
     String getDamageClass();
     boolean isTrue();
     boolean isConversion();
     IDFInterface setIsConversion();
     IDFInterface setTrue();
+    String getMsgId();
 
 }

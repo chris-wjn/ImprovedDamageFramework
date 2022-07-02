@@ -1,6 +1,6 @@
 package net.cwjn.idf.network;
 
-import net.cwjn.idf.event.EvasionEvent;
+import net.cwjn.idf.event.hook.EvasionEvent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

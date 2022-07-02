@@ -6,8 +6,8 @@ import net.minecraft.world.damagesource.DamageSource;
 public class ATHandler {
     public static void alterStaticSources() {
         //physical sources
-        DamageSource.STARVE = new PhysicalDamageSource("starve", 0.0f, "genric").setTrue();
-        DamageSource.OUT_OF_WORLD = new PhysicalDamageSource("outOfWorld", 0.0f, "genric").setTrue();
+        DamageSource.STARVE = new PhysicalDamageSource("starve", 0.0f, "generic").setTrue();
+        DamageSource.OUT_OF_WORLD = new PhysicalDamageSource("outOfWorld", 0.0f, "generic").setTrue();
         DamageSource.CACTUS = new PhysicalDamageSource("cactus", 0.0f, "pierce");
         DamageSource.SWEET_BERRY_BUSH = new PhysicalDamageSource("sweetBerryBush", 0.0f, "pierce");
         DamageSource.STALAGMITE = new PhysicalDamageSource("stalagmite", 0.0f, "pierce").setIsFall();
@@ -17,24 +17,24 @@ public class ATHandler {
         DamageSource.GENERIC = new PhysicalDamageSource("generic", 0.0f, "strike");
         DamageSource.ANVIL = new PhysicalDamageSource("anvil", 0.0f, "strike");
         DamageSource.FALLING_BLOCK = new PhysicalDamageSource("fallingBlock", 0.0f, "strike");
-        DamageSource.IN_WALL = new PhysicalDamageSource("inWall", 0.0f, "_crush");
-        DamageSource.CRAMMING = new PhysicalDamageSource("cramming", 0.0f, "_crush");
+        DamageSource.IN_WALL = new PhysicalDamageSource("inWall", 0.0f, "crush");
+        DamageSource.CRAMMING = new PhysicalDamageSource("cramming", 0.0f, "crush");
         //fire sources
-        DamageSource.IN_FIRE = new FireDamageSource("inFire", "genric").setIsFire();
-        DamageSource.ON_FIRE = new FireDamageSource("onFire", "genric").setIsFire();
-        DamageSource.LAVA = new FireDamageSource("lava", "genric").setIsFire();
-        DamageSource.HOT_FLOOR = new FireDamageSource("hotFloor", "genric").setIsFire();
-        DamageSource.DRY_OUT = new FireDamageSource("dryout", "genric");
+        DamageSource.IN_FIRE = new FireDamageSource("inFire", "generic").setIsFire();
+        DamageSource.ON_FIRE = new FireDamageSource("onFire", "generic").setIsFire();
+        DamageSource.LAVA = new FireDamageSource("lava", "generic").setIsFire();
+        DamageSource.HOT_FLOOR = new FireDamageSource("hotFloor", "generic").setIsFire();
+        DamageSource.DRY_OUT = new FireDamageSource("dryout", "generic");
         //water sources
-        DamageSource.DROWN = new WaterDamageSource("drown", "genric");
-        DamageSource.FREEZE = new WaterDamageSource("freeze", "genric");
+        DamageSource.DROWN = new WaterDamageSource("drown", "generic");
+        DamageSource.FREEZE = new WaterDamageSource("freeze", "generic");
         //lightning sources
         DamageSource.LIGHTNING_BOLT = new LightningDamageSource("lightningBolt", "pierce");
         //magic sources
-        DamageSource.MAGIC = new MagicDamageSource("magic", "genric");
+        DamageSource.MAGIC = new MagicDamageSource("magic", "generic");
         //dark sources
-        DamageSource.WITHER = new DarkDamageSource("wither", "genric");
+        DamageSource.WITHER = new DarkDamageSource("wither", "generic");
         //mixed sources
-        DamageSource.DRAGON_BREATH = new IDFDamageSource("dragonBreath", 0.5f,  0, 0, 0.5f, 0, 0, "genric").setIsConversion();
+        DamageSource.DRAGON_BREATH = new IDFDamageSource("dragonBreath", 0.5f,  0, 0, 0.5f, 0, 0, 0, "generic").setIsConversion();
     }
 }

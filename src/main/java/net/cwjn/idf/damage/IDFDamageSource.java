@@ -4,7 +4,7 @@ import net.minecraft.world.damagesource.DamageSource;
 
 public class IDFDamageSource extends DamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen;
+    private final float fire, water, lightning, magic, dark, pen, lifesteal;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -16,10 +16,11 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         magic = 0;
         dark = 0;
         pen = 0;
+        lifesteal = 0;
         damageClass = dc;
     }
 
-    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, String dc) {
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, float ls, String dc) {
         super(msgId);
         fire = f;
         water = w;
@@ -27,6 +28,7 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         magic = m;
         dark = d;
         damageClass = dc;
+        lifesteal = ls;
         this.pen = pen;
     }
 
@@ -65,11 +67,21 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
     }
 
     public float getDark() { return dark; }
+
     public float getPen() {
         return pen;
+    }
+
+    public float getLifesteal() {
+        return lifesteal;
     }
 
     public String getDamageClass() {
         return damageClass;
     }
+
+    public String getMsgId() {
+        return this.msgId;
+    }
+
 }

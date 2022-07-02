@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 
 public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen;
+    private final float fire, water, lightning, magic, dark, pen, lifesteal;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -17,10 +17,11 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         magic = 0;
         dark = 0;
         pen = 0;
+        lifesteal = 0;
         damageClass = dc;
     }
 
-    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, String dc) {
+    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, float ls, String dc) {
         super(msgId, source, trueSource);
         fire = f;
         water = w;
@@ -28,6 +29,7 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         magic = m;
         dark = d;
         pen = p;
+        lifesteal = ls;
         damageClass = dc;
     }
 
@@ -66,11 +68,20 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
     }
 
     public float getDark() { return dark; }
+
     public float getPen() {
         return pen;
     }
 
+    public float getLifesteal() {
+        return lifesteal;
+    }
+
     public String getDamageClass() {
         return damageClass;
+    }
+
+    public String getMsgId() {
+        return this.msgId;
     }
 }

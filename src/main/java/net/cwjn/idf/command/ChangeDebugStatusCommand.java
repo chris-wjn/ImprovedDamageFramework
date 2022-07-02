@@ -2,7 +2,7 @@ package net.cwjn.idf.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.cwjn.idf.event.ServerEvents;
+import net.cwjn.idf.event.hook.ServerEvents;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;

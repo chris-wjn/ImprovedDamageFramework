@@ -1,0 +1,407 @@
+{
+  "minecraft:netherite_shovel": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:netherite_pickaxe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:iron_sword": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:netherite_axe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:wooden_axe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:diamond_sword": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:golden_sword": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:diamond_axe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:stone_shovel": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:bow": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:wooden_pickaxe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:wooden_sword": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:crossbow": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:stone_pickaxe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:golden_shovel": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:golden_pickaxe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:trident": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:stone_axe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:golden_axe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:iron_axe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:stone_sword": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  },
+  "minecraft:iron_pickaxe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:diamond_pickaxe": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "pierce"
+  },
+  "minecraft:wooden_shovel": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:diamond_shovel": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:iron_shovel": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "strike"
+  },
+  "minecraft:netherite_sword": {
+    "damageValues": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "auxiliary": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "damageClass": "_slash"
+  }
+}

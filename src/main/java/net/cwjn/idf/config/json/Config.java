@@ -12,40 +12,15 @@ import java.nio.file.Paths;
 public class Config {
     public static void init()
     {
-        Path configPath = FMLPaths.CONFIGDIR.get();
-        Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "ImprovedDamageFramework");
-
-        try
-        {
-            Files.createDirectory(modConfigPath);
+        Path dir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework");
+        try {
+            Files.createDirectory(dir);
         }
-        catch (FileAlreadyExistsException e) {}
-        catch (IOException e)
-        {
-            ImprovedDamageFramework.getLog().error("Failed to create IDF config directory", e);
+        catch (FileAlreadyExistsException ignored) {}
+        catch (IOException e) {
+            ImprovedDamageFramework.LOGGER.error("Failed to create IDF config directory", e);
         }
-
-        JSONHandler.init(modConfigPath.toFile());
-
-        System.out.println("Initialized Data config!");
-    }
-    public static void initServer()
-    {
-        Path configPath = FMLPaths.CONFIGDIR.get();
-        Path modConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "ImprovedDamageFramework");
-
-        try
-        {
-            Files.createDirectory(modConfigPath);
-        }
-        catch (FileAlreadyExistsException e) {}
-        catch (IOException e)
-        {
-            ImprovedDamageFramework.getLog().error("Failed to create ImprovedDamageFramework config directory", e);
-        }
-
-        JSONHandler.serverInit(modConfigPath.toFile());
-
-        System.out.println("Initialized Server Data config!");
+        JSONHandler.init(dir.toFile());
+        ImprovedDamageFramework.LOGGER.info("Loaded ImprovedDamageFramework config.");
     }
 }

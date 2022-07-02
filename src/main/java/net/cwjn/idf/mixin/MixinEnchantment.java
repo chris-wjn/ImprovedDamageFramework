@@ -18,30 +18,27 @@ public class MixinEnchantment {
      */
     @Overwrite
     public Component getFullname(int level) {
-        Enchantment thisEnchant = (Enchantment) (Object) this;
+        Enchantment thisEnchant = (Enchantment)(Object)this;
         TranslatableComponent component = new TranslatableComponent(thisEnchant.getDescriptionId());
-        if (thisEnchant.isCurse()) {
-            component.withStyle(ChatFormatting.RED);
-        } else {
-            component.withStyle(ChatFormatting.GRAY);
-        }
-
         MutableComponent mutablecomponent;
         double maxLevel = thisEnchant.getMaxLevel();
-        double currentLevel = level;
-        double levelAsPercentage = currentLevel/maxLevel;
+        double levelAsPercentage = (double) level / maxLevel;
 
-        if (maxLevel == 1) {
-            mutablecomponent = Util.withColor(component, Color.FULLPURPLE);
+        if (thisEnchant.isCurse()) {
+            mutablecomponent = Util.withColor(component, Color.RED);
         } else {
-            if (levelAsPercentage <= 0.33) {
-                mutablecomponent = Util.withColor(component, Color.ENCHANTINGGRAY).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.ENCHANTINGGRAY));
-            } else if (levelAsPercentage <= 0.66) {
-                mutablecomponent = Util.withColor(component, Color.WEAKPURPLE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.WEAKPURPLE));
-            } else if (levelAsPercentage <= 0.99) {
-                mutablecomponent = Util.withColor(component, Color.FULLPURPLE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.FULLPURPLE));
+            if (maxLevel == 1) {
+                mutablecomponent = Util.withColor(component, Color.MAGICBLUE);
             } else {
-                mutablecomponent = Util.withColor(component, Color.MAGICBLUE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.MAGICBLUE));
+                if (levelAsPercentage <= 0.33) {
+                    mutablecomponent = Util.withColor(component, Color.ENCHANTINGGRAY).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.ENCHANTINGGRAY));
+                } else if (levelAsPercentage <= 0.66) {
+                    mutablecomponent = Util.withColor(component, Color.WEAKPURPLE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.WEAKPURPLE));
+                } else if (levelAsPercentage <= 0.99) {
+                    mutablecomponent = Util.withColor(component, Color.FULLPURPLE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.FULLPURPLE));
+                } else {
+                    mutablecomponent = Util.withColor(component, Color.MAGICBLUE).append(" ").append(Util.withColor(new TranslatableComponent("enchantment.level." + level), Color.MAGICBLUE));
+                }
             }
         }
         return mutablecomponent;
