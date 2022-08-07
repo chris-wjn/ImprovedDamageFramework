@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:compacta.otf",
+      "oversample": 6,
+      "size": 14
+    }
+  ]
+}

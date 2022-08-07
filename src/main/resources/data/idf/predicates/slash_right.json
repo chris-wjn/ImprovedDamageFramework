@@ -1,9 +1,0 @@
-{
-  "type": "tetra:modular_item",
-  "modules": [
-    ["double/basic_axe_right"],
-    ["double/sickle_right"],
-    ["double/claw_right"],
-    ["double/adze_right"]
-  ]
-}

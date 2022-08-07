@@ -4,7 +4,7 @@ import net.minecraft.world.damagesource.DamageSource;
 
 public class IDFDamageSource extends DamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen, lifesteal;
+    private final float fire, water, lightning, magic, dark, pen, lifesteal, weight, knockback;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -17,6 +17,8 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         dark = 0;
         pen = 0;
         lifesteal = 0;
+        weight = -1;
+        knockback = 0;
         damageClass = dc;
     }
 
@@ -29,6 +31,36 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         dark = d;
         damageClass = dc;
         lifesteal = ls;
+        weight = -1;
+        knockback = 0;
+        this.pen = pen;
+    }
+
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, float ls, float wt, String dc) {
+        super(msgId);
+        fire = f;
+        water = w;
+        lightning = l;
+        magic = m;
+        dark = d;
+        damageClass = dc;
+        lifesteal = ls;
+        weight = wt;
+        knockback = 0;
+        this.pen = pen;
+    }
+
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, float ls, float kb, float wt, String dc) {
+        super(msgId);
+        fire = f;
+        water = w;
+        lightning = l;
+        magic = m;
+        dark = d;
+        damageClass = dc;
+        lifesteal = ls;
+        weight = wt;
+        knockback = kb;
         this.pen = pen;
     }
 
@@ -76,6 +108,10 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         return lifesteal;
     }
 
+    public float getWeight() {
+        return weight;
+    }
+
     public String getDamageClass() {
         return damageClass;
     }
@@ -84,4 +120,7 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         return this.msgId;
     }
 
+    public float getKnockback() {
+        return knockback;
+    }
 }

@@ -1,6 +1,7 @@
 package net.cwjn.idf.attribute;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.mixin.AccessRangedAttribute;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -21,15 +22,16 @@ public class IDFAttributes {
     public static final RegistryObject<Attribute> MAGIC_DAMAGE = register("idf.magic_damage", () -> new RangedAttribute("idf.attribute.magic_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> DARK_DAMAGE = register("idf.dark_damage", () -> new RangedAttribute("idf.attribute.dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary offensive attributes
+    public static final RegistryObject<Attribute> WEIGHT = register("idf.weight", () -> new RangedAttribute("idf.attribute.weight", 1.0D, -1.0D, 40).setSyncable(true));
     public static final RegistryObject<Attribute> LIFESTEAL = register("idf.lifesteal", () -> new RangedAttribute("idf.attribute.lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
     public static final RegistryObject<Attribute> PENETRATING = register("idf.penetrating", () -> new RangedAttribute("idf.attribute.penetrating", 0.0D, 0.0D, 100.0D).setSyncable(true));
     public static final RegistryObject<Attribute> CRIT_CHANCE = register("idf.crit_chance", () -> new RangedAttribute("idf.attribute.crit_chance", 0.0D, 0.0D, 100.0D).setSyncable(true));
     //elemental resistance types
-    public static final RegistryObject<Attribute> FIRE_RESISTANCE = register("idf.fire_resistance", () -> new RangedAttribute("idf.attribute.fire_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> WATER_RESISTANCE = register("idf.water_resistance", () -> new RangedAttribute("idf.attribute.water_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> LIGHTNING_RESISTANCE = register("idf.lightning_resistance", () -> new RangedAttribute("idf.attribute.lightning_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> MAGIC_RESISTANCE = register("idf.magic_resistance", () -> new RangedAttribute("idf.attribute.magic_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> DARK_RESISTANCE = register("idf.dark_resistance", () -> new RangedAttribute("idf.attribute.dark_resistance", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> FIRE_RESISTANCE = register("idf.fire_resistance", () -> new RangedAttribute("idf.attribute.fire_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> WATER_RESISTANCE = register("idf.water_resistance", () -> new RangedAttribute("idf.attribute.water_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> LIGHTNING_RESISTANCE = register("idf.lightning_resistance", () -> new RangedAttribute("idf.attribute.lightning_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> MAGIC_RESISTANCE = register("idf.magic_resistance", () -> new RangedAttribute("idf.attribute.magic_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> DARK_RESISTANCE = register("idf.dark_resistance", () -> new RangedAttribute("idf.attribute.dark_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
     //damage class multipliers
     public static final RegistryObject<Attribute> STRIKE_MULT = register("idf.strike_mult", () -> new RangedAttribute("idf.attribute.strike_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> PIERCE_MULT = register("idf.pierce_mult", () -> new RangedAttribute("idf.attribute.pierce_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
@@ -44,10 +46,16 @@ public class IDFAttributes {
     }
 
     //this is to make the vanilla attributes that aren't syncable, syncable. This is needed for the stats screen to display correct information.
-    public static void setSyncables() {
+    public static void changeDefaultAttributes() {
         Attributes.ATTACK_DAMAGE.setSyncable(true);
         Attributes.ATTACK_KNOCKBACK.setSyncable(true);
         Attributes.KNOCKBACK_RESISTANCE.setSyncable(true);
+        AccessRangedAttribute mixinArmour = (AccessRangedAttribute) Attributes.ARMOR;
+        AccessRangedAttribute mixinDefense = (AccessRangedAttribute) Attributes.ARMOR_TOUGHNESS;
+        mixinArmour.setMax(Double.MAX_VALUE);
+        mixinArmour.setMin(-Double.MAX_VALUE);
+        mixinDefense.setMax(40D);
+        mixinDefense.setMin(1D);
     }
 
 }

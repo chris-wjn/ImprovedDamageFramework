@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:bubble.ttf",
+      "size": 16,
+      "oversample": 3
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:ancientmoderntales.ttf",
+      "size": 32,
+      "oversample": 3
+    }
+  ]
+}

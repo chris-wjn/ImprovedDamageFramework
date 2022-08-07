@@ -25,8 +25,14 @@ public class ImprovedDamageFramework {
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "idf";
+    public static final ResourceLocation FONT_COMPACTA = new ResourceLocation("idf", "compacta");
     public static final ResourceLocation FONT_IDF = new ResourceLocation("idf", "font");
+    public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
     public static final ResourceLocation FONT_PIXEL = new ResourceLocation("idf", "pixel");
+    public static final ResourceLocation FONT_MODERNTALES = new ResourceLocation("idf", "ancientmoderntales");
+    public static final ResourceLocation FONT_BUBBLE = new ResourceLocation("idf", "bubble");
+    public static final ResourceLocation FONT_ALAGARD = new ResourceLocation("idf", "alagard");
+    public static final ResourceLocation FONT_DOGICA = new ResourceLocation("idf", "dogica");
 
     public ImprovedDamageFramework() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -44,14 +50,14 @@ public class ImprovedDamageFramework {
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("Loading Improved Damage Framework...");
         event.enqueueWork(ATHandler::alterStaticSources);
-        event.enqueueWork(IDFAttributes::setSyncables);
+        event.enqueueWork(IDFAttributes::changeDefaultAttributes);
         IDFPacketHandler.init();
         CompatHandler.init(event);
+        LOGGER.info("Finished loading Improved Damage Framework!");
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatsScreen.class);
-        Keybinds.register(event);
         CompatHandler.initClient(event);
     }
 

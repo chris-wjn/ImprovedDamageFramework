@@ -31,10 +31,10 @@ public class SendServerDamageJsonMessage {
             buffer.writeDouble(data.getMagic());
             buffer.writeDouble(data.getDark());
             buffer.writeDouble(data.getAttackDamage());
-            //buffer.writeCharSequence(data.getDamageClass(), Charset.defaultCharset());
             writeString(data.getDamageClass(), buffer);
             buffer.writeDouble(data.getLifesteal());
             buffer.writeDouble(data.getArmourPenetration());
+            buffer.writeDouble(data.getWeight());
             buffer.writeDouble(data.getCritChance());
         }
     }
@@ -49,8 +49,8 @@ public class SendServerDamageJsonMessage {
                     buffer.readDouble(), //magic
                     buffer.readDouble(), //dark
                     buffer.readDouble(), //attack damage
-                    //buffer.readCharSequence(6, Charset.defaultCharset()).toString();
                     readString(buffer),
+                    buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble()));

@@ -1,0 +1,16 @@
+{
+  "name": "Creeper",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:creeper",
+      "text": "A common hostile mob that silently approaches players and explodes."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:creeper"
+    }
+  ]
+}

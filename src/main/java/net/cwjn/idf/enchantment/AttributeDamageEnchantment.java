@@ -6,7 +6,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.jetbrains.annotations.NotNull;
-import se.mickelus.tetra.items.modular.ModularItem;
 
 import java.util.UUID;
 

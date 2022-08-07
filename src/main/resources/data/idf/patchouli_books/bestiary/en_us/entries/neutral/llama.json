@@ -1,0 +1,16 @@
+{
+    "name": "Llama",
+    "icon": "",
+    "category": "idf:neutral",
+    "pages": [
+      {
+        "type": "patchouli:entity",
+        "entity": "minecraft:llama",
+        "text": "A neutral mob that can be found in windswept hills and savanna biomes. Can be tamed and used to transport items."
+      },
+      {
+        "type": "idf:passive_entity",
+        "entity": "minecraft:llama"
+      }
+    ]
+  }

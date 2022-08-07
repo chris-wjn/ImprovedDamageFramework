@@ -1,0 +1,17 @@
+{
+  "name": "Sheep",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:sheep",
+      "scale": 0.8,
+      "text": "A common passive mob found in grassy biomes."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:sheep"
+    }
+  ]
+}

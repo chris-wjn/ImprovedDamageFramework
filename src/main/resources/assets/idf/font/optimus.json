@@ -3,7 +3,8 @@
     {
       "type": "ttf",
       "file": "idf:optimus.ttf",
-      "oversample": 3
+      "oversample": 6,
+      "size": 16
     }
   ]
 }

@@ -15,7 +15,8 @@ import javax.annotation.Nullable;
 
 public class TridentHelperProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<ProjectileHelper> PROJECTILE_HELPER = CapabilityManager.get(new CapabilityToken<ProjectileHelper>() {});
+    public static Capability<ProjectileHelper> PROJECTILE_HELPER = CapabilityManager.get(new CapabilityToken<>() {
+    });
     private ProjectileHelper projectileHelper = null;
     private final LazyOptional<ProjectileHelper> optionalProjectileHelper = LazyOptional.of(this::createProjectileHelper);
 

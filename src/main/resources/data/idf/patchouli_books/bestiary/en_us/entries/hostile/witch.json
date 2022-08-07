@@ -1,0 +1,16 @@
+{
+  "name": "Witch",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:witch",
+      "text": "A hostile mob that throws splash potions to harm enemies and buff itself."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:witch"
+    }
+  ]
+}

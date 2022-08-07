@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-
+//written by SilentChaos512 as part of silentutils
 public class Color {
     private static final Map<String, Color> NAMED_MAP = new HashMap();
     private static final Pattern PATTERN_LEADING_JUNK = Pattern.compile("(#|0x)", 2);
@@ -167,6 +167,12 @@ public class Color {
     public static final Color MAGICBLUE = named("MagicBlue", 2477509);
     public static final Color WEAKPURPLE = named("WeakPurple", 8015744);
     public static final Color FULLPURPLE = named("FullPurple", 6684788);
+    public static final Color PHYSICAL_COLOUR = named("PhysicalColour", 11181194);
+    public static final Color FIRE_COLOUR = named("FireColour", 16753920);
+    public static final Color WATER_COLOUR = named("WaterColour", 3044334);
+    public static final Color LIGHTNING_COLOUR = named("LightningColour", 16769397);
+    public static final Color MAGIC_COLOUR = named("MagicColour", 11796455);
+    public static final Color DARK_COLOUR = named("DarkColour", 5908062);
     private final int color;
     private final int red;
     private final int green;

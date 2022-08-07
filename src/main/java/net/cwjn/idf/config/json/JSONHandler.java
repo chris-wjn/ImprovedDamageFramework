@@ -1,6 +1,9 @@
 package net.cwjn.idf.config.json;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.Util;
 import net.cwjn.idf.config.json.data.DamageData;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.data.ResistanceData;
@@ -10,9 +13,7 @@ import net.cwjn.idf.network.SendServerDamageJsonMessage;
 import net.cwjn.idf.network.SendServerResistanceJsonMessage;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -31,12 +32,15 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static net.minecraft.world.entity.ai.attributes.Attributes.ARMOR;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -48,21 +52,21 @@ public class JSONHandler {
     public static Map<ResourceLocation, ResistanceData> resistanceMap = new HashMap<>();
     public static Map<ResourceLocation, DamageData> damageMap = new HashMap<>();
     public static Map<String, SourceCatcherData> sourceMap = new HashMap<>();
+    private static final Gson gson = new Gson();
 
     public static void init(File configDir) {
-        Map<String, EntityData> defaultEntityData = Maps.newHashMap();
-        Map<String, ResistanceData> defaultResistanceData = Maps.newHashMap();
-        Map<String, DamageData> defaultDamageData = Maps.newHashMap();
-        Map<String, SourceCatcherData> defaultSourceData = Maps.newHashMap();
-        defaultSourceData.put("bullet", new SourceCatcherData(0, 0, 0, 0, 0, 25, 0, "pierce", false));
+        Map<String, EntityData> defaultEntityData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
+        Map<String, ResistanceData> defaultResistanceData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/resistance_data.json")))), new TypeToken<Map<String, ResistanceData>>(){}.getType());
+        Map<String, DamageData> defaultDamageData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/damage_data.json")))), new TypeToken<Map<String, DamageData>>(){}.getType());
+        Map<String, SourceCatcherData> defaultSourceData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
         //TODO: iron golems, snow golems, villagers not included in this list.
-        for (EntityType<?> entityType : ForgeRegistries.ENTITIES.getValues()) {
-            if (entityType.getCategory() != MobCategory.MISC) { //make sure this isnt an arrow entity or something
-                defaultEntityData.put(entityType.getRegistryName().toString(), new EntityData(
+        for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
+            if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
+                defaultEntityData.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(
                         0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike",
                         25.0D, 25.0D, 25.0D, 25.0D, 25.0D, 0.0D, 0.0D,
                         1.0D, 1.0D, 1.0D, 1.0D, 1.0D,
-                        0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D));
+                        0.0D, 0.0D, 0.4, -1.0D, 0.0D, 0.0D, 0.0D, 0.0D));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
@@ -75,16 +79,16 @@ public class JSONHandler {
                               armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                               armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (armorVal > 0) {
-                if (item.getRegistryName().toString().contains("iron") || (item.getRegistryName().toString().contains("chainmail")) || (item.getRegistryName().toString().contains("netherite"))) {
-                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0.05, 0, -0.05, 0.1, 0));
-                } else if (item.getRegistryName().toString().contains("leather")) {
-                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, -0.05, 0.1, 0, -0.03, 0));
-                } else if (item.getRegistryName().toString().contains("diamond")) {
-                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.07, 0.0, 0.02, -0.05, 0));
-                } else if (item.getRegistryName().toString().contains("gold")) {
-                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.1, -0.1, -0.1, 0.03, 0));
+                if (Util.getItemRegistryName(item).toString().contains("iron") || (Util.getItemRegistryName(item).toString().contains("chainmail")) || (Util.getItemRegistryName(item).toString().contains("netherite"))) {
+                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0.05, 0, -0.05, 0.1, 0));
+                } else if (Util.getItemRegistryName(item).toString().contains("leather")) {
+                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, -0.05, 0.1, 0, -0.03, 0));
+                } else if (Util.getItemRegistryName(item).toString().contains("diamond")) {
+                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.07, 0.0, 0.02, -0.05, 0));
+                } else if (Util.getItemRegistryName(item).toString().contains("gold")) {
+                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.1, -0.1, -0.1, 0.03, 0));
                 } else {
-                    defaultResistanceData.put(item.getRegistryName().toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
                 }
             }
         }
@@ -95,13 +99,13 @@ public class JSONHandler {
                     weapon1.stream().mapToDouble(AttributeModifier::getAmount).sum();
             if (damageVal > 0 || item instanceof BowItem || item instanceof CrossbowItem) {
                 String dc = "strike";
-                if (item.getRegistryName().toString().contains("sword") || item.getRegistryName().toString().contains("axe")) {
+                if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
                     dc = "slash";
                 }
-                if (item.getRegistryName().toString().contains("pickaxe") || (item.getRegistryName().toString().contains("bow"))) {
+                if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
                     dc = "pierce";
                 }
-                defaultDamageData.put(item.getRegistryName().toString(), new DamageData(0, 0, 0, 0, 0, 0, dc, 0, 0, 0));
+                defaultDamageData.putIfAbsent(Util.getItemRegistryName(item).toString(), new DamageData(0, 0, 0, 0, 0, 0, dc, 0, 0, 5, 0));
             }
         }
         entityMap.clear();
@@ -132,7 +136,6 @@ public class JSONHandler {
             }
         }
     }
-
     @OnlyIn(Dist.DEDICATED_SERVER)
     public static void updateServerFiles() {
         ImprovedDamageFramework.LOGGER.info("Updating server's json configs...");
@@ -167,7 +170,7 @@ public class JSONHandler {
     @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        ServerPlayer player = (ServerPlayer) event.getPlayer();
+        ServerPlayer player = (ServerPlayer) event.getEntity();
         if (!resistanceMap.isEmpty()) {
             IDFPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SendServerResistanceJsonMessage(resistanceMap));
             ImprovedDamageFramework.LOGGER.info("Sending server resistance data values to player: " + player.getScoreboardName());
@@ -182,7 +185,7 @@ public class JSONHandler {
     public static void updateClientResistanceData(Map<ResourceLocation, ResistanceData> map) {
         resistanceMap = map;
         if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.sendMessage(new TranslatableComponent("idf.client.armour.map.updated"), Util.NIL_UUID);
+            Minecraft.getInstance().player.sendSystemMessage(net.cwjn.idf.Util.translationComponent("idf.client.armour.map.updated"));
         }
     }
 
@@ -190,7 +193,7 @@ public class JSONHandler {
     public static void updateClientDamageData(Map<ResourceLocation, DamageData> map) {
         damageMap = map;
         if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.sendMessage(new TranslatableComponent("idf.client.weapon.map.updated"), Util.NIL_UUID);
+            Minecraft.getInstance().player.sendSystemMessage(net.cwjn.idf.Util.translationComponent("idf.client.weapon.map.updated"));
         }
     }
 

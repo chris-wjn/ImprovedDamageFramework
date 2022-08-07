@@ -6,7 +6,7 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.Util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import net.cwjn.idf.event.hook.ClientEvents;
+import net.cwjn.idf.event.ClientEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -30,22 +30,23 @@ import java.util.*;
 public abstract class MixinItemStack {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final Style symbolStyle = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_IDF);
-
     /**
      * @author cwJn
+     * @reason
+     * Changes the item tooltips (duh). Hopefully no mods need to inject into this method.
      */
     @Overwrite
     public List<Component> getTooltipLines(@Nullable Player player, TooltipFlag tooltipMode) {
         ItemStack thisItemStack = (ItemStack)(Object) this;
         List<Component> list = Lists.newArrayList();
-        MutableComponent mutablecomponent = (new TextComponent("")).append(thisItemStack.getHoverName());//.withStyle(item.getRarity().color);
+        MutableComponent mutablecomponent = Util.textComponent("").append(thisItemStack.getHoverName());
 
         //for maps... like treasure maps
         list.add(mutablecomponent);
         if (!tooltipMode.isAdvanced() && !thisItemStack.hasCustomHoverName() && thisItemStack.is(Items.FILLED_MAP)) {
             Integer integer = MapItem.getMapId((ItemStack)(Object)this);
             if (integer != null) {
-                list.add((new TextComponent("#" + integer)).withStyle(ChatFormatting.GRAY));
+                list.add((Util.textComponent("#" + integer)).withStyle(ChatFormatting.GRAY));
             }
         }
 
@@ -55,26 +56,29 @@ public abstract class MixinItemStack {
             thisItemStack.getItem().appendHoverText((ItemStack)(Object)this, player == null ? null : player.level, list, tooltipMode);
         }
 
-
         if (thisItemStack.hasTag() && thisItemStack.getTag().contains("idf.equipment")) {
-            list.add(Util.withColor(new TranslatableComponent("idf.description.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
-            MutableComponent durability = new TextComponent("  ");
-            durability.append(new TranslatableComponent("idf.durability_icon").withStyle(symbolStyle));
-            durability.append(Util.withColor(new TranslatableComponent("idf.item.durability"), Color.LIGHTSLATEGREY));
-            durability.append(Util.withColor(new TextComponent(": " + (thisItemStack.getMaxDamage() - thisItemStack.getDamageValue()) + "/" + thisItemStack.getMaxDamage()), Color.FLORALWHITE));
+            list.add(Util.withColor(Util.translationComponent("idf.description.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+            MutableComponent durability = Util.textComponent("  ");
+            durability.append(Util.translationComponent("idf.durability_icon").withStyle(symbolStyle));
+            durability.append(Util.withColor(Util.translationComponent("idf.item.durability"), Color.LIGHTSLATEGREY));
+            if (thisItemStack.isDamageableItem()) {
+                durability.append(Util.withColor(Util.textComponent(": " + (thisItemStack.getMaxDamage() - thisItemStack.getDamageValue()) + "/" + thisItemStack.getMaxDamage()), Color.FLORALWHITE));
+            } else {
+                durability.append(Util.withColor(Util.translationComponent("idf.infinity.symbol"), Color.FLORALWHITE));
+            }
             list.add(durability);
             if (thisItemStack.getTag().contains("idf.damage_class")) {
-                MutableComponent damageClass = new TextComponent("  ");
-                damageClass.append(new TranslatableComponent("idf.attack_icon").withStyle(symbolStyle));
-                damageClass.append(new TranslatableComponent("idf.damage_class.tooltip." + thisItemStack.getTag().getString("idf.damage_class")));
+                MutableComponent damageClass = Util.textComponent("  ");
+                damageClass.append(Util.translationComponent("idf.attack_icon").withStyle(symbolStyle));
+                damageClass.append(Util.translationComponent("idf.damage_class.tooltip." + thisItemStack.getTag().getString("idf.damage_class")));
                 list.add(damageClass);
             }
-        }
+        } //description
 
         if (thisItemStack.hasTag()) {
             if (this.tag.contains("display", 10)) {
                 CompoundTag compoundtag = this.tag.getCompound("display");
-                //list.add(new TranslatableComponent("item.durability", this.getMaxDamage() - this.getDamageValue(), this.getMaxDamage()));
+                //list.add(Util.translationComponent("item.durability", this.getMaxDamage() - this.getDamageValue(), this.getMaxDamage()));
                 if (compoundtag.getTagType("Lore") == 9) {
                     ListTag listtag = compoundtag.getList("Lore", 8);
                     for(int i = 0; i < listtag.size(); ++i) {
@@ -133,26 +137,26 @@ public abstract class MixinItemStack {
                     }
                 }
             }
-            appendAttributes(player, list, mappedOperation0, mappedOperation1, mappedOperation2);
-        }
+            if (thisItemStack.hasTag() && thisItemStack.getTag().contains("idf.equipment")) appendAttributes(player, list, mappedOperation0, mappedOperation1, mappedOperation2);
+        } //attributes
 
         if (thisItemStack.hasTag()) {
             if (shouldShowInTooltip(j, ItemStack.TooltipPart.ENCHANTMENTS)) {
                 if (!EnchantmentHelper.getEnchantments((ItemStack)(Object)this).isEmpty() && !(thisItemStack.getItem() instanceof EnchantedBookItem)) {
-                    list.add(Util.withColor(new TranslatableComponent("idf.enchantments.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+                    list.add(Util.withColor(Util.translationComponent("idf.enchantments.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
                     ItemStack.appendEnchantmentNames(list, thisItemStack.getEnchantmentTags());
-                    list.add(new TextComponent(""));
+                    list.add(Util.textComponent(""));
                 }
             }
             if (shouldShowInTooltip(j, ItemStack.TooltipPart.UNBREAKABLE) && this.tag.getBoolean("Unbreakable")) {
-                list.add((new TranslatableComponent("item.unbreakable")).withStyle(ChatFormatting.BLUE));
+                list.add((Util.translationComponent("item.unbreakable")).withStyle(ChatFormatting.BLUE));
             }
 
             if (shouldShowInTooltip(j, ItemStack.TooltipPart.CAN_DESTROY) && this.tag.contains("CanDestroy", 9)) {
                 ListTag listtag1 = this.tag.getList("CanDestroy", 8);
                 if (!listtag1.isEmpty()) {
-                    list.add(TextComponent.EMPTY);
-                    list.add((new TranslatableComponent("item.canBreak")).withStyle(ChatFormatting.GRAY));
+                    list.add(Component.empty());
+                    list.add((Util.translationComponent("item.canBreak")).withStyle(ChatFormatting.GRAY));
 
                     for(int k = 0; k < listtag1.size(); ++k) {
                         list.addAll(expandBlockState(listtag1.getString(k)));
@@ -163,24 +167,24 @@ public abstract class MixinItemStack {
             if (shouldShowInTooltip(j, ItemStack.TooltipPart.CAN_PLACE) && this.tag.contains("CanPlaceOn", 9)) {
                 ListTag listtag2 = this.tag.getList("CanPlaceOn", 8);
                 if (!listtag2.isEmpty()) {
-                    list.add(TextComponent.EMPTY);
-                    list.add((new TranslatableComponent("item.canPlace")).withStyle(ChatFormatting.GRAY));
+                    list.add(Component.empty());
+                    list.add((Util.translationComponent("item.canPlace")).withStyle(ChatFormatting.GRAY));
 
                     for(int l = 0; l < listtag2.size(); ++l) {
                         list.addAll(expandBlockState(listtag2.getString(l)));
                     }
                 }
             }
-        }
+        } //enchantments
 
         if (tooltipMode.isAdvanced()) {
             if (thisItemStack.isDamaged()) {
-                list.add(new TranslatableComponent("item.durability", thisItemStack.getMaxDamage() - thisItemStack.getDamageValue(), thisItemStack.getMaxDamage()));
+                list.add(Util.translationComponent("item.durability", thisItemStack.getMaxDamage() - thisItemStack.getDamageValue(), thisItemStack.getMaxDamage()));
             }
 
-            list.add((new TextComponent(Registry.ITEM.getKey(thisItemStack.getItem()).toString())).withStyle(ChatFormatting.DARK_GRAY));
+            list.add((Util.textComponent(Registry.ITEM.getKey(thisItemStack.getItem()).toString())).withStyle(ChatFormatting.DARK_GRAY));
             if (thisItemStack.hasTag()) {
-                list.add((new TranslatableComponent("item.nbt_tags", this.tag.getAllKeys().size())).withStyle(ChatFormatting.DARK_GRAY));
+                list.add((Util.translationComponent("item.nbt_tags", this.tag.getAllKeys().size())).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
 
@@ -189,55 +193,57 @@ public abstract class MixinItemStack {
     }
 
     private void appendAttributes(@NotNull Player player, List<Component> list, Map<Attribute, Double> mappedOperation0, Map<Attribute, Double> mappedOperation1, Map<Attribute, Double> mappedOperation2) {
-        ItemStack thisItemStack = (ItemStack)(Object) this;
         if (player == null) return;
-        if (mappedOperation0.containsKey(Attributes.ATTACK_SPEED)) {
-            double value = mappedOperation0.get(Attributes.ATTACK_SPEED) + player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.attack_speed_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.attack_speed_tooltip"));
-            component.append(new TextComponent(df.format(value)));
-            list.add(component);
+        boolean damaging = hasDamage(mappedOperation0);
+        boolean defensive = hasDefense(mappedOperation0);
+        boolean aux = hasAuxiliary(mappedOperation0);
+        boolean mult = hasMultipliers(mappedOperation1, mappedOperation2);
+        if (damaging) {
+            double value1 = player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
+            if (mappedOperation0.containsKey(Attributes.ATTACK_SPEED)) {
+                value1 += mappedOperation0.get(Attributes.ATTACK_SPEED);
+            }
+            MutableComponent component1 = Util.textComponent("  ");
+            component1.append(Util.translationComponent("idf.attack_speed_icon").withStyle(symbolStyle));
+            component1.append(Util.translationComponent("idf.attack_speed_tooltip"));
+            component1.append(Util.textComponent(df.format(value1)));
+            list.add(component1);
+            double value2 = player.getAttributeBaseValue(IDFAttributes.WEIGHT.get());
+            if (mappedOperation0.containsKey(IDFAttributes.WEIGHT.get())) {
+                value2 += mappedOperation0.get(IDFAttributes.WEIGHT.get());
+            }
+            MutableComponent component2 = Util.textComponent("  ");
+            component2.append(Util.translationComponent("idf.weight_icon").withStyle(symbolStyle));
+            component2.append(Util.translationComponent("idf.weight_tooltip"));
+            component2.append(Util.textComponent(df.format(value2)));
+            list.add(component2);
         }
-        if (thisItemStack.hasTag() && this.tag.contains("idf.equipment")) {
-            list.add(Util.withColor(new TranslatableComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
-        }
-        if (mappedOperation0.containsKey(Attributes.ATTACK_DAMAGE) || mappedOperation0.containsKey(IDFAttributes.FIRE_DAMAGE.get()) || mappedOperation0.containsKey(IDFAttributes.MAGIC_DAMAGE.get()) || mappedOperation0.containsKey(IDFAttributes.WATER_DAMAGE.get())
-        || mappedOperation0.containsKey(IDFAttributes.LIGHTNING_DAMAGE.get()) || mappedOperation0.containsKey(IDFAttributes.DARK_DAMAGE.get())) {
+        list.add(Util.withColor(Util.translationComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+        if (damaging) {
             appendDamageComponent(player, list, mappedOperation0);
         }
-        if (mappedOperation0.containsKey(Attributes.ARMOR) || mappedOperation0.containsKey(Attributes.ARMOR_TOUGHNESS) || mappedOperation0.containsKey(IDFAttributes.FIRE_RESISTANCE.get()) ||
-        mappedOperation0.containsKey(IDFAttributes.WATER_RESISTANCE.get()) || mappedOperation0.containsKey(IDFAttributes.LIGHTNING_RESISTANCE.get()) || mappedOperation0.containsKey(IDFAttributes.MAGIC_RESISTANCE.get()) || mappedOperation0.containsKey(IDFAttributes.DARK_RESISTANCE.get())) {
+        if (defensive) {
             appendDefensiveComponent(mappedOperation0, list);
-            if (mappedOperation0.containsKey(IDFAttributes.STRIKE_MULT.get()) || mappedOperation0.containsKey(IDFAttributes.PIERCE_MULT.get()) || mappedOperation0.containsKey(IDFAttributes.SLASH_MULT.get())
-            || mappedOperation0.containsKey(IDFAttributes.CRUSH_MULT.get()) || mappedOperation0.containsKey(IDFAttributes.GENERIC_MULT.get())) {
+            if (hasDamageClass(mappedOperation0)) {
                 appendDamageClassComponent(mappedOperation0, list);
             }
         }
-        if (mappedOperation0.containsKey(IDFAttributes.CRIT_CHANCE.get()) || mappedOperation0.containsKey(IDFAttributes.LIFESTEAL.get()) ||
-                mappedOperation0.containsKey(IDFAttributes.PENETRATING.get())
-                || mappedOperation0.containsKey(Attributes.KNOCKBACK_RESISTANCE) || mappedOperation0.containsKey(IDFAttributes.EVASION.get())
-                || mappedOperation0.containsKey(Attributes.MOVEMENT_SPEED) || mappedOperation0.containsKey(Attributes.MAX_HEALTH) || mappedOperation0.containsKey(Attributes.LUCK)
-                || (!mappedOperation1.isEmpty() || !mappedOperation2.isEmpty())
-        ) {
+        if (aux || mult) {
             if (ClientEvents.checkShiftDown()) {
-                if (mappedOperation0.containsKey(IDFAttributes.CRIT_CHANCE.get()) || mappedOperation0.containsKey(IDFAttributes.LIFESTEAL.get()) ||
-                        mappedOperation0.containsKey(IDFAttributes.PENETRATING.get())
-                        || mappedOperation0.containsKey(Attributes.KNOCKBACK_RESISTANCE) || mappedOperation0.containsKey(IDFAttributes.EVASION.get())
-                        || mappedOperation0.containsKey(Attributes.MOVEMENT_SPEED) || mappedOperation0.containsKey(Attributes.MAX_HEALTH) || mappedOperation0.containsKey(Attributes.LUCK)
-                ) {
-                    list.add(Util.withColor(new TranslatableComponent("idf.auxiliary.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+                if (aux) {
+                    list.add(Util.withColor(Util.translationComponent("idf.auxiliary.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
                     appendAuxiliaryComponent(player, list, mappedOperation0);
                 }
-                if ((!mappedOperation1.isEmpty() || !mappedOperation2.isEmpty())) {
-                    list.add(Util.withColor(new TranslatableComponent("idf.multipliers.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+                if (mult) {
+                    list.add(Util.withColor(Util.translationComponent("idf.multipliers.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
                     appendMultipliers(mappedOperation1, mappedOperation2, list);
                 }
             } else {
-                MutableComponent component = new TextComponent("");
-                component.append(new TranslatableComponent("idf.auxiliary_icon").withStyle(symbolStyle));
-                component.append(new TranslatableComponent("idf.hold_shift_for_aux"));
+                MutableComponent component = Util.textComponent("");
+                component.append(Util.translationComponent("idf.auxiliary_icon").withStyle(symbolStyle));
+                component.append(Util.translationComponent("idf.hold_shift_for_aux1"));
                 list.add(component);
+                list.add(Util.translationComponent("idf.hold_shift_for_aux2"));
             }
         }
     }
@@ -245,43 +251,71 @@ public abstract class MixinItemStack {
     private void appendDamageClassComponent(Map<Attribute, Double> mappedAttributes, List<Component> list) {
         if (mappedAttributes.containsKey(IDFAttributes.STRIKE_MULT.get())) {
             double value = mappedAttributes.get(IDFAttributes.STRIKE_MULT.get()) * 100;
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.strike_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.strike_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.strike_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.strike_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
             } else {
-                component.append(new TranslatableComponent("idf.strike_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.strike_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.strike_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.strike_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.PIERCE_MULT.get())) {
             double value = mappedAttributes.get(IDFAttributes.PIERCE_MULT.get()) * 100;
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.pierce_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.pierce_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.pierce_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.pierce_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
             } else {
-                component.append(new TranslatableComponent("idf.pierce_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.pierce_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.pierce_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.pierce_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.SLASH_MULT.get())) {
             double value = mappedAttributes.get(IDFAttributes.SLASH_MULT.get()) * 100;
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.slash_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.slash_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.slash_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.slash_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
             } else {
-                component.append(new TranslatableComponent("idf.slash_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.slash_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.slash_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.slash_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
+            }
+            list.add(component);
+        }
+        if (mappedAttributes.containsKey(IDFAttributes.CRUSH_MULT.get())) {
+            double value = mappedAttributes.get(IDFAttributes.CRUSH_MULT.get()) * 100;
+            MutableComponent component = Util.textComponent("  ");
+            if (value < 0) {
+                component.append(Util.translationComponent("idf.crush_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.crush_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+            } else {
+                component.append(Util.translationComponent("idf.crush_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.crush_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
+            }
+            list.add(component);
+        }
+        if (mappedAttributes.containsKey(IDFAttributes.GENERIC_MULT.get())) {
+            double value = mappedAttributes.get(IDFAttributes.GENERIC_MULT.get()) * 100;
+            MutableComponent component = Util.textComponent("  ");
+            if (value < 0) {
+                component.append(Util.translationComponent("idf.generic_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.generic_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+            } else {
+                component.append(Util.translationComponent("idf.generic_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.generic_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
             }
             list.add(component);
         }
@@ -289,19 +323,19 @@ public abstract class MixinItemStack {
 
     private void appendMultipliers(Map<Attribute, Double> mappedOperation1, Map<Attribute, Double> mappedOperation2, List<Component> list) {
         if (!mappedOperation1.isEmpty()) {
-            list.add(Util.withColor(new TranslatableComponent("idf.operation1.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGRAY));
+            list.add(Util.withColor(Util.translationComponent("idf.operation1.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGRAY));
             for (Map.Entry<Attribute, Double> entry : mappedOperation1.entrySet()) {
-                TranslatableComponent name = new TranslatableComponent(entry.getKey().getDescriptionId());
-                MutableComponent op1 = name.append(new TextComponent(" " + df.format(entry.getValue() * 100) + "%"));
+                MutableComponent name = Util.translationComponent(entry.getKey().getDescriptionId());
+                MutableComponent op1 = name.append(Util.textComponent(" " + df.format(entry.getValue() * 100) + "%"));
                 list.add(Util.withColor(op1, Color.GRAY));
             }
         }
         if (!mappedOperation2.isEmpty()) {
-            list.add(Util.withColor(new TranslatableComponent("idf.operation2.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGRAY));
-            new TextComponent("");
+            list.add(Util.withColor(Util.translationComponent("idf.operation2.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGRAY));
+            Util.textComponent("");
             for (Map.Entry<Attribute, Double> entry : mappedOperation2.entrySet()) {
-                TranslatableComponent name = new TranslatableComponent(entry.getKey().getDescriptionId());
-                MutableComponent op2 = name.append(new TextComponent(" " + df.format(entry.getValue() * 100) + "%"));
+                MutableComponent name = Util.translationComponent(entry.getKey().getDescriptionId());
+                MutableComponent op2 = name.append(Util.textComponent(" " + df.format(entry.getValue() * 100) + "%"));
                 list.add(Util.withColor(op2, Color.GRAY));
             }
         }
@@ -309,100 +343,100 @@ public abstract class MixinItemStack {
 
     private void appendDefensiveComponent(Map<Attribute, Double> mappedAttributes, List<Component> list) {
         if (mappedAttributes.containsKey(Attributes.ARMOR_TOUGHNESS)) {
-            double value = mappedAttributes.get(Attributes.ARMOR_TOUGHNESS)/3;
-            MutableComponent component = new TextComponent("  ");
+            double value = mappedAttributes.get(Attributes.ARMOR_TOUGHNESS);
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.defense_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.defense_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.defense_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.defense_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.defense_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.defense_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.defense_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.defense_tooltip"), Color.FLORALWHITE));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(Attributes.ARMOR)) {
-            double value = mappedAttributes.get(Attributes.ARMOR) * 3;
-            MutableComponent component = new TextComponent("  ");
+            double value = mappedAttributes.get(Attributes.ARMOR);
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.physical_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.physical_resistance_tooltip"), Color.BEIGE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.physical_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.physical_resistance_tooltip"), Color.PHYSICAL_COLOUR));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.physical_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.physical_resistance_tooltip"), Color.BEIGE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.physical_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.physical_resistance_tooltip"), Color.PHYSICAL_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.FIRE_RESISTANCE.get())) {
             double value = mappedAttributes.get(IDFAttributes.FIRE_RESISTANCE.get());
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.fire_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.fire_resistance_tooltip"), Color.ORANGE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.fire_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.fire_resistance_tooltip"), Color.FIRE_COLOUR));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.fire_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.fire_resistance_tooltip"), Color.ORANGE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.fire_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.fire_resistance_tooltip"), Color.FIRE_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.WATER_RESISTANCE.get())) {
             double value = mappedAttributes.get(IDFAttributes.WATER_RESISTANCE.get());
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.water_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.water_resistance_tooltip"), Color.BLUE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.water_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.water_resistance_tooltip"), Color.WATER_COLOUR));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.water_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.water_resistance_tooltip"), Color.BLUE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.water_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.water_resistance_tooltip"), Color.WATER_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.LIGHTNING_RESISTANCE.get())) {
             double value = mappedAttributes.get(IDFAttributes.LIGHTNING_RESISTANCE.get());
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.lightning_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.lightning_resistance_tooltip"), Color.YELLOW));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.lightning_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.lightning_resistance_tooltip"), Color.LIGHTNING_COLOUR));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.lightning_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.lightning_resistance_tooltip"), Color.YELLOW));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.lightning_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.lightning_resistance_tooltip"), Color.LIGHTNING_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.MAGIC_RESISTANCE.get())) {
             double value = mappedAttributes.get(IDFAttributes.MAGIC_RESISTANCE.get());
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.magic_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.magic_resistance_tooltip"), Color.AQUA));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.magic_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.magic_resistance_tooltip"), Color.MAGIC_COLOUR));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.magic_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.magic_resistance_tooltip"), Color.AQUA));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.magic_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.magic_resistance_tooltip"), Color.MAGIC_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.DARK_RESISTANCE.get())) {
             double value = mappedAttributes.get(IDFAttributes.DARK_RESISTANCE.get());
-            MutableComponent component = new TextComponent("  ");
+            MutableComponent component = Util.textComponent("  ");
             if (value < 0) {
-                component.append(new TranslatableComponent("idf.dark_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.dark_resistance_tooltip"), Color.PURPLE));
-                component.append(Util.withColor(new TextComponent("" + df.format(value)), ChatFormatting.RED));
+                component.append(Util.translationComponent("idf.dark_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.dark_resistance_tooltip"), Color.DARK_COLOUR));
+                component.append(Util.withColor(Util.textComponent("" + df.format(value)), ChatFormatting.RED));
             } else {
-                component.append(new TranslatableComponent("idf.dark_icon").withStyle(symbolStyle));
-                component.append(Util.withColor(new TranslatableComponent("idf.dark_resistance_tooltip"), Color.PURPLE));
-                component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                component.append(Util.translationComponent("idf.dark_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.dark_resistance_tooltip"), Color.DARK_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             }
             list.add(component);
         }
@@ -411,50 +445,52 @@ public abstract class MixinItemStack {
     private void appendDamageComponent(@NotNull Player player, List<Component> list, Map<Attribute, Double> mappedAttributes) {
         if (mappedAttributes.containsKey(Attributes.ATTACK_DAMAGE)) {
             double value = mappedAttributes.get(Attributes.ATTACK_DAMAGE) + player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus((ItemStack) (Object) this, MobType.UNDEFINED);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.physical_icon").withStyle(symbolStyle));
-            component.append(Util.withColor(new TranslatableComponent("idf.physical_damage_tooltip"), Color.BEIGE));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
-            list.add(component);
+            if (value != 0) {
+                MutableComponent component = Util.textComponent("  ");
+                component.append(Util.translationComponent("idf.physical_icon").withStyle(symbolStyle));
+                component.append(Util.withColor(Util.translationComponent("idf.physical_damage_tooltip"), Color.PHYSICAL_COLOUR));
+                component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
+                list.add(component);
+            }
         }
         if (mappedAttributes.containsKey(IDFAttributes.FIRE_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.FIRE_DAMAGE.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.fire_icon").withStyle(symbolStyle));
-            component.append(Util.withColor(new TranslatableComponent("idf.fire_damage_tooltip"), Color.ORANGE));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.fire_icon").withStyle(symbolStyle));
+            component.append(Util.withColor(Util.translationComponent("idf.fire_damage_tooltip"), Color.FIRE_COLOUR));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.WATER_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.WATER_DAMAGE.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.water_icon").withStyle(symbolStyle));
-            component.append(Util.withColor(new TranslatableComponent("idf.water_damage_tooltip"), Color.BLUE));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.water_icon").withStyle(symbolStyle));
+            component.append(Util.withColor(Util.translationComponent("idf.water_damage_tooltip"), Color.WATER_COLOUR));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.LIGHTNING_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.LIGHTNING_DAMAGE.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.lightning_icon").withStyle(symbolStyle));
-            component.append(Util.withColor(new TranslatableComponent("idf.lightning_damage_tooltip"), Color.YELLOW));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.lightning_icon").withStyle(symbolStyle));
+            component.append(Util.withColor(Util.translationComponent("idf.lightning_damage_tooltip"), Color.LIGHTNING_COLOUR));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.MAGIC_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.MAGIC_DAMAGE.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.magic_icon").withStyle(symbolStyle));
-            component.append(Util.withColor(new TranslatableComponent("idf.magic_damage_tooltip"), Color.AQUA));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.magic_icon").withStyle(symbolStyle));
+            component.append(Util.withColor(Util.translationComponent("idf.magic_damage_tooltip"), Color.MAGIC_COLOUR));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.DARK_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.DARK_DAMAGE.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.dark_icon").withStyle(symbolStyle));
-            component.append(Util.withColor(new TranslatableComponent("idf.dark_damage_tooltip"), Color.PURPLE));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.dark_icon").withStyle(symbolStyle));
+            component.append(Util.withColor(Util.translationComponent("idf.dark_damage_tooltip"), Color.DARK_COLOUR));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
     }
@@ -462,77 +498,106 @@ public abstract class MixinItemStack {
     private void appendAuxiliaryComponent(@NotNull Player player, List<Component> list, Map<Attribute, Double> mappedAttributes) {
         if (mappedAttributes.containsKey(Attributes.ATTACK_KNOCKBACK)) {
             double value = mappedAttributes.get(Attributes.ATTACK_KNOCKBACK);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.knockback_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.knockback_tooltip"));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.knockback_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.knockback_tooltip"));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.LIFESTEAL.get())) {
             double value = mappedAttributes.get(IDFAttributes.LIFESTEAL.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.lifesteal_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.lifesteal_tooltip"));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value) + "%"), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.lifesteal_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.lifesteal_tooltip"));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.PENETRATING.get())) {
             double value = mappedAttributes.get(IDFAttributes.PENETRATING.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.pen_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.pen_tooltip"));
-            component.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.pen_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.pen_tooltip"));
+            component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.CRIT_CHANCE.get())) {
             double value = mappedAttributes.get(IDFAttributes.CRIT_CHANCE.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.crit_chance_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.crit_chance_tooltip"));
-            component.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.crit_chance_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.crit_chance_tooltip"));
+            component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(Attributes.KNOCKBACK_RESISTANCE)) {
             double value = mappedAttributes.get(Attributes.KNOCKBACK_RESISTANCE);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.knockback_resistance_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.knockback_resistance_tooltip"));
-            component.append(Util.withColor(new TextComponent("" + df.format(value*100) + "%"), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.knockback_resistance_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.knockback_resistance_tooltip"));
+            component.append(Util.withColor(Util.textComponent("" + df.format(value*100) + "%"), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(IDFAttributes.EVASION.get())) {
             double value = mappedAttributes.get(IDFAttributes.EVASION.get());
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.evasion_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.evasion_tooltip"));
-            component.append(Util.withColor(new TextComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.evasion_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.evasion_tooltip"));
+            component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(Attributes.MAX_HEALTH)) {
             double value = mappedAttributes.get(Attributes.MAX_HEALTH);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.maxhp_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.maxhp_tooltip"));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.maxhp_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.maxhp_tooltip"));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(Attributes.MOVEMENT_SPEED)) {
             double value = mappedAttributes.get(Attributes.MOVEMENT_SPEED);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.movespeed_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.movespeed_tooltip"));
-            component.append(Util.withColor(new TextComponent("" + df.format(value*1000) + "%"), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.movespeed_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.movespeed_tooltip"));
+            component.append(Util.withColor(Util.textComponent("" + df.format(value*1000) + "%"), Color.LIGHTGREEN));
             list.add(component);
         }
         if (mappedAttributes.containsKey(Attributes.LUCK)) {
             double value = mappedAttributes.get(Attributes.LUCK);
-            MutableComponent component = new TextComponent("  ");
-            component.append(new TranslatableComponent("idf.luck_icon").withStyle(symbolStyle));
-            component.append(new TranslatableComponent("idf.luck_tooltip"));
-            component.append(Util.withColor(new TextComponent("+" + df.format(value)), Color.LIGHTGREEN));
+            MutableComponent component = Util.textComponent("  ");
+            component.append(Util.translationComponent("idf.luck_icon").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.luck_tooltip"));
+            component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
         }
     }
+
+    private static boolean hasDamage(Map<Attribute, Double> map) {
+        return map.containsKey(Attributes.ATTACK_DAMAGE) || map.containsKey(IDFAttributes.FIRE_DAMAGE.get()) || map.containsKey(IDFAttributes.MAGIC_DAMAGE.get()) || map.containsKey(IDFAttributes.WATER_DAMAGE.get())
+                || map.containsKey(IDFAttributes.LIGHTNING_DAMAGE.get()) || map.containsKey(IDFAttributes.DARK_DAMAGE.get());
+    }
+
+    private static boolean hasDefense(Map<Attribute, Double> map) {
+        return map.containsKey(Attributes.ARMOR) || map.containsKey(Attributes.ARMOR_TOUGHNESS) || map.containsKey(IDFAttributes.FIRE_RESISTANCE.get()) ||
+                map.containsKey(IDFAttributes.WATER_RESISTANCE.get()) || map.containsKey(IDFAttributes.LIGHTNING_RESISTANCE.get()) || map.containsKey(IDFAttributes.MAGIC_RESISTANCE.get())
+                || map.containsKey(IDFAttributes.DARK_RESISTANCE.get());
+    }
+
+    private static boolean hasDamageClass(Map<Attribute, Double> map) {
+        return map.containsKey(IDFAttributes.STRIKE_MULT.get()) || map.containsKey(IDFAttributes.PIERCE_MULT.get()) || map.containsKey(IDFAttributes.SLASH_MULT.get())
+                || map.containsKey(IDFAttributes.CRUSH_MULT.get()) || map.containsKey(IDFAttributes.GENERIC_MULT.get());
+    }
+
+    private static boolean hasAuxiliary(Map<Attribute, Double> map) {
+        return map.containsKey(IDFAttributes.CRIT_CHANCE.get()) || map.containsKey(IDFAttributes.LIFESTEAL.get()) ||
+                map.containsKey(IDFAttributes.PENETRATING.get()) || map.containsKey(Attributes.ATTACK_KNOCKBACK)
+                || map.containsKey(Attributes.KNOCKBACK_RESISTANCE) || map.containsKey(IDFAttributes.EVASION.get())
+                || map.containsKey(Attributes.MOVEMENT_SPEED) || map.containsKey(Attributes.MAX_HEALTH) || map.containsKey(Attributes.LUCK);
+    }
+
+    private static boolean hasMultipliers(Map<Attribute, Double> map, Map<Attribute, Double> map1) {
+        return (!map.isEmpty() || !map1.isEmpty());
+    }
+
+
 
     @Shadow
     private int getHideFlags() {

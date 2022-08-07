@@ -25,6 +25,6 @@ Because Minecraft's damage system is a little boring
 [[dependencies.idf]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19, 1.20)"
     ordering="NONE"
     side="BOTH"

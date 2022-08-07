@@ -1,9 +1,11 @@
 package net.cwjn.idf.damage;
 
+import net.cwjn.idf.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.data.SourceCatcherData;
-import net.cwjn.idf.event.post.PostMitigationDamageEvent;
-import net.cwjn.idf.event.post.PreMitigationDamageEvent;
+import net.cwjn.idf.api.event.PostMitigationDamageEvent;
+import net.cwjn.idf.api.event.PreMitigationDamageEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -11,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
@@ -21,14 +22,16 @@ import java.util.Map;
 
 public class DamageHandler {
 
+    private static final double e = 2.718281828459045;
+
     public static float handleDamage(LivingEntity target, DamageSource source, float amount) {
         //In ATHandler we leave fall damage as purely physical, so we can calculate this here.
         if (source.isFall()) {
             double fallLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                fallLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FALL_PROTECTION, item);
+                fallLevel += item.getEnchantmentLevel(Enchantments.FALL_PROTECTION);
             }
-            amount -= 1 * fallLevel;
+            amount *= (1 - (fallLevel * 0.0625));
         }
         //If the source isn't integrated, integrate it. Maintains isFall, isExplosion, and isProjectile.
         if (!(source instanceof IDFInterface)) source = SourceCatcherData.convert(source);
@@ -36,8 +39,8 @@ public class DamageHandler {
         IDFInterface convertedSource = (IDFInterface) source;
         //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
         //we initialize default values to minimize the possibility of null pointer crashes.
-        float fireDamage = 0, waterDamage = 0, lightningDamage = 0, magicDamage = 0, darkDamage = 0, physicalDamage = 0, pen = 0, lifesteal = 0;
-        String damageClass = "strike";
+        float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, weight, knockback;
+        String damageClass;
         if (convertedSource.isConversion()) {
             //if the source is a conversion from a vanilla source, we take the physical amount provided and spread it across all damage types
             //according the ratios given. This means the values of all the damage types should be < 1.0, and any leftovers should remain as
@@ -58,26 +61,37 @@ public class DamageHandler {
             darkDamage = convertedSource.getDark();
             physicalDamage = amount;
         }
-        //pen and lifesteal work the same way regardless of if the source is a conversion or not.
-        pen = convertedSource.getPen()/100; //we divide this by 100 here to get a number btwn 0.0 and 1.0 so we can use it in damage calculations.
-        lifesteal = convertedSource.getLifesteal()/100; //same concept here.
-        damageClass = convertedSource.getDamageClass();
-        //we run the premitigation event first, then put the damage and resistance values into an array here to easily loop through them and apply damage calculation math.
-        //resistances need to be divided by 100 to convert them to usable numbers in math. Armour is multiplied by 0.03 because every
-        //point of armour should be worth 3% physical damage reduction.
-        //defense is just 1/3rd of armour toughness. Subject to change.
-        PreMitigationDamageEvent event = new PreMitigationDamageEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, damageClass);
+        //we run the premitigation event first, then put the damage and resistance values into an array here to easily loop through them and apply modifiers.
+        //Pen and lifesteal need to be divided by 100 to get a value between 0.0 and 1.0 which we can use in math.
+        PreMitigationDamageEvent event = new PreMitigationDamageEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, convertedSource.getPen()/100, convertedSource.getLifesteal()/100, convertedSource.getKnockback(), convertedSource.getWeight(),
+                (float) armourFormula(target.getAttributeValue(IDFAttributes.FIRE_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(IDFAttributes.WATER_RESISTANCE.get())),
+                (float) armourFormula(target.getAttributeValue(IDFAttributes.LIGHTNING_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(IDFAttributes.MAGIC_RESISTANCE.get())),
+                (float) armourFormula(target.getAttributeValue(IDFAttributes.DARK_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(Attributes.ARMOR)),
+                (float) target.getAttributeValue(Attributes.ARMOR_TOUGHNESS), convertedSource.getDamageClass());
         MinecraftForge.EVENT_BUS.post(event);
-        float[] dv = {event.getFire(), event.getWater(), event.getLightning(), event.getMagic(), event.getDark(), event.getPhysical()};
+        float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double[] rv = {target.getAttributeValue(IDFAttributes.FIRE_RESISTANCE.get())/100, target.getAttributeValue(IDFAttributes.WATER_RESISTANCE.get())/100,
-                target.getAttributeValue(IDFAttributes.LIGHTNING_RESISTANCE.get())/100, target.getAttributeValue(IDFAttributes.MAGIC_RESISTANCE.get())/100,
-                target.getAttributeValue(IDFAttributes.DARK_RESISTANCE.get())/100, target.getAttributeValue(Attributes.ARMOR) * 0.03};
-        double defense = target.getAttributeValue(Attributes.ARMOR_TOUGHNESS)/3;
+        weight = event.getWeight();
+        knockback = event.getKnockback();
+        float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getPhysicalRes()};
+        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(event.getDef()), 0, 4);
+        //now we can knockback the target based on the weightMultiplier. The first code is copied from the
+        //vanilla knockback handler to get the direction of the knockback. We add the bonus knockback value from
+        //the attack afterwards.
+        if (source.getEntity() != null) {
+            double d1 = source.getEntity().getX() - target.getX();
+            double d0;
+            for (d0 = source.getEntity().getZ() - target.getZ(); d1 * d1 + d0 * d0 < 1.0E-4D; d0 = (Math.random() - Math.random()) * 0.01D) {
+                d1 = (Math.random() - Math.random()) * 0.01D;
+            }
+            target.hurtDir = (float)(Mth.atan2(d0, d1) * (double)(180F / (float)Math.PI) - (double)target.getYRot());
+            target.knockback(knockback*weightMultiplier, d1, d0);
+        }
         //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
-        //to all the damage types.
+        //to all the damage types. Then iterate through the damage values and apply the weight/defense multiplier followed by
+        //the damage class multiplier
         Map<String, Double> mappedMultipliers = new HashMap<>(3);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", target.getAttributeValue(IDFAttributes.PIERCE_MULT.get()));
@@ -86,6 +100,7 @@ public class DamageHandler {
         mappedMultipliers.put("generic", target.getAttributeValue(IDFAttributes.GENERIC_MULT.get()));
         //now multiply each damage value by the correct multiplier.
         for (int i = 0; i < 6; i++) {
+            dv[i] *= weightMultiplier;
             dv[i] *= mappedMultipliers.get(damageClass);
         }
         //now that we have the final pre-mitigation values, check if the source is true damage. If it is,
@@ -97,7 +112,7 @@ public class DamageHandler {
         if (source.isProjectile()) {
             double projectileLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                projectileLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, item);
+                projectileLevel += item.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION);
             }
             if (projectileLevel > 0) {
                 for (int i = 0; i < 6; i++) {
@@ -108,7 +123,7 @@ public class DamageHandler {
         if (source.isExplosion()) {
             double blastLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                blastLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLAST_PROTECTION, item);
+                blastLevel += item.getEnchantmentLevel(Enchantments.BLAST_PROTECTION);
             }
             if (blastLevel > 0) {
                 for (int i = 0; i < 6; i++) {
@@ -119,7 +134,7 @@ public class DamageHandler {
         if (source.isFire()) {
             double fireLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                fireLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_PROTECTION, item);
+                fireLevel += item.getEnchantmentLevel(Enchantments.FIRE_PROTECTION);
             }
             if (fireLevel > 0) {
                 for (int i = 0; i < 6; i++) {
@@ -131,7 +146,7 @@ public class DamageHandler {
         //so lets make it reduce damage taken by 1.5% per level, capping out at 24% at full prot 4 armour.
         double protLevel = 0;
         for (ItemStack item: target.getArmorSlots()) {
-            protLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.ALL_DAMAGE_PROTECTION, item);
+            protLevel += item.getEnchantmentLevel(Enchantments.ALL_DAMAGE_PROTECTION);
         }
         if (protLevel > 0) {
             for (int i = 0; i < 6; i++) {
@@ -145,20 +160,20 @@ public class DamageHandler {
                 rv[i] *= (1 + resistanceLevel);
             }
         }
+        //hurt the player's armour for the sum of the damage now.
+        target.hurtArmor(source, sum(dv));
         //now we start calculating the final damage value. We need to post the PostMitigation event,
         //then, create a variable to store the final damage,
         //then we do the damage math for fire, water, lightning, magic, and dark.
-        //After, do the math for physical damage, factoring in defense as a flat reduction.
         PostMitigationDamageEvent postMitigation = new PostMitigationDamageEvent(target, 0, 0, 0, 0, 0, 0);
-        for (int i = 0; i < 5; i++) {
+        rv[5] = rv[5] * (1.0f - pen); //factor in armour pen
+        for (int i = 0; i < 6; i++) {
             if (dv[i] > 0) {
-                postMitigation.setDamage(i, (float) (dv[i] * (1 - rv[i])));
+                postMitigation.setDamage(
+                        i,
+                        damageFormula(dv[i], rv[i])
+                );
             }
-        }
-        if (dv[5] > 0) {
-            float ad = (float) (dv[5] - defense);
-            float physicalRes = (float) (rv[5] * (1 - pen));
-            postMitigation.setDamage(5, (ad * (1 - physicalRes)));
         }
         MinecraftForge.EVENT_BUS.post(postMitigation);
         float returnValue = sum(postMitigation.getDamage());
@@ -176,23 +191,21 @@ public class DamageHandler {
 
     public static float handleDamageWithDebug(LivingEntity target, DamageSource source, float amount, Logger log) {
         log.debug("----------DAMAGE HANDLER DEBUG----------");
-        log.debug("TARGET: " + target.getType().getRegistryName());
+        log.debug("TARGET: " + Util.getEntityRegistryName(target.getType()));
         log.debug("SOURCE: " + source.getMsgId() + "(" + amount + ")");
         log.debug("Source already integrated?: " + (source instanceof IDFInterface));
         log.debug("----------------------------------------");
-        //In ATHandler we leave fall damage as purely physical, so we can calculate this here.
         if (source.isFall()) {
             log.debug("----------FALL ENCHANT CHECKER----------");
             double fallLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                fallLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FALL_PROTECTION, item);
+                fallLevel += item.getEnchantmentLevel(Enchantments.FALL_PROTECTION);
             }
             log.debug("Total Fall Levels: " + fallLevel);
             amount -= 1 * fallLevel;
             log.debug("Reduced damage to " + amount);
             log.debug("----------------------------------------");
         }
-        //If the source isn't integrated, integrate it. Maintains isFall, isExplosion, bypassInvuln, and isProjectile.
         if (!(source instanceof IDFInterface))  {
             log.debug("----------SOURCE CONVERSION----------");
             log.debug("PRE-CONVERSION:");
@@ -202,12 +215,12 @@ public class DamageHandler {
             log.debug("isBypassInvuln?: " + source.isBypassInvul());
             source = SourceCatcherData.convert(source);
         }
-        //since we integrated the source in the line above, it should be guaranteed that we can cast the source without issue.
         IDFInterface convertedSource = (IDFInterface) source;
-        log.debug("----------CONVERTED SOURCE INFORMATION----------");
+        log.debug("----------CONVERSION INFORMATION----------");
         log.debug("SOURCE: " + convertedSource.getMsgId() + " of class " + convertedSource.getClass().getName());
         log.debug("Is Conversion?: " + convertedSource.isConversion());
         log.debug("DAMAGE CLASS: " + convertedSource.getDamageClass());
+        log.debug("WEIGHT: " + convertedSource.getWeight());
         log.debug("DAMAGE NUMBERS (fire, water, lightning, magic, dark, physical): " +
                 convertedSource.getFire() + ", " +
                 convertedSource.getWater() + ", " +
@@ -221,17 +234,12 @@ public class DamageHandler {
         log.debug("OTHER INFO: ");
         log.debug("isFall?: " + ((DamageSource) convertedSource).isFall());
         log.debug("isExplosion?: " + ((DamageSource) convertedSource).isExplosion());
-        log.debug("isProjectile?:" + ((DamageSource) convertedSource).isProjectile());
-        log.debug("isTrue?:" + convertedSource.isTrue());
+        log.debug("isProjectile?: " + ((DamageSource) convertedSource).isProjectile());
+        log.debug("isTrue?: " + convertedSource.isTrue());
         log.debug("------------------------------------------------");
-        //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
-        //we initialize default values to minimize the possibility of null pointer crashes.
-        float fireDamage = 0, waterDamage = 0, lightningDamage = 0, magicDamage = 0, darkDamage = 0, physicalDamage = 0, pen = 0, lifesteal = 0;
-        String damageClass = "strike";
+        float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, knockback, weight;
+        String damageClass;
         if (convertedSource.isConversion()) {
-            //if the source is a conversion from a vanilla source, we take the physical amount provided and spread it across all damage types
-            //according the ratios given. This means the values of all the damage types should be < 1.0, and any leftovers should remain as
-            //physical damage.
             fireDamage = convertedSource.getFire() * amount;
             waterDamage = convertedSource.getWater() * amount;
             lightningDamage = convertedSource.getLightning() * amount;
@@ -239,8 +247,6 @@ public class DamageHandler {
             darkDamage = convertedSource.getDark() * amount;
             physicalDamage = amount - (fireDamage + waterDamage + lightningDamage + magicDamage + darkDamage);
         } else {
-            //otherwise, the source is a regular instance of IDFDamage, so we don't have to convert anything. The values given here
-            //should be flat values we want to use directly. Amount just corresponds to the physical damage.
             fireDamage = convertedSource.getFire();
             waterDamage = convertedSource.getWater();
             lightningDamage = convertedSource.getLightning();
@@ -248,20 +254,18 @@ public class DamageHandler {
             darkDamage = convertedSource.getDark();
             physicalDamage = amount;
         }
-        //pen and lifesteal work the same way regardless of it the source is a conversion or not.
-        pen = convertedSource.getPen()/100; //we divide this by 100 here to get a number btwn 0.0 and 1.0 so we can use it in damage calculations.
-        lifesteal = convertedSource.getLifesteal()/100; //same concept here.
-        damageClass = convertedSource.getDamageClass();
-        //we run the premitigation event first, then put the damage and resistance values into an array here to easily loop through them and apply damage calculation math.
-        //resistances need to be divided by 100 to convert them to usable numbers in math. Armour is multiplied by 0.03 because every
-        //point of armour should be worth 3% physical damage reduction.
-        //defense is just 1/3rd of armour toughness. Subject to change.
-        PreMitigationDamageEvent event = new PreMitigationDamageEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, damageClass);
+        PreMitigationDamageEvent event = new PreMitigationDamageEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, convertedSource.getPen()/100, convertedSource.getLifesteal()/100, convertedSource.getKnockback(), convertedSource.getWeight(),
+                (float) armourFormula(target.getAttributeValue(IDFAttributes.FIRE_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(IDFAttributes.WATER_RESISTANCE.get())),
+                (float) armourFormula(target.getAttributeValue(IDFAttributes.LIGHTNING_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(IDFAttributes.MAGIC_RESISTANCE.get())),
+                (float) armourFormula(target.getAttributeValue(IDFAttributes.DARK_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(Attributes.ARMOR)),
+                (float) target.getAttributeValue(Attributes.ARMOR_TOUGHNESS), convertedSource.getDamageClass());
         MinecraftForge.EVENT_BUS.post(event);
-        float[] dv = {event.getFire(), event.getWater(), event.getLightning(), event.getMagic(), event.getDark(), event.getPhysical()};
+        float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
+        weight = event.getWeight();
+        knockback = event.getKnockback();
         log.debug("----------POST-INITIALIZATION----------");
         log.debug("DAMAGE NUMBERS (fire, water, lightning, magic, dark, physical): " +
                 dv[0] + ", " +
@@ -274,13 +278,18 @@ public class DamageHandler {
                 pen + ", " +
                 lifesteal + ", ");
         log.debug("DAMAGE CLASS: " + damageClass);
+        log.debug("WEIGHT: " + weight);
         log.debug("---------------------------------------");
-        double[] rv = {target.getAttributeValue(IDFAttributes.FIRE_RESISTANCE.get())/100, target.getAttributeValue(IDFAttributes.WATER_RESISTANCE.get())/100,
-                target.getAttributeValue(IDFAttributes.LIGHTNING_RESISTANCE.get())/100, target.getAttributeValue(IDFAttributes.MAGIC_RESISTANCE.get())/100,
-                target.getAttributeValue(IDFAttributes.DARK_RESISTANCE.get())/100, target.getAttributeValue(Attributes.ARMOR) * 0.03};
-        double defense = target.getAttributeValue(Attributes.ARMOR_TOUGHNESS)/3;
-        //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
-        //to all the damage types.
+        float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getPhysicalRes()};
+        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(target.getAttributeValue(Attributes.ARMOR_TOUGHNESS)), 0, 4);
+        if (source.getEntity() != null) {
+            double d1 = source.getEntity().getX() - target.getX();
+            double d0;
+            for (d0 = source.getEntity().getZ() - target.getZ(); d1 * d1 + d0 * d0 < 1.0E-4D; d0 = (Math.random() - Math.random()) * 0.01D) {
+                d1 = (Math.random() - Math.random()) * 0.01D;
+            }
+            target.knockback(knockback*weightMultiplier, d1, d0);
+        }
         Map<String, Double> mappedMultipliers = new HashMap<>(3);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", target.getAttributeValue(IDFAttributes.PIERCE_MULT.get()));
@@ -296,17 +305,18 @@ public class DamageHandler {
                 rv[3] + ", " +
                 rv[4] + ", " +
                 rv[5] + ", " +
-                defense);
+                target.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
         log.debug("----------TARGET DAMAGE CLASS MULTIPLIERS----------");
+        log.debug("WEIGHT RATIO = " + weightMultiplier);
         for (Map.Entry<String, Double> entry : mappedMultipliers.entrySet()) {
             log.debug(entry.getKey() + ": " + entry.getValue());
         }
         log.debug("---------------------------------------------------");
-        //now multiply each damage value by the correct multiplier.
         for (int i = 0; i < 6; i++) {
+            dv[i] *= weightMultiplier;
             dv[i] *= mappedMultipliers.get(damageClass);
         }
-        log.debug("----------POST DAMAGE CLASS MULTIPLICATION----------");
+        log.debug("----------POST DAMAGE CLASS/WEIGHT MULTIPLICATION----------");
         log.debug("DAMAGE NUMBERS (fire, water, lightning, magic, dark, physical): " +
                 dv[0] + ", " +
                 dv[1] + ", " +
@@ -315,20 +325,15 @@ public class DamageHandler {
                 dv[4] + ", " +
                 dv[5]);
         log.debug("----------------------------------------------------");
-        //now that we have the final pre-mitigation values, check if the source is true damage. If it is,
-        //there's no need to do the rest of the method.
         if (convertedSource.isTrue()) {
             log.debug("!!!!Source is true damage. Returning " + sum(dv));
             return sum(dv);
         }
-        //now we can factor in blast protection and projectile protection. Reduce each damage type by 6.25% per
-        //level of blast and projectile respectively. Assuming the highest any player could get is 16 (prot 4 on each armour piece),
-        //this means having maxed out of either makes you take 100% reduced damage from these sources.
         if (source.isProjectile()) {
             log.debug("----------PROJECTILE ENCHANT CHECKER----------");
             double projectileLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                projectileLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, item);
+                projectileLevel += item.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION);
             }
             log.debug("Total Projectile Levels: " + projectileLevel);
             if (projectileLevel > 0) {
@@ -349,7 +354,7 @@ public class DamageHandler {
             log.debug("----------BLAST ENCHANT CHECKER----------");
             double blastLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                blastLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLAST_PROTECTION, item);
+                blastLevel += item.getEnchantmentLevel(Enchantments.BLAST_PROTECTION);
             }
             log.debug("Total Blast Levels: " + blastLevel);
             if (blastLevel > 0) {
@@ -370,7 +375,7 @@ public class DamageHandler {
             log.debug("----------FIRE PROTECT ENCHANT CHECKER----------");
             double fireLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
-                fireLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_PROTECTION, item);
+                fireLevel += item.getEnchantmentLevel(Enchantments.FIRE_PROTECTION);
             }
             log.debug("Total Fire Levels: " + fireLevel);
             if (fireLevel > 0) {
@@ -389,7 +394,7 @@ public class DamageHandler {
         }
         double protLevel = 0;
         for (ItemStack item: target.getArmorSlots()) {
-            protLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.ALL_DAMAGE_PROTECTION, item);
+            protLevel += item.getEnchantmentLevel(Enchantments.ALL_DAMAGE_PROTECTION);
         }
         if (protLevel > 0) {
             log.debug("----------ALL PROTECTION ENCHANT CHECKER----------");
@@ -406,7 +411,6 @@ public class DamageHandler {
                     dv[5]);
             log.debug("--------------------------------------------------");
         }
-        //now we factor in the resistance effect. Increases all resistances by 20% per level.
         if (target.hasEffect(MobEffects.DAMAGE_RESISTANCE)) {
             log.debug("----------RESISTANCE EFFECT CHECKER----------");
             double resistanceLevel = ((double)target.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() + 1)/5;
@@ -421,22 +425,19 @@ public class DamageHandler {
                     rv[3] + ", " +
                     rv[4] + ", " +
                     rv[5] + ", " +
-                    defense);
+                    target.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
         }
-        //now we start calculating the final damage value. First create a variable to store the final damage,
-        //then we do the damage math for fire, water, lightning, magic, and dark.
-        //After, do the math for physical damage, factoring in defense as a flat reduction.
+        target.hurtArmor(source, sum(dv));
         log.debug("----------FINAL DAMAGE NUMBERS----------");
         PostMitigationDamageEvent postMitigation = new PostMitigationDamageEvent(target, 0, 0, 0, 0, 0, 0);
-        for (int i = 0; i < 5; i++) {
+        rv[5] = rv[5] * (1.0f - pen);
+        for (int i = 0; i < 6; i++) {
             if (dv[i] > 0) {
-                postMitigation.setDamage(i, (float) (dv[i] * (1 - rv[i])));
+                postMitigation.setDamage(
+                        i,
+                        damageFormula(dv[i], rv[i])
+                );
             }
-        }
-        if (dv[5] > 0) {
-            float ad = (float) (dv[5] - defense);
-            float physicalRes = (float) (rv[5] * (1 - pen));
-            postMitigation.setDamage(5, (ad * (1 - physicalRes)));
         }
         MinecraftForge.EVENT_BUS.post(postMitigation);
         for (float f : postMitigation.getDamage()) {
@@ -444,15 +445,14 @@ public class DamageHandler {
         }
         float returnValue = sum(postMitigation.getDamage());
         log.debug("----------------------------------------");
-        //final thing we do is give lifesteal to the attacker, if it was a source of entity damage that was done.\
         log.debug("----------LIFESTEAL CHECK----------");
         if (convertedSource instanceof EntityDamageSource) {
             log.debug("-> source is entity damage!");
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
-            if (sourceEntity != null && sourceEntity instanceof LivingEntity livingEntity) {
+            if (sourceEntity instanceof LivingEntity livingEntity) {
                 log.debug("-> the source of the damage was a living entity!");
                 if (lifesteal != 0) {
-                    log.debug("lifesteal value is: " + lifesteal*100 + "%, healed " + livingEntity.getType().getRegistryName() + " for " + (returnValue * lifesteal));
+                    log.debug("lifesteal value is: " + lifesteal*100 + "%, healed " + Util.getEntityRegistryName(livingEntity.getType()) + " for " + (returnValue * lifesteal));
                     livingEntity.heal(returnValue * lifesteal);
                 }
             }
@@ -468,4 +468,22 @@ public class DamageHandler {
         }
         return returnFloat;
     }
+
+    public static double armourFormula(double d) {
+        if (d == 0) return 0; //if res is 0, then give 0 res 4HEAD
+        //the following formula is a function that has a horizontal asymptote at y = 100.
+        //this is so the player can never go over 100% damage reduction.
+        return 100/(1 + Math.exp((-d/10) + 2));
+    }
+
+    public static float damageFormula(float a, float d) {
+        if (d == 0) return a; //if res is 0, then we should return true damage.
+
+        //the following formula is a sigmoid function. At 0 res it's true damage, at equal it's 50%.
+        // return a - (a/(1 + Math.pow( (e/2.3) , ((a - d)/9) )));
+
+        //the following formula is just a simple % reduction, i.e d = 50 ->  return 0.5a
+        return a * (1 - (d/100));
+    }
+
 }

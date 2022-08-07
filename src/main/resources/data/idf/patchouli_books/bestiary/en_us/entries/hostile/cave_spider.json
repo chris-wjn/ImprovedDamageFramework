@@ -1,0 +1,16 @@
+{
+  "name": "Cave Spider",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:cave_spider",
+      "text": "A 1x1 variant of the spider that inflicts poison on hit."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:cave_spider"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ public abstract class UUIDs {
     public static final UUID configAttackDamage = UUID.randomUUID();
     public static final UUID configLifesteal = UUID.randomUUID();
     public static final UUID configPenetration = UUID.randomUUID();
+    public static final UUID configWeight = UUID.randomUUID();
     public static final UUID configCrit = UUID.randomUUID();
     public static final UUID helmetConfigFireResistance = UUID.randomUUID();
     public static final UUID helmetConfigWaterResistance = UUID.randomUUID();

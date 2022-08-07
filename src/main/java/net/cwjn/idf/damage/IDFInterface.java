@@ -9,6 +9,8 @@ public interface IDFInterface {
     float getDark();
     float getPen();
     float getLifesteal();
+    float getWeight();
+    float getKnockback();
     String getDamageClass();
     boolean isTrue();
     boolean isConversion();

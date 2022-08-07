@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 
 public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen, lifesteal;
+    private final float fire, water, lightning, magic, dark, pen, lifesteal, weight, knockback;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -18,6 +18,8 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         dark = 0;
         pen = 0;
         lifesteal = 0;
+        weight = -1;
+        knockback = 0;
         damageClass = dc;
     }
 
@@ -30,6 +32,36 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         dark = d;
         pen = p;
         lifesteal = ls;
+        weight = -1;
+        knockback = 0;
+        damageClass = dc;
+    }
+
+    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, float ls, float wt, String dc) {
+        super(msgId, source, trueSource);
+        fire = f;
+        water = w;
+        lightning = l;
+        magic = m;
+        dark = d;
+        pen = p;
+        lifesteal = ls;
+        weight = wt;
+        knockback = 0;
+        damageClass = dc;
+    }
+
+    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, float ls, float kb, float wt, String dc) {
+        super(msgId, source, trueSource);
+        fire = f;
+        water = w;
+        lightning = l;
+        magic = m;
+        dark = d;
+        pen = p;
+        lifesteal = ls;
+        weight = wt;
+        knockback = kb;
         damageClass = dc;
     }
 
@@ -77,11 +109,20 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         return lifesteal;
     }
 
+    public float getWeight() {
+        return weight;
+    }
+
     public String getDamageClass() {
         return damageClass;
     }
 
     public String getMsgId() {
         return this.msgId;
+    }
+
+    @Override
+    public float getKnockback() {
+        return knockback;
     }
 }

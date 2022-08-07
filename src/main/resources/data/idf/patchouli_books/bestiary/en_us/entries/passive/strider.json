@@ -1,0 +1,16 @@
+{
+    "name": "Strider",
+    "icon": "",
+    "category": "idf:passive",
+    "pages": [
+      {
+        "type": "patchouli:entity",
+        "entity": "minecraft:strider",
+        "text": "A passive mob found in lava lakes in the Nether. Can walk on lava and be saddled/ridden by players."
+      },
+      {
+        "type": "idf:passive_entity",
+        "entity": "minecraft:strider"
+      }
+    ]
+  }

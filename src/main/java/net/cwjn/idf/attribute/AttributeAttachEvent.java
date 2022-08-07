@@ -1,14 +1,12 @@
 package net.cwjn.idf.attribute;
 
-import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.Util;
 import net.cwjn.idf.config.json.Config;
-import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.JSONHandler;
+import net.cwjn.idf.config.json.data.EntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -19,7 +17,7 @@ public class AttributeAttachEvent {
     public static void attachAttributes(EntityAttributeModificationEvent event) {
         Config.init();
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-            EntityData data = JSONHandler.getEntityData(entityType.getRegistryName());
+            EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(entityType));
             if (data != null) {
                 event.add(entityType, IDFAttributes.FIRE_DAMAGE.get(), data.getFireDamage());
                 event.add(entityType, IDFAttributes.WATER_DAMAGE.get(), data.getWaterDamage());
@@ -42,6 +40,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.EVASION.get(), data.getEvasion());
                 event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.getLifesteal());
                 event.add(entityType, IDFAttributes.PENETRATING.get(), data.getArmourPenetration());
+                event.add(entityType, IDFAttributes.WEIGHT.get(), data.getWeight());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
             } else {
                 //damage types
@@ -66,6 +65,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.EVASION.get());
                 event.add(entityType, IDFAttributes.LIFESTEAL.get());
                 event.add(entityType, IDFAttributes.PENETRATING.get());
+                event.add(entityType, IDFAttributes.WEIGHT.get());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
             }
         }

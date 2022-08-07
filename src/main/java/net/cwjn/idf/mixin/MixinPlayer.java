@@ -4,10 +4,8 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
 import net.cwjn.idf.damage.*;
-import net.cwjn.idf.event.hook.ServerEvents;
-import net.minecraft.core.particles.ParticleTypes;
+import net.cwjn.idf.event.ServerEvents;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -25,43 +23,53 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Player.class)
 public class MixinPlayer {
     /**
      * @author cwJn
+     * @reason
+     * see MixinLivingEntity.
     */
     @Overwrite
-    protected void actuallyHurt(DamageSource source, float amount) {
+    protected void actuallyHurt(DamageSource damageSource, float damageAmount) {
         Player thisPlayer = (Player)(Object) this;
-        if (!thisPlayer.isInvulnerableTo(source)) {
-            amount = net.minecraftforge.common.ForgeHooks.onLivingHurt(thisPlayer, source, amount);
-            hurtArmor(source, amount);
-            if (ServerEvents.debugMode) amount = DamageHandler.handleDamageWithDebug(thisPlayer, source, amount, ImprovedDamageFramework.LOGGER);
-            else amount = DamageHandler.handleDamage(thisPlayer, source, amount);
-            if (amount <= 0) return;
-            float postAbsorptionDamageAmount = Math.max(amount - thisPlayer.getAbsorptionAmount(), 0.0F); //subtract the entity's absorption hearts from the damage amount
-            thisPlayer.setAbsorptionAmount(thisPlayer.getAbsorptionAmount() - (amount - postAbsorptionDamageAmount));
-            postAbsorptionDamageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(thisPlayer, source, postAbsorptionDamageAmount);
-            float amountTankedWithAbsorption = amount - postAbsorptionDamageAmount;
-            if (amountTankedWithAbsorption > 0.0F && amountTankedWithAbsorption < 3.4028235E37F) {
-                thisPlayer.awardStat(Stats.DAMAGE_ABSORBED, Math.round(amountTankedWithAbsorption * 10.0F));
+        if (!thisPlayer.isInvulnerableTo(damageSource)) {
+            damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(thisPlayer, damageSource, damageAmount);
+
+            //if (damageAmount <= 0) return;
+            //MODIFIED CODE STARTS HERE
+            if (ServerEvents.debugMode) damageAmount = DamageHandler.handleDamageWithDebug(thisPlayer, damageSource, damageAmount, ImprovedDamageFramework.LOGGER);
+            else damageAmount = DamageHandler.handleDamage(thisPlayer, damageSource, damageAmount);
+            if (damageAmount <= 0) return;
+            //MODIFIED CODE ENDS HERE
+
+            float f2 = Math.max(damageAmount - thisPlayer.getAbsorptionAmount(), 0.0F);
+            thisPlayer.setAbsorptionAmount(thisPlayer.getAbsorptionAmount() - (damageAmount - f2));
+            f2 = net.minecraftforge.common.ForgeHooks.onLivingDamage(thisPlayer, damageSource, f2);
+            float f = damageAmount - f2;
+            if (f > 0.0F && f < 3.4028235E37F) {
+                thisPlayer.awardStat(Stats.DAMAGE_ABSORBED, Math.round(f * 10.0F));
             }
-            if (postAbsorptionDamageAmount != 0.0F) {
-                thisPlayer.causeFoodExhaustion(source.getFoodExhaustion());
-                float health = thisPlayer.getHealth();
-                (thisPlayer).getCombatTracker().recordDamage(source, health, postAbsorptionDamageAmount);
-                (thisPlayer).setHealth(health - postAbsorptionDamageAmount); // Forge: moved to fix MC-121048
-                if (postAbsorptionDamageAmount < 3.4028235E37F) {
-                    thisPlayer.awardStat(Stats.DAMAGE_TAKEN, Math.round(postAbsorptionDamageAmount * 10.0F));
+
+            if (f2 != 0.0F) {
+                thisPlayer.causeFoodExhaustion(damageSource.getFoodExhaustion());
+                float f1 = thisPlayer.getHealth();
+                thisPlayer.getCombatTracker().recordDamage(damageSource, f1, f2);
+                thisPlayer.setHealth(f1 - f2); // Forge: moved to fix MC-121048
+                if (f2 < 3.4028235E37F) {
+                    thisPlayer.awardStat(Stats.DAMAGE_TAKEN, Math.round(f2 * 10.0F));
                 }
+
             }
         }
     }
+
     /**
      * @author cwjn
+     * @reason
+     * Implement new attributes and features. Too much to change here to reasonably do it without overwrite.
+     * Anything that is made incompatible by this should probably stay incompatible.
      */
     @Overwrite
     public void attack(Entity target) {
@@ -78,6 +86,7 @@ public class MixinPlayer {
                 float md = (float)thisPlayer.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
                 float dd = (float)thisPlayer.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
                 float pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
+                float weight = (float)thisPlayer.getAttributeValue(IDFAttributes.WEIGHT.get());
                 float damageBonus;
                 if (target instanceof LivingEntity) {
                     damageBonus = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), ((LivingEntity)target).getMobType());
@@ -104,10 +113,13 @@ public class MixinPlayer {
                     boolean sprintAttack = false;
                     float knockback = (float)thisPlayer.getAttributeValue(Attributes.ATTACK_KNOCKBACK); // Forge: Initialize player value to the attack knockback attribute of the player, which is by default 0
                     knockback += EnchantmentHelper.getKnockbackBonus(thisPlayer);
-                    if (thisPlayer.isSprinting() && fullStrength) {
-                        thisPlayer.level.playSound((Player)null, thisPlayer.getX(), thisPlayer.getY(), thisPlayer.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, thisPlayer.getSoundSource(), 1.0F, 1.0F);
-                        ++knockback;
-                        sprintAttack = true;
+                    if (fullStrength) {
+                        knockback += 0.4f;
+                        if (thisPlayer.isSprinting()) {
+                            thisPlayer.level.playSound((Player) null, thisPlayer.getX(), thisPlayer.getY(), thisPlayer.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, thisPlayer.getSoundSource(), 1.0F, 1.0F);
+                            knockback += 0.4f;
+                            sprintAttack = true;
+                        }
                     }
 
                     boolean isCrit = (thisPlayer.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())/100) >= Math.random() && target instanceof LivingEntity;
@@ -148,12 +160,11 @@ public class MixinPlayer {
                     //this is where we actually set the target to be hurt, and check to see if the hurt event went through
                     Vec3 direction = target.getDeltaMovement();
                     String damageClass = thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
-                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, pen, lifesteal, damageClass), ad);
+                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, pen, lifesteal, knockback, weight, damageClass), ad);
 
                     if (targetWasHurt) {
                         //knockback the target and if the player was sprinting, stop their sprint
-
-                        if (knockback > 0 && thisPlayer.getAttackStrengthScale(0.5f) > 0.8) {
+                        if (knockback > 0) {
                             if (target instanceof LivingEntity) {
                                 ((LivingEntity)target).knockback((double)((float)knockback * 0.5F), (double) Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F))));
                             } else {
@@ -176,7 +187,7 @@ public class MixinPlayer {
                             for(LivingEntity livingentity : thisPlayer.level.getEntitiesOfClass(LivingEntity.class, thisPlayer.getItemInHand(InteractionHand.MAIN_HAND).getSweepHitBox(thisPlayer, target))) {
                                 if (livingentity != thisPlayer && livingentity != target && !thisPlayer.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).isMarker()) && thisPlayer.distanceToSqr(livingentity) < 9.0D) {
                                     livingentity.knockback((double)0.4F, (double)Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F))));
-                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, pen, 0,
+                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, pen, 0, weight,
                                             thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass()), sweepingAD);
                                 }
                             }
@@ -256,11 +267,4 @@ public class MixinPlayer {
             }
         }
     }
-
-    @Shadow
-    protected void hurtArmor(DamageSource p_21122_, float p_21123_) {
-        throw new IllegalStateException("Mixin failed to shadow hurtArmor(DamageSource d, float f)");
-    }
-
-
 }

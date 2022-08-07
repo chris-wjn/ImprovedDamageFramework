@@ -2,11 +2,10 @@ package net.cwjn.idf.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.cwjn.idf.Util;
 import net.cwjn.idf.config.json.JSONHandler;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class UpdateJsonFilesCommand {
 
@@ -17,10 +16,10 @@ public class UpdateJsonFilesCommand {
     private int updateJsonFiles(CommandSourceStack stack) throws CommandSyntaxException {
         if (stack.getServer().isDedicatedServer()) {
             JSONHandler.updateServerFiles();
-            stack.sendSuccess(new TranslatableComponent("idf.update.command.success"), true);
+            stack.sendSuccess(Util.translationComponent("idf.update.command.success"), true);
             return 1;
         } else {
-            stack.sendFailure(new TranslatableComponent("idf.update.command.failure"));
+            stack.sendFailure(Util.translationComponent("idf.update.command.failure"));
             return -1;
         }
     }

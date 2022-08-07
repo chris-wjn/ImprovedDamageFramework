@@ -14,7 +14,7 @@ public class ATHandler {
         DamageSource.FALLING_STALACTITE = new PhysicalDamageSource("fallingStalactite", 0.0f, "pierce");
         DamageSource.FALL = new PhysicalDamageSource("fall", 0.0f, "strike").setIsFall();
         DamageSource.FLY_INTO_WALL = new PhysicalDamageSource("flyIntoWall", 0.0f, "strike");
-        DamageSource.GENERIC = new PhysicalDamageSource("generic", 0.0f, "strike");
+        DamageSource.GENERIC = new PhysicalDamageSource("generic", 0.0f, "generic").setTrue();
         DamageSource.ANVIL = new PhysicalDamageSource("anvil", 0.0f, "strike");
         DamageSource.FALLING_BLOCK = new PhysicalDamageSource("fallingBlock", 0.0f, "strike");
         DamageSource.IN_WALL = new PhysicalDamageSource("inWall", 0.0f, "crush");

@@ -6,38 +6,98 @@ import net.cwjn.idf.Color;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.Keybinds;
 import net.cwjn.idf.Util;
-import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.gui.buttons.AttributeButton;
+import net.cwjn.idf.gui.buttons.BackButton;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 
+import static net.cwjn.idf.Color.*;
+import static net.cwjn.idf.Util.*;
+import static net.cwjn.idf.attribute.IDFAttributes.*;
+import static net.cwjn.idf.gui.StatsScreen.Page.*;
+import static net.minecraft.world.entity.ai.attributes.Attributes.*;
+
 @OnlyIn(Dist.CLIENT)
 public class StatsScreen extends Screen {
 
-    private static final ResourceLocation BACKGROUND_TEXTURE =
-            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stats_screen_gui.png");
+    private static final ResourceLocation STAT_ATTRIBUTES =
+            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_attributes.png");
+    private static final ResourceLocation BASE =
+            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_base.png");
+
+
     private static final Style pixel = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_PIXEL);
-    private static final DecimalFormat healthFormat = new DecimalFormat();
-    private static final DecimalFormat attributeFormat = new DecimalFormat("#.##");
+    private static final Style modernTales = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_MODERNTALES);
+    private static final Style bubble = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_BUBBLE);
+    private static final Style alagard = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_ALAGARD);
+    private static final Style dogica = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_DOGICA);
+    private static final Style indicators = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
+    private int w;
+    private int h;
+    private Page page = MAIN;
+    private StatButton attributeButton, backButton;
+    public static final DecimalFormat healthFormat = new DecimalFormat();
+    private Player player;
+    private Font font;
+
+    enum Page {
+        MAIN,
+        PAGE_ATTRIBUTES
+    }
+
     static {
         healthFormat.setMinimumFractionDigits(1);
         healthFormat.setMaximumFractionDigits(1);
         healthFormat.setMinimumIntegerDigits(2);
     }
 
-
     public StatsScreen() {
-        super(new TextComponent("idf:stats_screen"));
+        super(translationComponent("idf.stats_screen"));
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        player = minecraft.player;
+        font = minecraft.font;
+        w = (width - 384)/2;
+        h = (height - 512)/2 - 7;
+        attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
+        backButton = addRenderableWidget(new BackButton(w+20, h+455, (f) -> this.attributesToMain()));
+        //122, 443
+        updateButtonVisibility();
+    }
+
+    private void updateButtonVisibility() {
+        if (page == PAGE_ATTRIBUTES) {
+            attributeButton.visible = false;
+            backButton.visible = true;
+        }
+        else if (page == MAIN) {
+            attributeButton.visible = true;
+            backButton.visible = false;
+        }
+    }
+
+    private void mainToAttributes() {
+        page = PAGE_ATTRIBUTES;
+        updateButtonVisibility();
+    }
+
+    private void attributesToMain() {
+        page = MAIN;
+        updateButtonVisibility();
     }
 
     @Override
@@ -46,59 +106,60 @@ public class StatsScreen extends Screen {
         pPoseStack.pushPose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-        int leftPos = width/2 - 128;
-        int topPos = height/2 - 128;
-        int rightPos = width/2 + 128;
-        int botPos = height/2 + 128;
-        this.blit(pPoseStack, leftPos, topPos, 0, 0, 256, 256);
-        InventoryScreen.renderEntityInInventory(leftPos + 53, topPos + 100, 30, (float)(leftPos + 53) - pMouseX, (float)(topPos + 100 - 50) - pMouseY, this.minecraft.player);
-        pPoseStack.popPose();
-        pPoseStack.pushPose();
-        drawStrings(pPoseStack, leftPos, topPos);
-        drawValues(pPoseStack, leftPos, topPos);
+        if (page == MAIN)  {
+            RenderSystem.setShaderTexture(0, BASE);
+            blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
+        }
+        else if (page == PAGE_ATTRIBUTES)  {
+            RenderSystem.setShaderTexture(0, STAT_ATTRIBUTES);
+            blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
+            renderAttributes(pPoseStack, pMouseX, pMouseY);
+        }
         pPoseStack.popPose();
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
 
-    private void drawStrings(PoseStack pPoseStack, int leftPos, int topPos) {
-        minecraft.font.draw(pPoseStack, new TextComponent(healthFormat.format(this.minecraft.player.getHealth())).withStyle(pixel).
-                append(Util.withColor(new TextComponent("/"), Color.WHITESMOKE)).withStyle(pixel).
-                append(String.valueOf(healthFormat.format(this.minecraft.player.getAttributeValue(Attributes.MAX_HEALTH)))), (float)(leftPos + 34.5), (topPos + 126), 0xDC143C);
-        minecraft.font.draw(pPoseStack, new TextComponent("Physical").withStyle(pixel), (leftPos + 116), (topPos + 22), 0xf5f5dc);
-        minecraft.font.draw(pPoseStack, new TextComponent("Fire").withStyle(pixel), (leftPos + 116), (topPos + 28), 0xff5555);
-        minecraft.font.draw(pPoseStack, new TextComponent("Water").withStyle(pixel), (leftPos + 116), (topPos + 34), 0x5555ff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Lightning").withStyle(pixel), (leftPos + 116), (topPos + 40), 0xffff55);
-        minecraft.font.draw(pPoseStack, new TextComponent("Magic").withStyle(pixel), (leftPos + 116), (topPos + 46), 0x55ffff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Dark").withStyle(pixel), (leftPos + 116), (topPos + 52), 0xaa00aa);
-        minecraft.font.draw(pPoseStack, new TextComponent("Defense").withStyle(pixel), (leftPos + 116), (topPos + 74), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Evasion").withStyle(pixel), (leftPos + 116), (topPos + 80), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Movespeed").withStyle(pixel), (leftPos + 116), (topPos + 86), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Knockback").withStyle(pixel), (leftPos + 116), (topPos + 92), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Attack Speed").withStyle(pixel), (leftPos + 116), (topPos + 98), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent("Luck").withStyle(pixel), (leftPos + 116), (topPos + 104), 0xffffff);
+    private void renderAttributes(PoseStack matrix, int mouseX, int mouseY) {
+        InventoryScreen.renderEntityInInventory(w + 193, h + 387, 40, (float)(w + 192) - mouseX, (float)(h + 387 - 66) - mouseY, this.minecraft.player);
+        drawCenteredString(font, matrix, player.getAttributeValue(ATTACK_DAMAGE), w+158, h+52.5f, PHYSICAL_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(ARMOR), w+232, h+52.5f, PHYSICAL_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(ARMOR_TOUGHNESS), w+306.5f, h+52.5f, PHYSICAL_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(FIRE_DAMAGE.get()), w+158, h+77.5f, FIRE_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(FIRE_RESISTANCE.get()), w+232, h+77.5f, FIRE_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(WATER_DAMAGE.get()), w+158, h+102.5f, WATER_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(WATER_RESISTANCE.get()), w+232, h+102.5f, WATER_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(LIGHTNING_DAMAGE.get()), w+158, h+127.5f, LIGHTNING_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(LIGHTNING_RESISTANCE.get()), w+232, h+127.5f, LIGHTNING_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(MAGIC_DAMAGE.get()), w+158, h+152.5f, MAGIC_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(MAGIC_RESISTANCE.get()), w+232, h+152.5f, MAGIC_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(DARK_DAMAGE.get()), w+158, h+177.5f, DARK_COLOUR.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(DARK_RESISTANCE.get()), w+232, h+177.5f, DARK_COLOUR.getColor());
+        drawCenteredString(font, matrix, (player.getAttributeValue(ATTACK_SPEED)), w+104, h+408, ChatFormatting.YELLOW.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(WEIGHT.get()), w+282, h+408, ChatFormatting.GRAY.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(CRUSH_MULT.get()) * 100, w+67f, h+211.5f,
+                player.getAttributeValue(CRUSH_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
+        drawCenteredString(font, matrix, (player.getAttributeValue(STRIKE_MULT.get())*100), w+136f, h+211.5f,
+                player.getAttributeValue(STRIKE_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
+        drawCenteredString(font, matrix, (player.getAttributeValue(PIERCE_MULT.get())*100), w+205f, h+211.5f,
+                player.getAttributeValue(PIERCE_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
+        drawCenteredString(font, matrix, (player.getAttributeValue(SLASH_MULT.get())*100), w+274f, h+211.5f,
+                player.getAttributeValue(SLASH_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
+        drawCenteredString(font, matrix, (player.getAttributeValue(GENERIC_MULT.get())*100), w+343f, h+211.5f,
+                player.getAttributeValue(GENERIC_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(CRIT_CHANCE.get()), w+104, h+318, ORANGE.getColor());
+        drawCenteredString(font, matrix, (player.getAttributeValue(ATTACK_KNOCKBACK)/0.4) * 100, w+104, h+363, VIOLET.getColor());
+        drawCenteredString(font, matrix, 100 - player.getAttributeValue(KNOCKBACK_RESISTANCE)*100, w+283, h+363, VIOLET.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(PENETRATING.get()), w+283, h+318, WHITESMOKE.getColor());
+        drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(LUCK), w+223.5f, h+454, GREENYELLOW.getColor());
+        drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(EVASION.get()), w+223.5f, h+273, ChatFormatting.DARK_GRAY.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(LIFESTEAL.get()), w+162, h+273, ChatFormatting.DARK_RED.getColor());
+        //163, 454
     }
 
-    private void drawValues(PoseStack pPoseStack, int leftPos, int topPos) {
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus(this.minecraft.player.getMainHandItem(), MobType.UNDEFINED)) + "").withStyle(pixel), (leftPos + 177), (topPos + 22), 0xf5f5dc);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.ARMOR)*3) + "").withStyle(pixel), (leftPos + 206), (topPos + 22), 0xf5f5dc);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get())) + "").withStyle(pixel), (leftPos + 177), (topPos + 28), 0xff5555);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.FIRE_RESISTANCE.get())) + "").withStyle(pixel), (leftPos + 206), (topPos + 28), 0xff5555);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.WATER_DAMAGE.get())) + "").withStyle(pixel), (leftPos + 177), (topPos + 34), 0x5555ff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.WATER_RESISTANCE.get())) + "").withStyle(pixel), (leftPos + 206), (topPos + 34), 0x5555ff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get())) + "").withStyle(pixel), (leftPos + 177), (topPos + 40), 0xffff55);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.LIGHTNING_RESISTANCE.get())) + "").withStyle(pixel), (leftPos + 206), (topPos + 40), 0xffff55);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get())) + "").withStyle(pixel), (leftPos + 177), (topPos + 46), 0xffff55);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.MAGIC_RESISTANCE.get())) + "").withStyle(pixel), (leftPos + 206), (topPos + 46), 0x55ffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.DARK_DAMAGE.get())) + "").withStyle(pixel), (leftPos + 177), (topPos + 52), 0xaa00aa);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.DARK_RESISTANCE.get())) + "").withStyle(pixel), (leftPos + 206), (topPos + 52), 0xaa00aa);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.ARMOR_TOUGHNESS)/3) + "").withStyle(pixel), (leftPos + 206), (topPos + 74), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(IDFAttributes.EVASION.get())) + "%").withStyle(pixel), (leftPos + 206), (topPos + 80), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.MOVEMENT_SPEED)*1000) + "%").withStyle(pixel), (leftPos + 206), (topPos + 86), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.ATTACK_KNOCKBACK)) + "").withStyle(pixel), (leftPos + 177), (topPos + 92), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)*100) + "%").withStyle(pixel), (leftPos +206), (topPos + 92), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.ATTACK_SPEED)) + "").withStyle(pixel), (leftPos + 177), (topPos + 98), 0xffffff);
-        minecraft.font.draw(pPoseStack, new TextComponent(attributeFormat.format(this.minecraft.player.getAttributeValue(Attributes.LUCK)) + "").withStyle(pixel), (leftPos + 206), (topPos + 104), 0xffffff);
+    private void drawCenteredString(Font font, PoseStack matrix, double value, float x, float y, int colour) {
+        Util.drawCenteredString(font, matrix, numericalAttributeComponent(value).withStyle(indicators), x, y, colour);
     }
 
     @Override
@@ -114,4 +175,5 @@ public class StatsScreen extends Screen {
         }
         return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
+
 }

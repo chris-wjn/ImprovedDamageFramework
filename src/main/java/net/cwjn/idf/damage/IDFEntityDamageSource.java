@@ -5,7 +5,7 @@ import net.minecraft.world.entity.Entity;
 
 public class IDFEntityDamageSource extends EntityDamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen, lifesteal;
+    private final float fire, water, lightning, magic, dark, pen, lifesteal, weight, knockback;
     private final String damageClass; //strike, pierce, slash, crush, generic
     private boolean isTrue = false, isConversion = false;
 
@@ -18,6 +18,36 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         dark = d;
         this.pen = pen;
         lifesteal = ls;
+        weight = -1;
+        knockback = 0;
+        damageClass = dc;
+    }
+
+    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float pen, float ls, float wt, String dc) {
+        super(msgId, entity);
+        fire = f;
+        water = w;
+        lightning = l;
+        magic = m;
+        dark = d;
+        this.pen = pen;
+        lifesteal = ls;
+        weight = wt;
+        knockback = 0;
+        damageClass = dc;
+    }
+
+    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float pen, float ls, float kb, float wt, String dc) {
+        super(msgId, entity);
+        fire = f;
+        water = w;
+        lightning = l;
+        magic = m;
+        dark = d;
+        this.pen = pen;
+        lifesteal = ls;
+        weight = wt;
+        knockback = kb;
         damageClass = dc;
     }
 
@@ -65,6 +95,10 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         return lifesteal;
     }
 
+    public float getWeight() {
+        return weight;
+    }
+
     public String getDamageClass() {
         return damageClass;
     }
@@ -73,4 +107,7 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         return this.msgId;
     }
 
+    public float getKnockback() {
+        return knockback;
+    }
 }

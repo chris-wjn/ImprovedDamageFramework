@@ -1,9 +1,11 @@
 package net.cwjn.idf.config;
 
+import net.cwjn.idf.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.DamageData;
 import net.cwjn.idf.config.json.data.ResistanceData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -30,24 +32,26 @@ public class ItemModifier {
                     return;
                 }
             }
-            if (JSONHandler.damageMap.containsKey(item.getItem().getRegistryName())) {
+            ResourceLocation loc = Util.getItemRegistryName(item.getItem());
+            if (JSONHandler.damageMap.containsKey(loc)) {
                 cachedItem = item;
                 item.getOrCreateTag().putBoolean("idf.equipment", true);
-                item.getOrCreateTag().putString("idf.damage_class", JSONHandler.damageMap.get(item.getItem().getRegistryName()).getDamageClass());
-                DamageData data = JSONHandler.getDamageData(item.getItem().getRegistryName());
+                item.getTag().putString("idf.damage_class", JSONHandler.damageMap.get(loc).getDamageClass());
+                DamageData data = JSONHandler.getDamageData(loc);
                 event.addModifier(Attributes.ATTACK_DAMAGE, new AttributeModifier(configAttackDamage, () -> "config_attack_damage", data.getAttackDamage(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.FIRE_DAMAGE.get(), new AttributeModifier(configFireDamage, () -> "config_fire_damage", data.getFire(), AttributeModifier.Operation.ADDITION));
-                event.addModifier(IDFAttributes.WATER_DAMAGE.get(), new AttributeModifier(configWaterDamage, () -> "config_water_damage", data.getWater(), AttributeModifier.Operation.ADDITION));
+                event.addModifier(IDFAttributes.WATER_DAMAGE.get(), new Attribut eModifier(configWaterDamage, () -> "config_water_damage", data.getWater(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.LIGHTNING_DAMAGE.get(), new AttributeModifier(configLightningDamage, () -> "config_lightning_damage", data.getLightning(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.MAGIC_DAMAGE.get(), new AttributeModifier(configMagicDamage, () -> "config_magic_damage", data.getMagic(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.DARK_DAMAGE.get(), new AttributeModifier(configDarkDamage, () -> "config_dark_damage", data.getDark(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.LIFESTEAL.get(), new AttributeModifier(configLifesteal, () -> "config_lifesteal", data.getLifesteal(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.PENETRATING.get(), new AttributeModifier(configPenetration, () -> "config_penetration", data.getArmourPenetration(), AttributeModifier.Operation.ADDITION));
+                event.addModifier(IDFAttributes.WEIGHT.get(), new AttributeModifier(configWeight, () -> "config_weight", data.getWeight(), AttributeModifier.Operation.ADDITION));
                 event.addModifier(IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier(configCrit, () -> "config_crit_chance", data.getCritChance(), AttributeModifier.Operation.ADDITION));
-            } else if (JSONHandler.resistanceMap.containsKey(item.getItem().getRegistryName())) {
+            } else if (JSONHandler.resistanceMap.containsKey(loc)) {
                 cachedItem = item;
                 item.getOrCreateTag().putBoolean("idf.equipment", true);
-                ResistanceData data = JSONHandler.getResistanceData(item.getItem().getRegistryName());
+                ResistanceData data = JSONHandler.getResistanceData(loc);
                 if (event.getSlotType() == EquipmentSlot.HEAD) {
                     event.addModifier(Attributes.ARMOR, new AttributeModifier(helmetConfigArmour, () -> "helmet_config_armour", data.getArmour(), AttributeModifier.Operation.ADDITION));
                     event.addModifier(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(helmetConfigArmourToughness, () -> "helmet_config_armour_toughness", data.getArmourToughness(), AttributeModifier.Operation.ADDITION));

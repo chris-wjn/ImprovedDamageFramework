@@ -1,0 +1,16 @@
+{
+  "name": "Blaze",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:blaze",
+      "text": "Hostile floating mobs found in nether fortresses."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:blaze"
+    }
+  ]
+}

@@ -2,10 +2,10 @@ package net.cwjn.idf.config.json.data;
 
 public class DamageData {
 
-    private final double fire, water, lightning, magic, dark, attackDamage, lifesteal, armourPenetration, critChance;
+    private final double fire, water, lightning, magic, dark, attackDamage, lifesteal, armourPenetration, critChance, weight;
     private final String damageClass;
 
-    public DamageData(double f, double w, double l, double m, double d, double phys, String c, double ls, double pen, double crit) {
+    public DamageData(double f, double w, double l, double m, double d, double phys, String c, double ls, double pen, double wt, double crit) {
         damageClass = c;
         fire = f;
         water = w;
@@ -16,6 +16,7 @@ public class DamageData {
         lifesteal = ls;
         armourPenetration = pen;
         critChance = crit;
+        weight = wt;
     }
 
     public String getDamageClass() {
@@ -58,4 +59,7 @@ public class DamageData {
         return attackDamage;
     }
 
+    public double getWeight() {
+        return weight;
+    }
 }

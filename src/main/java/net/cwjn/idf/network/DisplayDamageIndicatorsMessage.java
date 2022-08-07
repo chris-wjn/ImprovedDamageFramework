@@ -1,25 +1,30 @@
 package net.cwjn.idf.network;
 
-import net.cwjn.idf.event.hook.DamageIndicatorEvents;
+import net.cwjn.idf.event.DamageIndicatorEvents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Random;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class DisplayDamageIndicatorsMessage {
 
     private double x, y, z;
     private float f;
-    private float[] colour;
+    private UUID id;
+    private int colour;
+    private float horizontalOffset;
     private static final Random random = new Random();
 
-    public DisplayDamageIndicatorsMessage(double x, double y, double z, float f, float[] colour) {
+    public DisplayDamageIndicatorsMessage(double x, double y, double z, float f, float h, int colour, UUID id) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.f = f;
+        this.horizontalOffset = h;
         this.colour = colour;
+        this.id = id;
     }
 
     public static void encode(DisplayDamageIndicatorsMessage message, FriendlyByteBuf buffer) {
@@ -27,9 +32,9 @@ public class DisplayDamageIndicatorsMessage {
         buffer.writeDouble(message.y);
         buffer.writeDouble(message.z);
         buffer.writeFloat(message.f);
-        buffer.writeFloat(message.colour[0]);
-        buffer.writeFloat(message.colour[1]);
-        buffer.writeFloat(message.colour[2]);
+        buffer.writeFloat(message.horizontalOffset);
+        buffer.writeInt(message.colour);
+        buffer.writeUUID(message.id);
     }
 
     public static DisplayDamageIndicatorsMessage decode(FriendlyByteBuf buffer) {
@@ -37,13 +42,15 @@ public class DisplayDamageIndicatorsMessage {
         double y = buffer.readDouble();
         double z = buffer.readDouble();
         float f = buffer.readFloat();
-        float[] colour = {buffer.readFloat(), buffer.readFloat(), buffer.readFloat()};
-        return new DisplayDamageIndicatorsMessage(x, y, z, f, colour);
+        float h = buffer.readFloat();
+        int colour = buffer.readInt();
+        UUID id = buffer.readUUID();
+        return new DisplayDamageIndicatorsMessage(x, y, z, f, h, colour, id);
     }
 
     public static void handle(DisplayDamageIndicatorsMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
-        DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, random.nextDouble(2) - 1, 0, random.nextDouble(2) - 1, message.colour);
+        DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, message.colour, message.horizontalOffset, random.nextDouble(1, 1.2), message.id);
         ctx.setPacketHandled(true);
     }
 

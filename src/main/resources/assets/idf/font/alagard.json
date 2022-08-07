@@ -1,0 +1,10 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:alagard.ttf",
+      "size": 16,
+      "oversample": 4
+    }
+  ]
+}

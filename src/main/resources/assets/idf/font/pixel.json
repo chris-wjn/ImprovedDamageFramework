@@ -3,8 +3,8 @@
     {
       "type": "ttf",
       "file": "idf:pixelfont.ttf",
-      "oversample": 3,
-      "size": 6
+      "size": 21,
+      "oversample": 3
     }
   ]
 }

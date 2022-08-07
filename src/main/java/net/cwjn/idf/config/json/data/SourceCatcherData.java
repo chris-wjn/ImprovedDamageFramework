@@ -18,6 +18,7 @@ public class SourceCatcherData {
     private final float dark;
     private final float pen;
     private final float lifesteal;
+    private final float weight;
     private final String damageClass;
     private final boolean isTrueDamage;
 
@@ -53,11 +54,15 @@ public class SourceCatcherData {
         return damageClass;
     }
 
+    public float getWeight() {
+        return weight;
+    }
+
     public boolean isTrueDamage() {
         return isTrueDamage;
     }
 
-    public SourceCatcherData(float f, float w, float l, float m, float d, float p, float ls, String dc, boolean isTrue) {
+    public SourceCatcherData(float f, float w, float l, float m, float d, float p, float ls, float wt, String dc, boolean isTrue) {
         damageClass = dc;
         fire = f;
         water = w;
@@ -66,6 +71,7 @@ public class SourceCatcherData {
         dark = d;
         pen = p;
         lifesteal = ls;
+        weight = wt;
         this.isTrueDamage = isTrue;
     }
 
@@ -86,6 +92,7 @@ public class SourceCatcherData {
                             data.getDark(),
                             data.getPen(),
                             data.getLifesteal(),
+                            data.getWeight(),
                             data.getDamageClass()).setIsConversion().setTrue();
                 } else {
                     newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
@@ -96,6 +103,7 @@ public class SourceCatcherData {
                             data.getDark(),
                             data.getPen(),
                             data.getLifesteal(),
+                            data.getWeight(),
                             data.getDamageClass()).setIsConversion();
                 }
                 if (isFall) newSource.setIsFall();
@@ -115,6 +123,7 @@ public class SourceCatcherData {
                             data.getDark(),
                             data.getPen(),
                             data.getLifesteal(),
+                            data.getWeight(),
                             data.getDamageClass()).setIsConversion().setTrue();
                 } else {
                     newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
@@ -125,6 +134,7 @@ public class SourceCatcherData {
                             data.getDark(),
                             data.getPen(),
                             data.getLifesteal(),
+                            data.getWeight(),
                             data.getDamageClass()).setIsConversion();
                 }
                 if (isFall) newSource.setIsFall();
@@ -144,6 +154,7 @@ public class SourceCatcherData {
                             data.getDark(),
                             data.getPen(),
                             data.getLifesteal(),
+                            data.getWeight(),
                             data.getDamageClass()).setIsConversion().setTrue();
                 } else {
                     newSource = new IDFDamageSource(source.msgId,
@@ -154,6 +165,7 @@ public class SourceCatcherData {
                             data.getDark(),
                             data.getPen(),
                             data.getLifesteal(),
+                            data.getWeight(),
                             data.getDamageClass()).setIsConversion();
                 }
                 if (isFall) newSource.setIsFall();

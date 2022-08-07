@@ -18,8 +18,7 @@ public class IDFPacketHandler {
     public static void init() {
         INSTANCE.registerMessage(0, SendServerResistanceJsonMessage.class, SendServerResistanceJsonMessage::encode, SendServerResistanceJsonMessage::decode, SendServerResistanceJsonMessage::handle);
         INSTANCE.registerMessage(1, SendServerDamageJsonMessage.class, SendServerDamageJsonMessage::encode, SendServerDamageJsonMessage::decode, SendServerDamageJsonMessage::handle);
-        INSTANCE.registerMessage(2, DisplayEvasionParticlesMessage.class, DisplayEvasionParticlesMessage::encode, DisplayEvasionParticlesMessage::decode, DisplayEvasionParticlesMessage::handle);
-        INSTANCE.registerMessage(3, DisplayDamageIndicatorsMessage.class, DisplayDamageIndicatorsMessage::encode, DisplayDamageIndicatorsMessage::decode, DisplayDamageIndicatorsMessage::handle);
+        INSTANCE.registerMessage(2, DisplayDamageIndicatorsMessage.class, DisplayDamageIndicatorsMessage::encode, DisplayDamageIndicatorsMessage::decode, DisplayDamageIndicatorsMessage::handle);
     }
 
 }
