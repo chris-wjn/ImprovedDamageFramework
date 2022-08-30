@@ -71,7 +71,10 @@ public class SendServerResistanceJsonMessage {
 
     public static void handle(SendServerResistanceJsonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
-        JSONHandler.updateClientResistanceData(message.map);
+        ctx.enqueueWork(() -> {
+            JSONHandler.updateClientResistanceData(message.map);
+        });
+        //JSONHandler.updateClientResistanceData(message.map);
         ctx.setPacketHandled(true);
     }
 }

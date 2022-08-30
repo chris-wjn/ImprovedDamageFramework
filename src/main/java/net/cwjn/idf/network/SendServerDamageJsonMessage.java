@@ -2,6 +2,7 @@ package net.cwjn.idf.network;
 
 import net.cwjn.idf.config.json.data.DamageData;
 import net.cwjn.idf.config.json.JSONHandler;
+import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
@@ -25,13 +26,15 @@ public class SendServerDamageJsonMessage {
         for (Map.Entry<ResourceLocation, DamageData> entry : message.map.entrySet()) {
             buffer.writeResourceLocation(entry.getKey());
             DamageData data = entry.getValue();
+            buffer.writeInt(data.getDurability());
             buffer.writeDouble(data.getFire());
             buffer.writeDouble(data.getWater());
             buffer.writeDouble(data.getLightning());
             buffer.writeDouble(data.getMagic());
             buffer.writeDouble(data.getDark());
             buffer.writeDouble(data.getAttackDamage());
-            writeString(data.getDamageClass(), buffer);
+            buffer.writeDouble(data.getSpeed());
+            Util.writeString(data.getDamageClass(), buffer);
             buffer.writeDouble(data.getLifesteal());
             buffer.writeDouble(data.getArmourPenetration());
             buffer.writeDouble(data.getWeight());
@@ -43,13 +46,15 @@ public class SendServerDamageJsonMessage {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++) {
             returnMap.put(buffer.readResourceLocation() , new DamageData(
+                    buffer.readInt(),
                     buffer.readDouble(), //fire
                     buffer.readDouble(), //water
                     buffer.readDouble(), //lightning
                     buffer.readDouble(), //magic
                     buffer.readDouble(), //dark
                     buffer.readDouble(), //attack damage
-                    readString(buffer),
+                    buffer.readDouble(),
+                    Util.readString(buffer),
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),
@@ -60,30 +65,11 @@ public class SendServerDamageJsonMessage {
 
     public static void handle(SendServerDamageJsonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
-        JSONHandler.updateClientDamageData(message.map);
+        ctx.enqueueWork(() -> {
+            JSONHandler.updateClientDamageData(message.map);
+        });
+        //JSONHandler.updateClientDamageData(message.map);
         ctx.setPacketHandled(true);
-    }
-
-    /*
-        Below methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
-     */
-    private static String readString(FriendlyByteBuf buffer) {
-        String string = "";
-        char c = buffer.readChar();
-
-        while(c != '\0') {
-            string += c;
-            c = buffer.readChar();
-        }
-
-        return string;
-    }
-
-    private static void writeString(String string, FriendlyByteBuf buffer) {
-        for (int i = 0; i < string.length(); i++) {
-            buffer.writeChar(string.charAt(i));
-        }
-        buffer.writeChar('\0');
     }
 
 }

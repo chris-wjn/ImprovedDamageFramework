@@ -1,6 +1,6 @@
 package net.cwjn.idf.damage;
 
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.data.SourceCatcherData;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
@@ -471,6 +471,8 @@ public class DamageHandler {
 
     public static double armourFormula(double d) {
         if (d == 0) return 0; //if res is 0, then give 0 res 4HEAD
+        //the following formula is a reversal of the main armour formula. Used for negative armor values.
+        if (d < 0) return -100/(1 + Math.exp((d/10) + 2));
         //the following formula is a function that has a horizontal asymptote at y = 100.
         //this is so the player can never go over 100% damage reduction.
         return 100/(1 + Math.exp((-d/10) + 2));

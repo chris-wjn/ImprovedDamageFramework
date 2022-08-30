@@ -1,15 +1,13 @@
 package net.cwjn.idf.event;
 
 import com.mojang.math.Vector3f;
-import net.cwjn.idf.Color;
+import net.cwjn.idf.util.Color;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.network.DisplayDamageIndicatorsMessage;
 import net.cwjn.idf.network.IDFPacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
-import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -20,7 +18,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

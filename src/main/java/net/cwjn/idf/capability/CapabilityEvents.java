@@ -1,6 +1,6 @@
 package net.cwjn.idf.capability;
 
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.capability.data.AuxiliaryData;
 import net.cwjn.idf.capability.data.ProjectileHelper;
@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,45 +57,50 @@ public class CapabilityEvents {
             entity.getCapability(AuxiliaryProvider.AUXILIARY_DATA).ifPresent(h -> {
                 if (JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())) != null)
                     h.setDamageClass(JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())).getDamageClass());
-                if (item.hasTag() && item.getTag().contains("idf.damage_class")) {
+                if ((item.hasTag() && item.getTag().contains("idf.damage_class"))) {
                     h.setDamageClass(item.getTag().getString("idf.damage_class"));
                 } else {
                     h.setDamageClass("strike");
                 }
             });
-            if (item == ItemStack.EMPTY) return;
-            if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
-                entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                    h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
-                    h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
-                    h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
-                    h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
-                    h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
-                    h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                    h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
-                    h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                    h.setWeight((float) entity.getAttributeValue(IDFAttributes.WEIGHT.get()));
-                    h.setDamageClass(item.hasTag() ?
-                            item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
-                });
-            }
-            if (item.getItem() instanceof TridentItem) {
-                entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                    h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
-                    h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
-                    h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
-                    h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
-                    h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
-                    h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                    h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
-                    h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                    h.setWeight((float) entity.getAttributeValue(IDFAttributes.WEIGHT.get()));
-                    h.setDamageClass(item.hasTag() ?
-                            item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
-                });
-            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingUseItem(LivingEntityUseItemEvent.Start event) {
+        ItemStack item = event.getItem();
+        LivingEntity entity = event.getEntity();
+        if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
+            System.out.println("Starting item use");
+            entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
+                h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
+                h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
+                h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
+                h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
+                h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
+                h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
+                h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
+                h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
+                h.setWeight((float) entity.getAttributeValue(IDFAttributes.WEIGHT.get()));
+                h.setDamageClass(item.hasTag() ?
+                        item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
+            });
+        } else if (item.getItem() instanceof TridentItem) {
+            entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
+                h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
+                h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
+                h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
+                h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
+                h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
+                h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
+                h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
+                h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
+                h.setWeight((float) entity.getAttributeValue(IDFAttributes.WEIGHT.get()));
+                h.setDamageClass(item.hasTag() ?
+                        item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
+            });
         }
     }
 

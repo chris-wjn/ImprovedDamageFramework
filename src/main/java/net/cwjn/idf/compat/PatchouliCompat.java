@@ -16,7 +16,7 @@ import vazkii.patchouli.api.IVariableProvider;
 
 import java.text.DecimalFormat;
 
-import static net.cwjn.idf.Util.mBPS;
+import static net.cwjn.idf.util.Util.mBPS;
 
 public class PatchouliCompat implements IComponentProcessor {
 

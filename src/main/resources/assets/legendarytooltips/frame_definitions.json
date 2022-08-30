@@ -1,0 +1,91 @@
+{
+  "definitions": [
+    {
+      "index": 0,
+      "startColor": "30_#FF912307_orangered-s45-v25_#FF912307+v50_#FF912307+r25+s50-v55",
+      "endColor": "30_#FF818385-v15_#FF818385+r5+g5+v45_#FF818385-v45_#FF818385+r25+g25",
+      "bgStartColor": "#F0912307-v125+s35",
+      "bgEndColor": "#F4818385-v100+s55",
+      "selectors": ["&idf.tooltip_border=0"]
+    },
+    {
+      "index": 1,
+      "startColor": "#3C79E5",
+      "endColor": "#D5EAF8",
+      "bgStartColor": "#F0912307-v125+s35",
+      "bgEndColor": "#F4818385-v100+s55",
+      "selectors": ["&idf.tooltip_border=1"]
+    },
+    {
+      "index": 2,
+      "startColor": "#FFCB3B",
+      "endColor": "#FFF2AC",
+      "bgStartColor": "#F0912307-v125+s35",
+      "bgEndColor": "#F4818385-v100+s55",
+      "selectors": ["&idf.tooltip_border=2"]
+    },
+    {
+      "index": 3,
+      "startColor": "#5CDBEE",
+      "endColor": "#66FFE3",
+      "bgStartColor": "#F0912307-v125+s35",
+      "bgEndColor": "#F4818385-v100+s55",
+      "selectors": ["&idf.tooltip_border=3"]
+    },
+    {
+      "index": 4,
+      "startColor": "#5CDBEE",
+      "endColor": "#66FFE3",
+      "bgStartColor": "#F0912307-v125+s35",
+      "bgEndColor": "#F4818385-v100+s55",
+      "selectors": ["&idf.tooltip_border=4"]
+    },
+    {
+      "index": 5,
+      "startColor": "#7e7e8f",
+      "endColor": "#7e7e8f",
+      "bgStartColor": "#F07D8A91-v125+s35",
+      "bgEndColor": "#F47D8A91-v100+s55",
+      "selectors": ["&idf.tooltip_border=5"]
+    },
+    {
+      "index": 6,
+      "startColor": "#7e7e8f",
+      "endColor": "#7e7e8f",
+      "bgStartColor": "#F07D8A91-v125+s35",
+      "bgEndColor": "#F47D8A91-v100+s55",
+      "selectors": ["&idf.tooltip_border=6"]
+    },
+    {
+      "index": 7,
+      "startColor": "#7e7e8f",
+      "endColor": "#7e7e8f",
+      "bgStartColor": "#F07D8A91-v125+s35",
+      "bgEndColor": "#F47D8A91-v100+s55",
+      "selectors": ["&idf.tooltip_border=7"]
+    },
+    {
+      "index": 8,
+      "startColor": "#7e7e8f",
+      "endColor": "#7e7e8f",
+      "bgStartColor": "#F07D8A91-v125+s35",
+      "bgEndColor": "#F47D8A91-v100+s55",
+      "selectors": ["&idf.tooltip_border=8"]
+    },
+    {
+      "index": 9,
+      "startColor": "#7e7e8f",
+      "endColor": "#7e7e8f",
+      "bgStartColor": "#F07D8A91-v125+s35",
+      "bgEndColor": "#F47D8A91-v100+s55",
+      "selectors": ["&idf.tooltip_border=9"]
+    },
+    {
+      "index": 10,
+      "startColor": "#ffffff",
+      "endColor": "#ffffff",
+      "bgStartColor": "#F0E670CC-v125+s35",
+      "bgEndColor": "#F4F2AC8A-v100+s55"
+    }
+  ]
+}

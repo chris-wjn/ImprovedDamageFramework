@@ -1,7 +1,7 @@
 package net.cwjn.idf.event;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.Keybinds;
+import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.gui.StatsScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

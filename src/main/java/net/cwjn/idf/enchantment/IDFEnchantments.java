@@ -1,7 +1,7 @@
 package net.cwjn.idf.enchantment;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.UUIDs;
+import net.cwjn.idf.util.UUIDs;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.DeferredRegister;

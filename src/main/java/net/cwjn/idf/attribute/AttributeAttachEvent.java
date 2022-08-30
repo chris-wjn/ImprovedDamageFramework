@@ -1,6 +1,6 @@
 package net.cwjn.idf.attribute;
 
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.Config;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.EntityData;

@@ -1,29 +1,27 @@
 package net.cwjn.idf.mixin;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.*;
 import net.cwjn.idf.event.ServerEvents;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.cwjn.idf.util.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
@@ -68,155 +66,52 @@ public class MixinLivingEntity {
         }
     }
 
-    /**
-     * @author cwjn
-     * @reason 
-     * too many changes need to be made to this in terms of knockback in immunity frames
-     * to where it's not feasible to do it with redirects and injections
+    /*
+    All the following methods were written by me, cwJn, to change the vanilla way iFrames and knockback is handled.
+    By default, any instance of damage will knockback the entity slightly. This is fkn stupid, and makes no sense.
+    Knockback is now handled in idf.damage.DamageHandler. For iFrames, it will no longer hurt the entity with the difference
+    in damage if the new attack is higher. If the target is in iFrames, they are immune to anything except damage sources
+    predefined in the config.
      */
-    @Overwrite
-    public boolean hurt(DamageSource damageSource, float damageAmount) {
-        LivingEntity thisLivingEntity = (LivingEntity)(Object) this;
-        if (!net.minecraftforge.common.ForgeHooks.onLivingAttack(thisLivingEntity, damageSource, damageAmount)) return false;
-        if (thisLivingEntity.isInvulnerableTo(damageSource) || thisLivingEntity.level.isClientSide || thisLivingEntity.isDeadOrDying() || (damageSource.isFire() && thisLivingEntity.hasEffect(MobEffects.FIRE_RESISTANCE))) {
-            return false;
-        } else {
-            if (thisLivingEntity.isSleeping()) thisLivingEntity.stopSleeping();
-            thisLivingEntity.setNoActionTime(0);
-            float cringe = damageAmount;
-            boolean blockedWithShield = false;
-            float damageBlocked = 0.0F;
-            if (damageAmount > 0.0F && thisLivingEntity.isDamageSourceBlocked(damageSource)) {
-                net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(thisLivingEntity, damageSource, damageAmount);
-                if(!ev.isCanceled()) {
-                    if(ev.shieldTakesDamage()) this.hurtCurrentlyUsedShield(damageAmount);
-                    damageBlocked = ev.getBlockedDamage();
-                    damageAmount -= ev.getBlockedDamage();
-                    if (!damageSource.isProjectile()) {
-                        Entity entity = damageSource.getDirectEntity();
-                        if (entity instanceof LivingEntity) {
-                            this.blockUsingShield((LivingEntity)entity);
-                        }
-                    }
-                    blockedWithShield = true;
-                }
-            }
 
-            thisLivingEntity.animationSpeed = 1.5F;
-            /*
-             *   MODIFIED CODE STARTS HERE
-            */
-            boolean gotHit = true;
-            if ((float)thisLivingEntity.invulnerableTime > 0.0F) {
-                if (damageSource.getEntity() instanceof Player) {
-                    this.lastHurt = damageAmount;
-                    int saveInvulnerableTime = thisLivingEntity.invulnerableTime;
-                    this.actuallyHurt(damageSource, damageAmount);
-                    thisLivingEntity.invulnerableTime = saveInvulnerableTime;
-                } else {
-                    gotHit = false;
-                }
+    @ModifyConstant(method = "hurt", constant = @Constant(floatValue = 10.0F, ordinal = 0))
+    private float inject(float constant) {
+        return 0.0F;
+    }
+
+    @Redirect(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 0))
+    protected void voidActuallyHurt(LivingEntity instance, DamageSource f2, float f) {
+    }
+
+    @Redirect(method = "hurt", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;lastHurt:F", opcode = Opcodes.GETFIELD, ordinal = 0))
+    private float voidIfStatement(LivingEntity instance) {
+        return -Float.MAX_VALUE;
+    }
+
+    @Redirect(method = "hurt", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;lastHurt:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
+    private void voidLastHurt(LivingEntity instance, float value) {
+    }
+
+    @Inject(method = "hurt", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 0), cancellable = true)
+    private void injectOverrideLogic(DamageSource source, float val, CallbackInfoReturnable<Boolean> callback) {
+        String msgID = source.getMsgId();
+        if (CommonConfig.WHITELISTED_DAMAGE_SOURCES_NO_INVULN.get().contains(msgID)) {
+            if (source.getEntity() == null) {
+                this.actuallyHurt(source, val);
             } else {
-                this.lastHurt = damageAmount;
-                thisLivingEntity.invulnerableTime = 20;
-                this.actuallyHurt(damageSource, damageAmount);
-                thisLivingEntity.hurtDuration = 10;
-                thisLivingEntity.hurtTime = thisLivingEntity.hurtDuration;
-            }
-            /*
-             *   MODIFIED CODE ENDS HERE
-            */
-
-            if (damageSource.isDamageHelmet() && !thisLivingEntity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-                this.hurtHelmet(damageSource, damageAmount);
-                damageAmount *= 0.75F;
-            }
-
-            thisLivingEntity.hurtDir = 0.0F;
-            Entity sourceEntity = damageSource.getEntity();
-            if (sourceEntity != null) {
-                if (sourceEntity instanceof LivingEntity && !damageSource.isNoAggro()) {
-                    thisLivingEntity.setLastHurtByMob((LivingEntity)sourceEntity);
-                }
-                if (sourceEntity instanceof Player) {
-                    this.lastHurtByPlayerTime = 100;
-                    this.lastHurtByPlayer = (Player)sourceEntity;
-                } else if (sourceEntity instanceof TamableAnimal tamableEntity) {
-                    if (tamableEntity.isTame()) {
-                        this.lastHurtByPlayerTime = 100;
-                        LivingEntity livingentity = tamableEntity.getOwner();
-                        if (livingentity != null && livingentity.getType() == EntityType.PLAYER) {
-                            this.lastHurtByPlayer = (Player)livingentity;
-                        } else {
-                            this.lastHurtByPlayer = null;
-                        }
-                    }
-                }
-            }
-
-            if (gotHit) {
-                if (blockedWithShield) {
-                    thisLivingEntity.level.broadcastEntityEvent(thisLivingEntity, (byte)29);
-                } else if (damageSource instanceof EntityDamageSource && ((EntityDamageSource)damageSource).isThorns()) {
-                    thisLivingEntity.level.broadcastEntityEvent(thisLivingEntity, (byte)33);
+                if (CommonConfig.BLACKLISTED_ENTITIES.get().contains(Util.getEntityRegistryName(source.getEntity().getType()).toString())) {
+                    ImprovedDamageFramework.LOGGER.debug("MOB IS BLACKLISTED");
                 } else {
-                    byte b0;
-                    if (damageSource == DamageSource.DROWN) {
-                        b0 = 36;
-                    } else if (damageSource.isFire()) {
-                        b0 = 37;
-                    } else if (damageSource == DamageSource.SWEET_BERRY_BUSH) {
-                        b0 = 44;
-                    } else if (damageSource == DamageSource.FREEZE) {
-                        b0 = 57;
-                    } else {
-                        b0 = 2;
-                    }
-
-                    thisLivingEntity.level.broadcastEntityEvent(thisLivingEntity, b0);
-                }
-
-                if (damageSource != DamageSource.DROWN && (!blockedWithShield || damageAmount > 0.0F)) {
-                    thisLivingEntity.markHurt();
-                }
-                //DELETED THE DEFAULT KNOCKBACK CODE HERE
-                if (sourceEntity == null) {
-                    thisLivingEntity.hurtDir = (float) ((int) (Math.random() * 2.0D) * 180);
+                    this.actuallyHurt(source, val);
                 }
             }
-
-            if (thisLivingEntity.isDeadOrDying()) {
-                if (!this.checkTotemDeathProtection(damageSource)) {
-                    SoundEvent soundevent = this.getDeathSound();
-                    if (gotHit && soundevent != null) {
-                        thisLivingEntity.playSound(soundevent, this.getSoundVolume(), thisLivingEntity.getVoicePitch());
-                    }
-
-                    thisLivingEntity.die(damageSource);
-                }
-            } else if (gotHit) {
-                this.playHurtSound(damageSource);
-            }
-
-            boolean wasHitReal = !blockedWithShield || damageAmount > 0.0F;
-            if (wasHitReal) {
-                this.lastDamageSource = damageSource;
-                this.lastDamageStamp = thisLivingEntity.level.getGameTime();
-            }
-
-            if (thisLivingEntity instanceof ServerPlayer) {
-                CriteriaTriggers.ENTITY_HURT_PLAYER.trigger((ServerPlayer)thisLivingEntity, damageSource, cringe, damageAmount, blockedWithShield);
-                if (damageBlocked > 0.0F && damageBlocked < 3.4028235E37F) {
-                    ((ServerPlayer)thisLivingEntity).awardStat(Stats.CUSTOM.get(Stats.DAMAGE_BLOCKED_BY_SHIELD), Math.round(damageBlocked * 10.0F));
-                }
-            }
-
-            if (sourceEntity instanceof ServerPlayer) {
-                CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayer)sourceEntity, thisLivingEntity, damageSource, cringe, damageAmount, blockedWithShield);
-            }
-
-            return wasHitReal;
+        } else {
+            callback.setReturnValue(false);
         }
+    }
+
+    @Redirect(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
+    private void redirectKnockback(LivingEntity instance, double strength, double x, double z) {
     }
 
     /**
@@ -289,38 +184,4 @@ public class MixinLivingEntity {
     public void setHealth(float newHealth) {
         throw new IllegalStateException("failed to shadow setHealth()");
     }
-    @Shadow
-    protected void hurtCurrentlyUsedShield(float f) {
-        throw new IllegalStateException("failed to shadow hurtCurrentlyUsedShield(float f)");
-    }
-    @Shadow
-    protected void blockUsingShield(LivingEntity l) {
-        throw new IllegalStateException("failed to shadow blockUsingShield(LivingEntity l)");
-    }
-    @Shadow
-    protected void hurtHelmet(DamageSource d, float f) {
-        throw new IllegalStateException("failed to shadow hurtHelmet(DamageSource d, float f)");
-    }
-    @Shadow
-    private boolean checkTotemDeathProtection(DamageSource d) {
-        throw new IllegalStateException("failed to shadow checkTotemDeathProtection");
-    }
-    @Shadow
-    protected SoundEvent getDeathSound() {
-        throw new IllegalStateException("failed to shadow getDeathSound()");
-    }
-    @Shadow
-    protected float getSoundVolume(){
-        throw new IllegalStateException("failed to shadow getSoundVolume()");
-    }
-    @Shadow
-    protected void playHurtSound(DamageSource d) {
-        throw new IllegalStateException("failed to shadow playHurtSound(DamageSource d)");
-    }
-    @Shadow protected float lastHurt;
-    @Shadow protected Player lastHurtByPlayer;
-    @Shadow protected int lastHurtByPlayerTime;
-    @Shadow private DamageSource lastDamageSource;
-    @Shadow private long lastDamageStamp;
-
 }

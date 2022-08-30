@@ -1,7 +1,7 @@
 package net.cwjn.idf.mixin;
 
-import net.cwjn.idf.Color;
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Color;
+import net.cwjn.idf.util.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;

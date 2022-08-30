@@ -1,11 +1,11 @@
 package net.cwjn.idf.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.cwjn.idf.Color;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.Keybinds;
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Keybinds;
+import net.cwjn.idf.util.Util;
 import net.cwjn.idf.gui.buttons.AttributeButton;
 import net.cwjn.idf.gui.buttons.BackButton;
 import net.minecraft.ChatFormatting;
@@ -22,8 +22,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 
-import static net.cwjn.idf.Color.*;
-import static net.cwjn.idf.Util.*;
+import static net.cwjn.idf.util.Color.*;
+import static net.cwjn.idf.damage.DamageHandler.armourFormula;
+import static net.cwjn.idf.util.Util.*;
 import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.cwjn.idf.gui.StatsScreen.Page.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
@@ -36,12 +37,6 @@ public class StatsScreen extends Screen {
     private static final ResourceLocation BASE =
             new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_base.png");
 
-
-    private static final Style pixel = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_PIXEL);
-    private static final Style modernTales = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_MODERNTALES);
-    private static final Style bubble = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_BUBBLE);
-    private static final Style alagard = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_ALAGARD);
-    private static final Style dogica = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_DOGICA);
     private static final Style indicators = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
     private int w;
     private int h;
@@ -71,10 +66,10 @@ public class StatsScreen extends Screen {
         super.init();
         player = minecraft.player;
         font = minecraft.font;
-        w = (width - 384)/2;
-        h = (height - 512)/2 - 7;
+        w = (minecraft.getWindow().getGuiScaledWidth() - 384)/2;
+        h = (minecraft.getWindow().getGuiScaledHeight() - 512)/2 - 7;
         attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
-        backButton = addRenderableWidget(new BackButton(w+20, h+455, (f) -> this.attributesToMain()));
+        backButton = addRenderableWidget(new BackButton(w+30, h+462, (f) -> this.attributesToMain()));
         //122, 443
         updateButtonVisibility();
     }
@@ -122,18 +117,18 @@ public class StatsScreen extends Screen {
     private void renderAttributes(PoseStack matrix, int mouseX, int mouseY) {
         InventoryScreen.renderEntityInInventory(w + 193, h + 387, 40, (float)(w + 192) - mouseX, (float)(h + 387 - 66) - mouseY, this.minecraft.player);
         drawCenteredString(font, matrix, player.getAttributeValue(ATTACK_DAMAGE), w+158, h+52.5f, PHYSICAL_COLOUR.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(ARMOR), w+232, h+52.5f, PHYSICAL_COLOUR.getColor());
+        drawCenteredString(font, matrix, armourFormula(player.getAttributeValue(ARMOR)), w+232, h+52.5f, PHYSICAL_COLOUR.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(ARMOR_TOUGHNESS), w+306.5f, h+52.5f, PHYSICAL_COLOUR.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(FIRE_DAMAGE.get()), w+158, h+77.5f, FIRE_COLOUR.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(FIRE_RESISTANCE.get()), w+232, h+77.5f, FIRE_COLOUR.getColor());
+        drawCenteredString(font, matrix, armourFormula(player.getAttributeValue(FIRE_RESISTANCE.get())), w+232, h+77.5f, FIRE_COLOUR.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(WATER_DAMAGE.get()), w+158, h+102.5f, WATER_COLOUR.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(WATER_RESISTANCE.get()), w+232, h+102.5f, WATER_COLOUR.getColor());
+        drawCenteredString(font, matrix, armourFormula(player.getAttributeValue(WATER_RESISTANCE.get())), w+232, h+102.5f, WATER_COLOUR.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(LIGHTNING_DAMAGE.get()), w+158, h+127.5f, LIGHTNING_COLOUR.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(LIGHTNING_RESISTANCE.get()), w+232, h+127.5f, LIGHTNING_COLOUR.getColor());
+        drawCenteredString(font, matrix, armourFormula(player.getAttributeValue(LIGHTNING_RESISTANCE.get())), w+232, h+127.5f, LIGHTNING_COLOUR.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(MAGIC_DAMAGE.get()), w+158, h+152.5f, MAGIC_COLOUR.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(MAGIC_RESISTANCE.get()), w+232, h+152.5f, MAGIC_COLOUR.getColor());
+        drawCenteredString(font, matrix, armourFormula(player.getAttributeValue(MAGIC_RESISTANCE.get())), w+232, h+152.5f, MAGIC_COLOUR.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(DARK_DAMAGE.get()), w+158, h+177.5f, DARK_COLOUR.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(DARK_RESISTANCE.get()), w+232, h+177.5f, DARK_COLOUR.getColor());
+        drawCenteredString(font, matrix, armourFormula(player.getAttributeValue(DARK_RESISTANCE.get())), w+232, h+177.5f, DARK_COLOUR.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(ATTACK_SPEED)), w+104, h+408, ChatFormatting.YELLOW.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(WEIGHT.get()), w+282, h+408, ChatFormatting.GRAY.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(CRUSH_MULT.get()) * 100, w+67f, h+211.5f,
@@ -148,7 +143,7 @@ public class StatsScreen extends Screen {
                 player.getAttributeValue(GENERIC_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(CRIT_CHANCE.get()), w+104, h+318, ORANGE.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(ATTACK_KNOCKBACK)/0.4) * 100, w+104, h+363, VIOLET.getColor());
-        drawCenteredString(font, matrix, 100 - player.getAttributeValue(KNOCKBACK_RESISTANCE)*100, w+283, h+363, VIOLET.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(KNOCKBACK_RESISTANCE)*100, w+283, h+363, VIOLET.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(PENETRATING.get()), w+283, h+318, WHITESMOKE.getColor());
         drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(LUCK), w+223.5f, h+454, GREENYELLOW.getColor());

@@ -1,407 +1,497 @@
 {
-  "minecraft:netherite_shovel": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
-  },
-  "minecraft:netherite_pickaxe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
-  },
-  "minecraft:iron_sword": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:netherite_axe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:wooden_axe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:diamond_sword": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:golden_sword": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:diamond_axe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
   "minecraft:stone_shovel": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
-  },
-  "minecraft:bow": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
-  },
-  "minecraft:wooden_pickaxe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
-  },
-  "minecraft:wooden_sword": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:crossbow": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
-  },
-  "minecraft:stone_pickaxe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
-  },
-  "minecraft:golden_shovel": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
-  },
-  "minecraft:golden_pickaxe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
-  },
-  "minecraft:trident": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
-  },
-  "minecraft:stone_axe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:golden_axe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:iron_axe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:stone_sword": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
-  },
-  "minecraft:iron_pickaxe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
+    "speed": -0.2,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 1.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 6.0,
+    "damageClass": "strike",
+    "durability": 1000
   },
   "minecraft:diamond_pickaxe": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "pierce"
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 18.0,
+    "critChance": 10.0,
+    "weight": 9.0,
+    "damageClass": "pierce",
+    "durability": 0
   },
-  "minecraft:wooden_shovel": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
+  "minecraft:wooden_pickaxe": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 3.0,
+    "damageClass": "pierce",
+    "durability": 0
+  },
+  "minecraft:trident": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 6.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": -4.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 30.0,
+    "critChance": 10.0,
+    "weight": 8.0,
+    "damageClass": "pierce",
+    "durability": 1000
+  },
+  "minecraft:golden_axe": {
+    "speed": -0.1,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 12.0,
+    "damageClass": "slash",
+    "durability": 100
+  },
+  "minecraft:netherite_axe": {
+    "speed": 0.0,
+    "fire": 4.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 1.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 9.0,
+    "damageClass": "slash",
+    "durability": 0
+  },
+  "minecraft:wooden_sword": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 2.0,
+    "damageClass": "slash",
+    "durability": 0
+  },
+  "minecraft:diamond_sword": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 10.0,
+    "weight": 8.0,
+    "damageClass": "slash",
+    "durability": 0
+  },
+  "minecraft:stone_hoe": {
+    "speed": -0.2,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 4.0,
+    "damageClass": "pierce",
+    "durability": 1000
+  },
+  "minecraft:diamond_hoe": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 4.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 14.0,
+    "critChance": 10.0,
+    "weight": 7.0,
+    "damageClass": "pierce",
+    "durability": 0
+  },
+  "minecraft:wooden_hoe": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 1.0,
+    "damageClass": "pierce",
+    "durability": 0
   },
   "minecraft:diamond_shovel": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 10.0,
+    "weight": 9.0,
+    "damageClass": "strike",
+    "durability": 0
   },
-  "minecraft:iron_shovel": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "strike"
+  "minecraft:stone_sword": {
+    "speed": -0.2,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 1.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 5.0,
+    "damageClass": "slash",
+    "durability": 1000
+  },
+  "minecraft:stone_pickaxe": {
+    "speed": -0.2,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 1.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 6.0,
+    "damageClass": "pierce",
+    "durability": 1000
   },
   "minecraft:netherite_sword": {
-    "damageValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0
-    ],
-    "damageClass": "_slash"
+    "speed": 0.0,
+    "fire": 3.4,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 7.0,
+    "damageClass": "slash",
+    "durability": 0
+  },
+  "minecraft:iron_sword": {
+    "speed": 0.3,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 6.0,
+    "damageClass": "slash",
+    "durability": 500
+  },
+  "minecraft:golden_shovel": {
+    "speed": -0.1,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 11.0,
+    "damageClass": "strike",
+    "durability": 100
+  },
+  "minecraft:netherite_pickaxe": {
+    "speed": 0.0,
+    "fire": 2.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 20.0,
+    "critChance": 0.0,
+    "weight": 8.0,
+    "damageClass": "pierce",
+    "durability": 0
+  },
+  "minecraft:diamond_axe": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 1.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 10.0,
+    "weight": 10.0,
+    "damageClass": "slash",
+    "durability": 0
+  },
+  "minecraft:crossbow": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 5.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 50.0,
+    "critChance": 0.0,
+    "weight": 9.0,
+    "damageClass": "pierce",
+    "durability": 250
+  },
+  "minecraft:iron_axe": {
+    "speed": 0.15,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 8.0,
+    "damageClass": "slash",
+    "durability": 500
+  },
+  "minecraft:wooden_axe": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 4.0,
+    "damageClass": "slash",
+    "durability": 0
+  },
+  "minecraft:golden_sword": {
+    "speed": -0.1,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 10.0,
+    "damageClass": "slash",
+    "durability": 100
+  },
+  "minecraft:iron_pickaxe": {
+    "speed": 0.2,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 10.0,
+    "critChance": 0.0,
+    "weight": 7.0,
+    "damageClass": "pierce",
+    "durability": 500
+  },
+  "minecraft:wooden_shovel": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 3.0,
+    "damageClass": "strike",
+    "durability": 0
+  },
+  "minecraft:golden_pickaxe": {
+    "speed": -0.1,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 15.0,
+    "critChance": 0.0,
+    "weight": 11.0,
+    "damageClass": "pierce",
+    "durability": 100
+  },
+  "minecraft:iron_hoe": {
+    "speed": 0.4,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 3.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 10.0,
+    "critChance": 0.0,
+    "weight": 5.0,
+    "damageClass": "pierce",
+    "durability": 500
+  },
+  "minecraft:bow": {
+    "speed": 0.0,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 3.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 25.0,
+    "critChance": 0.0,
+    "weight": 7.0,
+    "damageClass": "pierce",
+    "durability": 250
+  },
+  "minecraft:iron_shovel": {
+    "speed": 0.3,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 7.0,
+    "damageClass": "strike",
+    "durability": 500
+  },
+  "minecraft:golden_hoe": {
+    "speed": -0.1,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 2.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 9.0,
+    "damageClass": "pierce",
+    "durability": 100
+  },
+  "minecraft:netherite_shovel": {
+    "speed": 0.0,
+    "fire": 2.5,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 8.0,
+    "damageClass": "strike",
+    "durability": 0
+  },
+  "minecraft:netherite_hoe": {
+    "speed": 0.0,
+    "fire": 1.25,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 5.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 17.0,
+    "critChance": 0.0,
+    "weight": 6.0,
+    "damageClass": "pierce",
+    "durability": 0
+  },
+  "minecraft:stone_axe": {
+    "speed": -0.2,
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "attackDamage": 0.0,
+    "lifesteal": 0.0,
+    "armourPenetration": 0.0,
+    "critChance": 0.0,
+    "weight": 7.0,
+    "damageClass": "slash",
+    "durability": 1000
   }
 }

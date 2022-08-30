@@ -2,14 +2,16 @@
   "required": true,
   "package": "net.cwjn.idf.mixin",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "net.cwjn.idf.mixin.IDFMixinPlugin",
   "mixins": [
+    "AccessRangedAttribute",
     "MixinAbstractArrow",
+    "MixinCreeper",
     "MixinDamageSource",
     "MixinEnchantment",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinPlayer",
-    "AccessRangedAttribute",
     "damage.MixinAxolotl",
     "damage.MixinBaseFireBlock",
     "damage.MixinCactus",
@@ -29,7 +31,14 @@
     "damage.MixinThornsEnchantment",
     "damage.MixinVex",
     "damage.MixinWaterAnimal",
-    "damage.MixinWitherSkull"
+    "damage.MixinWitherSkull",
+    "equipment.AccessArmorItem",
+    "equipment.AccessDiggerItem",
+    "equipment.AccessItem",
+    "equipment.AccessSwordItem",
+    "equipment.MixinDiggerItem",
+    "equipment.MixinItem",
+    "equipment.MixinSwordItem"
   ],
   "injectors": {
     "defaultRequire": 1

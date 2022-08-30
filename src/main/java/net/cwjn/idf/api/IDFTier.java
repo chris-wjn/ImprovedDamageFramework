@@ -14,12 +14,11 @@ public class IDFTier implements Tier {
     private final Supplier<Ingredient> repairIngredient;
     private final int level, durability, enchantability;
     private final float speed, fire, water, lightning, magic, dark, physical, crit, weight, pen, lifesteal;
-    private final String damageClass;
     private final TagKey<Block> tag;
 
     public IDFTier(int level, int durability, float speed, int enchantability, Supplier<Ingredient> item,
                    float physical, float fire, float water, float lightning, float magic, float dark,
-                   float crit, float weight, float pen, float lifesteal, String damageClass, @NotNull TagKey<Block> tag) {
+                   float crit, float weight, float pen, float lifesteal, @NotNull TagKey<Block> tag) {
         this.level = level;
         this.durability = durability;
         this.speed = speed;
@@ -35,7 +34,6 @@ public class IDFTier implements Tier {
         this.weight = weight;
         this.pen = pen;
         this.lifesteal = lifesteal;
-        this.damageClass = damageClass;
         this.tag = tag;
     }
 
@@ -80,10 +78,6 @@ public class IDFTier implements Tier {
         return lifesteal;
     }
 
-    public String getDamageClass() {
-        return damageClass;
-    }
-
     @Override
     public int getUses() {
         return durability;
@@ -113,4 +107,5 @@ public class IDFTier implements Tier {
     public @Nullable TagKey<Block> getTag() {
         return tag;
     }
+
 }

@@ -2,7 +2,7 @@ package net.cwjn.idf.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

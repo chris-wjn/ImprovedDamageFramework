@@ -1,24 +1,21 @@
 package net.cwjn.idf.mixin;
 
-import net.cwjn.idf.capability.provider.ArrowHelperProvider;
 import net.cwjn.idf.capability.data.ProjectileHelper;
+import net.cwjn.idf.capability.provider.ArrowHelperProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractArrow.class)
-public class MixinAbstractArrow extends Projectile {
+public class MixinAbstractArrow {
 
     @Inject(
             method = "onHitEntity",
@@ -42,7 +39,8 @@ public class MixinAbstractArrow extends Projectile {
             )
     )
     private boolean hurtRedirect(Entity instance, DamageSource source, float amt) {
-        if (this.getOwner() instanceof LivingEntity livingEntity) {
+        AbstractArrow thisArrow = (AbstractArrow)(Object)this;
+        if (thisArrow.getOwner() instanceof LivingEntity livingEntity) {
             ProjectileHelper helper = livingEntity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
             amt += helper.getPhys();
         }
@@ -60,11 +58,5 @@ public class MixinAbstractArrow extends Projectile {
         return false;
     }
 
-    @Shadow
-    protected void defineSynchedData() {}
-
-    protected MixinAbstractArrow(EntityType<? extends Projectile> p_37248_, Level p_37249_) {
-        super(p_37248_, p_37249_);
-    }
 
 }

@@ -1,11 +1,10 @@
 package net.cwjn.idf.particle.custom;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -13,7 +12,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
@@ -28,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 public class NumberParticle extends Particle {
 
     private static final Minecraft client = Minecraft.getInstance();
-    private static final Style compacta = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_COMPACTA);
     private static final Style indicator = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
     private final float number;
     private final float weight;

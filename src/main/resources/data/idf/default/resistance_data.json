@@ -1,577 +1,477 @@
 {
   "minecraft:iron_chestplate": {
-    "resistanceValues": [
-      2.0,
-      4.0,
-      6.0,
-      8.0,
-      10.0
-    ],
-    "auxiliary": [
-      6.0,
-      6.0,
-      7.9,
-      0.2,
-      1.0
-    ],
-    "multipliers": [
-      -0.2,
-      0.2,
-      1.0,
-      -1.0,
-      0.5
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:leather_chestplate": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      95.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.05,
+    "pierceMult": 0.1,
+    "slashMult": 0.0,
+    "crushMult": -0.03,
+    "genericMult": 0.0
   },
   "minecraft:iron_leggings": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:leather_leggings": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.05,
+    "pierceMult": 0.1,
+    "slashMult": 0.0,
+    "crushMult": -0.03,
+    "genericMult": 0.0
   },
   "minecraft:chainmail_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.1,
-      0.2,
-      0.3,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:netherite_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:golden_boots": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.1,
+    "pierceMult": -0.1,
+    "slashMult": -0.1,
+    "crushMult": 0.03,
+    "genericMult": 0.0
   },
   "minecraft:netherite_chestplate": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:iron_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:chainmail_leggings": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:turtle_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.0,
+    "pierceMult": 0.0,
+    "slashMult": 0.0,
+    "crushMult": 0.0,
+    "genericMult": 0.0
   },
   "minecraft:diamond_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.07,
+    "pierceMult": 0.0,
+    "slashMult": 0.02,
+    "crushMult": -0.05,
+    "genericMult": 0.0
   },
   "minecraft:diamond_boots": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.07,
+    "pierceMult": 0.0,
+    "slashMult": 0.02,
+    "crushMult": -0.05,
+    "genericMult": 0.0
   },
   "minecraft:golden_leggings": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.1,
+    "pierceMult": -0.1,
+    "slashMult": -0.1,
+    "crushMult": 0.03,
+    "genericMult": 0.0
   },
   "minecraft:leather_boots": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.05,
+    "pierceMult": 0.1,
+    "slashMult": 0.0,
+    "crushMult": -0.03,
+    "genericMult": 0.0
   },
   "minecraft:diamond_chestplate": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.07,
+    "pierceMult": 0.0,
+    "slashMult": 0.02,
+    "crushMult": -0.05,
+    "genericMult": 0.0
   },
   "minecraft:netherite_boots": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:iron_boots": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:leather_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.05,
+    "pierceMult": 0.1,
+    "slashMult": 0.0,
+    "crushMult": -0.03,
+    "genericMult": 0.0
   },
   "minecraft:netherite_leggings": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:diamond_leggings": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.07,
+    "pierceMult": 0.0,
+    "slashMult": 0.02,
+    "crushMult": -0.05,
+    "genericMult": 0.0
   },
   "minecraft:golden_helmet": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.1,
+    "pierceMult": -0.1,
+    "slashMult": -0.1,
+    "crushMult": 0.03,
+    "genericMult": 0.0
   },
   "minecraft:golden_chestplate": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": -0.1,
+    "pierceMult": -0.1,
+    "slashMult": -0.1,
+    "crushMult": 0.03,
+    "genericMult": 0.0
   },
   "minecraft:chainmail_chestplate": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   },
   "minecraft:chainmail_boots": {
-    "resistanceValues": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "auxiliary": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ],
-    "multipliers": [
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      0.0
-    ]
+    "fire": 0.0,
+    "water": 0.0,
+    "lightning": 0.0,
+    "magic": 0.0,
+    "dark": 0.0,
+    "armour": 0.0,
+    "armourToughness": 0.0,
+    "evasion": 0.0,
+    "maxHP": 0.0,
+    "movespeed": 0.0,
+    "knockbackRes": 0.0,
+    "luck": 0.0,
+    "strikeMult": 0.05,
+    "pierceMult": 0.0,
+    "slashMult": -0.05,
+    "crushMult": 0.1,
+    "genericMult": 0.0
   }
 }

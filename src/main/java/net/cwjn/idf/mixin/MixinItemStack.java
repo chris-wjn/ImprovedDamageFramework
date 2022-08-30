@@ -1,9 +1,9 @@
 package net.cwjn.idf.mixin;
 
+import net.cwjn.idf.api.event.ItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.Color;
-import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.Util;
+import net.cwjn.idf.util.Color;
+import net.cwjn.idf.util.Util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.event.ClientEvents;
@@ -20,16 +20,26 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.*;
+
+import static net.cwjn.idf.ImprovedDamageFramework.FONT_IDF;
+
 @Mixin(ItemStack.class)
 public abstract class MixinItemStack {
+
     private static final DecimalFormat df = new DecimalFormat("#.##");
-    private static final Style symbolStyle = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_IDF);
+    private static final Style symbolStyle = Style.EMPTY.withFont(FONT_IDF);
+
     /**
      * @author cwJn
      * @reason
@@ -597,7 +607,10 @@ public abstract class MixinItemStack {
         return (!map.isEmpty() || !map1.isEmpty());
     }
 
-
+    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+    public void ItemStack(ItemLike p_41604_, int p_41605_, CompoundTag p_41606_, CallbackInfo callback) {
+        MinecraftForge.EVENT_BUS.post(new ItemStackCreatedEvent((ItemStack)(Object)this));
+    }
 
     @Shadow
     private int getHideFlags() {

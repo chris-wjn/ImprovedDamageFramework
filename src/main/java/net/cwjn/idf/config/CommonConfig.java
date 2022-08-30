@@ -12,7 +12,7 @@ public class CommonConfig {
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_DAMAGE_SOURCES_NO_INVULN;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ENTITIES;
-    private static final String[] defaultStringList = {"player", "mob", "sting"};
+    private static final String[] defaultStringList = {"player", "mob", "sting", "fall"};
     private static final String[] defaultBlacklist = {"minecraft:slime", "minecraft:magma_cube"};
 
     static {
@@ -27,6 +27,7 @@ public class CommonConfig {
 
         BUILDER.pop();
         SPEC = BUILDER.build();
+
     }
 
 }

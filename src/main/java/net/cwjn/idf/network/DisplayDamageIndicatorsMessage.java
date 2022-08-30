@@ -50,7 +50,10 @@ public class DisplayDamageIndicatorsMessage {
 
     public static void handle(DisplayDamageIndicatorsMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
-        DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, message.colour, message.horizontalOffset, random.nextDouble(1, 1.2), message.id);
+        ctx.enqueueWork(() -> {
+            DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, message.colour, message.horizontalOffset, random.nextDouble(1, 1.2), message.id);
+        });
+        //DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, message.colour, message.horizontalOffset, random.nextDouble(1, 1.2), message.id);
         ctx.setPacketHandled(true);
     }
 

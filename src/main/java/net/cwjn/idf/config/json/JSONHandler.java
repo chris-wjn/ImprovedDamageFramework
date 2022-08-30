@@ -1,17 +1,25 @@
 package net.cwjn.idf.config.json;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.Util;
+import net.cwjn.idf.api.IDFArmourItem;
+import net.cwjn.idf.api.IDFDamagingItem;
+import net.cwjn.idf.api.IDFDiggerItem;
+import net.cwjn.idf.api.IDFSwordItem;
+import net.cwjn.idf.mixin.equipment.AccessItem;
+import net.cwjn.idf.util.ItemInterface;
+import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.data.DamageData;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.data.ResistanceData;
 import net.cwjn.idf.config.json.data.SourceCatcherData;
+import net.cwjn.idf.mixin.equipment.AccessArmorItem;
+import net.cwjn.idf.mixin.equipment.AccessDiggerItem;
+import net.cwjn.idf.mixin.equipment.AccessSwordItem;
+import net.cwjn.idf.util.WeaponInterface;
 import net.cwjn.idf.network.IDFPacketHandler;
 import net.cwjn.idf.network.SendServerDamageJsonMessage;
 import net.cwjn.idf.network.SendServerResistanceJsonMessage;
-import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -20,9 +28,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -42,8 +49,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static net.minecraft.world.entity.ai.attributes.Attributes.ARMOR;
-import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
+import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 @SuppressWarnings(value = "UnstableApiUsage")
 @Mod.EventBusSubscriber
@@ -70,42 +76,44 @@ public class JSONHandler {
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
-            Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
-            Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
-            Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
-            Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
-            double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                              armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                              armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                              armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
-            if (armorVal > 0) {
-                if (Util.getItemRegistryName(item).toString().contains("iron") || (Util.getItemRegistryName(item).toString().contains("chainmail")) || (Util.getItemRegistryName(item).toString().contains("netherite"))) {
-                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0.05, 0, -0.05, 0.1, 0));
-                } else if (Util.getItemRegistryName(item).toString().contains("leather")) {
-                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, -0.05, 0.1, 0, -0.03, 0));
-                } else if (Util.getItemRegistryName(item).toString().contains("diamond")) {
-                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.07, 0.0, 0.02, -0.05, 0));
-                } else if (Util.getItemRegistryName(item).toString().contains("gold")) {
-                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -0.1, -0.1, -0.1, 0.03, 0));
+            if (item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem) {
+                if (item instanceof IDFDamagingItem modItem) {
+                    defaultDamageData.putIfAbsent(Util.getItemRegistryName(item).toString(), new DamageData(0, 0, 0, 0, 0, 0, 0, 0, modItem.getDamageClass(), 0, 0, 1, 0));
                 } else {
-                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                    String dc = "strike";
+                    if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
+                        dc = "slash";
+                    }
+                    if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
+                        dc = "pierce";
+                    }
+                    defaultDamageData.putIfAbsent(Util.getItemRegistryName(item).toString(), new DamageData(0, 0, 0, 0, 0, 0, 0, 0, dc, 0, 0, 1, 0));
                 }
             }
-        }
-        for (Item item : ForgeRegistries.ITEMS.getValues()) {
-            Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
-            Collection<AttributeModifier> weapon1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.OFFHAND).get(ATTACK_DAMAGE);
-            double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                    weapon1.stream().mapToDouble(AttributeModifier::getAmount).sum();
-            if (damageVal > 0 || item instanceof BowItem || item instanceof CrossbowItem) {
-                String dc = "strike";
-                if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
-                    dc = "slash";
+            else {
+                Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
+                double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum();
+                if (damageVal > 0) {
+                    String dc = "strike";
+                    if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
+                        dc = "slash";
+                    }
+                    if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
+                        dc = "pierce";
+                    }
+                    defaultDamageData.putIfAbsent(Util.getItemRegistryName(item).toString(), new DamageData(0, 0, 0, 0, 0, 0, 0, 0, dc, 0, 0, 5, 0));
                 }
-                if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
-                    dc = "pierce";
+                Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
+                Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
+                Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
+                Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
+                double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                        armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                        armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                        armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
+                if (armorVal > 0) {
+                    defaultResistanceData.putIfAbsent(Util.getItemRegistryName(item).toString(), new ResistanceData(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
                 }
-                defaultDamageData.putIfAbsent(Util.getItemRegistryName(item).toString(), new DamageData(0, 0, 0, 0, 0, 0, dc, 0, 0, 5, 0));
             }
         }
         entityMap.clear();
@@ -120,6 +128,21 @@ public class JSONHandler {
         }.getType());
         sourceMap = JSONUtil.getOrCreateConfigFile(configDir, "source_catcher.json", defaultSourceData, new TypeToken<Map<String, SourceCatcherData>>() {
         }.getType());
+        for (Map.Entry<String, EntityData> entry : defaultEntityData.entrySet()) {
+            if (!tempEntityMap.containsKey(entry.getKey())) {
+                tempEntityMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        for (Map.Entry<String, ResistanceData> entry : defaultResistanceData.entrySet()) {
+            if (!tempResistanceMap.containsKey(entry.getKey())) {
+                tempResistanceMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        for (Map.Entry<String, DamageData> entry : defaultDamageData.entrySet()) {
+            if (!tempDamageMap.containsKey(entry.getKey())) {
+                tempDamageMap.put(entry.getKey(), entry.getValue());
+            }
+        }
         if (tempEntityMap != null && !tempEntityMap.isEmpty()) {
             for (Map.Entry<String, EntityData> entry : tempEntityMap.entrySet()) {
                 entityMap.put(new ResourceLocation(entry.getKey()), entry.getValue());
@@ -135,6 +158,11 @@ public class JSONHandler {
                 damageMap.put(new ResourceLocation(entry.getKey()), entry.getValue());
             }
         }
+        updateDamageItems();
+        updateResistanceItems();
+        JSONUtil.writeFile(new File(configDir, "entity_data.json"), entityMap);
+        JSONUtil.writeFile(new File(configDir, "damage_data.json"), damageMap);
+        JSONUtil.writeFile(new File(configDir, "resistance_data.json"), resistanceMap);
     }
     @OnlyIn(Dist.DEDICATED_SERVER)
     public static void updateServerFiles() {
@@ -165,6 +193,7 @@ public class JSONHandler {
             IDFPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SendServerDamageJsonMessage(damageMap));
             ImprovedDamageFramework.LOGGER.info("Sending server damage map to all clients...");
         }
+
     }
 
     @OnlyIn(Dist.DEDICATED_SERVER)
@@ -185,7 +214,7 @@ public class JSONHandler {
     public static void updateClientResistanceData(Map<ResourceLocation, ResistanceData> map) {
         resistanceMap = map;
         if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.sendSystemMessage(net.cwjn.idf.Util.translationComponent("idf.client.armour.map.updated"));
+            Minecraft.getInstance().player.sendSystemMessage(Util.translationComponent("idf.client.armour.map.updated"));
         }
     }
 
@@ -193,7 +222,7 @@ public class JSONHandler {
     public static void updateClientDamageData(Map<ResourceLocation, DamageData> map) {
         damageMap = map;
         if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.sendSystemMessage(net.cwjn.idf.Util.translationComponent("idf.client.weapon.map.updated"));
+            Minecraft.getInstance().player.sendSystemMessage(Util.translationComponent("idf.client.weapon.map.updated"));
         }
     }
 
@@ -207,6 +236,64 @@ public class JSONHandler {
 
     public static ResistanceData getResistanceData(ResourceLocation key) {
         return resistanceMap.getOrDefault(key, null);
+    }
+
+    private static void updateDamageItems() {
+        for (Map.Entry<ResourceLocation, DamageData> entry : damageMap.entrySet()) {
+            if (Util.getItemFromRegistryName(entry.getKey()) instanceof SwordItem swordItem) {
+                DamageData data = entry.getValue();
+                double saveSpeed = swordItem.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED).stream().
+                        mapToDouble(AttributeModifier::getAmount).sum();
+                AccessSwordItem mixinSwordItem = (AccessSwordItem) swordItem;
+                AccessItem mixinSwordItem2 = (AccessItem) swordItem;
+                mixinSwordItem2.setMaxDamage(mixinSwordItem2.getMaxDamage() + data.getDurability());
+                mixinSwordItem.setDefaultAttributes(Util.buildDefaultAttributesWeapon(saveSpeed + data.getSpeed(), data.getFire(), data.getWater(), data.getLightning(), data.getMagic(), data.getDark(),
+                        data.getAttackDamage() + mixinSwordItem.getAttackDamage(), data.getCritChance(), data.getWeight(), data.getArmourPenetration(),
+                        data.getLifesteal()));
+                WeaponInterface interfaceSwordItem = (WeaponInterface) swordItem;
+                interfaceSwordItem.setDamageClass(data.getDamageClass());
+            } else if (Util.getItemFromRegistryName(entry.getKey()) instanceof DiggerItem diggerItem) {
+                DamageData data = entry.getValue();
+                double saveSpeed = diggerItem.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED).stream().
+                        mapToDouble(AttributeModifier::getAmount).sum();
+                AccessDiggerItem mixinDiggerItem = (AccessDiggerItem) diggerItem;
+                AccessItem mixinDiggerItem2 = (AccessItem) diggerItem;
+                mixinDiggerItem2.setMaxDamage(mixinDiggerItem2.getMaxDamage() + data.getDurability());
+                mixinDiggerItem.setDefaultAttributes(Util.buildDefaultAttributesWeapon(saveSpeed + data.getSpeed(), data.getFire(), data.getWater(), data.getLightning(), data.getMagic(), data.getDark(),
+                        data.getAttackDamage() + mixinDiggerItem.getAttackDamageBaseline(), data.getCritChance(), data.getWeight(), data.getArmourPenetration(),
+                        data.getLifesteal()));
+                WeaponInterface interfaceDiggerItem = (WeaponInterface) diggerItem;
+                interfaceDiggerItem.setDamageClass(data.getDamageClass());
+            } else {
+                DamageData data = entry.getValue();
+                ItemInterface interfaceItem = (ItemInterface) Util.getItemFromRegistryName(entry.getKey());
+                AccessItem mixinItem = (AccessItem) Util.getItemFromRegistryName(entry.getKey());
+                mixinItem.setMaxDamage(mixinItem.getMaxDamage() + data.getDurability());
+                interfaceItem.setDefaultModifiers(Util.buildDefaultAttributesWeapon(data.getSpeed(), data.getFire(), data.getWater(), data.getLightning(), data.getMagic(), data.getDark(),
+                        data.getAttackDamage(), data.getCritChance(), data.getWeight(), data.getArmourPenetration(), data.getLifesteal()));
+                interfaceItem.setDamageClass(data.getDamageClass());
+            }
+        }
+    }
+
+    private static void updateResistanceItems() {
+        for (Map.Entry<ResourceLocation, ResistanceData> entry : resistanceMap.entrySet()) {
+            if (Util.getItemFromRegistryName(entry.getKey()) instanceof ArmorItem armorItem) {
+                ResistanceData data = entry.getValue();
+                double saveArmour = armorItem.getDefaultAttributeModifiers(armorItem.getSlot()).get(ARMOR).stream().
+                        mapToDouble(AttributeModifier::getAmount).sum();
+                double saveToughness = armorItem.getDefaultAttributeModifiers(armorItem.getSlot()).get(ARMOR_TOUGHNESS).stream().
+                        mapToDouble(AttributeModifier::getAmount).sum();
+                double saveKBR = armorItem.getDefaultAttributeModifiers(armorItem.getSlot()).get(KNOCKBACK_RESISTANCE).stream().
+                        mapToDouble(AttributeModifier::getAmount).sum();
+                AccessArmorItem mixinArmorItem = (AccessArmorItem) armorItem;
+                mixinArmorItem.setDefaultModifiers(Util.buildDefaultAttributesArmor(armorItem.getSlot(),
+                        saveArmour + data.getArmour(), saveToughness + data.getArmourToughness(),
+                        data.getFire(), data.getWater(), data.getLightning(), data.getMagic(), data.getDark(),
+                        saveKBR + data.getKnockbackRes(), data.getMaxHP(), data.getMovespeed(), data.getLuck(), data.getEvasion(),
+                        data.getStrikeMult(), data.getPierceMult(), data.getSlashMult(), data.getCrushMult(), data.getGenericMult()));
+            }
+        }
     }
 
 }
