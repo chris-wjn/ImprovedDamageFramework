@@ -148,13 +148,17 @@ public class StatsScreen extends Screen {
         drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(LUCK), w+223.5f, h+454, GREENYELLOW.getColor());
         drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(EVASION.get()), w+223.5f, h+273, ChatFormatting.DARK_GRAY.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(LIFESTEAL.get()), w+162, h+273, ChatFormatting.DARK_RED.getColor());
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(EVASION.get()), w+223.5f, h+273, ChatFormatting.DARK_GRAY.getColor());
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(LIFESTEAL.get()), w+162, h+273, ChatFormatting.DARK_RED.getColor());
         //163, 454
     }
 
     private void drawCenteredString(Font font, PoseStack matrix, double value, float x, float y, int colour) {
         Util.drawCenteredString(font, matrix, numericalAttributeComponent(value).withStyle(indicators), x, y, colour);
+    }
+
+    private void drawCenteredPercentage(Font font, PoseStack matrix, double value, float x, float y, int colour) {
+        Util.drawCenteredString(font, matrix, percentageAttributeComponent(value).withStyle(indicators), x, y, colour);
     }
 
     @Override
