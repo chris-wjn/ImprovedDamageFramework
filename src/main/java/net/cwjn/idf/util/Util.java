@@ -71,21 +71,14 @@ public class Util {
         return MutableComponent.create(new LiteralContents(d.toString()));
     }
 
-    public static MutableComponent percentageAttributeComponent(double val) {
-        if (val > 99) return MutableComponent.create(new LiteralContents(attributeFormat.format(val)));
-        BigDecimal d = new BigDecimal(val);
-        int integralDigits = d.toBigInteger().toString().length();
-        d = d.setScale(2 - integralDigits, RoundingMode.HALF_EVEN);
-        return MutableComponent.create(new LiteralContents(d.toString() + "%"));
-    }
-
-    public static void drawCenteredString(Font font, PoseStack matrix, String text, float x, float y, int colour) {
-        MutableComponent component = textComponent(text);
-        font.draw(matrix, component, (x - (float) font.width(component) / 2), y, colour);
-    }
-
     public static void drawCenteredString(Font font, PoseStack matrix, Component component, float x, float y, int colour) {
         font.draw(matrix, component, (x - (float) font.width(component) / 2), y, colour);
+    }
+
+    public static void drawCenteredPercentageString(Font font, PoseStack matrix, MutableComponent component, float x, float y, int colour) {
+        float textX = (x - (float) font.width(component) / 2);
+        MutableComponent newComp = component.append("%");
+        font.draw(matrix, newComp, textX, y, colour);
     }
 
     public static ResourceLocation getEntityRegistryName(EntityType<?> type) {
