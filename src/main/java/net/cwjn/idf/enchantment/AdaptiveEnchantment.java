@@ -6,7 +6,7 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class AdaptiveEnchantment extends Enchantment {
 
-    protected AdaptiveEnchantment(Rarity rarity, EnchantmentCategory category, EquipmentSlot[] slots) {
+    protected AdaptiveEnchantment(Rarity rarity) {
         super(rarity, EnchantmentCategory.ARMOR, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
     }
 

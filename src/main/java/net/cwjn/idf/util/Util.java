@@ -178,6 +178,18 @@ public class Util {
         }
     }
 
+    public static int findHighest(float[] arr) {
+        int index = 0;
+        float highest = arr[0];
+        for (int i = 0; i < arr.length; ++i) {
+            if (arr[i] > highest) {
+                index = i;
+                highest = arr[i];
+            }
+        }
+        return index;
+    }
+
     /*
         Below methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
      */

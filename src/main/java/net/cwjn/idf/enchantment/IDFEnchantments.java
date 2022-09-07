@@ -37,4 +37,7 @@ public class IDFEnchantments {
     public static final RegistryObject<Enchantment> MAGIC_RESIST_MULT = ENCHANTMENTS.register("magic_resist_mult", () -> new AttributeResistanceEnchantment(Enchantment.Rarity.RARE, true, UUIDs.createUUIDArray(8), IDFAttributes.MAGIC_RESISTANCE.get(), "magic"));
     public static final RegistryObject<Enchantment> DARK_RESIST_MULT = ENCHANTMENTS.register("dark_resist_mult", () -> new AttributeResistanceEnchantment(Enchantment.Rarity.RARE, true, UUIDs.createUUIDArray(8), IDFAttributes.DARK_RESISTANCE.get(), "dark"));
 
+    //OTHER
+    public static final RegistryObject<Enchantment> ADAPTIVE = ENCHANTMENTS.register("adaptive", () -> new AdaptiveEnchantment(Enchantment.Rarity.VERY_RARE));
+
 }

@@ -1,13 +1,12 @@
 package net.cwjn.idf.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.util.Keybinds;
-import net.cwjn.idf.util.Util;
 import net.cwjn.idf.gui.buttons.AttributeButton;
 import net.cwjn.idf.gui.buttons.BackButton;
+import net.cwjn.idf.util.Keybinds;
+import net.cwjn.idf.util.Util;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
@@ -22,11 +21,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 
-import static net.cwjn.idf.util.Color.*;
-import static net.cwjn.idf.damage.DamageHandler.armourFormula;
-import static net.cwjn.idf.util.Util.*;
 import static net.cwjn.idf.attribute.IDFAttributes.*;
-import static net.cwjn.idf.gui.StatsScreen.Page.*;
+import static net.cwjn.idf.damage.DamageHandler.armourFormula;
+import static net.cwjn.idf.gui.StatsScreen.Page.MAIN;
+import static net.cwjn.idf.gui.StatsScreen.Page.PAGE_ATTRIBUTES;
+import static net.cwjn.idf.util.Color.*;
+import static net.cwjn.idf.util.Util.numericalAttributeComponent;
+import static net.cwjn.idf.util.Util.translationComponent;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 @OnlyIn(Dist.CLIENT)
