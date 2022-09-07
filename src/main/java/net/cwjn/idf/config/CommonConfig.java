@@ -17,7 +17,7 @@ public class CommonConfig {
 
     static {
 
-        BUILDER.push("Configs");
+        BUILDER.push("Common Config");
 
         WHITELISTED_DAMAGE_SOURCES_NO_INVULN = BUILDER.comment("Damage Sources that will not make the target gain invulnerability frames. Takes DamageSource object's msgId field. If you don't know what that is, don't touch this.")
                         .defineList("Whitelisted sources", Arrays.asList(defaultStringList), s -> s instanceof String);

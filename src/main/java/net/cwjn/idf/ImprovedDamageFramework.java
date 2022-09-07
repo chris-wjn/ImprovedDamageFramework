@@ -2,9 +2,11 @@ package net.cwjn.idf;
 
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.compat.CompatHandler;
+import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
 import net.cwjn.idf.enchantment.IDFEnchantments;
+import net.cwjn.idf.gui.HealthBarReplacer;
 import net.cwjn.idf.network.IDFPacketHandler;
 import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.particle.IDFParticles;
@@ -42,6 +44,7 @@ public class ImprovedDamageFramework {
         IDFParticles.PARTICLE_TYPES.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
     }
 
     private void setup(final FMLCommonSetupEvent event) {
@@ -55,6 +58,8 @@ public class ImprovedDamageFramework {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatsScreen.class);
+        if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(HealthBarReplacer::replaceWithBar);
+        if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(HealthBarReplacer::deleteArmorHud);
         CompatHandler.initClient(event);
     }
 

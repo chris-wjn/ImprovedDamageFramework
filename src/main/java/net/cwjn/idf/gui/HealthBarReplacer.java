@@ -35,7 +35,6 @@ public class HealthBarReplacer {
     }
 
     private static final Minecraft client = Minecraft.getInstance();
-    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void replaceWithBar(RenderGuiOverlayEvent event) {
         if (event.isCanceled()
                 || client.options.hideGui
@@ -48,7 +47,6 @@ public class HealthBarReplacer {
         event.setCanceled(true);
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void deleteArmorHud(RenderGuiOverlayEvent event) {
         if (event.getOverlay() == VanillaGuiOverlay.ARMOR_LEVEL.type()) {
             event.setCanceled(true);
