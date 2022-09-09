@@ -137,6 +137,7 @@
 
 
   "//ENCHANTMENTS": "ENCHANTMENT NAMES/DESC",
+  "enchantment.idf.adaptive": "Adaptation",
   "enchantment.idf.fire_damage_flat": "Flat Fire Damage",
   "enchantment.idf.water_damage_flat": "Flat Water Damage",
   "enchantment.idf.lightning_damage_flat": "Flat Lightning Damage",
@@ -186,6 +187,10 @@
   "key.idf.open_stats": "Open Stats",
   "key.category.idf": "ImprovedDamageFramework",
   "idf.debug_message_on": "Debug enabled.",
-  "idf.debug_message_off": "Debug disabled."
+  "idf.debug_message_off": "Debug disabled.",
+
+  "//EFFECTS": "USED FOR EFFECTS lol",
+  "effect.idf.positive_attribute_modifier_effect": "Stat Up!",
+  "effect.idf.negative_attribute_modifier_effect": "Stat Down!"
 
 }

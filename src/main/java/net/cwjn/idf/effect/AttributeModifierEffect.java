@@ -8,7 +8,7 @@ import net.minecraftforge.common.extensions.IForgeMobEffect;
 public class AttributeModifierEffect extends MobEffect implements IForgeMobEffect {
 
     protected AttributeModifierEffect(MobEffectCategory category, boolean beneficial) {
-        super(category, beneficial ? Color.GREEN.getColor() : Color.RED.getColor());
+        super(category, beneficial ? Color.LIGHTGREEN.getColor() : Color.DARKRED.getColor());
     }
 
 }

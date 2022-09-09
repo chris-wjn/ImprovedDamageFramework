@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.0.1-1.19'
+version = '0.0.1-1.19.2'
 group = 'net.cwjn.idf' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'idf'
 
@@ -24,7 +24,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.19'
+    mappings channel: 'official', version: '1.19.2'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
     runs {
         client {
@@ -86,17 +86,17 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.17'
     implementation fg.deobf("curse.maven:iceberg-520110:3898603") //1.19
     implementation fg.deobf("curse.maven:itemframes-532127:3910283") //1.19
     implementation fg.deobf("curse.maven:prism-638111:3910027")
     //implementation fg.deobf("se.mickelus.mutil:mutil:1.18.2-4.5.0")
     //implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.2")
-    implementation fg.deobf("mezz.jei:jei-1.19-forge:11.0.0.222")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19-5.1.0.4")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19-5.1.0.4:api")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19-75:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19-75")
+    implementation fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings

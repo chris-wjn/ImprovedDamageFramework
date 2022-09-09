@@ -6,6 +6,7 @@ import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
 import net.cwjn.idf.effect.AttributeModifierEffect;
+import net.cwjn.idf.effect.IDFEffects;
 import net.cwjn.idf.enchantment.IDFEnchantments;
 import net.cwjn.idf.gui.HealthBarReplacer;
 import net.cwjn.idf.network.IDFPacketHandler;
@@ -43,7 +44,7 @@ public class ImprovedDamageFramework {
         IDFAttributes.ATTRIBUTES.register(bus);
         IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
-        bus.register(AttributeModifierEffect.class);
+        IDFEffects.EFFECTS.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");

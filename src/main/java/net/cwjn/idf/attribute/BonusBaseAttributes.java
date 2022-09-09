@@ -19,9 +19,9 @@ public class BonusBaseAttributes {
     @SubscribeEvent(priority = HIGHEST)
     public static void grantBonuses(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide() && event.getEntity() instanceof LivingEntity livingEntity) {
-            //FIRST SECTION: do not spawn the entity if it somehow dodged the attribute attaching event on startup
+            //FIRST SECTION: do not spawn the entity if it somehow dodged the attribute attaching event on startup *cough* evilcraft *cough*
             if (livingEntity.getAttribute(IDFAttributes.FIRE_DAMAGE.get()) == null) {
-                ImprovedDamageFramework.LOGGER.info("ImprovedDamageFramework blocked spawning of living entity " + livingEntity + " because it somehow does not have proper attributes!");
+                ImprovedDamageFramework.LOGGER.info("ImprovedDamageFramework blocked spawning of living entity " + livingEntity + " because it does not have proper attributes!");
                 event.setCanceled(true);
                 return;
             }
