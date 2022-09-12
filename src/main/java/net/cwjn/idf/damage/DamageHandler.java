@@ -22,8 +22,6 @@ import java.util.Map;
 
 public class DamageHandler {
 
-    private static final double e = 2.718281828459045;
-
     public static float handleDamage(LivingEntity target, DamageSource source, float amount) {
         //In ATHandler we leave fall damage as purely physical, so we can calculate this here.
         if (source.isFall()) {

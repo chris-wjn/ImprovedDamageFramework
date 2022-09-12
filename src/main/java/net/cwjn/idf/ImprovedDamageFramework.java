@@ -12,6 +12,7 @@ import net.cwjn.idf.gui.HealthBarReplacer;
 import net.cwjn.idf.network.IDFPacketHandler;
 import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.particle.IDFParticles;
+import net.cwjn.idf.rpg.RpgModule;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

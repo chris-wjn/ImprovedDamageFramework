@@ -29,7 +29,7 @@ public class MixinPlayer {
     /**
      * @author cwJn
      * @reason
-     * see MixinLivingEntity.
+     * see MixinPlayer.
     */
     @Overwrite
     protected void actuallyHurt(DamageSource damageSource, float damageAmount) {
