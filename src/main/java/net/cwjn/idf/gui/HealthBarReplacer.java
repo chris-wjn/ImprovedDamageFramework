@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -25,8 +26,9 @@ public class HealthBarReplacer {
     private static final ResourceLocation HEALTH_BAR = new ResourceLocation(
             ImprovedDamageFramework.MOD_ID + ":textures/gui/healthbar.png");
     private static final ResourceLocation HEALTH_FILL = new ResourceLocation(
-            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthfill.png"
-    );
+            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthfill.png");
+    private static final ResourceLocation HEALTH_GUI = new ResourceLocation(
+            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthgui.png");
     private static DecimalFormat healthFormat = new DecimalFormat();
     static {
         healthFormat.setMinimumFractionDigits(1);
@@ -57,26 +59,25 @@ public class HealthBarReplacer {
         float health = player.getHealth();
         float absorption = player.getAbsorptionAmount();
         float maxHealth = player.getMaxHealth();
-        float absorptionPercent = absorption/maxHealth;
-        float healthPercent = health / maxHealth;
+        float absorptionPercent = Mth.clamp(absorption/maxHealth, 0.0f, 1.0f);
+        float healthPercent = Mth.clamp(health/maxHealth, 0.0f, 1.0f);
         int xBar = (client.getWindow().getGuiScaledWidth()) / 2 - 91;
         int xText = ((client.getWindow().getGuiScaledWidth() / 2 - 9) + xBar) / 2;
         int y = client.getWindow().getGuiScaledHeight() - 40;
         matrix.pushPose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.enableBlend();
-        float healthMap = 72.0f * healthPercent;
-        float absorptionMap = 72.0f * absorptionPercent;
-        RenderSystem.setShaderTexture(0, HEALTH_BAR);
-        client.gui.blit(matrix, xBar + 5, y - 3, 0, 0, 72, 13);
-        RenderSystem.setShaderTexture(0, HEALTH_FILL);
-        client.gui.blit(matrix, xBar + 5, y - 3, 0, 0, (int) healthMap, 13);
-        client.gui.blit(matrix, xBar + 5, y - 3, 0, 13, (int) absorptionMap, 13);
+        float healthMap = 62.0f * healthPercent;
+        float absorptionMap = 62.0f * absorptionPercent;
+        RenderSystem.setShaderTexture(0, HEALTH_GUI);
+        client.gui.blit(matrix, xBar + 4, y - 2, 0, 26, 72, 13);
+        client.gui.blit(matrix, xBar + 4, y - 2, 0, 0, (int) healthMap, 13);
+        client.gui.blit(matrix, xBar + 4, y - 2, 0, 13, (int) absorptionMap, 13);
         RenderSystem.disableBlend();
         matrix.popPose();
         matrix.pushPose();
-        MutableComponent comp = Util.textComponent(healthFormat.format(health) + "/" + healthFormat.format(maxHealth));
-        client.font.draw(matrix, comp, (xText - (float) client.font.width(comp) / 2), y, 0xffffff);
+        //MutableComponent comp = Util.textComponent(healthFormat.format(health) + "/" + healthFormat.format(maxHealth));
+        //client.font.draw(matrix, comp, (xText - (float) client.font.width(comp) / 2), y, 0xffffff);
         matrix.popPose();
     }
 
