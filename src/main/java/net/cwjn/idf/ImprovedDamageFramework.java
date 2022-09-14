@@ -45,7 +45,7 @@ public class ImprovedDamageFramework {
         IDFAttributes.ATTRIBUTES.register(bus);
         IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
-        IDFEffects.EFFECTS.register(bus);
+        //IDFEffects.EFFECTS.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");

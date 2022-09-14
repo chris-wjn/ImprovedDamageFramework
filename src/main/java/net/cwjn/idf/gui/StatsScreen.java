@@ -153,7 +153,7 @@ public class StatsScreen extends Screen {
         drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
         drawCenteredPercentage(font, matrix, player.getAttributeValue(EVASION.get()), w+223.5f, h+273, ChatFormatting.DARK_GRAY.getColor());
         drawCenteredPercentage(font, matrix, player.getAttributeValue(LIFESTEAL.get()), w+162, h+273, ChatFormatting.DARK_RED.getColor());
-        drawCenteredString(matrix, font, df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth()), w + 192, h + 398, INDIANRED.getColor());
+        Util.drawCenteredString(font, matrix, Util.textComponent(df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth())), w + 193.5f, h + 399, INDIANRED.getColor());
         //163, 454
     }
 

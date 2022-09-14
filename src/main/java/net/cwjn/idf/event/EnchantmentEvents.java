@@ -19,7 +19,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber
 public class EnchantmentEvents {
 
-    private static final String fireUUID = UUID.randomUUID().toString();
+    /*private static final String fireUUID = UUID.randomUUID().toString();
     private static final String waterUUID = UUID.randomUUID().toString();
     private static final String lightningUUID = UUID.randomUUID().toString();
     private static final String magicUUID = UUID.randomUUID().toString();
@@ -87,6 +87,6 @@ public class EnchantmentEvents {
                                 .addAttributeModifier(Attributes.ARMOR, physUUID, level * 0.1D, AttributeModifier.Operation.MULTIPLY_TOTAL), 200, 1, false, false));
             }
         }
-    }
+    }*/
 
 }
