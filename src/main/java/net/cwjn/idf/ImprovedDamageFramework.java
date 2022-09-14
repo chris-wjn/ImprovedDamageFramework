@@ -5,15 +5,11 @@ import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
-import net.cwjn.idf.effect.AttributeModifierEffect;
-import net.cwjn.idf.effect.IDFEffects;
 import net.cwjn.idf.enchantment.IDFEnchantments;
 import net.cwjn.idf.gui.HealthBarReplacer;
-import net.cwjn.idf.network.IDFPacketHandler;
 import net.cwjn.idf.gui.StatsScreen;
+import net.cwjn.idf.network.IDFPacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
-import net.cwjn.idf.rpg.RpgModule;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,8 +21,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.text.DecimalFormat;
 
 @Mod("idf")
 public class ImprovedDamageFramework {
@@ -45,7 +39,6 @@ public class ImprovedDamageFramework {
         IDFAttributes.ATTRIBUTES.register(bus);
         IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
-        //IDFEffects.EFFECTS.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.buttons.AttributeButton;
 import net.cwjn.idf.gui.buttons.BackButton;
+import net.cwjn.idf.gui.buttons.StatsButton;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
@@ -24,8 +25,7 @@ import java.text.DecimalFormat;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.cwjn.idf.damage.DamageHandler.armourFormula;
-import static net.cwjn.idf.gui.StatsScreen.Page.MAIN;
-import static net.cwjn.idf.gui.StatsScreen.Page.PAGE_ATTRIBUTES;
+import static net.cwjn.idf.gui.StatsScreen.Page.*;
 import static net.cwjn.idf.util.Color.*;
 import static net.cwjn.idf.util.Util.numericalAttributeComponent;
 import static net.cwjn.idf.util.Util.translationComponent;
@@ -34,7 +34,9 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 @OnlyIn(Dist.CLIENT)
 public class StatsScreen extends Screen {
 
-    private static final ResourceLocation STAT_ATTRIBUTES =
+    private static final ResourceLocation STATS =
+            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_stats.png");
+    private static final ResourceLocation ATTRIBUTES =
             new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_attributes.png");
     private static final ResourceLocation BASE =
             new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_base.png");
@@ -44,14 +46,15 @@ public class StatsScreen extends Screen {
     private int w;
     private int h;
     private Page page = MAIN;
-    private StatButton attributeButton, backButton;
+    private StatButton attributeButton, backButton, statsButton;
     public static final DecimalFormat healthFormat = new DecimalFormat();
     private Player player;
     private Font font;
 
     enum Page {
         MAIN,
-        PAGE_ATTRIBUTES
+        PAGE_ATTRIBUTES,
+        PAGE_STATS
     }
 
     static {
@@ -72,6 +75,7 @@ public class StatsScreen extends Screen {
         w = (minecraft.getWindow().getGuiScaledWidth() - 384)/2;
         h = (minecraft.getWindow().getGuiScaledHeight() - 512)/2 - 7;
         attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
+        statsButton = addRenderableWidget(new StatsButton(w+28, h+84, (f) -> this.mainToStats()));
         backButton = addRenderableWidget(new BackButton(w+30, h+462, (f) -> this.attributesToMain()));
         //122, 443
         updateButtonVisibility();
@@ -80,10 +84,17 @@ public class StatsScreen extends Screen {
     private void updateButtonVisibility() {
         if (page == PAGE_ATTRIBUTES) {
             attributeButton.visible = false;
+            statsButton.visible = false;
             backButton.visible = true;
         }
-        else if (page == MAIN) {
+        else if (page == PAGE_STATS) {
+            statsButton.visible = false;
+            attributeButton.visible = false;
+            backButton.visible = true;
+        }
+        else {
             attributeButton.visible = true;
+            statsButton.visible = true;
             backButton.visible = false;
         }
     }
@@ -98,6 +109,11 @@ public class StatsScreen extends Screen {
         updateButtonVisibility();
     }
 
+    private void mainToStats() {
+        page = PAGE_STATS;
+        updateButtonVisibility();
+    }
+
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(pPoseStack);
@@ -109,12 +125,20 @@ public class StatsScreen extends Screen {
             blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
         }
         else if (page == PAGE_ATTRIBUTES)  {
-            RenderSystem.setShaderTexture(0, STAT_ATTRIBUTES);
+            RenderSystem.setShaderTexture(0, ATTRIBUTES);
             blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
             renderAttributes(pPoseStack, pMouseX, pMouseY);
+        } else {
+            RenderSystem.setShaderTexture(0, STATS);
+            blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
+            renderStats(pPoseStack);
         }
         pPoseStack.popPose();
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+    }
+
+    private void renderStats(PoseStack matrix) {
+
     }
 
     private void renderAttributes(PoseStack matrix, int mouseX, int mouseY) {
