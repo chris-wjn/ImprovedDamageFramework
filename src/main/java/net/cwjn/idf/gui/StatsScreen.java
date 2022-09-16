@@ -6,6 +6,7 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.buttons.AttributeButton;
 import net.cwjn.idf.gui.buttons.BackButton;
 import net.cwjn.idf.gui.buttons.StatsButton;
+import net.cwjn.idf.rpg.RpgPlayer;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
@@ -75,7 +76,7 @@ public class StatsScreen extends Screen {
         w = (minecraft.getWindow().getGuiScaledWidth() - 384)/2;
         h = (minecraft.getWindow().getGuiScaledHeight() - 512)/2 - 7;
         attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
-        statsButton = addRenderableWidget(new StatsButton(w+28, h+84, (f) -> this.mainToStats()));
+        statsButton = addRenderableWidget(new StatsButton(w+78, h+137, (f) -> this.mainToStats()));
         backButton = addRenderableWidget(new BackButton(w+30, h+462, (f) -> this.attributesToMain()));
         //122, 443
         updateButtonVisibility();
@@ -138,7 +139,8 @@ public class StatsScreen extends Screen {
     }
 
     private void renderStats(PoseStack matrix) {
-
+        RpgPlayer rpgPlayer = (RpgPlayer) player;
+        drawCenteredString(font, matrix, rpgPlayer.getCons(), w + 180, h + 52.5f, 0x000000);
     }
 
     private void renderAttributes(PoseStack matrix, int mouseX, int mouseY) {

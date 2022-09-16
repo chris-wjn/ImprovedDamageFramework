@@ -62,13 +62,13 @@ public class HealthBarReplacer {
         float absorptionPercent = Mth.clamp(absorption/maxHealth, 0.0f, 1.0f);
         float healthPercent = Mth.clamp(health/maxHealth, 0.0f, 1.0f);
         int xBar = (client.getWindow().getGuiScaledWidth()) / 2 - 91;
-        int xText = ((client.getWindow().getGuiScaledWidth() / 2 - 9) + xBar) / 2;
+        //int xText = ((client.getWindow().getGuiScaledWidth() / 2 - 9) + xBar) / 2;
         int y = client.getWindow().getGuiScaledHeight() - 40;
         matrix.pushPose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.enableBlend();
-        float healthMap = 62.0f * healthPercent;
-        float absorptionMap = 62.0f * absorptionPercent;
+        float healthMap = 72.0f * healthPercent;
+        float absorptionMap = 72.0f * absorptionPercent;
         RenderSystem.setShaderTexture(0, HEALTH_GUI);
         client.gui.blit(matrix, xBar + 4, y - 2, 0, 26, 72, 13);
         client.gui.blit(matrix, xBar + 4, y - 2, 0, 0, (int) healthMap, 13);

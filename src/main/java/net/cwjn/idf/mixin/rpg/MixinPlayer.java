@@ -3,7 +3,6 @@ package net.cwjn.idf.mixin.rpg;
 import net.cwjn.idf.rpg.RpgPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinPlayer implements RpgPlayer {
 
     @Unique
-    private int level, constitution, strength, dexterity, agility, intelligence, wisdom, faith;
+    private int level = 1, constitution = 1, strength = 1, dexterity = 1, agility = 1, intelligence = 1, wisdom = 1, faith = 1;
 
     public int getLevel() {
         return level;
