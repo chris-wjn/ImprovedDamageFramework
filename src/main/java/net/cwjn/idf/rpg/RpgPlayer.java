@@ -1,9 +1,19 @@
 package net.cwjn.idf.rpg;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface RpgPlayer {
 
     int getLevel();
     void setLevel(int i);
+
+    int getMaxBonfires();
+    void setMaxBonfires(int i);
+
+    List<UUID> getBonfires();
+    void addBonfire(UUID id);
+    void removeBonfire(UUID id);
 
     //attribute scaling stats
     int getCons(); //health, defense, knockback resistance

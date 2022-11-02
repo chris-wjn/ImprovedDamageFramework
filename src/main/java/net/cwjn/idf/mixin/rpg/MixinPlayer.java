@@ -9,12 +9,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Mixin(Player.class)
 public class MixinPlayer implements RpgPlayer {
 
     @Unique
-    private int level = 1, constitution = 1, strength = 1, dexterity = 1, agility = 1, intelligence = 1, wisdom = 1, faith = 1;
+    private final List<UUID> bonfires = new ArrayList<>();
+    @Unique
+    private int level = 1, maxBonfires = 1, constitution = 1, strength = 1, dexterity = 1, agility = 1, intelligence = 1, wisdom = 1, faith = 1;
 
+    public int getMaxBonfires() {
+        return maxBonfires;
+    }
+    public void setMaxBonfires(int i) {
+        maxBonfires = i;
+    }
+    public List<UUID> getBonfires()
     public int getLevel() {
         return level;
     }
@@ -95,6 +108,10 @@ public class MixinPlayer implements RpgPlayer {
         saveTag.putInt("RPGIntelligence", intelligence);
         saveTag.putInt("RPGWisdom", wisdom);
         saveTag.putInt("RPGFaith", faith);
+        saveTag.putInt("maxBonfires", maxBonfires);
+        for (int i = 0; i < maxBonfires; ++i) {
+            saveTag.putUUID("bonfireUUID" + i, bonfires.get(i));
+        }
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
@@ -107,6 +124,10 @@ public class MixinPlayer implements RpgPlayer {
         intelligence = saveTag.getInt("RPGIntelligence");
         wisdom = saveTag.getInt("RPGWisdom");
         faith = saveTag.getInt("RPGFaith");
+        maxBonfires = saveTag.getInt("maxBonfires");
+        for (int i = 0; i < maxBonfires; ++i) {
+            bonfires.add(saveTag.getUUID("bonfireUUID" + i));
+        }
     }
 
 }

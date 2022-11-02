@@ -1,7 +1,7 @@
 package net.cwjn.idf.event;
 
-import net.cwjn.idf.block.BonfireSwordRenderer;
-import net.cwjn.idf.block.entity.IDFBlockEntities;
+import net.cwjn.idf.rpg.bonfire.BonfireSwordRenderer;
+import net.cwjn.idf.rpg.bonfire.entity.BonfireEntityRegistry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,7 +12,7 @@ public class ClientEventsModBus {
 
     @SubscribeEvent
     public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(IDFBlockEntities.BONFIRE_BASE.get(), BonfireSwordRenderer::new);
+        event.registerBlockEntityRenderer(BonfireEntityRegistry.BONFIRE_BASE.get(), BonfireSwordRenderer::new);
     }
 
 }

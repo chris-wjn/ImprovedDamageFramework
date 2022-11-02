@@ -1,19 +1,15 @@
-package net.cwjn.idf.block;
+package net.cwjn.idf.rpg.bonfire;
 
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.block.entity.BonfireBlockEntity;
-import net.cwjn.idf.block.entity.IDFBlockEntities;
 import net.cwjn.idf.gui.CreateBonfireScreen;
 import net.cwjn.idf.gui.StatsScreen;
-import net.cwjn.idf.network.PacketHandler;
-import net.cwjn.idf.network.packets.bonfire.ActivateBonfireMessage;
-import net.cwjn.idf.network.packets.bonfire.OpenBonfireScreenMessage;
-import net.cwjn.idf.network.packets.bonfire.SyncBonfireMessage;
+import net.cwjn.idf.rpg.RpgPlayer;
+import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
+import net.cwjn.idf.rpg.bonfire.entity.BonfireEntityRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -36,7 +32,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +63,7 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return IDFBlockEntities.BONFIRE_BASE.get().create(pos, state);
+        return BonfireEntityRegistry.BONFIRE_BASE.get().create(pos, state);
     }
 
     @SuppressWarnings("deprecation")
@@ -99,6 +94,8 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof BonfireBlockEntity be) {
+            RpgPlayer rpgPlayer = (RpgPlayer)player;
+            if (rpgPlayer.get)
             if (be.isActive()) {
                 if (level.isClientSide) {
                     Minecraft.getInstance().setScreen(new StatsScreen(true));
@@ -137,6 +134,8 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
                 if (random.nextDouble() < 0.1D) {
                     level.playLocalSound((double)pos.getX() + 0.5D, pos.getY(), (double)pos.getZ() + 0.5D, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.5F, 1.0F, false);
                 }
+                level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.1D, 0.0D);
+                level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.15D, 0.0D);
                 level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.05D, 0.0D);
                 level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
             }

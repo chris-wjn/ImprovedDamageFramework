@@ -1,10 +1,10 @@
-package net.cwjn.idf.block;
+package net.cwjn.idf.rpg.bonfire;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import net.cwjn.idf.block.entity.BonfireBlockEntity;
+import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.cwjn.idf.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -29,7 +29,7 @@ public class BonfireSwordRenderer implements BlockEntityRenderer<BonfireBlockEnt
             renderName(be, partialTicks, matrix, buffer, light);
             matrix.pushPose();
             matrix.translate(0.5, 0.65, 0.5);
-            if (Minecraft.getInstance().level.getBlockState(be.getBlockPos()).getBlock() == IDFBlocks.BONFIRE_BASE.get()) {
+            if (Minecraft.getInstance().level.getBlockState(be.getBlockPos()).getBlock() == BonfireBlockRegistry.BONFIRE_BASE.get()) {
                 if (Minecraft.getInstance().level.getBlockState(be.getBlockPos()).getValue(BonfireBlock.FACING) == Direction.NORTH) {
                     matrix.mulPose(Vector3f.YP.rotationDegrees(0));
                 } else if (Minecraft.getInstance().level.getBlockState(be.getBlockPos()).getValue(BonfireBlock.FACING) == Direction.EAST) {

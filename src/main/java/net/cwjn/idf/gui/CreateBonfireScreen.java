@@ -1,7 +1,7 @@
 package net.cwjn.idf.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.cwjn.idf.block.entity.BonfireBlockEntity;
+import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.bonfire.ActivateBonfireMessage;
 import net.cwjn.idf.util.Util;
@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.item.ItemStack;
 
 public class CreateBonfireScreen extends Screen {
 

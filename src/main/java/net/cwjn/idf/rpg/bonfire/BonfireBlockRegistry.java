@@ -1,4 +1,4 @@
-package net.cwjn.idf.block;
+package net.cwjn.idf.rpg.bonfire;
 
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.item.IDFItems;
@@ -15,7 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
-public class IDFBlocks {
+public class BonfireBlockRegistry {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ImprovedDamageFramework.MOD_ID);
 

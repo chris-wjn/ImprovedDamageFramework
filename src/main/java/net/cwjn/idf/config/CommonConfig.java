@@ -20,7 +20,7 @@ public class CommonConfig {
 
         BUILDER.push("Common Config");
 
-        ENABLE_RPG_MODULE = BUILDER.comment("Enable RPG Module (levels, stats, etc...)").define("Enable", true);
+        ENABLE_RPG_MODULE = BUILDER.comment("Enable RPG Module (levels, bonfires, stats, etc...)").define("Enable", true);
 
         WHITELISTED_DAMAGE_SOURCES_NO_INVULN = BUILDER.comment("Damage Sources that will not make the target gain invulnerability frames. Takes DamageSource object's msgId field. If you don't know what that is, don't touch this.")
                         .defineList("Whitelisted sources", Arrays.asList(defaultStringList), s -> s instanceof String);

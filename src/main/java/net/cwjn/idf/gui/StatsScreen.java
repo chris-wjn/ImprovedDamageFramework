@@ -142,7 +142,13 @@ public class StatsScreen extends Screen {
 
     private void renderStats(PoseStack matrix) {
         RpgPlayer rpgPlayer = (RpgPlayer) player;
-        drawCenteredString(font, matrix, rpgPlayer.getCons(), w + 180, h + 52.5f, 0x000000);
+        drawCenteredString(font, matrix, rpgPlayer.getCons(), w + 200, h + 52.5f, 0xffffff);
+        drawCenteredString(font, matrix, rpgPlayer.getStr(), w + 200, h + 72.5f, 0xffffff);
+        drawCenteredString(font, matrix, rpgPlayer.getDex(), w + 200, h + 92.5f, 0xffffff);
+        drawCenteredString(font, matrix, rpgPlayer.getAgl(), w + 200, h + 112.5f, 0xffffff);
+        drawCenteredString(font, matrix, rpgPlayer.getIntel(), w + 200, h + 132.5f, 0xffffff);
+        drawCenteredString(font, matrix, rpgPlayer.getWis(), w + 200, h + 152.5f, 0xffffff);
+        drawCenteredString(font, matrix, rpgPlayer.getFth(), w + 200, h + 172.5f, 0xffffff);
     }
 
     private void renderAttributes(PoseStack matrix, int mouseX, int mouseY) {

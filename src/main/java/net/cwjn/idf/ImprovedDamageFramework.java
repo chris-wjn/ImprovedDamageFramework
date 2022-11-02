@@ -1,8 +1,7 @@
 package net.cwjn.idf;
 
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.block.IDFBlocks;
-import net.cwjn.idf.block.entity.IDFBlockEntities;
+import net.cwjn.idf.rpg.RpgModule;
 import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
@@ -45,8 +44,7 @@ public class ImprovedDamageFramework {
         IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
         IDFItems.ITEMS.register(bus);
-        IDFBlocks.BLOCKS.register(bus);
-        IDFBlockEntities.BLOCK_ENTITIES.register(bus);
+        if (CommonConfig.ENABLE_RPG_MODULE.get()) RpgModule.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
