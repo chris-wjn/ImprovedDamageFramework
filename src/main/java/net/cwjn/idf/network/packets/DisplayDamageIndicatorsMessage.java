@@ -1,6 +1,7 @@
-package net.cwjn.idf.network;
+package net.cwjn.idf.network.packets;
 
 import net.cwjn.idf.event.DamageIndicatorEvents;
+import net.cwjn.idf.network.IDFPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -8,7 +9,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class DisplayDamageIndicatorsMessage {
+public class DisplayDamageIndicatorsMessage implements IDFPacket {
 
     private double x, y, z;
     private float f;
@@ -53,7 +54,6 @@ public class DisplayDamageIndicatorsMessage {
         ctx.enqueueWork(() -> {
             DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, message.colour, message.horizontalOffset, random.nextDouble(1, 1.2), message.id);
         });
-        //DamageIndicatorEvents.addDamageIndicatorParticle(message.x, message.y, message.z, message.f, message.colour, message.horizontalOffset, random.nextDouble(1, 1.2), message.id);
         ctx.setPacketHandled(true);
     }
 

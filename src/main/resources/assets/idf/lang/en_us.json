@@ -191,6 +191,12 @@
 
   "//EFFECTS": "USED FOR EFFECTS lol",
   "effect.idf.positive_attribute_modifier_effect": "Stat Up!",
-  "effect.idf.negative_attribute_modifier_effect": "Stat Down!"
+  "effect.idf.negative_attribute_modifier_effect": "Stat Down!",
+
+  "//BLOCKS": "blocks",
+  "block.idf.bonfire_base": "Bonfire",
+
+  "//GUI": "gui",
+  "button.confirm": "Confirm"
 
 }

@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ClientEvents {
+public class ClientEventsForgeBus {
 
     @SubscribeEvent
     public static void openStatsScreen(InputEvent.Key event) {
@@ -22,7 +22,7 @@ public class ClientEvents {
 
     private static void onInput(Minecraft minecraft, int key, int action) {
         if (Keybinds.openStats.isDown() && minecraft.screen == null) {
-            minecraft.setScreen(new StatsScreen());
+            minecraft.setScreen(new StatsScreen(false));
         }
     }
 
@@ -30,4 +30,11 @@ public class ClientEvents {
         if (Screen.hasShiftDown()) return true;
         return false;
     }
+
+    public static void openBonfireScreen() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null) return;
+        minecraft.setScreen(new StatsScreen(true));
+    }
+
 }

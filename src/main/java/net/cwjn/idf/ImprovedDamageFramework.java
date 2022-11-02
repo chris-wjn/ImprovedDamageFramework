@@ -1,14 +1,19 @@
 package net.cwjn.idf;
 
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.block.IDFBlocks;
+import net.cwjn.idf.block.entity.IDFBlockEntities;
 import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
 import net.cwjn.idf.enchantment.IDFEnchantments;
+import net.cwjn.idf.event.ClientEventsModBus;
+import net.cwjn.idf.gui.CreateBonfireScreen;
 import net.cwjn.idf.gui.HealthBarReplacer;
 import net.cwjn.idf.gui.StatsScreen;
-import net.cwjn.idf.network.IDFPacketHandler;
+import net.cwjn.idf.item.IDFItems;
+import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,6 +44,9 @@ public class ImprovedDamageFramework {
         IDFAttributes.ATTRIBUTES.register(bus);
         IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
+        IDFItems.ITEMS.register(bus);
+        IDFBlocks.BLOCKS.register(bus);
+        IDFBlockEntities.BLOCK_ENTITIES.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
@@ -48,13 +56,15 @@ public class ImprovedDamageFramework {
         LOGGER.info("Loading Improved Damage Framework...");
         event.enqueueWork(ATHandler::alterStaticSources);
         event.enqueueWork(IDFAttributes::changeDefaultAttributes);
-        IDFPacketHandler.init();
+        PacketHandler.init();
         CompatHandler.init(event);
         LOGGER.info("Finished loading Improved Damage Framework!");
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatsScreen.class);
+        MinecraftForge.EVENT_BUS.register(CreateBonfireScreen.class);
+        MinecraftForge.EVENT_BUS.register(new ClientEventsModBus());
         if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(HealthBarReplacer::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(HealthBarReplacer::deleteArmorHud);
         CompatHandler.initClient(event);

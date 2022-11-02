@@ -1,24 +1,25 @@
-package net.cwjn.idf.network;
+package net.cwjn.idf.network.packets.config;
 
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.ResistanceData;
+import net.cwjn.idf.network.IDFPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 
-public class SendServerResistanceJsonMessage {
+public class SendServerResistanceJsonMessage implements IDFPacket {
 
     Map<ResourceLocation, ResistanceData> map;
-    public SendServerResistanceJsonMessage() {}
+
     public SendServerResistanceJsonMessage(Map<ResourceLocation, ResistanceData> map) {
         this.map = map;
     }
+
     public static void encode(SendServerResistanceJsonMessage message, FriendlyByteBuf buffer) { //lol?
         buffer.writeInt(message.map.size());
         for (Map.Entry<ResourceLocation, ResistanceData> entry : message.map.entrySet()) {
@@ -43,6 +44,7 @@ public class SendServerResistanceJsonMessage {
             buffer.writeDouble(data.getGenericMult());
         }
     }
+
     public static SendServerResistanceJsonMessage decode(FriendlyByteBuf buffer) {
         Map<ResourceLocation, ResistanceData> returnMap = new HashMap<>();
         int size = buffer.readInt();
@@ -74,7 +76,6 @@ public class SendServerResistanceJsonMessage {
         ctx.enqueueWork(() -> {
             JSONHandler.updateClientResistanceData(message.map);
         });
-        //JSONHandler.updateClientResistanceData(message.map);
         ctx.setPacketHandled(true);
     }
 }

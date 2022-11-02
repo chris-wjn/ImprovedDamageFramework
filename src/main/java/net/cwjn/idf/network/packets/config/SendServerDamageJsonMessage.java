@@ -1,26 +1,26 @@
-package net.cwjn.idf.network;
+package net.cwjn.idf.network.packets.config;
 
 import net.cwjn.idf.config.json.data.DamageData;
 import net.cwjn.idf.config.json.JSONHandler;
+import net.cwjn.idf.network.IDFPacket;
 import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
 
-public class SendServerDamageJsonMessage {
+public class SendServerDamageJsonMessage implements IDFPacket {
 
     Map<ResourceLocation, DamageData> map;
-    public SendServerDamageJsonMessage() {}
+
     public SendServerDamageJsonMessage(Map<ResourceLocation, DamageData> map) {
         this.map = map;
     }
+
     public static void encode(SendServerDamageJsonMessage message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.map.size());
         for (Map.Entry<ResourceLocation, DamageData> entry : message.map.entrySet()) {
@@ -41,6 +41,7 @@ public class SendServerDamageJsonMessage {
             buffer.writeDouble(data.getCritChance());
         }
     }
+
     public static SendServerDamageJsonMessage decode(FriendlyByteBuf buffer) {
         Map<ResourceLocation, DamageData> returnMap = new HashMap<>();
         int size = buffer.readInt();
@@ -68,7 +69,6 @@ public class SendServerDamageJsonMessage {
         ctx.enqueueWork(() -> {
             JSONHandler.updateClientDamageData(message.map);
         });
-        //JSONHandler.updateClientDamageData(message.map);
         ctx.setPacketHandled(true);
     }
 

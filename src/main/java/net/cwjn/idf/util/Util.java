@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.block.entity.BonfireBlockEntity;
 import net.cwjn.idf.config.json.data.DamageData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -20,6 +22,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.math.BigDecimal;
@@ -204,11 +209,17 @@ public class Util {
 
         return string;
     }
+
     public static void writeString(String string, FriendlyByteBuf buffer) {
         for (int i = 0; i < string.length(); i++) {
             buffer.writeChar(string.charAt(i));
         }
         buffer.writeChar('\0');
+    }
+
+    public static boolean lookingAt(float partialTicks, BonfireBlockEntity be) {
+        HitResult ray = Minecraft.getInstance().player.pick(20, partialTicks, false);
+        return (((BlockHitResult)ray).getBlockPos().equals(be.getBlockPos()));
     }
 
 }

@@ -2,11 +2,11 @@ package net.cwjn.idf.mixin;
 
 import net.cwjn.idf.api.event.ItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.event.ClientEventsForgeBus;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import net.cwjn.idf.event.ClientEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -239,7 +239,7 @@ public abstract class MixinItemStack {
             }
         }
         if (aux || mult) {
-            if (ClientEvents.checkShiftDown()) {
+            if (ClientEventsForgeBus.checkShiftDown()) {
                 if (aux) {
                     list.add(Util.withColor(Util.translationComponent("idf.auxiliary.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
                     appendAuxiliaryComponent(player, list, mappedOperation0);

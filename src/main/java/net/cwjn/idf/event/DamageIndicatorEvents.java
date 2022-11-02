@@ -3,8 +3,8 @@ package net.cwjn.idf.event;
 import com.mojang.math.Vector3f;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
-import net.cwjn.idf.network.DisplayDamageIndicatorsMessage;
-import net.cwjn.idf.network.IDFPacketHandler;
+import net.cwjn.idf.network.packets.DisplayDamageIndicatorsMessage;
+import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -47,37 +47,37 @@ public class DamageIndicatorEvents {
             locs.add(random.nextFloat(1.333334f, 2.0f));
             if (event.getFire() > 0) {
                 int loc = random.nextInt(locs.size());
-                IDFPacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
+                PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
                         new DisplayDamageIndicatorsMessage(x, y, z, event.getFire(), locs.get(loc), Color.FIRE_COLOUR.getColor(), id));
                 locs.remove(loc);
             }
             if (event.getWater() > 0) {
                 int loc = random.nextInt(locs.size());
-                IDFPacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
+                PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
                         new DisplayDamageIndicatorsMessage(x, y, z, event.getWater(), locs.get(loc), Color.WATER_COLOUR.getColor(), id));
                 locs.remove(loc);
             }
             if (event.getLightning() > 0) {
                 int loc = random.nextInt(locs.size());
-                IDFPacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
+                PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
                         new DisplayDamageIndicatorsMessage(x, y, z, event.getLightning(), locs.get(loc),  Color.LIGHTNING_COLOUR.getColor(), id));
                 locs.remove(loc);
             }
             if (event.getMagic() > 0) {
                 int loc = random.nextInt(locs.size());
-                IDFPacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
+                PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
                         new DisplayDamageIndicatorsMessage(x, y, z, event.getMagic(), locs.get(loc),  Color.MAGIC_COLOUR.getColor(), id));
                 locs.remove(loc);
             }
             if (event.getDark() > 0) {
                 int loc = random.nextInt(locs.size());
-                IDFPacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
+                PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
                         new DisplayDamageIndicatorsMessage(x, y, z, event.getDark(), locs.get(loc),  Color.DARK_COLOUR.getColor(), id));
                 locs.remove(loc);
             }
             if (event.getPhysical() > 0) {
                 int loc = random.nextInt(locs.size());
-                IDFPacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
+                PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),
                         new DisplayDamageIndicatorsMessage(x, y, z, event.getPhysical(), locs.get(loc), Color.PHYSICAL_COLOUR.getColor(), id));
             }
         }

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "idf:block/bonfire_base"
+    },
+    "facing=south": {
+      "model": "idf:block/bonfire_base",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "idf:block/bonfire_base",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "idf:block/bonfire_base",
+      "y": 90
+    }
+  }
+}

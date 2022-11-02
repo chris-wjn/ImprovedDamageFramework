@@ -44,6 +44,7 @@ public class StatsScreen extends Screen {
 
     private static final DecimalFormat df = new DecimalFormat("##.#");
     private static final Style indicators = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
+    private final boolean atBonfire;
     private int w;
     private int h;
     private Page page = MAIN;
@@ -64,8 +65,9 @@ public class StatsScreen extends Screen {
         healthFormat.setMinimumIntegerDigits(2);
     }
 
-    public StatsScreen() {
+    public StatsScreen(boolean b) {
         super(translationComponent("idf.stats_screen"));
+        atBonfire = b;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class StatsScreen extends Screen {
         w = (minecraft.getWindow().getGuiScaledWidth() - 384)/2;
         h = (minecraft.getWindow().getGuiScaledHeight() - 512)/2 - 7;
         attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
-        statsButton = addRenderableWidget(new StatsButton(w+78, h+137, (f) -> this.mainToStats()));
+        if (atBonfire) statsButton = addRenderableWidget(new StatsButton(w+78, h+137, (f) -> this.mainToStats()));
         backButton = addRenderableWidget(new BackButton(w+30, h+462, (f) -> this.attributesToMain()));
         //122, 443
         updateButtonVisibility();
@@ -85,17 +87,17 @@ public class StatsScreen extends Screen {
     private void updateButtonVisibility() {
         if (page == PAGE_ATTRIBUTES) {
             attributeButton.visible = false;
-            statsButton.visible = false;
+            if (atBonfire) statsButton.visible = false;
             backButton.visible = true;
         }
         else if (page == PAGE_STATS) {
-            statsButton.visible = false;
+            if (atBonfire) statsButton.visible = false;
             attributeButton.visible = false;
             backButton.visible = true;
         }
         else {
             attributeButton.visible = true;
-            statsButton.visible = true;
+            if (atBonfire) statsButton.visible = true;
             backButton.visible = false;
         }
     }
@@ -193,7 +195,7 @@ public class StatsScreen extends Screen {
 
     @Override
     public boolean isPauseScreen() {
-        return true;
+        return false;
     }
 
     @Override

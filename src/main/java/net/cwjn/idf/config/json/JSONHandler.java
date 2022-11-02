@@ -2,10 +2,7 @@ package net.cwjn.idf.config.json;
 
 import com.google.gson.Gson;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.api.IDFArmourItem;
 import net.cwjn.idf.api.IDFDamagingItem;
-import net.cwjn.idf.api.IDFDiggerItem;
-import net.cwjn.idf.api.IDFSwordItem;
 import net.cwjn.idf.mixin.equipment.AccessItem;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
@@ -17,9 +14,9 @@ import net.cwjn.idf.mixin.equipment.AccessArmorItem;
 import net.cwjn.idf.mixin.equipment.AccessDiggerItem;
 import net.cwjn.idf.mixin.equipment.AccessSwordItem;
 import net.cwjn.idf.util.WeaponInterface;
-import net.cwjn.idf.network.IDFPacketHandler;
-import net.cwjn.idf.network.SendServerDamageJsonMessage;
-import net.cwjn.idf.network.SendServerResistanceJsonMessage;
+import net.cwjn.idf.network.PacketHandler;
+import net.cwjn.idf.network.packets.config.SendServerDamageJsonMessage;
+import net.cwjn.idf.network.packets.config.SendServerResistanceJsonMessage;
 import com.google.common.reflect.TypeToken;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -186,11 +183,11 @@ public class JSONHandler {
             ImprovedDamageFramework.LOGGER.info("Updated weapon map.");
         }
         if (!resistanceMap.isEmpty()) {
-            IDFPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SendServerResistanceJsonMessage(resistanceMap));
+            PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SendServerResistanceJsonMessage(resistanceMap));
             ImprovedDamageFramework.LOGGER.info("Sending server resistance map to all clients...");
         }
         if (!damageMap.isEmpty()) {
-            IDFPacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SendServerDamageJsonMessage(damageMap));
+            PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SendServerDamageJsonMessage(damageMap));
             ImprovedDamageFramework.LOGGER.info("Sending server damage map to all clients...");
         }
 
@@ -201,11 +198,11 @@ public class JSONHandler {
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
         if (!resistanceMap.isEmpty()) {
-            IDFPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SendServerResistanceJsonMessage(resistanceMap));
+            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SendServerResistanceJsonMessage(resistanceMap));
             ImprovedDamageFramework.LOGGER.info("Sending server resistance data values to player: " + player.getScoreboardName());
         }
         if (!damageMap.isEmpty()) {
-            IDFPacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SendServerDamageJsonMessage(damageMap));
+            PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SendServerDamageJsonMessage(damageMap));
             ImprovedDamageFramework.LOGGER.info("Sending server damage data values to player: " + player.getScoreboardName());
         }
     }
