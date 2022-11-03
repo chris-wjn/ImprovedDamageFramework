@@ -27,7 +27,19 @@ public class MixinPlayer implements RpgPlayer {
     public void setMaxBonfires(int i) {
         maxBonfires = i;
     }
-    public List<UUID> getBonfires()
+    public List<UUID> getBonfires() {
+        return bonfires;
+    }
+    public void addBonfire(UUID id) {
+        bonfires.add(id);
+    }
+    public void removeBonfire(UUID id) {
+        if (bonfires.contains(id)) {
+            bonfires.remove(id);
+        } else {
+            throw new IllegalStateException("tried to remove a player's bonfire, but the player doesn't own it!");
+        }
+    }
     public int getLevel() {
         return level;
     }

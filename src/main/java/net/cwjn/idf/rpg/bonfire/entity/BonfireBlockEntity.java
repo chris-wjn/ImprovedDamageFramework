@@ -6,17 +6,22 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class BonfireBlockEntity extends BlockEntity {
 
     private boolean active = false;
     private String name;
+    private UUID id, owner;
 
     public BonfireBlockEntity(BlockPos pos, BlockState state) {
         super(BonfireEntityRegistry.BONFIRE_BASE.get(), pos, state);
+        id = UUID.randomUUID();
     }
 
     public boolean isActive() {
@@ -26,6 +31,18 @@ public class BonfireBlockEntity extends BlockEntity {
     public void setActive(boolean b) {
         active = b;
         setChanged();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
     }
 
     public String getName() {
@@ -41,12 +58,16 @@ public class BonfireBlockEntity extends BlockEntity {
         super.load(tag);
         active = tag.getBoolean("active");
         name = tag.getString("name");
+        id = tag.getUUID("id");
+        owner = tag.getUUID("owner");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         tag.putBoolean("active", active);
         tag.putString("name", getName());
+        tag.putUUID("id", id);
+        tag.putUUID("id", owner);
         super.saveAdditional(tag);
     }
 

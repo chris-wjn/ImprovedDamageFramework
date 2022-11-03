@@ -60,7 +60,7 @@ public class CreateBonfireScreen extends Screen {
     protected void confirmAction() {
         if (!nameEditor.getValue().isEmpty()) {
             Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, be.getBlockPos(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.BLOCKS, 1, 1);
-            PacketHandler.playerToServer(new ActivateBonfireMessage(nameEditor.getValue(), be.getBlockPos().getX(), be.getBlockPos().getY(), be.getBlockPos().getZ()));
+            PacketHandler.playerToServer(new ActivateBonfireMessage(Minecraft.getInstance().player.getUUID(), nameEditor.getValue(), be.getBlockPos().getX(), be.getBlockPos().getY(), be.getBlockPos().getZ()));
             minecraft.setScreen(null);
         }
         updateButtons();

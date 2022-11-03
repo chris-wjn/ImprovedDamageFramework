@@ -30,7 +30,9 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +41,8 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final Property<Boolean> ACTIVE = BooleanProperty.create("active");
-    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 2, 16);
+    private static final VoxelShape BASE_SHAPE = Block.box(0, 0, 0, 16, 2, 16);
+    private static final VoxelShape SWORD_SHAPE = Block.box(5, 2, 5, 11, 20, 11);
 
     protected BonfireBlock(Properties properties) {
         super(properties.lightLevel(BonfireBlock::getLightValue));
@@ -74,8 +77,20 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public @NotNull VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_) {
-        return SHAPE;
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
+        if (level.getBlockEntity(pos) != null) {
+            if (level.getBlockEntity(pos) instanceof BonfireBlockEntity) {
+                if (((BonfireBlockEntity)level.getBlockEntity(pos)).isActive()) {
+                    return Shapes.join(BASE_SHAPE, SWORD_SHAPE, BooleanOp.OR);
+                }
+            }
+        }
+        return BASE_SHAPE;
+    }
+
+    @Override
+    public boolean hasDynamicShape() {
+        return true;
     }
 
     @SuppressWarnings("deprecation")
@@ -95,7 +110,6 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (level.getBlockEntity(pos) instanceof BonfireBlockEntity be) {
             RpgPlayer rpgPlayer = (RpgPlayer)player;
-            if (rpgPlayer.get)
             if (be.isActive()) {
                 if (level.isClientSide) {
                     Minecraft.getInstance().setScreen(new StatsScreen(true));
@@ -119,6 +133,31 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
             }
         }
         return super.use(state, level, pos, player, hand, result);
+    }
+
+    @Override
+    public boolean canHarvestBlock(BlockState state, BlockGetter level, BlockPos pos, Player player) {
+        if (level.getBlockEntity(pos) instanceof BonfireBlockEntity be) {
+            return !be.isActive();
+        }
+        return super.canHarvestBlock(state, level, pos, player);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
+        if (newState.getBlock() == Blocks.AIR) {
+            if (!level.isClientSide()) {
+                BonfireBlockEntity be = (BonfireBlockEntity) level.getBlockEntity(pos);
+                if (be != null && be.isActive()) {
+                    if (be.getOwner() != null) {
+                        RpgPlayer rpgPlayer = (RpgPlayer) level.getPlayerByUUID(be.getOwner());
+                        rpgPlayer.removeBonfire(be.getId());
+                    }
+                }
+            }
+        }
+        super.onRemove(state, level, pos, newState, moving);
     }
 
     @Override
