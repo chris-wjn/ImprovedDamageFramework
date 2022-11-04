@@ -1,6 +1,7 @@
 package net.cwjn.idf;
 
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.gui.BonfireScreen;
 import net.cwjn.idf.rpg.RpgModule;
 import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
@@ -44,7 +45,7 @@ public class ImprovedDamageFramework {
         IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
         IDFItems.ITEMS.register(bus);
-        if (CommonConfig.ENABLE_RPG_MODULE.get()) RpgModule.register(bus);
+        RpgModule.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
@@ -62,6 +63,7 @@ public class ImprovedDamageFramework {
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatsScreen.class);
         MinecraftForge.EVENT_BUS.register(CreateBonfireScreen.class);
+        MinecraftForge.EVENT_BUS.register(BonfireScreen.class);
         MinecraftForge.EVENT_BUS.register(new ClientEventsModBus());
         if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(HealthBarReplacer::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(HealthBarReplacer::deleteArmorHud);

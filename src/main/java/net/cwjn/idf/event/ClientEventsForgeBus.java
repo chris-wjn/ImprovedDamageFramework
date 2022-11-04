@@ -1,6 +1,7 @@
 package net.cwjn.idf.event;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.gui.BonfireScreen;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.gui.StatsScreen;
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,8 @@ public class ClientEventsForgeBus {
 
     private static void onInput(Minecraft minecraft, int key, int action) {
         if (Keybinds.openStats.isDown() && minecraft.screen == null) {
-            minecraft.setScreen(new StatsScreen(false));
+            //minecraft.setScreen(new StatsScreen(false));
+            minecraft.setScreen(new BonfireScreen());
         }
     }
 

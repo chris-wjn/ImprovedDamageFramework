@@ -1,6 +1,7 @@
 package net.cwjn.idf.rpg.bonfire;
 
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.gui.BonfireScreen;
 import net.cwjn.idf.gui.CreateBonfireScreen;
 import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.rpg.RpgPlayer;
@@ -112,7 +113,8 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
             RpgPlayer rpgPlayer = (RpgPlayer)player;
             if (be.isActive()) {
                 if (level.isClientSide) {
-                    Minecraft.getInstance().setScreen(new StatsScreen(true));
+                    Minecraft.getInstance().setScreen(new BonfireScreen());
+                    //Minecraft.getInstance().setScreen(new StatsScreen(true));
                 } else {
                     level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
                 }
@@ -170,11 +172,16 @@ public class BonfireBlock extends FallingBlock implements EntityBlock {
                 double d2 = (double)pos.getZ() + 0.5D + random.nextDouble() / 16.0D;
                 double d4 = random.nextDouble() * 0.6D - 0.3D;
                 double d5 = random.nextDouble() * 0.6D - 0.3D;
+                double d00 = (double)pos.getX() + 0.5D + random.nextDouble() * 3.0D / 16.0D;
+                double d01 = (double)pos.getY() + 0.2D;
+                double d02 = (double)pos.getZ() + 0.5D + random.nextDouble() / 16.0D;
+                double d04 = random.nextDouble() * 0.6D - 0.3D;
+                double d05 = random.nextDouble() * 0.6D - 0.3D;
                 if (random.nextDouble() < 0.1D) {
                     level.playLocalSound((double)pos.getX() + 0.5D, pos.getY(), (double)pos.getZ() + 0.5D, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.5F, 1.0F, false);
                 }
-                level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.1D, 0.0D);
-                level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.15D, 0.0D);
+                level.addParticle(ParticleTypes.FLAME, d00 + d05, d01, d02 + d04, 0.0D, 0.05D, 0.0D);
+                level.addParticle(ParticleTypes.FLAME, d00 + d05, d01, d02 + d04, 0.0D, 0.05D, 0.0D);
                 level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.05D, 0.0D);
                 level.addParticle(ParticleTypes.FLAME, d0 + d5, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
             }

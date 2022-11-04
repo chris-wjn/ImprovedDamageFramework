@@ -17,11 +17,10 @@ public class BonfireBlockEntity extends BlockEntity {
 
     private boolean active = false;
     private String name;
-    private UUID id, owner;
+    private UUID id = UUID.randomUUID(), owner;
 
     public BonfireBlockEntity(BlockPos pos, BlockState state) {
         super(BonfireEntityRegistry.BONFIRE_BASE.get(), pos, state);
-        id = UUID.randomUUID();
     }
 
     public boolean isActive() {
@@ -58,16 +57,16 @@ public class BonfireBlockEntity extends BlockEntity {
         super.load(tag);
         active = tag.getBoolean("active");
         name = tag.getString("name");
-        id = tag.getUUID("id");
-        owner = tag.getUUID("owner");
+        id = tag.getUUID("bonfireID");
+        if (owner != null) owner = tag.getUUID("owner");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         tag.putBoolean("active", active);
         tag.putString("name", getName());
-        tag.putUUID("id", id);
-        tag.putUUID("id", owner);
+        tag.putUUID("bonfireID", id);
+        if (owner != null) tag.putUUID("id", owner);
         super.saveAdditional(tag);
     }
 

@@ -121,8 +121,10 @@ public class MixinPlayer implements RpgPlayer {
         saveTag.putInt("RPGWisdom", wisdom);
         saveTag.putInt("RPGFaith", faith);
         saveTag.putInt("maxBonfires", maxBonfires);
-        for (int i = 0; i < maxBonfires; ++i) {
-            saveTag.putUUID("bonfireUUID" + i, bonfires.get(i));
+        if (!bonfires.isEmpty()) {
+            for (int i = 0; i < maxBonfires; ++i) {
+                saveTag.putUUID("bonfireUUID" + i, bonfires.get(i));
+            }
         }
     }
 
@@ -137,8 +139,10 @@ public class MixinPlayer implements RpgPlayer {
         wisdom = saveTag.getInt("RPGWisdom");
         faith = saveTag.getInt("RPGFaith");
         maxBonfires = saveTag.getInt("maxBonfires");
-        for (int i = 0; i < maxBonfires; ++i) {
-            bonfires.add(saveTag.getUUID("bonfireUUID" + i));
+        if (saveTag.contains("bonfireUUID0")) {
+            for (int i = 0; i < maxBonfires; ++i) {
+                bonfires.add(saveTag.getUUID("bonfireUUID" + i));
+            }
         }
     }
 
