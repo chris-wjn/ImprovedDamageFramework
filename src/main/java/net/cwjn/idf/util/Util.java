@@ -12,11 +12,13 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -29,15 +31,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Map;
 import java.util.UUID;
 
+import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 import static net.cwjn.idf.util.UUIDs.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_BASE;
 
 public class Util {
 
     private Util() {throw new IllegalAccessError("Util class");}
-    private static final DecimalFormat attributeFormat = new DecimalFormat("###");
+    private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
+    private static final DecimalFormat attributeFormat = new DecimalFormat("#.##");
+    private static final DecimalFormat hundredFormat = new DecimalFormat("###");
     private static final UUID BASE_ATTACK_DAMAGE_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
     private static final UUID BASE_ATTACK_SPEED_UUID = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
     private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
@@ -68,7 +75,7 @@ public class Util {
     }
 
     public static MutableComponent numericalAttributeComponent(double val) {
-        if (val > 99) return MutableComponent.create(new LiteralContents(attributeFormat.format(val)));
+        if (val > 99) return MutableComponent.create(new LiteralContents(hundredFormat.format(val)));
         BigDecimal d = new BigDecimal(val);
         int integralDigits = d.toBigInteger().toString().length();
         d = d.setScale(2 - integralDigits, RoundingMode.HALF_EVEN);
@@ -214,6 +221,54 @@ public class Util {
             buffer.writeChar(string.charAt(i));
         }
         buffer.writeChar('\0');
+    }
+
+    public static Component getComponentFromAttribute (ItemStack item, Attribute a) {
+        double addition = 0;
+        double base = 0;
+        double total = 0;
+        for (Map.Entry<Attribute, AttributeModifier> entry : item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item)).entries()) {
+            if (entry.getKey() == a) {
+                double val = entry.getValue().getAmount();
+                AttributeModifier.Operation op = entry.getValue().getOperation();
+                if (op == ADDITION) {
+                    addition += val;
+                } else if (op == MULTIPLY_BASE) {
+                    base += val;
+                } else {
+                    total += val;
+                }
+            }
+        }
+        MutableComponent returnComponent = textComponent("");
+        boolean hasAddition = addition != 0, hasBaseMult = base != 0, hasTotalMult = total != 0;
+        if (hasAddition || hasTotalMult || hasBaseMult) returnComponent.append(translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
+        System.out.println("idf.icon." + a.getDescriptionId());
+        if (hasAddition) {
+            if (addition < 0) {
+                returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.RED));
+            } else {
+                returnComponent.append(withColor(textComponent("+"), Color.GREEN));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.GREEN));
+            }
+            returnComponent.append(",   ");
+        }
+        if (hasBaseMult) {
+            if (base < 0) {
+                returnComponent.append(withColor(textComponent("(B × " + attributeFormat.format(addition) + ")"), Color.RED));
+            } else {
+                returnComponent.append(withColor(textComponent("(B × " + attributeFormat.format(addition) + ")"), Color.GREEN));
+            }
+            returnComponent.append(",   ");
+        }
+        if (hasTotalMult) {
+            if (total < 0) {
+                returnComponent.append(withColor(textComponent("(T × " + attributeFormat.format(addition) + ")"), Color.RED));
+            } else {
+                returnComponent.append(withColor(textComponent("(T × " + attributeFormat.format(addition) + ")"), Color.GREEN));
+            }
+        }
+        return returnComponent;
     }
 
     public static boolean lookingAt(float partialTicks, BonfireBlockEntity be) {

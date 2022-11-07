@@ -73,17 +73,8 @@ public class EquipmentInspectScreen extends Screen {
     }
 
     private void drawStrings(PoseStack matrix) {
-        MutableComponent physicalComponent = Component.literal("");
-        physicalComponent.append(translationComponent("idf.icon.physical_attack").withStyle(ICON));
-        physicalComponent.append(numericalAttributeComponent(currentItem.getAttributeModifiers(ATTACK_DAMAGE).forEach(AttributeModifier::getAmount)));
-        Util.drawCenteredString(font, matrix,
-                textComponent("").append(
-                        .append(
-                        .append(
-                                textComponent(" / ").append(
-                                        translationComponent("idf.icon.physical_resistance").withStyle(ICON).append(
-                                                numericalAttributeComponent(armourFormula(player.getAttributeValue(Attributes.ARMOR))))
-                )))), (float)w/2 - 50, (float)h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_DAMAGE), w/2 - boxWidth/2  - 60, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, FIRE_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 50, 0xffffff);
     }
 
     @Override
