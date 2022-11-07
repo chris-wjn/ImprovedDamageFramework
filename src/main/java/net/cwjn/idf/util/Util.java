@@ -34,7 +34,7 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.UUID;
 
-import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
+import static net.cwjn.idf.ImprovedDamageFramework.*;
 import static net.cwjn.idf.util.UUIDs.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_BASE;
@@ -240,32 +240,38 @@ public class Util {
                 }
             }
         }
-        MutableComponent returnComponent = textComponent("");
+        MutableComponent returnComponent = textComponent("").withStyle(Style.EMPTY.withFont(FONT_INDICATORS));
         boolean hasAddition = addition != 0, hasBaseMult = base != 0, hasTotalMult = total != 0;
         if (hasAddition || hasTotalMult || hasBaseMult) returnComponent.append(translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
-        System.out.println("idf.icon." + a.getDescriptionId());
         if (hasAddition) {
             if (addition < 0) {
                 returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.RED));
             } else {
-                returnComponent.append(withColor(textComponent("+"), Color.GREEN));
-                returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.GREEN));
+                returnComponent.append(withColor(textComponent("+" + attributeFormat.format(addition)), Color.GREEN));
             }
-            returnComponent.append(",   ");
+            if (hasBaseMult || hasTotalMult) returnComponent.append(",   ");
         }
         if (hasBaseMult) {
             if (base < 0) {
-                returnComponent.append(withColor(textComponent("(B × " + attributeFormat.format(addition) + ")"), Color.RED));
+                returnComponent.append(withColor(textComponent("(B × "), Color.RED).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.RED));
+                returnComponent.append(withColor(textComponent(")"), Color.RED).withStyle(Style.EMPTY));
             } else {
-                returnComponent.append(withColor(textComponent("(B × " + attributeFormat.format(addition) + ")"), Color.GREEN));
+                returnComponent.append(withColor(textComponent("(B × "), Color.GREEN).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.GREEN));
+                returnComponent.append(withColor(textComponent(")"), Color.GREEN).withStyle(Style.EMPTY));
             }
-            returnComponent.append(",   ");
+            if (hasTotalMult) returnComponent.append(",   ");
         }
         if (hasTotalMult) {
             if (total < 0) {
-                returnComponent.append(withColor(textComponent("(T × " + attributeFormat.format(addition) + ")"), Color.RED));
+                returnComponent.append(withColor(textComponent("(T × "), Color.RED).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.RED));
+                returnComponent.append(withColor(textComponent(")"), Color.RED).withStyle(Style.EMPTY));
             } else {
-                returnComponent.append(withColor(textComponent("(T × " + attributeFormat.format(addition) + ")"), Color.GREEN));
+                returnComponent.append(withColor(textComponent("(T × "), Color.GREEN).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.GREEN));
+                returnComponent.append(withColor(textComponent(")"), Color.GREEN).withStyle(Style.EMPTY));
             }
         }
         return returnComponent;

@@ -1,0 +1,9 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:danmark.otf",
+      "oversample": 8
+    }
+  ]
+}

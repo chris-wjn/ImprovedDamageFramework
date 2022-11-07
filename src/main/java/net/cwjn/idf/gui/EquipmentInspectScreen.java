@@ -73,8 +73,12 @@ public class EquipmentInspectScreen extends Screen {
     }
 
     private void drawStrings(PoseStack matrix) {
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_DAMAGE), w/2 - boxWidth/2  - 60, h/2, 0xffffff);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, FIRE_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 50, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_DAMAGE), w/2 - boxWidth/2  - 70, h/2 + 50, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, FIRE_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 100, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, WATER_DAMAGE.get()), w/2 - boxWidth/2 - 60, h/2 + 100, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, LIGHTNING_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 150, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, MAGIC_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 200, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, DARK_DAMAGE.get()), w/2 - boxWidth/2 - 60, h/2 + 250, 0xffffff);
     }
 
     @Override
