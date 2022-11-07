@@ -39,12 +39,12 @@ public class DamageIndicatorEvents {
             double y = target.getEyeY();
             double z = target.getZ();
             List<Float> locs = new ArrayList<>();
-            locs.add(random.nextFloat(-2.0f, -1.333334f));
-            locs.add(random.nextFloat(-1.333334f, -0.666667f));
-            locs.add(random.nextFloat(-0.666667f, 0));
-            locs.add(random.nextFloat(0, 0.666667f));
-            locs.add(random.nextFloat(0.666667f, 1.333334f));
-            locs.add(random.nextFloat(1.333334f, 2.0f));
+            locs.add(random.nextFloat(-1.0f, -0.6666667f));
+            locs.add(random.nextFloat(-0.6666667f, -0.333333f));
+            locs.add(random.nextFloat(-0.333333f, 0));
+            locs.add(random.nextFloat(0, 0.333333f));
+            locs.add(random.nextFloat(0.333333f, 0.6666667f));
+            locs.add(random.nextFloat(0.6666667f, 1.0f));
             if (event.getFire() > 0) {
                 int loc = random.nextInt(locs.size());
                 PacketHandler.INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(target.getX(), target.getY(), target.getZ(), 30d, target.getCommandSenderWorld().dimension())),

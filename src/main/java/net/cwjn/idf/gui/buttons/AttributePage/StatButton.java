@@ -1,4 +1,4 @@
-package net.cwjn.idf.gui;
+package net.cwjn.idf.gui.buttons.AttributePage;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;

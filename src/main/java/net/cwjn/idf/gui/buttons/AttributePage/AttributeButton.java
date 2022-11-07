@@ -1,7 +1,6 @@
-package net.cwjn.idf.gui.buttons;
+package net.cwjn.idf.gui.buttons.AttributePage;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.gui.StatButton;
 import net.minecraft.resources.ResourceLocation;
 
 public class AttributeButton extends StatButton {

@@ -221,29 +221,48 @@ public class Util {
         return (((BlockHitResult)ray).getBlockPos().equals(be.getBlockPos()));
     }
 
-    public static ResourceLocation[] openBookAnim() {
-        ResourceLocation[] returnRL = new ResourceLocation[8];
+    public static ResourceLocation[] flipLeftAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[7];
+        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/0.png");
+        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/1.png");
+        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/2.png");
+        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/3.png");
+        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/4.png");
+        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/5.png");
+        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/6.png");
+        return returnRL;
+    }
+
+    public static ResourceLocation[] flipRightAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[7];
+        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/0.png");
+        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/1.png");
+        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/2.png");
+        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/3.png");
+        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/4.png");
+        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/5.png");
+        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/6.png");
+        return returnRL;
+    }
+
+    public static ResourceLocation[] openAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[5];
         returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/0.png");
         returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/1.png");
         returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/2.png");
         returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/3.png");
         returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/4.png");
-        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/5.png");
-        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/6.png");
-        returnRL[7] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/7.png");
         return returnRL;
     }
 
-    public static ResourceLocation[] closeBookAnim() {
-        ResourceLocation[] returnRL = new ResourceLocation[8];
+    public static ResourceLocation[] closeAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[5];
         returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/0.png");
         returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/1.png");
         returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/2.png");
         returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/3.png");
         returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/4.png");
-        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/5.png");
-        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/6.png");
-        returnRL[7] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/7.png");
         return returnRL;
     }
+
 }

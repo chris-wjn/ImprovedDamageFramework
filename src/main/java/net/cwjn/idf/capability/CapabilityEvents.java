@@ -71,7 +71,6 @@ public class CapabilityEvents {
         ItemStack item = event.getItem();
         LivingEntity entity = event.getEntity();
         if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
-            System.out.println("Starting item use");
             entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
                 h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
                 h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));

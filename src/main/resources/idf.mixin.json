@@ -9,7 +9,6 @@
     "MixinCreeper",
     "MixinDamageSource",
     "MixinEnchantment",
-    "MixinItemStack",
     "MixinLivingEntity",
     "MixinPlayer",
     "damage.MixinAxolotl",

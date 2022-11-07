@@ -1,7 +1,7 @@
 package net.cwjn.idf.rpg.bonfire.entity;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.rpg.bonfire.BonfireBlockRegistry;
+import net.cwjn.idf.rpg.bonfire.block.BonfireBlockRegistry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

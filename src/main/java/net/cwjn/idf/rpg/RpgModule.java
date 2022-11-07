@@ -1,6 +1,6 @@
 package net.cwjn.idf.rpg;
 
-import net.cwjn.idf.rpg.bonfire.BonfireBlockRegistry;
+import net.cwjn.idf.rpg.bonfire.block.BonfireBlockRegistry;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireEntityRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
 

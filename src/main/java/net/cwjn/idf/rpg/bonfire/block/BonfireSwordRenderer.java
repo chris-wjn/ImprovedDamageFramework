@@ -1,4 +1,4 @@
-package net.cwjn.idf.rpg.bonfire;
+package net.cwjn.idf.rpg.bonfire.block;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -48,7 +48,7 @@ public class BonfireSwordRenderer implements BlockEntityRenderer<BonfireBlockEnt
 
     private void renderName(BonfireBlockEntity be, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int light) {
         if (Util.lookingAt(partialTicks, be)) {
-            float f = (float) (be.getBlockState().getCollisionShape(Minecraft.getInstance().level, be.getBlockPos()).max(Direction.Axis.Y) + 1.5F);
+            float f = (float) (be.getBlockState().getCollisionShape(Minecraft.getInstance().level, be.getBlockPos()).max(Direction.Axis.Y) + 0.5F);
             matrix.pushPose();
             matrix.translate(0.5D, f, 0.5D);
             matrix.mulPose(context.getBlockEntityRenderDispatcher().camera.rotation());

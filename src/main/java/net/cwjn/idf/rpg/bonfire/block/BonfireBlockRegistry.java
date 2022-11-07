@@ -1,4 +1,4 @@
-package net.cwjn.idf.rpg.bonfire;
+package net.cwjn.idf.rpg.bonfire.block;
 
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.item.IDFItems;

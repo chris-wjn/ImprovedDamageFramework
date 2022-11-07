@@ -1,6 +1,6 @@
 package net.cwjn.idf.network;
 
-import net.cwjn.idf.rpg.bonfire.BonfireBlock;
+import net.cwjn.idf.rpg.bonfire.block.BonfireBlock;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

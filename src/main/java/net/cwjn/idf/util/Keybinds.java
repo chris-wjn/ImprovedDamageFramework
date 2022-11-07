@@ -15,11 +15,14 @@ import java.awt.event.KeyEvent;
 public class Keybinds {
 
     public static KeyMapping openStats;
+    public static KeyMapping inspectItem;
 
     @SubscribeEvent
     public static void registerKeyBinding(final RegisterKeyMappingsEvent event) {
         openStats = create("open_stats", KeyEvent.VK_O);
+        inspectItem = create("inspect_item", KeyEvent.VK_I);
         event.register(openStats);
+        event.register(inspectItem);
     }
 
     private static KeyMapping create(String name, int key) {

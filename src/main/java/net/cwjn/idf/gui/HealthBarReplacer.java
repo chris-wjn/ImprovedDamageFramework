@@ -23,12 +23,8 @@ import java.text.DecimalFormat;
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class HealthBarReplacer {
 
-    private static final ResourceLocation HEALTH_BAR = new ResourceLocation(
-            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthbar.png");
-    private static final ResourceLocation HEALTH_FILL = new ResourceLocation(
-            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthfill.png");
     private static final ResourceLocation HEALTH_GUI = new ResourceLocation(
-            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthgui.png");
+            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthbar/healthgui.png");
     private static DecimalFormat healthFormat = new DecimalFormat();
     static {
         healthFormat.setMinimumFractionDigits(1);
@@ -62,7 +58,6 @@ public class HealthBarReplacer {
         float absorptionPercent = Mth.clamp(absorption/maxHealth, 0.0f, 1.0f);
         float healthPercent = Mth.clamp(health/maxHealth, 0.0f, 1.0f);
         int xBar = (client.getWindow().getGuiScaledWidth()) / 2 - 91;
-        //int xText = ((client.getWindow().getGuiScaledWidth() / 2 - 9) + xBar) / 2;
         int y = client.getWindow().getGuiScaledHeight() - 40;
         matrix.pushPose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -76,8 +71,6 @@ public class HealthBarReplacer {
         RenderSystem.disableBlend();
         matrix.popPose();
         matrix.pushPose();
-        //MutableComponent comp = Util.textComponent(healthFormat.format(health) + "/" + healthFormat.format(maxHealth));
-        //client.font.draw(matrix, comp, (xText - (float) client.font.width(comp) / 2), y, 0xffffff);
         matrix.popPose();
     }
 

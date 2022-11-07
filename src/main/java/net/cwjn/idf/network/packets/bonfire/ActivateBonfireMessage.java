@@ -1,14 +1,12 @@
 package net.cwjn.idf.network.packets.bonfire;
 
 import net.cwjn.idf.rpg.RpgPlayer;
-import net.cwjn.idf.rpg.bonfire.BonfireBlock;
+import net.cwjn.idf.rpg.bonfire.block.BonfireBlock;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.cwjn.idf.network.IDFPacket;
 import net.cwjn.idf.util.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 

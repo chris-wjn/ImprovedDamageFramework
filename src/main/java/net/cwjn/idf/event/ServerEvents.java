@@ -1,17 +1,12 @@
 package net.cwjn.idf.event;
 
-import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
-import net.cwjn.idf.api.event.ItemStackCreatedEvent;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.UpdateJsonFilesCommand;
 import net.cwjn.idf.compat.TooltipsCompat;
-import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.DamageData;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,9 +16,7 @@ import net.minecraft.world.item.*;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
