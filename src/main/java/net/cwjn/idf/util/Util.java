@@ -223,7 +223,7 @@ public class Util {
         buffer.writeChar('\0');
     }
 
-    public static Component getComponentFromAttribute (ItemStack item, Attribute a) {
+    public static MutableComponent getComponentFromAttribute (ItemStack item, Attribute a) {
         double addition = 0;
         double base = 0;
         double total = 0;

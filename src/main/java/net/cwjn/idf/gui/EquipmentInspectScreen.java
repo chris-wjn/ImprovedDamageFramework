@@ -9,20 +9,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import static net.cwjn.idf.attribute.IDFAttributes.*;
-import static net.cwjn.idf.damage.DamageHandler.armourFormula;
-import static net.cwjn.idf.damage.DamageHandler.damageFormula;
-import static net.cwjn.idf.gui.StatsScreen.Page.*;
-import static net.cwjn.idf.util.Color.*;
-import static net.cwjn.idf.util.Util.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 import java.awt.event.KeyEvent;
@@ -69,16 +60,48 @@ public class EquipmentInspectScreen extends Screen {
         itemRenderer.renderAndDecorateItem(currentItem, w/2 - boxWidth/2 - 27, h/2 - boxHeight/2 + 41);
         itemRenderer.renderAndDecorateItem(hoveredItem, w/2 + 107, h/2 - boxHeight/2 + 41);
         itemRenderer.blitOffset = 0.0F;
-        drawStrings(matrix);
+        drawCurrentItemStrings(matrix);
     }
 
-    private void drawStrings(PoseStack matrix) {
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_DAMAGE), w/2 - boxWidth/2  - 70, h/2 + 50, 0xffffff);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, FIRE_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 100, 0xffffff);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, WATER_DAMAGE.get()), w/2 - boxWidth/2 - 60, h/2 + 100, 0xffffff);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, LIGHTNING_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 150, 0xffffff);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, MAGIC_DAMAGE.get()), w/2 - boxWidth/2  - 60, h/2 + 200, 0xffffff);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, DARK_DAMAGE.get()), w/2 - boxWidth/2 - 60, h/2 + 250, 0xffffff);
+    private void drawCurrentItemStrings(PoseStack matrix) {
+        // NAME
+        Util.drawCenteredString(font, matrix, currentItem.getDisplayName(), w/2 - boxWidth/2, h/2, 0xffffff);
+        // DAMAGE/RESISTANCES
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_DAMAGE).
+                append(Util.getComponentFromAttribute(currentItem, ARMOR)), w/2 - boxWidth/2  - 70, h/2 + 50, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, FIRE_DAMAGE.get()).
+                append(Util.getComponentFromAttribute(currentItem, FIRE_RESISTANCE.get())), w/2 - boxWidth/2  - 60, h/2 + 100, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, WATER_DAMAGE.get()).
+                append(Util.getComponentFromAttribute(currentItem, WATER_RESISTANCE.get())), w/2 - boxWidth/2 - 60, h/2 + 100, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, LIGHTNING_DAMAGE.get()).
+                append(Util.getComponentFromAttribute(currentItem, LIGHTNING_RESISTANCE.get())), w/2 - boxWidth/2  - 60, h/2 + 150, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, MAGIC_DAMAGE.get()).
+                append(Util.getComponentFromAttribute(currentItem, MAGIC_RESISTANCE.get())), w/2 - boxWidth/2  - 60, h/2 + 200, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, DARK_DAMAGE.get()).
+                append(Util.getComponentFromAttribute(currentItem, DARK_RESISTANCE.get())), w/2 - boxWidth/2 - 60, h/2 + 250, 0xffffff);
+        // DAMAGE CLASS MULTIPLIERS
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, STRIKE_MULT.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, PIERCE_MULT.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, SLASH_MULT.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, CRUSH_MULT.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, GENERIC_MULT.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        // OFFENSIVE AUXILIARY
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, LIFESTEAL.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, PENETRATING.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, CRIT_CHANCE.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_KNOCKBACK), w/2 - boxWidth/2, h/2, 0xffffff);
+        // DEFENSIVE AUXILIARY
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, EVASION.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, MAX_HEALTH), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, MOVEMENT_SPEED), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, KNOCKBACK_RESISTANCE), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, LUCK), w/2 - boxWidth/2, h/2, 0xffffff);
+        // PRIMARY ATTRIBUTES
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, WEIGHT.get()), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_SPEED), w/2 - boxWidth/2, h/2, 0xffffff);
+        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ARMOR_TOUGHNESS), w/2 - boxWidth/2, h/2, 0xffffff);
+        if (currentItem.getTag().contains("idf.damage_class")) Util.drawCenteredString(font, matrix, Util.textComponent(currentItem.getTag().getString("idf.damage_class")), w/2 - boxWidth/2, h/2, 0xffffff);
+        else Util.drawCenteredString(font, matrix, Util.textComponent("N/A"), w/2 - boxWidth/2, h/2, 0xffffff);
     }
 
     @Override
