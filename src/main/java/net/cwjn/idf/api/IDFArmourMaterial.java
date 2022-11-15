@@ -3,9 +3,12 @@ package net.cwjn.idf.api;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class IDFArmourMaterial implements ArmorMaterial {
@@ -13,33 +16,51 @@ public class IDFArmourMaterial implements ArmorMaterial {
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
     private final String name;
     private final int durabilityMultiplier;
-    private final int[] slotProtections;
-    private final double[] fire, water, lightning, magic, dark, maxhp, movespeed, luck, evasion, strike, pierce, slash, crush, generic;
+    private final double[] physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, lifesteal,
+            armourPenetration, knockback, criticalChance, force, attackSpeed, defense,
+            physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance,
+            maxHP, movespeed, luck, evasion,
+            strike, pierce, slash, crush, generic;
+    private final Map<Attribute, AttributeModifier> bonusAttributes;
     private final int enchantmentValue;
     private final SoundEvent sound;
-    private final float toughness;
     private final float knockbackResistance;
     private final LazyLoadedValue<Ingredient> repairIngredient;
 
-    public IDFArmourMaterial(String name, int durabilityMult, int[] armourPerSlot,
+    public IDFArmourMaterial(String name, int durabilityMult, double[] physicalDamage, double[] fireDamage, double[] waterDamage, double[] lightningDamage,
+                             double[] magicDamage, double[] darkDamage, double[] lifesteal, double[] armourPenetration, double[] knockback, double[] criticalChance,
+                             double[] force, double[] attackSpeed, double[] defense, double[] physicalResistance,
                              double[] f, double[] w, double[] l, double[] m, double[] d,
                              double[] hp, double[] ms, double[] luck, double[] evasion,
                              double[] str, double[] prc, double[] sls, double[] crs, double[] gen,
-                             int enchantability, SoundEvent equipSound, float toughness, float KBR, Supplier<Ingredient> repairIngredient) {
+                             Map<Attribute, AttributeModifier> bonusAttributes, int enchantability, SoundEvent equipSound, float KBR, Supplier<Ingredient> repairIngredient) {
         this.name = name;
         this.durabilityMultiplier = durabilityMult;
-        this.slotProtections = armourPerSlot;
+        this.physicalDamage = physicalDamage;
+        this.fireDamage = fireDamage;
+        this.waterDamage = waterDamage;
+        this.lightningDamage = lightningDamage;
+        this.magicDamage = magicDamage;
+        this.darkDamage = darkDamage;
+        this.lifesteal = lifesteal;
+        this.armourPenetration = armourPenetration;
+        this.knockback = knockback;
+        this.criticalChance = criticalChance;
+        this.force = force;
+        this.attackSpeed = attackSpeed;
+        this.defense = defense;
+        this.physicalResistance = physicalResistance;
+        this.bonusAttributes = bonusAttributes;
         this.enchantmentValue = enchantability;
         this.sound = equipSound;
-        this.toughness = toughness;
         this.knockbackResistance = KBR;
         this.repairIngredient = new LazyLoadedValue<>(repairIngredient);
-        fire = f;
-        water = w;
-        lightning = l;
-        magic = m;
-        dark = d;
-        maxhp = hp;
+        fireResistance = f;
+        waterResistance = w;
+        lightningResistance = l;
+        magicResistance = m;
+        darkResistance = d;
+        maxHP = hp;
         movespeed = ms;
         this.luck = luck;
         this.evasion = evasion;
@@ -54,8 +75,67 @@ public class IDFArmourMaterial implements ArmorMaterial {
         return HEALTH_PER_SLOT[slot.getIndex()] * this.durabilityMultiplier;
     }
 
-    public int getDefenseForSlot(EquipmentSlot p_40487_) {
-        return this.slotProtections[p_40487_.getIndex()];
+    /** @deprecated
+     * use getPhysicalResistanceForSlot and getRealDefenseForSlot*/
+    @Deprecated
+    public int getDefenseForSlot(EquipmentSlot slot) {
+        return (int)this.physicalResistance[slot.getIndex()];
+    }
+
+    public double getPhysicalResistanceForSlot(EquipmentSlot slot) {
+        return this.physicalResistance[slot.getIndex()];
+    }
+
+    public double getRealDefenseForSlot(EquipmentSlot slot) {
+        return this.defense[slot.getIndex()];
+    }
+
+    public double getPhysicalDamage(EquipmentSlot slot) {
+        return physicalDamage[slot.getIndex()];
+    }
+
+    public double getFireDamage(EquipmentSlot slot) {
+        return fireDamage[slot.getIndex()];
+    }
+
+    public double getWaterDamage(EquipmentSlot slot) {
+        return waterDamage[slot.getIndex()];
+    }
+
+    public double getLightningDamage(EquipmentSlot slot) {
+        return lightningDamage[slot.getIndex()];
+    }
+
+    public double getMagicDamage(EquipmentSlot slot) {
+        return magicDamage[slot.getIndex()];
+    }
+
+    public double getDarkDamage(EquipmentSlot slot) {
+        return darkDamage[slot.getIndex()];
+    }
+
+    public double getLifesteal(EquipmentSlot slot) {
+        return lifesteal[slot.getIndex()];
+    }
+
+    public double getArmourPenetration(EquipmentSlot slot) {
+        return armourPenetration[slot.getIndex()];
+    }
+
+    public double getKnockback(EquipmentSlot slot) {
+        return knockback[slot.getIndex()];
+    }
+
+    public double getCriticalChance(EquipmentSlot slot) {
+        return criticalChance[slot.getIndex()];
+    }
+
+    public double getForce(EquipmentSlot slot) {
+        return force[slot.getIndex()];
+    }
+
+    public double getAttackSpeed(EquipmentSlot slot) {
+        return attackSpeed[slot.getIndex()];
     }
 
     public int getEnchantmentValue() {
@@ -75,7 +155,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
     }
 
     public float getToughness() {
-        return this.toughness;
+        return (float) defense[0];
     }
 
     public float getKnockbackResistance() {
@@ -83,27 +163,27 @@ public class IDFArmourMaterial implements ArmorMaterial {
     }
 
     public double getFireResForSlot(EquipmentSlot slot) {
-        return this.fire[slot.getIndex()];
+        return this.fireResistance[slot.getIndex()];
     }
 
     public double getWaterResForSlot(EquipmentSlot slot) {
-        return this.water[slot.getIndex()];
+        return this.waterResistance[slot.getIndex()];
     }
 
     public double getLightningResForSlot(EquipmentSlot slot) {
-        return this.lightning[slot.getIndex()];
+        return this.lightningResistance[slot.getIndex()];
     }
 
     public double getMagicResForSlot(EquipmentSlot slot) {
-        return this.magic[slot.getIndex()];
+        return this.magicResistance[slot.getIndex()];
     }
 
     public double getDarkResForSlot(EquipmentSlot slot) {
-        return this.dark[slot.getIndex()];
+        return this.darkResistance[slot.getIndex()];
     }
 
     public double getMaxHPForSlot(EquipmentSlot slot) {
-        return this.maxhp[slot.getIndex()];
+        return this.maxHP[slot.getIndex()];
     }
 
     public double getMovespeedForSlot(EquipmentSlot slot) {
@@ -138,4 +218,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
         return this.generic[slot.getIndex()];
     }
 
+    public Map<Attribute, AttributeModifier> getBonusAttributes() {
+        return bonusAttributes;
+    }
 }

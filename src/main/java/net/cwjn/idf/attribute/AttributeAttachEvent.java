@@ -40,7 +40,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.EVASION.get(), data.getEvasion());
                 event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.getLifesteal());
                 event.add(entityType, IDFAttributes.PENETRATING.get(), data.getArmourPenetration());
-                event.add(entityType, IDFAttributes.WEIGHT.get(), data.getWeight());
+                event.add(entityType, IDFAttributes.FORCE.get(), data.getForce());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
             } else {
                 //damage types
@@ -65,7 +65,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.EVASION.get());
                 event.add(entityType, IDFAttributes.LIFESTEAL.get());
                 event.add(entityType, IDFAttributes.PENETRATING.get());
-                event.add(entityType, IDFAttributes.WEIGHT.get());
+                event.add(entityType, IDFAttributes.FORCE.get());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
             }
         }

@@ -29,7 +29,7 @@ public class MixinPlayer {
     /**
      * @author cwJn
      * @reason
-     * see MixinPlayer.
+     * see MixinLivingEntity
     */
     @Overwrite
     protected void actuallyHurt(DamageSource damageSource, float damageAmount) {
@@ -86,7 +86,7 @@ public class MixinPlayer {
                 float md = (float)thisPlayer.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
                 float dd = (float)thisPlayer.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
                 float pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
-                float weight = (float)thisPlayer.getAttributeValue(IDFAttributes.WEIGHT.get());
+                float weight = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
                 float damageBonus;
                 if (target instanceof LivingEntity) {
                     damageBonus = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), ((LivingEntity)target).getMobType());
@@ -145,7 +145,7 @@ public class MixinPlayer {
 
 
                     //for some reason we start tracking the target's health here, even though we don't use it yet
-                    //we also check if we have fire aspect, and if we do (any level), we set the target on fire for 1 tick?
+                    //we also check if we have fire aspect, and if we do (any level), we set the target on fire for 1 second?
                     float targetHealth = 0.0F;
                     boolean targetOnFire = false;
                     int fireAspectLevel = EnchantmentHelper.getFireAspect(thisPlayer);

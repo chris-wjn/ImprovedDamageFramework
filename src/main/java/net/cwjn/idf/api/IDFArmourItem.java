@@ -2,7 +2,11 @@ package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
 import net.cwjn.idf.config.json.JSONHandler;
+import net.cwjn.idf.config.json.data.ArmourData;
+import net.cwjn.idf.config.json.data.ItemData;
 import net.cwjn.idf.config.json.data.ResistanceData;
+import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -10,94 +14,55 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 
-public class IDFArmourItem extends ArmorItem {
+import java.util.Map;
 
-    private final double armour, defense, knockbackRes, fireRes, waterRes, lightningRes, magicRes, darkRes, maxHp, movespeed, luck, evasion, strike, pierce, slash, crush, generic;
+public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment{
 
-    public IDFArmourItem(ArmorMaterial material, EquipmentSlot slot, Properties p, double fire, double water, double lightning, double magic, double dark, double phys, double def,
-                         double kbr, double hp, double ms, double lk, double eva, double str, double prc, double sls, double crs, double gen) {
+    private final double armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes;
+
+    public IDFArmourItem(ArmorMaterial material, EquipmentSlot slot, Properties p, int durability, double physicalDamage, double fireDamage,
+                         double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
+                         double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
+                         double attackSpeed, double defense, double physicalResistance, double fireResistance,
+                         double waterResistance, double lightningResistance, double magicResistance,
+                         double darkResistance, double evasion, double maxHP, double movespeed,
+                         double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
+                         double slashMultiplier, double crushMultiplier, double genericMultiplier,
+                         Map<Attribute, AttributeModifier> bonusAttributes) {
         super(material, slot, p);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        ResistanceData data = JSONHandler.getResistanceData(Util.getItemRegistryName(this));
-        if (material instanceof IDFArmourMaterial modMaterial) {
-            if (data != null) {
-                armour = phys + this.getDefense() + data.getArmour();
-                defense = def + this.getToughness() + data.getArmourToughness();
-                knockbackRes = kbr + this.knockbackResistance + data.getKnockbackRes();
-                fireRes = fire + data.getFire() + modMaterial.getFireResForSlot(slot);
-                waterRes = water + data.getWater() + modMaterial.getWaterResForSlot(slot);
-                lightningRes = lightning + data.getLightning() + modMaterial.getLightningResForSlot(slot);
-                magicRes = magic + data.getMagic() + modMaterial.getMagicResForSlot(slot);
-                darkRes = dark + data.getDark() + modMaterial.getDarkResForSlot(slot);
-                maxHp = hp + data.getMaxHP() + modMaterial.getMaxHPForSlot(slot);
-                movespeed = ms + data.getMovespeed() + modMaterial.getMovespeedForSlot(slot);
-                luck = lk + data.getLuck() + modMaterial.getLuckForSlot(slot);
-                evasion = eva + data.getEvasion() + modMaterial.getEvasionForSlot(slot);
-                strike = str + data.getStrikeMult() + modMaterial.getStrikeForSlot(slot);
-                pierce = prc + data.getPierceMult() + modMaterial.getPierceForSlot(slot);
-                slash = sls + data.getSlashMult() + modMaterial.getSlashForSlot(slot);
-                crush = crs + data.getCrushMult() + modMaterial.getCrushForSlot(slot);
-                generic = gen + data.getGenericMult() + modMaterial.getGenericForSlot(slot);
-            } else {
-                armour = phys + this.getDefense();
-                defense = def + this.getToughness();
-                knockbackRes = kbr + this.knockbackResistance;
-                fireRes = fire + modMaterial.getFireResForSlot(slot);
-                waterRes = water + modMaterial.getWaterResForSlot(slot);
-                lightningRes = lightning + modMaterial.getLightningResForSlot(slot);
-                magicRes = magic + modMaterial.getMagicResForSlot(slot);
-                darkRes = dark + modMaterial.getDarkResForSlot(slot);
-                maxHp = hp + modMaterial.getMaxHPForSlot(slot);
-                movespeed = ms + modMaterial.getMovespeedForSlot(slot);
-                luck = lk + modMaterial.getLuckForSlot(slot);
-                evasion = eva + modMaterial.getEvasionForSlot(slot);
-                strike = str + modMaterial.getStrikeForSlot(slot);
-                pierce = prc + modMaterial.getPierceForSlot(slot);
-                slash = sls + modMaterial.getSlashForSlot(slot);
-                crush = crs + modMaterial.getCrushForSlot(slot);
-                generic = gen + modMaterial.getGenericForSlot(slot);
-            }
-        } else {
-            if (data != null) {
-                armour = phys + this.getDefense() + data.getArmour();
-                defense = def + this.getToughness() + data.getArmourToughness();
-                knockbackRes = kbr + this.knockbackResistance + data.getKnockbackRes();
-                fireRes = fire + data.getFire();
-                waterRes = water + data.getWater();
-                lightningRes = lightning + data.getLightning();
-                magicRes = magic + data.getMagic();
-                darkRes = dark + data.getDark();
-                maxHp = hp + data.getMaxHP();
-                movespeed = ms + data.getMovespeed();
-                luck = lk + data.getLuck();
-                evasion = eva + data.getEvasion();
-                strike = str + data.getStrikeMult();
-                pierce = prc + data.getPierceMult();
-                slash = sls + data.getSlashMult();
-                crush = crs + data.getCrushMult();
-                generic = gen + data.getGenericMult();
-            } else {
-                armour = phys + this.getDefense();
-                defense = def + this.getToughness();
-                knockbackRes = kbr + this.knockbackResistance;
-                fireRes = fire;
-                waterRes = water;
-                lightningRes = lightning;
-                magicRes = magic;
-                darkRes = dark;
-                maxHp = hp;
-                movespeed = ms;
-                luck = lk;
-                evasion = eva;
-                strike = str;
-                pierce = prc;
-                slash = sls;
-                crush = crs;
-                generic = gen;
-            }
+        ArmourData data0 = ArmourData.combine(JSONHandler.getArmourData(Util.getItemRegistryName(this)),
+                new ArmourData(durability, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
+                        waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
+                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier));
+        if (material instanceof IDFArmourMaterial idfMaterial) {
+            data0 = ArmourData.combine(data0,
+                    new ArmourData(0, idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
+                            idfMaterial.getLightningDamage(slot), idfMaterial.getMagicDamage(slot), idfMaterial.getDarkDamage(slot), idfMaterial.getLifesteal(slot), idfMaterial.getArmourPenetration(slot),
+                            idfMaterial.getCriticalChance(slot), idfMaterial.getForce(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot), idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot),
+                            idfMaterial.getFireResForSlot(slot), idfMaterial.getWaterResForSlot(slot), idfMaterial.getLightningResForSlot(slot), idfMaterial.getMagicResForSlot(slot), idfMaterial.getDarkResForSlot(slot),
+                            idfMaterial.getEvasionForSlot(slot), idfMaterial.getMaxHPForSlot(slot), idfMaterial.getMovespeedForSlot(slot), idfMaterial.getKnockbackResistance(), idfMaterial.getLuckForSlot(slot), idfMaterial.getStrikeForSlot(slot),
+                            idfMaterial.getPierceForSlot(slot), idfMaterial.getSlashForSlot(slot), idfMaterial.getCrushForSlot(slot), idfMaterial.getGenericForSlot(slot)));
+            bonusAttributes.putAll(idfMaterial.getBonusAttributes());
         }
-        this.defaultModifiers = Util.buildDefaultAttributesArmor(slot, armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes,
-                knockbackRes, maxHp, movespeed, luck, evasion, strike, pierce, slash, crush, generic);
+        armour = data0.physicalResistance();
+        this.defense = data0.defense();
+        fireRes = data0.fireResistance();
+        waterRes = data0.waterResistance();
+        lightningRes = data0.lightningResistance();
+        magicRes = data0.magicResistance();
+        darkRes = data0.darkResistance();
+        ((ItemInterface) this).setMaxDamage(data0.durability() + this.getMaxDamage());
+        ItemData data1 = JSONHandler.getItemData(Util.getItemRegistryName(this), 1, true);
+        ItemData data2 = JSONHandler.getItemData(Util.getItemRegistryName(this), 2, true);
+        Util.buildArmourAttributesOp0(builder, slot, data0, 0, 0, 0);
+        Util.buildArmourAttributesOp1(builder, slot, data1);
+        Util.buildArmourAttributesOp2(builder, slot, data2);
+        for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
+            builder.put(entry.getKey(), entry.getValue());
+        }
+        this.defaultModifiers = builder.build();
     }
 
     @Override

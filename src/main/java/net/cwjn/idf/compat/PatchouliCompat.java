@@ -57,7 +57,7 @@ public class PatchouliCompat implements IComponentProcessor {
             case "lifesteal" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.LIFESTEAL.get())));
             case "attackWeight" ->
-                    IVariable.wrap(multFormat.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.WEIGHT.get())));
+                    IVariable.wrap(multFormat.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FORCE.get())));
             case "evasion" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.EVASION.get())));
             case "knockback" ->

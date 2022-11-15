@@ -67,7 +67,7 @@ public class SendServerDamageJsonMessage implements IDFPacket {
     public static void handle(SendServerDamageJsonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
         ctx.enqueueWork(() -> {
-            JSONHandler.updateClientDamageData(message.map);
+            //JSONHandler.updateClientDamageData(message.map);
         });
         ctx.setPacketHandled(true);
     }

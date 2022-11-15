@@ -10,7 +10,6 @@ import net.cwjn.idf.damage.IDFDamageSource;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.cwjn.idf.damage.IDFIndirectEntityDamageSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -40,7 +39,7 @@ public class MixinDamageSource {
         final float dark = (float) bee.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
         final float pen = (float) bee.getAttributeValue(IDFAttributes.PENETRATING.get());
         final float lifesteal = (float) bee.getAttributeValue(IDFAttributes.LIFESTEAL.get());
-        final float weight = (float) bee.getAttributeValue(IDFAttributes.WEIGHT.get());
+        final float weight = (float) bee.getAttributeValue(IDFAttributes.FORCE.get());
         final float knockback = (float) bee.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         AuxiliaryData data = bee.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
         return new IDFEntityDamageSource("sting", bee, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, data.getDamageClass());
@@ -60,7 +59,7 @@ public class MixinDamageSource {
         final float dark = (float) mob.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
         final float pen = (float) mob.getAttributeValue(IDFAttributes.PENETRATING.get());
         final float lifesteal = (float) mob.getAttributeValue(IDFAttributes.LIFESTEAL.get());
-        final float weight = (float) mob.getAttributeValue(IDFAttributes.WEIGHT.get());
+        final float weight = (float) mob.getAttributeValue(IDFAttributes.FORCE.get());
         final float knockback = (float)mob.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         AuxiliaryData data = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
         return new IDFEntityDamageSource("mob", mob, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, data.getDamageClass());
@@ -91,7 +90,7 @@ public class MixinDamageSource {
             pen = (float) indirectSource.getAttributeValue(IDFAttributes.PENETRATING.get());
             lifesteal = (float) indirectSource.getAttributeValue(IDFAttributes.LIFESTEAL.get());
             knockback = (float) indirectSource.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-            weight = (float) indirectSource.getAttributeValue(IDFAttributes.WEIGHT.get());
+            weight = (float) indirectSource.getAttributeValue(IDFAttributes.FORCE.get());
             AuxiliaryData data = indirectSource.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
             damageClass = data.getDamageClass();
         }

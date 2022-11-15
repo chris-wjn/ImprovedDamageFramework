@@ -1,81 +1,78 @@
 package net.cwjn.idf.api;
 
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class IDFTier implements Tier {
 
     private final Supplier<Ingredient> repairIngredient;
     private final int level, durability, enchantability;
-    private final float speed, fire, water, lightning, magic, dark, physical, crit, weight, pen, lifesteal;
+    private final float speed;
+    private final double
+            physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+            lifesteal, armourPenetration, criticalChance, force, knockback,
+            defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance,
+            evasion, maxHP, movespeed, knockbackResistance, luck,
+            strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier;
+    private final Map<Attribute, AttributeModifier> bonusAttributes;
     private final TagKey<Block> tag;
 
     public IDFTier(int level, int durability, float speed, int enchantability, Supplier<Ingredient> item,
-                   float physical, float fire, float water, float lightning, float magic, float dark,
-                   float crit, float weight, float pen, float lifesteal, @NotNull TagKey<Block> tag) {
+                   double physicalDamage, double fireDamage, double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
+                   double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
+                   double defense, double physicalResistance, double fireResistance, double waterResistance, double lightningResistance, double magicResistance, double darkResistance,
+                   double evasion, double maxHP, double movespeed, double knockbackResistance, double luck,
+                   double strikeMultiplier, double pierceMultiplier, double slashMultiplier, double crushMultiplier, double genericMultiplier,
+                   Map<Attribute, AttributeModifier> bonusAttributes, @NotNull TagKey<Block> tag) {
         this.level = level;
         this.durability = durability;
         this.speed = speed;
         this.enchantability = enchantability;
         this.repairIngredient = item;
-        this.physical = physical;
-        this.fire = fire;
-        this.water = water;
-        this.lightning = lightning;
-        this.magic = magic;
-        this.dark = dark;
-        this.crit = crit;
-        this.weight = weight;
-        this.pen = pen;
+        this.physicalDamage = physicalDamage;
+        this.fireDamage = fireDamage;
+        this.waterDamage = waterDamage;
+        this.lightningDamage = lightningDamage;
+        this.magicDamage = magicDamage;
+        this.darkDamage = darkDamage;
         this.lifesteal = lifesteal;
+        this.armourPenetration = armourPenetration;
+        this.criticalChance = criticalChance;
+        this.force = force;
+        this.knockback = knockback;
+        this.defense = defense;
+        this.physicalResistance = physicalResistance;
+        this.fireResistance = fireResistance;
+        this.waterResistance = waterResistance;
+        this.lightningResistance = lightningResistance;
+        this.magicResistance = magicResistance;
+        this.darkResistance = darkResistance;
+        this.evasion = evasion;
+        this.maxHP = maxHP;
+        this.movespeed = movespeed;
+        this.knockbackResistance = knockbackResistance;
+        this.luck = luck;
+        this.strikeMultiplier = strikeMultiplier;
+        this.pierceMultiplier = pierceMultiplier;
+        this.slashMultiplier = slashMultiplier;
+        this.crushMultiplier = crushMultiplier;
+        this.genericMultiplier = genericMultiplier;
+        this.bonusAttributes = bonusAttributes;
         this.tag = tag;
     }
 
     @Override
     public float getAttackDamageBonus() {
-        return physical;
-    }
-
-    public float getFire() {
-        return fire;
-    }
-
-    public float getWater() {
-        return water;
-    }
-
-    public float getLightning() {
-        return lightning;
-    }
-
-    public float getMagic() {
-        return magic;
-    }
-
-    public float getDark() {
-        return dark;
-    }
-
-    public float getCrit() {
-        return crit;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public float getPen() {
-        return pen;
-    }
-
-    public float getLifesteal() {
-        return lifesteal;
+        return (float) physicalDamage;
     }
 
     @Override
@@ -108,4 +105,115 @@ public class IDFTier implements Tier {
         return tag;
     }
 
+    public double getFireDamage() {
+        return fireDamage;
+    }
+
+    public double getWaterDamage() {
+        return waterDamage;
+    }
+
+    public double getLightningDamage() {
+        return lightningDamage;
+    }
+
+    public double getMagicDamage() {
+        return magicDamage;
+    }
+
+    public double getDarkDamage() {
+        return darkDamage;
+    }
+
+    public double getLifesteal() {
+        return lifesteal;
+    }
+
+    public double getArmourPenetration() {
+        return armourPenetration;
+    }
+
+    public double getCriticalChance() {
+        return criticalChance;
+    }
+
+    public double getForce() {
+        return force;
+    }
+
+    public double getKnockback() {
+        return knockback;
+    }
+
+    public double getDefense() {
+        return defense;
+    }
+
+    public double getPhysicalResistance() {
+        return physicalResistance;
+    }
+
+    public double getFireResistance() {
+        return fireResistance;
+    }
+
+    public double getWaterResistance() {
+        return waterResistance;
+    }
+
+    public double getLightningResistance() {
+        return lightningResistance;
+    }
+
+    public double getMagicResistance() {
+        return magicResistance;
+    }
+
+    public double getDarkResistance() {
+        return darkResistance;
+    }
+
+    public double getEvasion() {
+        return evasion;
+    }
+
+    public double getMaxHP() {
+        return maxHP;
+    }
+
+    public double getMovespeed() {
+        return movespeed;
+    }
+
+    public double getKnockbackResistance() {
+        return knockbackResistance;
+    }
+
+    public double getLuck() {
+        return luck;
+    }
+
+    public double getStrikeMultiplier() {
+        return strikeMultiplier;
+    }
+
+    public double getPierceMultiplier() {
+        return pierceMultiplier;
+    }
+
+    public double getSlashMultiplier() {
+        return slashMultiplier;
+    }
+
+    public double getCrushMultiplier() {
+        return crushMultiplier;
+    }
+
+    public double getGenericMultiplier() {
+        return genericMultiplier;
+    }
+
+    public Map<Attribute, AttributeModifier> getBonusAttributes() {
+        return bonusAttributes;
+    }
 }

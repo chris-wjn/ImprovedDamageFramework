@@ -1,6 +1,9 @@
 package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
+import net.cwjn.idf.config.json.data.ItemData;
+import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.JSONHandler;
@@ -13,93 +16,69 @@ import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 
+import java.util.Map;
+
 import static net.cwjn.idf.util.UUIDs.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
-public class IDFDiggerItem extends DiggerItem implements IDFDamagingItem{
+public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
 
-    private final String damageClass;
-    private final double fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, crit, weight, pen, lifesteal;
+    private final double physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage;
 
-    public IDFDiggerItem(Tier tier, float baseAS,
-                         float fire, float water, float lightning, float magic, float dark, int baseAD,
-                         float crit, float weight, float pen, float lifesteal, String dc,
-                         TagKey<Block> tag, Properties p) {
-        super(baseAD, baseAS, tier, tag, p);
-        damageClass = dc;
-        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        DamageData data = JSONHandler.getDamageData(Util.getItemRegistryName(this));
-        double speed;
-        if (tier instanceof IDFTier modTier) {
-            if (data != null) {
-                speed = modTier.getSpeed() + data.getSpeed() + baseAS;
-                fireDamage = modTier.getFire() + data.getFire() + fire;
-                waterDamage = modTier.getWater() + data.getWater() + water;
-                lightningDamage = modTier.getLightning() + data.getLightning() + lightning;
-                magicDamage = modTier.getMagic() + data.getMagic() + magic;
-                darkDamage = modTier.getDark() + data.getDark() + dark;
-                this.crit = modTier.getCrit() + data.getCritChance() + crit;
-                this.weight = modTier.getWeight() + data.getWeight() + weight;
-                this.pen = modTier.getPen() + data.getArmourPenetration() + pen;
-                this.lifesteal = modTier.getLifesteal() + data.getLifesteal() +  lifesteal;
-            } else {
-                speed = modTier.getSpeed() + baseAS;
-                fireDamage = modTier.getFire() + fire;
-                waterDamage = modTier.getWater() + water;
-                lightningDamage = modTier.getLightning() + lightning;
-                magicDamage = modTier.getMagic() + magic;
-                darkDamage = modTier.getDark() + dark;
-                this.crit = modTier.getCrit() + crit;
-                this.weight = modTier.getWeight() + weight;
-                this.pen = modTier.getPen() + pen;
-                this.lifesteal = modTier.getLifesteal() + lifesteal;
-            }
-        } else  {
-            if (data != null) {
-                speed = data.getSpeed() + baseAS;
-                fireDamage = data.getFire() + fire;
-                waterDamage = data.getWater() + water;
-                lightningDamage = data.getLightning() + lightning;
-                magicDamage = data.getMagic() + magic;
-                darkDamage = data.getDark() + dark;
-                this.crit = data.getCritChance() + crit;
-                this.weight = data.getWeight() + weight;
-                this.pen = data.getArmourPenetration() + pen;
-                this.lifesteal = data.getLifesteal() + lifesteal;
-            } else {
-                speed = baseAS;
-                fireDamage = fire;
-                waterDamage = water;
-                lightningDamage = lightning;
-                magicDamage = magic;
-                darkDamage = dark;
-                this.crit = crit;
-                this.weight = weight;
-                this.pen = pen;
-                this.lifesteal = lifesteal;
-            }
-        }
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.getAttackDamage(), AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", speed, AttributeModifier.Operation.ADDITION));
-        builder.put(IDFAttributes.FIRE_DAMAGE.get(), new AttributeModifier(baseFireDamage, "Weapon modifier", fireDamage, ADDITION));
-        builder.put(IDFAttributes.WATER_DAMAGE.get(), new AttributeModifier(baseWaterDamage, "Weapon modifier", waterDamage, ADDITION));
-        builder.put(IDFAttributes.LIGHTNING_DAMAGE.get(), new AttributeModifier(baseLightningDamage, "Weapon modifier", lightningDamage, ADDITION));
-        builder.put(IDFAttributes.MAGIC_DAMAGE.get(), new AttributeModifier(baseMagicDamage, "Weapon modifier", magicDamage, ADDITION));
-        builder.put(IDFAttributes.DARK_DAMAGE.get(), new AttributeModifier(baseDarkDamage, "Weapon modifier", darkDamage, ADDITION));
-        builder.put(IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier(baseCrit, "Weapon modifier", this.crit, ADDITION));
-        builder.put(IDFAttributes.WEIGHT.get(), new AttributeModifier(baseWeight, "Weapon modifier", this.weight, ADDITION));
-        builder.put(IDFAttributes.PENETRATING.get(), new AttributeModifier(basePen, "Weapon modifier", this.pen, ADDITION));
-        builder.put(IDFAttributes.LIFESTEAL.get(), new AttributeModifier(baseLifesteal, "Weapon modifier", this.lifesteal, ADDITION));
-        this.defaultModifiers = builder.build();
+    public IDFDiggerItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage, double waterDamage, double lightningDamage,
+                        double magicDamage, double darkDamage, double lifesteal, double pen, double crit, double force, double knockback, double speed, Properties p, Map<Attribute, AttributeModifier> bonusAttributes,
+                         TagKey<Block> tag) {
+        this(tier, durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+                lifesteal, pen, crit, force, knockback, speed, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p, bonusAttributes, tag);
     }
 
-    public String getDamageClass() {
-        return damageClass;
+    public IDFDiggerItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage,
+                         double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
+                         double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
+                         double attackSpeed, double defense, double physicalResistance, double fireResistance,
+                         double waterResistance, double lightningResistance, double magicResistance,
+                         double darkResistance, double evasion, double maxHP, double movespeed,
+                         double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
+                         double slashMultiplier, double crushMultiplier, double genericMultiplier,
+                         Properties p, Map<Attribute, AttributeModifier> bonusAttributes, TagKey<Block> tag) {
+        super((float) physicalDamage, (float) attackSpeed, tier, tag, p);
+        this.physicalDamage = physicalDamage;
+        this.fireDamage = fireDamage;
+        this.waterDamage = waterDamage;
+        this.lightningDamage = lightningDamage;
+        this.magicDamage = magicDamage;
+        this.darkDamage = darkDamage;
+        ((ItemInterface) this).setDamageClass(damageClass);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        WeaponData data0 = WeaponData.combine(JSONHandler.getWeaponData(Util.getItemRegistryName(this)),
+                new WeaponData(durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
+                        waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
+                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier));
+        ItemData data1 = JSONHandler.getItemData(Util.getItemRegistryName(this), 1, true);
+        ItemData data2 = JSONHandler.getItemData(Util.getItemRegistryName(this), 2, true);
+        if (tier instanceof IDFTier modTier) {
+            data0 = WeaponData.combine(data0,
+                    new WeaponData(0, "strike", modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
+                            modTier.getLightningDamage(), modTier.getMagicDamage(), modTier.getDarkDamage(), modTier.getLifesteal(), modTier.getArmourPenetration(),
+                            modTier.getCriticalChance(), modTier.getForce(), modTier.getKnockback(), modTier.getSpeed(), modTier.getDefense(), modTier.getPhysicalResistance(),
+                            modTier.getFireResistance(), modTier.getWaterResistance(), modTier.getLightningResistance(), modTier.getMagicResistance(), modTier.getDarkResistance(),
+                            modTier.getEvasion(), modTier.getMaxHP(), modTier.getMovespeed(), modTier.getKnockbackResistance(), modTier.getLuck(), modTier.getStrikeMultiplier(),
+                            modTier.getPierceMultiplier(), modTier.getSlashMultiplier(), modTier.getCrushMultiplier(), modTier.getGenericMultiplier()));
+            bonusAttributes.putAll(modTier.getBonusAttributes());
+        }
+        Util.buildWeaponAttributesOp0(builder, data0, 0, 0);
+        Util.buildWeaponAttributesOp1(builder, data1);
+        Util.buildWeaponAttributesOp2(builder, data2);
+        for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
+            builder.put(entry.getKey(), entry.getValue());
+        }
+        this.defaultModifiers = builder.build();
     }
 
     @Override
     public float getAttackDamage() {
-        return (float) (this.attackDamageBaseline + fireDamage + waterDamage + lightningDamage + magicDamage + darkDamage);
+        return (float) (physicalDamage + fireDamage + waterDamage + lightningDamage + magicDamage + darkDamage);
     }
 
     public double getFireDamage() {
@@ -120,22 +99,6 @@ public class IDFDiggerItem extends DiggerItem implements IDFDamagingItem{
 
     public double getDarkDamage() {
         return darkDamage;
-    }
-
-    public double getCrit() {
-        return crit;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public double getPen() {
-        return pen;
-    }
-
-    public double getLifesteal() {
-        return lifesteal;
     }
 
 }

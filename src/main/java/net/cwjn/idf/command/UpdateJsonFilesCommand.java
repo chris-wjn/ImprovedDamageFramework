@@ -15,7 +15,7 @@ public class UpdateJsonFilesCommand {
 
     private int updateJsonFiles(CommandSourceStack stack) throws CommandSyntaxException {
         if (stack.getServer().isDedicatedServer()) {
-            JSONHandler.updateServerFiles();
+            //JSONHandler.updateServerFiles();
             stack.sendSuccess(Util.translationComponent("idf.update.command.success"), true);
             return 1;
         } else {

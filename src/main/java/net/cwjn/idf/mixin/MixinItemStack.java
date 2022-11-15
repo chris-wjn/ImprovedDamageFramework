@@ -1,5 +1,6 @@
 package net.cwjn.idf.mixin;
 
+import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.event.ClientEventsForgeBus;
 import net.cwjn.idf.util.Color;
@@ -19,8 +20,15 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
@@ -28,7 +36,7 @@ import java.util.*;
 
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 
-//@Mixin(ItemStack.class)
+@Mixin(ItemStack.class)
 public abstract class MixinItemStack {
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
@@ -39,7 +47,7 @@ public abstract class MixinItemStack {
      * @reason
      * Changes the item tooltips (duh). Hopefully no mods need to inject into this method.
      */
-    //@Overwrite
+    @Overwrite
     public List<Component> getTooltipLines(@Nullable Player player, TooltipFlag tooltipMode) {
         ItemStack thisItemStack = (ItemStack)(Object) this;
         List<Component> list = Lists.newArrayList();
@@ -212,12 +220,12 @@ public abstract class MixinItemStack {
             component1.append(Util.translationComponent("idf.attack_speed_tooltip"));
             component1.append(Util.textComponent(df.format(value1)));
             list.add(component1);
-            double value2 = player.getAttributeBaseValue(IDFAttributes.WEIGHT.get());
-            if (mappedOperation0.containsKey(IDFAttributes.WEIGHT.get())) {
-                value2 += mappedOperation0.get(IDFAttributes.WEIGHT.get());
+            double value2 = player.getAttributeBaseValue(IDFAttributes.FORCE.get());
+            if (mappedOperation0.containsKey(IDFAttributes.FORCE.get())) {
+                value2 += mappedOperation0.get(IDFAttributes.FORCE.get());
             }
             MutableComponent component2 = Util.textComponent("  ");
-            component2.append(Util.translationComponent("idf.icon.impact").withStyle(symbolStyle));
+            component2.append(Util.translationComponent("idf.icon.weight").withStyle(symbolStyle));
             component2.append(Util.translationComponent("idf.weight_tooltip"));
             component2.append(Util.textComponent(df.format(value2)));
             list.add(component2);
@@ -448,7 +456,7 @@ public abstract class MixinItemStack {
             double value = mappedAttributes.get(Attributes.ATTACK_DAMAGE) + player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus((ItemStack) (Object) this, MobType.UNDEFINED);
             if (value != 0) {
                 MutableComponent component = Util.textComponent("  ");
-                component.append(Util.translationComponent("idf.icon.physical_attack").withStyle(symbolStyle));
+                component.append(Util.translationComponent("idf.icon.physical_damage").withStyle(symbolStyle));
                 component.append(Util.withColor(Util.translationComponent("idf.physical_damage_tooltip"), Color.PHYSICAL_COLOUR));
                 component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
                 list.add(component);
@@ -457,7 +465,7 @@ public abstract class MixinItemStack {
         if (mappedAttributes.containsKey(IDFAttributes.FIRE_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.FIRE_DAMAGE.get());
             MutableComponent component = Util.textComponent("  ");
-            component.append(Util.translationComponent("idf.icon.fire_attack").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.icon.fire_damage").withStyle(symbolStyle));
             component.append(Util.withColor(Util.translationComponent("idf.fire_damage_tooltip"), Color.FIRE_COLOUR));
             component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
@@ -465,7 +473,7 @@ public abstract class MixinItemStack {
         if (mappedAttributes.containsKey(IDFAttributes.WATER_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.WATER_DAMAGE.get());
             MutableComponent component = Util.textComponent("  ");
-            component.append(Util.translationComponent("idf.icon.water_attack").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.icon.water_damage").withStyle(symbolStyle));
             component.append(Util.withColor(Util.translationComponent("idf.water_damage_tooltip"), Color.WATER_COLOUR));
             component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
@@ -473,7 +481,7 @@ public abstract class MixinItemStack {
         if (mappedAttributes.containsKey(IDFAttributes.LIGHTNING_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.LIGHTNING_DAMAGE.get());
             MutableComponent component = Util.textComponent("  ");
-            component.append(Util.translationComponent("idf.icon.lightning_attack").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.icon.lightning_damage").withStyle(symbolStyle));
             component.append(Util.withColor(Util.translationComponent("idf.lightning_damage_tooltip"), Color.LIGHTNING_COLOUR));
             component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
@@ -481,7 +489,7 @@ public abstract class MixinItemStack {
         if (mappedAttributes.containsKey(IDFAttributes.MAGIC_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.MAGIC_DAMAGE.get());
             MutableComponent component = Util.textComponent("  ");
-            component.append(Util.translationComponent("idf.icon.magic_attack").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.icon.magic_damage").withStyle(symbolStyle));
             component.append(Util.withColor(Util.translationComponent("idf.magic_damage_tooltip"), Color.MAGIC_COLOUR));
             component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
@@ -489,7 +497,7 @@ public abstract class MixinItemStack {
         if (mappedAttributes.containsKey(IDFAttributes.DARK_DAMAGE.get())) {
             double value = mappedAttributes.get(IDFAttributes.DARK_DAMAGE.get());
             MutableComponent component = Util.textComponent("  ");
-            component.append(Util.translationComponent("idf.icon.dark_attack").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.icon.dark_damage").withStyle(symbolStyle));
             component.append(Util.withColor(Util.translationComponent("idf.dark_damage_tooltip"), Color.DARK_COLOUR));
             component.append(Util.withColor(Util.textComponent("+" + df.format(value)), Color.LIGHTGREEN));
             list.add(component);
@@ -598,17 +606,23 @@ public abstract class MixinItemStack {
         return (!map.isEmpty() || !map1.isEmpty());
     }
 
-    //@Shadow
+    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+    private void constructorInjection(ItemLike item, int amount, CompoundTag capNBT, CallbackInfo callback) {
+        OnItemStackCreatedEvent event = new OnItemStackCreatedEvent((ItemStack)(Object)this);
+        MinecraftForge.EVENT_BUS.post(event);
+    }
+
+    @Shadow
     private int getHideFlags() {
         throw new IllegalStateException("Mixin failed to shadow getHideFlags()");
     }
-    //@Shadow
+    @Shadow
     private CompoundTag tag;
-    //@Shadow
+    @Shadow
     private static boolean shouldShowInTooltip(int p_41627_, ItemStack.TooltipPart p_41628_) {
         throw new IllegalStateException("Mixin failed to shadow shouldShowInTooltip(int i, ItemStack.TooltipPart xxx)");
     }
-    //@Shadow
+    @Shadow
     private static Collection<Component> expandBlockState(String p_41762_) {
         throw new IllegalStateException("Mixin failed to shadow expandBlockState(String s)");
     }

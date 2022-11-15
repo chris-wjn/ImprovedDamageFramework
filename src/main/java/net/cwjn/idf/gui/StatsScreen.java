@@ -167,7 +167,7 @@ public class StatsScreen extends Screen {
         drawCenteredString(font, matrix, player.getAttributeValue(DARK_DAMAGE.get()), w+158, h+177.5f, DARK_COLOUR.getColor());
         drawCenteredPercentage(font, matrix, armourFormula(player.getAttributeValue(DARK_RESISTANCE.get())), w+232, h+177.5f, DARK_COLOUR.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(ATTACK_SPEED)), w+104, h+408, ChatFormatting.YELLOW.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(WEIGHT.get()), w+282, h+408, ChatFormatting.GRAY.getColor());
+        drawCenteredString(font, matrix, player.getAttributeValue(FORCE.get()), w+282, h+408, ChatFormatting.GRAY.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(CRUSH_MULT.get()) * 100, w+67f, h+211.5f,
                 player.getAttributeValue(CRUSH_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(STRIKE_MULT.get())*100), w+136f, h+211.5f,

@@ -22,7 +22,7 @@ public class IDFAttributes {
     public static final RegistryObject<Attribute> MAGIC_DAMAGE = register("idf.magic_damage", () -> new RangedAttribute("magic_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> DARK_DAMAGE = register("idf.dark_damage", () -> new RangedAttribute("dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary offensive attributes
-    public static final RegistryObject<Attribute> WEIGHT = register("idf.weight", () -> new RangedAttribute("weight", 1.0D, -1.0D, 40).setSyncable(true));
+    public static final RegistryObject<Attribute> FORCE = register("idf.force", () -> new RangedAttribute("force", 1.0D, -1.0D, 40).setSyncable(true));
     public static final RegistryObject<Attribute> LIFESTEAL = register("idf.lifesteal", () -> new RangedAttribute("lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
     public static final RegistryObject<Attribute> PENETRATING = register("idf.penetrating", () -> new RangedAttribute("armour_penetration", 0.0D, 0.0D, 100.0D).setSyncable(true));
     public static final RegistryObject<Attribute> CRIT_CHANCE = register("idf.crit_chance", () -> new RangedAttribute("crit_chance", 0.0D, 0.0D, 100.0D).setSyncable(true));

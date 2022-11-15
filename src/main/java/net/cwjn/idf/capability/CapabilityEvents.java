@@ -81,7 +81,7 @@ public class CapabilityEvents {
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
                 h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
                 h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                h.setWeight((float) entity.getAttributeValue(IDFAttributes.WEIGHT.get()));
+                h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
                 h.setDamageClass(item.hasTag() ?
                         item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
             });
@@ -96,7 +96,7 @@ public class CapabilityEvents {
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
                 h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
                 h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                h.setWeight((float) entity.getAttributeValue(IDFAttributes.WEIGHT.get()));
+                h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
                 h.setDamageClass(item.hasTag() ?
                         item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
             });
