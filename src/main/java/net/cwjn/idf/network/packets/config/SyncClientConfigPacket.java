@@ -31,7 +31,7 @@ public class SyncClientConfigPacket implements IDFPacket {
     }
 
     public static void encode(SyncClientConfigPacket packet, FriendlyByteBuf buffer) {
-        buffer.writeMap(packet.weaponMap0, FriendlyByteBuf::readResourceLocation, );
+        buffer.writeMap(packet.weaponMap0, FriendlyByteBuf::writeResourceLocation, );
         buffer.writeMap(packet.weaponMap1);
         buffer.writeMap(packet.weaponMap2);
         buffer.writeMap(packet.armourMap0);
@@ -40,7 +40,7 @@ public class SyncClientConfigPacket implements IDFPacket {
     }
 
     public static SyncClientConfigPacket decode(FriendlyByteBuf buffer) {
-
+        buffer.readMap(FriendlyByteBuf::readResourceLocation, );
     }
 
     public static void handle(SyncClientConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {

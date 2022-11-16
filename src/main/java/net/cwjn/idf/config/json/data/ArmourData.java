@@ -1,5 +1,7 @@
 package net.cwjn.idf.config.json.data;
 
+import net.minecraft.network.FriendlyByteBuf;
+
 public record ArmourData(int durability, double physicalDamage, double fireDamage,
                          double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
                          double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
@@ -27,6 +29,36 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
         return new ArmourData(0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
+
+    public static ArmourData fromNetwork(FriendlyByteBuf buffer) {
+        return new ArmourData(buffer.readInt(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
+                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+    }
+
+    public void toNetwork(FriendlyByteBuf buffer) {
+        buffer.writeInt(durability);
+        buffer.writeDouble(physicalDamage);
+        buffer.writeDouble(fireDamage);
+        buffer.writeDouble(waterDamage);
+        buffer.writeDouble(lightningDamage);
+        buffer.writeDouble(magicDamage);
+        buffer.writeDouble(darkDamage);
+        buffer.writeDouble(lifesteal);
+        buffer.writeDouble(armourPenetration);
+        buffer.writeDouble(criticalChance);
+        buffer.writeDouble(force);
+        buffer.writeDouble(knockback);
+        buffer.writeDouble(attackSpeed);
+        buffer.writeDouble(defense);
+        buffer.writeDouble(physicalResistance);
+        buffer.writeDouble(fireResistance);
+        buffer.writeDouble(waterResistance);
+
     }
 
 }
