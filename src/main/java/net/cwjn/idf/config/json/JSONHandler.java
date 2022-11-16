@@ -1,27 +1,27 @@
 package net.cwjn.idf.config.json;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
-import mezz.jei.core.collect.MultiMap;
-import net.cwjn.idf.api.IDFArmourItem;
 import net.cwjn.idf.api.IDFCustomEquipment;
-import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.compat.TooltipsCompat;
 import net.cwjn.idf.config.json.data.*;
+import net.cwjn.idf.network.PacketHandler;
+import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import com.google.common.reflect.TypeToken;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -214,6 +214,13 @@ public class JSONHandler {
         JSONUtil.writeFile(new File(configDir, "weapon_items_operation_addition.json"), sortedWeaponOp0Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_base.json"), sortedWeaponOp1Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_total.json"), sortedWeaponOp2Map);
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoginEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        PacketHandler.serverToPlayer(
+                new SyncClientConfigPacket(weaponItemsOp0, weaponItemsOp1, weaponItemsOp2, armourItemsOp0, armourItemsOp1, armourItemsOp2),
+                (ServerPlayer) event.getEntity());
     }
 
     public static EntityData getEntityData(ResourceLocation key) {

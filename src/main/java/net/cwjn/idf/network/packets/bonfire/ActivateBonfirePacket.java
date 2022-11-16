@@ -13,13 +13,13 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class ActivateBonfireMessage implements IDFPacket {
+public class ActivateBonfirePacket implements IDFPacket {
 
     private UUID player;
     private String name;
     private int x, y, z;
 
-    public ActivateBonfireMessage(UUID player, String name, int x, int y, int z) {
+    public ActivateBonfirePacket(UUID player, String name, int x, int y, int z) {
         this.player = player;
         this.name = name;
         this.x = x;
@@ -27,7 +27,7 @@ public class ActivateBonfireMessage implements IDFPacket {
         this.z = z;
     }
 
-    public static void encode(ActivateBonfireMessage message, FriendlyByteBuf buffer) {
+    public static void encode(ActivateBonfirePacket message, FriendlyByteBuf buffer) {
         buffer.writeUUID(message.player);
         Util.writeString(message.name, buffer);
         buffer.writeInt(message.x);
@@ -35,16 +35,16 @@ public class ActivateBonfireMessage implements IDFPacket {
         buffer.writeInt(message.z);
     }
 
-    public static ActivateBonfireMessage decode(FriendlyByteBuf buffer) {
+    public static ActivateBonfirePacket decode(FriendlyByteBuf buffer) {
         UUID id = buffer.readUUID();
         String returnName = Util.readString(buffer);
         int x1 = buffer.readInt();
         int y1 = buffer.readInt();
         int z1 = buffer.readInt();
-        return new ActivateBonfireMessage(id, returnName, x1, y1, z1);
+        return new ActivateBonfirePacket(id, returnName, x1, y1, z1);
     }
 
-    public static void handle(ActivateBonfireMessage message, Supplier<NetworkEvent.Context> ctxSupplier) {
+    public static void handle(ActivateBonfirePacket message, Supplier<NetworkEvent.Context> ctxSupplier) {
         NetworkEvent.Context ctx = ctxSupplier.get();
         ctx.enqueueWork(() -> {
             BlockPos pos = new BlockPos(message.x, message.y, message.z);

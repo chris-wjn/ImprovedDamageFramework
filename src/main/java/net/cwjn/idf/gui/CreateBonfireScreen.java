@@ -3,7 +3,7 @@ package net.cwjn.idf.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.cwjn.idf.network.PacketHandler;
-import net.cwjn.idf.network.packets.bonfire.ActivateBonfireMessage;
+import net.cwjn.idf.network.packets.bonfire.ActivateBonfirePacket;
 import net.cwjn.idf.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -60,7 +60,7 @@ public class CreateBonfireScreen extends Screen {
     protected void confirmAction() {
         if (!nameEditor.getValue().isEmpty()) {
             Minecraft.getInstance().level.playSound(Minecraft.getInstance().player, be.getBlockPos(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.BLOCKS, 1, 1);
-            PacketHandler.playerToServer(new ActivateBonfireMessage(Minecraft.getInstance().player.getUUID(), nameEditor.getValue(), be.getBlockPos().getX(), be.getBlockPos().getY(), be.getBlockPos().getZ()));
+            PacketHandler.playerToServer(new ActivateBonfirePacket(Minecraft.getInstance().player.getUUID(), nameEditor.getValue(), be.getBlockPos().getX(), be.getBlockPos().getY(), be.getBlockPos().getZ()));
             minecraft.setScreen(null);
         }
         updateButtons();

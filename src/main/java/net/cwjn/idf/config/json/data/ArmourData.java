@@ -1,6 +1,13 @@
 package net.cwjn.idf.config.json.data;
 
+import com.google.gson.*;
+import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+
+import javax.json.Json;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 
 public record ArmourData(int durability, double physicalDamage, double fireDamage,
                          double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
@@ -31,7 +38,7 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
-    public static ArmourData fromNetwork(FriendlyByteBuf buffer) {
+    public static ArmourData readArmourData(FriendlyByteBuf buffer) {
         return new ArmourData(buffer.readInt(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
@@ -40,7 +47,7 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
     }
 
-    public void toNetwork(FriendlyByteBuf buffer) {
+    public void writeArmourData(FriendlyByteBuf buffer) {
         buffer.writeInt(durability);
         buffer.writeDouble(physicalDamage);
         buffer.writeDouble(fireDamage);
@@ -58,8 +65,76 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
         buffer.writeDouble(physicalResistance);
         buffer.writeDouble(fireResistance);
         buffer.writeDouble(waterResistance);
+        buffer.writeDouble(lightningResistance);
+        buffer.writeDouble(magicResistance);
+        buffer.writeDouble(darkResistance);
+        buffer.writeDouble(evasion);
+        buffer.writeDouble(maxHP);
+        buffer.writeDouble(movespeed);
+        buffer.writeDouble(knockbackResistance);
+        buffer.writeDouble(luck);
+        buffer.writeDouble(strikeMultiplier);
+        buffer.writeDouble(pierceMultiplier);
+        buffer.writeDouble(slashMultiplier);
+        buffer.writeDouble(crushMultiplier);
+        buffer.writeDouble(genericMultiplier);
+    }
+
+    public static class ArmourSerializer implements JsonSerializer<ArmourData>, JsonDeserializer<ArmourData> {
+
+        @Override
+        public ArmourData deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+            final JsonObject obj = json.getAsJsonObject();
+            return new ArmourData(obj.get("DURABILITY").getAsInt(),
+                    obj.getAsJsonArray("DAMAGE_TYPES").get(0).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE_TYPES").get(1).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE_TYPES").get(2).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE_TYPES").get(3).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE_TYPES").get(4).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE_TYPES").get(5).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(0).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(1).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(2).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(3).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(4).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(5).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(0).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(1).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(2).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(3).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(4).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(5).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE_TYPES").get(6).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(0).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(1).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(2).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(3).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(4).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS").get(0).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS").get(1).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS").get(2).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS").get(3).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS").get(4).getAsDouble());
+        }
+
+        @Override
+        public JsonElement serialize(ArmourData data, Type type, JsonSerializationContext ctx) {
+            JsonObject obj = new JsonObject();
+            JsonArray DAMAGE_TYPES = new JsonArray(), OFFENSIVE_AUXILIARY = new JsonArray(), RESISTANCE_TYPES = new JsonArray(), DEFENSIVE_AUXILIARY = new JsonArray(), MULTIPLIERS = new JsonArray();
+            Util.addAllToJsonArray(DAMAGE_TYPES, data.physicalDamage, data.fireDamage, data.waterDamage, data.lightningDamage, data.magicDamage, data.darkDamage);
+            Util.addAllToJsonArray(OFFENSIVE_AUXILIARY, data.lifesteal, data.armourPenetration, data.criticalChance, data.force, data.knockback, data.attackSpeed);
+            Util.addAllToJsonArray(RESISTANCE_TYPES, data.defense, data.physicalResistance, data.fireResistance, data.waterResistance, data.lightningResistance, data.magicResistance, data.darkResistance);
+            Util.addAllToJsonArray(DEFENSIVE_AUXILIARY, data.evasion, data.maxHP, data.movespeed, data.knockbackResistance, data.luck);
+            Util.addAllToJsonArray(MULTIPLIERS, data.strikeMultiplier, data.pierceMultiplier, data.slashMultiplier, data.crushMultiplier, data.genericMultiplier);
+            obj.addProperty("DURABILITY", data.durability);
+            obj.add("RESISTANCE_TYPES", RESISTANCE_TYPES);
+            obj.add("DEFENSIVE_AUXILIARY", DEFENSIVE_AUXILIARY);
+            obj.add("MULTIPLIERS", MULTIPLIERS);
+            obj.add("DAMAGE_TYPES", DAMAGE_TYPES);
+            obj.add("OFFENSIVE_AUXILIARY", OFFENSIVE_AUXILIARY);
+            return obj;
+        }
 
     }
-    //https://github.com/GizmoTheMoonPig/OpenBlocksTrophies/blob/69dd50272c1517bdb7041368ce724e83c6146b9d/src/main/java/com/gizmo/trophies/trophy/Trophy.java
 
 }

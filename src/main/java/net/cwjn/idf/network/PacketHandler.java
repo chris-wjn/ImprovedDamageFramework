@@ -2,13 +2,12 @@ package net.cwjn.idf.network;
 
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.network.packets.*;
-import net.cwjn.idf.network.packets.bonfire.ActivateBonfireMessage;
-import net.cwjn.idf.network.packets.bonfire.OpenBonfireScreenMessage;
-import net.cwjn.idf.network.packets.bonfire.SyncBonfireMessage;
-import net.cwjn.idf.network.packets.config.SendServerDamageJsonMessage;
-import net.cwjn.idf.network.packets.config.SendServerResistanceJsonMessage;
+import net.cwjn.idf.network.packets.bonfire.ActivateBonfirePacket;
+import net.cwjn.idf.network.packets.SyncClientConfigPacket;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -24,12 +23,9 @@ public class PacketHandler {
     );
 
     public static void init() {
-        INSTANCE.registerMessage(0, SendServerResistanceJsonMessage.class, SendServerResistanceJsonMessage::encode, SendServerResistanceJsonMessage::decode, SendServerResistanceJsonMessage::handle);
-        INSTANCE.registerMessage(1, SendServerDamageJsonMessage.class, SendServerDamageJsonMessage::encode, SendServerDamageJsonMessage::decode, SendServerDamageJsonMessage::handle);
-        INSTANCE.registerMessage(2, DisplayDamageIndicatorsMessage.class, DisplayDamageIndicatorsMessage::encode, DisplayDamageIndicatorsMessage::decode, DisplayDamageIndicatorsMessage::handle);
-        INSTANCE.registerMessage(3, OpenBonfireScreenMessage.class, OpenBonfireScreenMessage::encode, OpenBonfireScreenMessage::decode, OpenBonfireScreenMessage::handle);
-        INSTANCE.registerMessage(4, SyncBonfireMessage.class, SyncBonfireMessage::encode, SyncBonfireMessage::decode, SyncBonfireMessage::handle);
-        INSTANCE.registerMessage(5, ActivateBonfireMessage.class, ActivateBonfireMessage::encode, ActivateBonfireMessage::decode, ActivateBonfireMessage::handle);
+        INSTANCE.registerMessage(0, SyncClientConfigPacket.class, SyncClientConfigPacket::encode, SyncClientConfigPacket::decode, SyncClientConfigPacket::handle);
+        INSTANCE.registerMessage(1, DisplayDamageIndicatorPacket.class, DisplayDamageIndicatorPacket::encode, DisplayDamageIndicatorPacket::decode, DisplayDamageIndicatorPacket::handle);
+        INSTANCE.registerMessage(2, ActivateBonfirePacket.class, ActivateBonfirePacket::encode, ActivateBonfirePacket::decode, ActivateBonfirePacket::handle);
     }
 
     public static void serverToPlayer(IDFPacket packet, ServerPlayer player) {
@@ -42,6 +38,10 @@ public class PacketHandler {
 
     public static void serverToAll(IDFPacket packet) {
         INSTANCE.send(PacketDistributor.ALL.noArg(), packet);
+    }
+
+    public static void serverToNearPoint(IDFPacket packet, double x, double y, double z, double r, ResourceKey<Level> dim) {
+        INSTANCE.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(x, y, z, r, dim)), packet);
     }
 
 }

@@ -2,6 +2,7 @@ package net.cwjn.idf.util;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.google.gson.JsonArray;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
@@ -34,8 +35,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
 import static net.cwjn.idf.util.UUIDs.*;
@@ -482,6 +482,12 @@ public class Util {
         returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/3.png");
         returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/4.png");
         return returnRL;
+    }
+
+    public static void addAllToJsonArray(JsonArray array, double... d) {
+        for (double v : d) {
+            array.add(v);
+        }
     }
 
 }
