@@ -60,5 +60,6 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
         buffer.writeDouble(waterResistance);
 
     }
+    //https://github.com/GizmoTheMoonPig/OpenBlocksTrophies/blob/69dd50272c1517bdb7041368ce724e83c6146b9d/src/main/java/com/gizmo/trophies/trophy/Trophy.java
 
 }
