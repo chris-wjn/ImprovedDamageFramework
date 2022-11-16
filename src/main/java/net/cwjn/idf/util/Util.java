@@ -323,7 +323,7 @@ public class Util {
         return x.floatValue();
     }
 
-    public static int getItemBorderType(ItemStack item, String dc, double f, double w, double l, double m, double d, double p) {
+    public static int getItemBorderType(String dc, double f, double w, double l, double m, double d, double p) {
         double[] dv = new double[] {f, w, l, m, d, p};
         int index = 5;
         double highest = 0.0D;

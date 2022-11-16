@@ -12,6 +12,7 @@ import net.cwjn.idf.config.json.data.*;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import com.google.common.reflect.TypeToken;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -45,12 +46,12 @@ public class JSONHandler {
     private static final Gson gson = new Gson();
 
     public static void init(File configDir) {
-        Map<String, ArmourData> defaultArmourItemsOp0 = new HashMap<>(); //= gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_op0.json")))), new TypeToken<Map<String, ArmourData>>(){}.getType());
-        Map<String, ItemData> defaultArmourItemsOp1 = new HashMap<>(); //= gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_op1.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, ItemData> defaultArmourItemsOp2 = new HashMap<>(); //= gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_op2.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, WeaponData> defaultWeaponItemsOp0 = new HashMap<>(); //= gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op0.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
-        Map<String, ItemData> defaultWeaponItemsOp1 = new HashMap<>(); //= gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op1.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, ItemData> defaultWeaponItemsOp2 = new HashMap<>(); //= gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op2.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, ArmourData> defaultArmourItemsOp0 = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_op0.json")))), new TypeToken<Map<String, ArmourData>>(){}.getType());
+        Map<String, ItemData> defaultArmourItemsOp1 = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_op1.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, ItemData> defaultArmourItemsOp2 = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_op2.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, WeaponData> defaultWeaponItemsOp0 = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op0.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
+        Map<String, ItemData> defaultWeaponItemsOp1 = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op1.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, ItemData> defaultWeaponItemsOp2 = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op2.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
         Map<String, EntityData> defaultEntityData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
         Map<String, SourceCatcherData> defaultSourceData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
         //TODO: iron golems, snow golems, villagers not included in this list.
@@ -247,14 +248,16 @@ public class JSONHandler {
 
     private static void updateItems() {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
+            if (item instanceof IDFCustomEquipment) {
+                continue;
+            }
             ResourceLocation loc = Util.getItemRegistryName(item);
             ItemInterface idfItem = (ItemInterface) item;
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+            CompoundTag defaultTag = new CompoundTag();
             if (weaponItemsOp0.containsKey(loc) || weaponItemsOp1.containsKey(loc) || weaponItemsOp2.containsKey(loc)) {
-                idfItem.setIsEquipment(true);
-                if (item instanceof IDFCustomEquipment) {
-                    continue;
-                } else if (item instanceof SwordItem sword) {
+                defaultTag.putBoolean("idf.equipment", true);
+                if (item instanceof SwordItem sword) {
                     WeaponData data0 = weaponItemsOp0.get(loc);
                     ItemData data1 = weaponItemsOp1.get(loc);
                     ItemData data2 = weaponItemsOp2.get(loc);
@@ -264,7 +267,7 @@ public class JSONHandler {
                     Util.buildWeaponAttributesOp1(builder, data1);
                     Util.buildWeaponAttributesOp2(builder, data2);
                     if (data0 != null) {
-                        idfItem.setDamageClass(data0.damageClass());
+                        defaultTag.putString("idf.damage_class", data0.damageClass());
                         idfItem.setMaxDamage(item.getMaxDamage() + data0.durability());
                     }
                 } else if (item instanceof DiggerItem digger) {
@@ -278,7 +281,7 @@ public class JSONHandler {
                     Util.buildWeaponAttributesOp1(builder, data1);
                     Util.buildWeaponAttributesOp2(builder, data2);
                     if (data0 != null) {
-                        idfItem.setDamageClass(data0.damageClass());
+                        defaultTag.putString("idf.damage_class", data0.damageClass());
                         idfItem.setMaxDamage(item.getMaxDamage() + data0.durability());
                     }
                 } else {
@@ -289,8 +292,8 @@ public class JSONHandler {
                     Util.buildWeaponAttributesOp1(builder, data1);
                     Util.buildWeaponAttributesOp2(builder, data2);
                     if (data0 != null) {
+                        defaultTag.putString("idf.damage_class", data0.damageClass());
                         idfItem.setMaxDamage(item.getMaxDamage() + data0.durability());
-                        idfItem.setDamageClass(data0.damageClass());
                     }
                     if (TooltipsCompat.enabled) {
                         double fire = (data0.fireDamage() * (1 + data1.fireDamage())) * (1 + data2.fireDamage());
@@ -299,12 +302,12 @@ public class JSONHandler {
                         double magic = (data0.magicDamage() * (1 + data1.magicDamage())) * (1 + data2.magicDamage());
                         double dark = (data0.darkDamage() * (1 + data1.darkDamage())) * (1 + data2.darkDamage());
                         double phys = (data0.physicalDamage() * (1 + data1.physicalDamage())) * (1 + data2.physicalDamage());
-                        idfItem..putInt("idf.tooltip_border", Util.getItemBorderType(item, item.getTag().getString("idf.damage_class"), fire, water, lightning, magic, dark, phys));
+                        idfItem.getDefaultTags().putInt("idf.tooltip_border", Util.getItemBorderType(idfItem.getDefaultTags().getString("idf.damage_class"), fire, water, lightning, magic, dark, phys));
                     }
                 }
             }
             if (armourItemsOp0.containsKey(loc) || armourItemsOp1.containsKey(loc) || armourItemsOp2.containsKey(loc)) {
-                idfItem.setIsEquipment(true);
+                defaultTag.putBoolean("idf.equipment", true);
                 if (item instanceof ArmorItem armour) {
                     ArmourData data0 = armourItemsOp0.get(loc);
                     ItemData data1 = armourItemsOp1.get(loc);
@@ -320,6 +323,7 @@ public class JSONHandler {
                     Util.buildArmourAttributesOp2(builder, armour.getSlot(), data2);
                 }
             }
+            if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
         }
     }

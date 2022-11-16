@@ -19,10 +19,8 @@ public interface ItemInterface {
 
     int getMaxDamage();
 
-    boolean isEquipment();
+    CompoundTag getDefaultTags();
 
-    void setIsEquipment(boolean b);
-
-    boolean hasDamageClass();
+    void setDefaultTag(CompoundTag tag);
 
 }

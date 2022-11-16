@@ -32,20 +32,10 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void updateTags(OnItemStackCreatedEvent event) {
-        if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER) {
-            ItemStack item = event.getItemStack();
-            if (item.hasTag() && item.getTag().contains("idf.equipment")) return;
-            Item baseItem = item.getItem();
-            ResourceLocation loc = Util.getItemRegistryName(baseItem);
-            if (baseItem instanceof SwordItem || baseItem instanceof ArmorItem || baseItem instanceof DiggerItem
-                || JSONHandler.weaponItemsOp0.containsKey(loc)
-                || JSONHandler.armourItemsOp0.containsKey(loc)
-                || JSONHandler.weaponItemsOp2.containsKey(loc)
-                || JSONHandler.armourItemsOp2.containsKey(loc)
-                || JSONHandler.weaponItemsOp1.containsKey(loc)
-                || JSONHandler.armourItemsOp1.containsKey(loc)) {
-                item.getOrCreateTag().merge(((ItemInterface) baseItem).getDefaultTags());
-            }
+        ItemStack item = event.getItemStack();
+        Item baseItem = item.getItem();
+        if (((ItemInterface) baseItem).getDefaultTags() != null) {
+            item.getOrCreateTag().merge(((ItemInterface) baseItem).getDefaultTags());
         }
     }
 
