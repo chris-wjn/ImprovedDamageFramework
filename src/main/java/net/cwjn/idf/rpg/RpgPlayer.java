@@ -20,7 +20,7 @@ public interface RpgPlayer {
     int getStr(); //physical scaling and requirements, damage, knockback
     int getDex(); //physical scaling and requirements, crit chance, attack speed
     int getAgl(); //physical scaling and requirements, movespeed, evasion chance
-    int getIntel(); //elemental scaling and requirements, dark damage
+    int getInt(); //elemental scaling and requirements, dark damage
     int getWis(); //elemental scaling and requirements, magic/water damage
     int getFth(); //elemental scaling and requirements, fire/lightning damage
 
@@ -28,7 +28,7 @@ public interface RpgPlayer {
     void setStr(int i);
     void setDex(int i);
     void setAgl(int i);
-    void setIntel(int i);
+    void setInt(int i);
     void setWis(int i);
     void setFth(int i);
 
@@ -36,7 +36,7 @@ public interface RpgPlayer {
     void incrementStr(int i);
     void incrementDex(int i);
     void incrementAgl(int i);
-    void incrementIntel(int i);
+    void incrementInt(int i);
     void incrementWis(int i);
     void incrementFth(int i);
 

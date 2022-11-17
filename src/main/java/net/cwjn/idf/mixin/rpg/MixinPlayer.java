@@ -55,7 +55,7 @@ public class MixinPlayer implements RpgPlayer {
     public int getAgl() {
         return agility;
     }
-    public int getIntel() {
+    public int getInt() {
         return intelligence;
     }
     public int getWis() {
@@ -79,7 +79,7 @@ public class MixinPlayer implements RpgPlayer {
     public void setAgl(int i) {
         agility = i;
     }
-    public void setIntel(int i) {
+    public void setInt(int i) {
         intelligence = i;
     }
     public void setWis(int i) {
@@ -100,7 +100,7 @@ public class MixinPlayer implements RpgPlayer {
     public void incrementAgl(int i) {
         agility += i;
     }
-    public void incrementIntel(int i) {
+    public void incrementInt(int i) {
         intelligence += i;
     }
     public void incrementWis(int i) {
