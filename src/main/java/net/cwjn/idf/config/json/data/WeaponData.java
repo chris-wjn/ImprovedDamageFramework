@@ -80,40 +80,44 @@ public record WeaponData(int durability, String damageClass, double physicalDama
 
     public static class WeaponSerializer implements JsonSerializer<WeaponData>, JsonDeserializer<WeaponData> {
 
+        public WeaponSerializer() {
+
+        }
+
         @Override
         public WeaponData deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) throws JsonParseException {
             final JsonObject obj = json.getAsJsonObject();
-            return new WeaponData(obj.get("DURABILITY").getAsInt(),
-                    obj.get("DAMAGE_CLASS").getAsString(),
-                    obj.getAsJsonArray("DAMAGE_TYPES").get(0).getAsDouble(),
-                    obj.getAsJsonArray("DAMAGE_TYPES").get(1).getAsDouble(),
-                    obj.getAsJsonArray("DAMAGE_TYPES").get(2).getAsDouble(),
-                    obj.getAsJsonArray("DAMAGE_TYPES").get(3).getAsDouble(),
-                    obj.getAsJsonArray("DAMAGE_TYPES").get(4).getAsDouble(),
-                    obj.getAsJsonArray("DAMAGE_TYPES").get(5).getAsDouble(),
-                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(0).getAsDouble(),
-                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(1).getAsDouble(),
-                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(2).getAsDouble(),
-                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(3).getAsDouble(),
-                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(4).getAsDouble(),
-                    obj.getAsJsonArray("OFFENSIVE_AUXILIARY").get(5).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(0).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(1).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(2).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(3).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(4).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(5).getAsDouble(),
-                    obj.getAsJsonArray("RESISTANCE_TYPES").get(6).getAsDouble(),
-                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(0).getAsDouble(),
-                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(1).getAsDouble(),
-                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(2).getAsDouble(),
-                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(3).getAsDouble(),
-                    obj.getAsJsonArray("DEFENSIVE_AUXILIARY").get(4).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS").get(0).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS").get(1).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS").get(2).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS").get(3).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS").get(4).getAsDouble());
+            return new WeaponData(obj.get("Bonus Durability").getAsInt(),
+                    obj.get("Damage Class").getAsString(),
+                    obj.getAsJsonArray("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark").get(0).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark").get(1).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark").get(2).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark").get(3).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark").get(4).getAsDouble(),
+                    obj.getAsJsonArray("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark").get(5).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed").get(0).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed").get(1).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed").get(2).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed").get(3).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed").get(4).getAsDouble(),
+                    obj.getAsJsonArray("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed").get(5).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(0).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(1).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(2).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(3).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(4).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(5).getAsDouble(),
+                    obj.getAsJsonArray("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark").get(6).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(0).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(1).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(2).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(3).getAsDouble(),
+                    obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(4).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(0).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(1).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(2).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(3).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(4).getAsDouble());
         }
 
         @Override
@@ -125,13 +129,13 @@ public record WeaponData(int durability, String damageClass, double physicalDama
             Util.addAllToJsonArray(RESISTANCE_TYPES, data.defense, data.physicalResistance, data.fireResistance, data.waterResistance, data.lightningResistance, data.magicResistance, data.darkResistance);
             Util.addAllToJsonArray(DEFENSIVE_AUXILIARY, data.evasion, data.maxHP, data.movespeed, data.knockbackResistance, data.luck);
             Util.addAllToJsonArray(MULTIPLIERS, data.strikeMultiplier, data.pierceMultiplier, data.slashMultiplier, data.crushMultiplier, data.genericMultiplier);
-            obj.addProperty("DURABILITY", data.durability);
-            obj.addProperty("DAMAGE_CLASS", data.damageClass);
-            obj.add("DAMAGE_TYPES", DAMAGE_TYPES);
-            obj.add("OFFENSIVE_AUXILIARY", OFFENSIVE_AUXILIARY);
-            obj.add("RESISTANCE_TYPES", RESISTANCE_TYPES);
-            obj.add("DEFENSIVE_AUXILIARY", DEFENSIVE_AUXILIARY);
-            obj.add("MULTIPLIERS", MULTIPLIERS);
+            obj.addProperty("Bonus Durability", data.durability);
+            obj.addProperty("Damage Class", data.damageClass);
+            obj.add("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark", DAMAGE_TYPES);
+            obj.add("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed", OFFENSIVE_AUXILIARY);
+            obj.add("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark", RESISTANCE_TYPES);
+            obj.add("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck", DEFENSIVE_AUXILIARY);
+            obj.add("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic", MULTIPLIERS);
             return obj;
         }
 
