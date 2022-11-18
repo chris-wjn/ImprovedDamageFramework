@@ -4,7 +4,7 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
 import net.cwjn.idf.damage.*;
-import net.cwjn.idf.event.ServerEvents;
+import net.cwjn.idf.event.LogicalEvents;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -39,7 +39,7 @@ public class MixinPlayer {
 
             //if (damageAmount <= 0) return;
             //MODIFIED CODE STARTS HERE
-            if (ServerEvents.debugMode) damageAmount = DamageHandler.handleDamageWithDebug(thisPlayer, damageSource, damageAmount, ImprovedDamageFramework.LOGGER);
+            if (LogicalEvents.debugMode) damageAmount = DamageHandler.handleDamageWithDebug(thisPlayer, damageSource, damageAmount, ImprovedDamageFramework.LOGGER);
             else damageAmount = DamageHandler.handleDamage(thisPlayer, damageSource, damageAmount);
             if (damageAmount <= 0) return;
             //MODIFIED CODE ENDS HERE

@@ -3,7 +3,7 @@ package net.cwjn.idf.mixin;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.*;
-import net.cwjn.idf.event.ServerEvents;
+import net.cwjn.idf.event.LogicalEvents;
 import net.cwjn.idf.util.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
@@ -20,8 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
@@ -43,7 +40,7 @@ public class MixinLivingEntity {
             damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(thisLivingEntity, damageSource, damageAmount);
 
             //MODIFIED CODE STARTS HERE
-            if (ServerEvents.debugMode) damageAmount = DamageHandler.handleDamageWithDebug(thisLivingEntity, damageSource, damageAmount, ImprovedDamageFramework.LOGGER);
+            if (LogicalEvents.debugMode) damageAmount = DamageHandler.handleDamageWithDebug(thisLivingEntity, damageSource, damageAmount, ImprovedDamageFramework.LOGGER);
             else damageAmount = DamageHandler.handleDamage(thisLivingEntity, damageSource, damageAmount);
             if (damageAmount <= 0) return;
             //MODIFIED CODE ENDS HERE

@@ -3,7 +3,9 @@ package net.cwjn.idf.mixin.rpg;
 import net.cwjn.idf.rpg.RpgPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,9 +18,9 @@ import java.util.UUID;
 @Mixin(Player.class)
 public class MixinPlayer implements RpgPlayer {
 
-    @Unique
-    private final List<UUID> bonfires = new ArrayList<>();
-    @Unique
+    @Unique @Final @Mutable
+    private List<UUID> bonfires = new ArrayList<>();
+    @Unique @Final @Mutable
     private int level = 1, maxBonfires = 1, constitution = 1, strength = 1, dexterity = 1, agility = 1, intelligence = 1, wisdom = 1, faith = 1;
 
     public int getMaxBonfires() {

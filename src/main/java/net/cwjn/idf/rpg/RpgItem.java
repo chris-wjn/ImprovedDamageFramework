@@ -2,6 +2,9 @@ package net.cwjn.idf.rpg;
 
 public interface RpgItem {
 
+    Tier getTier();
+    void setTier(Tier t);
+
     int getConsReq(); //health, defense, knockback resistance
     int getStrReq(); //physical scaling and requirements, damage, knockback
     int getDexReq(); //physical scaling and requirements, crit chance, attack speed
@@ -20,10 +23,12 @@ public interface RpgItem {
 
     enum Tier {
         S(1.0),
-        A(0.8),
-        B(0.6),
-        C(0.4),
-        D(0.2);
+        A(0.9),
+        B(0.8),
+        C(0.7),
+        D(0.6),
+        E(0.5),
+        F(0.4);
         private double scalar;
         Tier(double scalar) {
             this.scalar = scalar;
