@@ -1,4 +1,4 @@
-package net.cwjn.idf.rpg;
+package net.cwjn.idf.rpg.player;
 
 import java.util.List;
 import java.util.UUID;

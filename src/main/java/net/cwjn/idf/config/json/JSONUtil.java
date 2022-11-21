@@ -50,7 +50,7 @@ public class JSONUtil {
         return null;
     }
 
-    protected static void writeFile(File outputFile, Object obj) {
+    public static void writeFile(File outputFile, Object obj) {
         try {
             FileUtils.write(outputFile, SERIALIZER.toJson(obj));
         }

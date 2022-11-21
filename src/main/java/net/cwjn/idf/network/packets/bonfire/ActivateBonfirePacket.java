@@ -1,6 +1,6 @@
 package net.cwjn.idf.network.packets.bonfire;
 
-import net.cwjn.idf.rpg.RpgPlayer;
+import net.cwjn.idf.rpg.player.RpgPlayer;
 import net.cwjn.idf.rpg.bonfire.block.BonfireBlock;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.cwjn.idf.network.IDFPacket;

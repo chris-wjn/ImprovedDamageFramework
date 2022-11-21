@@ -7,7 +7,7 @@ import net.cwjn.idf.gui.buttons.AttributePage.AttributeButton;
 import net.cwjn.idf.gui.buttons.AttributePage.BackButton;
 import net.cwjn.idf.gui.buttons.AttributePage.StatButton;
 import net.cwjn.idf.gui.buttons.AttributePage.StatsButton;
-import net.cwjn.idf.rpg.RpgPlayer;
+import net.cwjn.idf.rpg.player.RpgPlayer;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
 import net.minecraft.ChatFormatting;

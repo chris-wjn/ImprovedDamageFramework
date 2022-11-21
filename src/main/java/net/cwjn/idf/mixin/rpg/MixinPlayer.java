@@ -1,6 +1,6 @@
 package net.cwjn.idf.mixin.rpg;
 
-import net.cwjn.idf.rpg.RpgPlayer;
+import net.cwjn.idf.rpg.player.RpgPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;

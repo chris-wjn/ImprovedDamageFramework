@@ -3,7 +3,7 @@ package net.cwjn.idf.rpg.bonfire.block;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.gui.BonfireScreen;
 import net.cwjn.idf.gui.CreateBonfireScreen;
-import net.cwjn.idf.rpg.RpgPlayer;
+import net.cwjn.idf.rpg.player.RpgPlayer;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.cwjn.idf.rpg.bonfire.entity.BonfireEntityRegistry;
 import net.minecraft.client.Minecraft;
