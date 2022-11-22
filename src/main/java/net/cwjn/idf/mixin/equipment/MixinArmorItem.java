@@ -16,4 +16,7 @@ public abstract class MixinArmorItem implements ItemInterface {
     @Mutable
     public abstract void setDefaultAttributes(Multimap<Attribute, AttributeModifier> x);
 
+    @Accessor("defaultModifiers")
+    public abstract Multimap<Attribute, AttributeModifier> getDefaultModifiers();
+
 }

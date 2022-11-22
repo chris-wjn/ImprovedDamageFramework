@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 public class RpgItemProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<RpgItemProvider> RPG_ITEM = CapabilityManager.get(new CapabilityToken<>() {});
+    public static Capability<RpgItem> RPG_ITEM = CapabilityManager.get(new CapabilityToken<>() {});
     private RpgItem rpgItem = null;
     private final LazyOptional<RpgItem> optionalRpgItem = LazyOptional.of(this::createRpgItem);
 

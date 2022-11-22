@@ -15,4 +15,7 @@ public abstract class MixinDiggerItem implements ItemInterface {
     @Mutable
     public abstract void setDefaultAttributes(Multimap<Attribute, AttributeModifier> x);
 
+    @Accessor("defaultModifiers")
+    public abstract Multimap<Attribute, AttributeModifier> getDefaultModifiers();
+
 }
