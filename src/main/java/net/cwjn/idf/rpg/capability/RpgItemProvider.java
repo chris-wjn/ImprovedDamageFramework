@@ -2,6 +2,7 @@ package net.cwjn.idf.rpg.capability;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -14,6 +15,7 @@ import javax.annotation.Nullable;
 
 public class RpgItemProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
+    private Player owner = null;
     public static Capability<RpgItem> RPG_ITEM = CapabilityManager.get(new CapabilityToken<>() {});
     private RpgItem rpgItem = null;
     private final LazyOptional<RpgItem> optionalRpgItem = LazyOptional.of(this::createRpgItem);

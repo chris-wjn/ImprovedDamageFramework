@@ -2,10 +2,14 @@ package net.cwjn.idf.rpg.capability;
 
 import net.cwjn.idf.rpg.RpgClass;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 public class RpgItem extends RpgClass {
 
+    Player owner;
+
     public void copyFrom(RpgItem source) {
+        this.owner = source.owner;
         this.CONSTITUTION = source.CONSTITUTION;
         this.STRENGTH = source.STRENGTH;
         this.DEXTERITY = source.DEXTERITY;
@@ -47,6 +51,14 @@ public class RpgItem extends RpgClass {
         WISDOM.setRight(tag.getDouble("WISDOM.scalar"));
         FAITH.setLeft(tag.getInt("FAITH.level"));
         FAITH.setRight(tag.getDouble("FAITH.scalar"));
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
 }
