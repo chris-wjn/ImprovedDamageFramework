@@ -35,9 +35,7 @@
     "equipment.MixinArmorItem",
     "equipment.MixinDiggerItem",
     "equipment.MixinItem",
-    "equipment.MixinSwordItem",
-    "rpg.MixinItemStack",
-    "rpg.MixinPlayer"
+    "equipment.MixinSwordItem"
   ],
   "injectors": {
     "defaultRequire": 1

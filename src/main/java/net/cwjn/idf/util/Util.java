@@ -1,18 +1,13 @@
 package net.cwjn.idf.util;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.data.ArmourData;
 import net.cwjn.idf.config.json.data.ItemData;
 import net.cwjn.idf.config.json.data.WeaponData;
-import net.cwjn.idf.rpg.bonfire.entity.BonfireBlockEntity;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -29,16 +24,16 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 
-import static net.cwjn.idf.ImprovedDamageFramework.*;
+import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
+import static net.cwjn.idf.ImprovedDamageFramework.FONT_INDICATORS;
 import static net.cwjn.idf.util.UUIDs.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 
@@ -434,55 +429,6 @@ public class Util {
             }
         }
         return returnComponent;
-    }
-
-    public static boolean lookingAt(float partialTicks, BonfireBlockEntity be) {
-        HitResult ray = Minecraft.getInstance().player.pick(20, partialTicks, false);
-        return (((BlockHitResult)ray).getBlockPos().equals(be.getBlockPos()));
-    }
-
-    public static ResourceLocation[] flipLeftAnim() {
-        ResourceLocation[] returnRL = new ResourceLocation[7];
-        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/0.png");
-        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/1.png");
-        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/2.png");
-        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/3.png");
-        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/4.png");
-        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/5.png");
-        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/6.png");
-        return returnRL;
-    }
-
-    public static ResourceLocation[] flipRightAnim() {
-        ResourceLocation[] returnRL = new ResourceLocation[7];
-        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/0.png");
-        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/1.png");
-        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/2.png");
-        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/3.png");
-        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/4.png");
-        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/5.png");
-        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/6.png");
-        return returnRL;
-    }
-
-    public static ResourceLocation[] openAnim() {
-        ResourceLocation[] returnRL = new ResourceLocation[5];
-        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/0.png");
-        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/1.png");
-        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/2.png");
-        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/3.png");
-        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/4.png");
-        return returnRL;
-    }
-
-    public static ResourceLocation[] closeAnim() {
-        ResourceLocation[] returnRL = new ResourceLocation[5];
-        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/0.png");
-        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/1.png");
-        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/2.png");
-        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/3.png");
-        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_close/4.png");
-        return returnRL;
     }
 
     public static void addAllToJsonArray(JsonArray array, double... d) {

@@ -1,8 +1,7 @@
 package net.cwjn.idf.network;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.network.packets.*;
-import net.cwjn.idf.network.packets.bonfire.ActivateBonfirePacket;
+import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +24,6 @@ public class PacketHandler {
     public static void init() {
         INSTANCE.registerMessage(0, SyncClientConfigPacket.class, SyncClientConfigPacket::encode, SyncClientConfigPacket::decode, SyncClientConfigPacket::handle);
         INSTANCE.registerMessage(1, DisplayDamageIndicatorPacket.class, DisplayDamageIndicatorPacket::encode, DisplayDamageIndicatorPacket::decode, DisplayDamageIndicatorPacket::handle);
-        INSTANCE.registerMessage(2, ActivateBonfirePacket.class, ActivateBonfirePacket::encode, ActivateBonfirePacket::decode, ActivateBonfirePacket::handle);
     }
 
     public static void serverToPlayer(IDFPacket packet, ServerPlayer player) {

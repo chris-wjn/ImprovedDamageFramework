@@ -6,8 +6,6 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.buttons.AttributePage.AttributeButton;
 import net.cwjn.idf.gui.buttons.AttributePage.BackButton;
 import net.cwjn.idf.gui.buttons.AttributePage.StatButton;
-import net.cwjn.idf.gui.buttons.AttributePage.StatsButton;
-import net.cwjn.idf.rpg.player.RpgPlayer;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
 import net.minecraft.ChatFormatting;
@@ -26,7 +24,8 @@ import java.text.DecimalFormat;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.cwjn.idf.damage.DamageHandler.armourFormula;
-import static net.cwjn.idf.gui.StatsScreen.Page.*;
+import static net.cwjn.idf.gui.StatsScreen.Page.MAIN;
+import static net.cwjn.idf.gui.StatsScreen.Page.PAGE_ATTRIBUTES;
 import static net.cwjn.idf.util.Color.*;
 import static net.cwjn.idf.util.Util.numericalAttributeComponent;
 import static net.cwjn.idf.util.Util.translationComponent;
@@ -35,8 +34,6 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 @OnlyIn(Dist.CLIENT)
 public class StatsScreen extends Screen {
 
-    private static final ResourceLocation STATS =
-            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_stats.png");
     private static final ResourceLocation ATTRIBUTES =
             new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_attributes.png");
     private static final ResourceLocation BASE =
@@ -44,7 +41,6 @@ public class StatsScreen extends Screen {
 
     private static final DecimalFormat df = new DecimalFormat("##.#");
     private static final Style indicators = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
-    private final boolean atBonfire;
     private int w;
     private int h;
     private Page page = MAIN;
@@ -55,8 +51,7 @@ public class StatsScreen extends Screen {
 
     enum Page {
         MAIN,
-        PAGE_ATTRIBUTES,
-        PAGE_STATS
+        PAGE_ATTRIBUTES
     }
 
     static {
@@ -65,9 +60,8 @@ public class StatsScreen extends Screen {
         healthFormat.setMinimumIntegerDigits(2);
     }
 
-    public StatsScreen(boolean b) {
+    public StatsScreen() {
         super(translationComponent("idf.stats_screen"));
-        atBonfire = b;
     }
 
     @Override
@@ -78,7 +72,6 @@ public class StatsScreen extends Screen {
         w = (minecraft.getWindow().getGuiScaledWidth() - 384)/2;
         h = (minecraft.getWindow().getGuiScaledHeight() - 512)/2 - 7;
         attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
-        if (atBonfire) statsButton = addRenderableWidget(new StatsButton(w+78, h+137, (f) -> this.mainToStats()));
         backButton = addRenderableWidget(new BackButton(w+30, h+462, (f) -> this.attributesToMain()));
         //122, 443
         updateButtonVisibility();
@@ -87,17 +80,10 @@ public class StatsScreen extends Screen {
     private void updateButtonVisibility() {
         if (page == PAGE_ATTRIBUTES) {
             attributeButton.visible = false;
-            if (atBonfire) statsButton.visible = false;
-            backButton.visible = true;
-        }
-        else if (page == PAGE_STATS) {
-            if (atBonfire) statsButton.visible = false;
-            attributeButton.visible = false;
             backButton.visible = true;
         }
         else {
             attributeButton.visible = true;
-            if (atBonfire) statsButton.visible = true;
             backButton.visible = false;
         }
     }
@@ -112,11 +98,6 @@ public class StatsScreen extends Screen {
         updateButtonVisibility();
     }
 
-    private void mainToStats() {
-        page = PAGE_STATS;
-        updateButtonVisibility();
-    }
-
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         this.renderBackground(pPoseStack);
@@ -127,28 +108,13 @@ public class StatsScreen extends Screen {
             RenderSystem.setShaderTexture(0, BASE);
             blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
         }
-        else if (page == PAGE_ATTRIBUTES)  {
+        else  {
             RenderSystem.setShaderTexture(0, ATTRIBUTES);
             blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
             renderAttributes(pPoseStack, pMouseX, pMouseY);
-        } else {
-            RenderSystem.setShaderTexture(0, STATS);
-            blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
-            renderStats(pPoseStack);
         }
         pPoseStack.popPose();
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-    }
-
-    private void renderStats(PoseStack matrix) {
-        RpgPlayer rpgPlayer = (RpgPlayer) player;
-        drawCenteredString(font, matrix, rpgPlayer.getCons(), w + 200, h + 52.5f, 0xffffff);
-        drawCenteredString(font, matrix, rpgPlayer.getStr(), w + 200, h + 72.5f, 0xffffff);
-        drawCenteredString(font, matrix, rpgPlayer.getDex(), w + 200, h + 92.5f, 0xffffff);
-        drawCenteredString(font, matrix, rpgPlayer.getAgl(), w + 200, h + 112.5f, 0xffffff);
-        drawCenteredString(font, matrix, rpgPlayer.getInt(), w + 200, h + 132.5f, 0xffffff);
-        drawCenteredString(font, matrix, rpgPlayer.getWis(), w + 200, h + 152.5f, 0xffffff);
-        drawCenteredString(font, matrix, rpgPlayer.getFth(), w + 200, h + 172.5f, 0xffffff);
     }
 
     private void renderAttributes(PoseStack matrix, int mouseX, int mouseY) {
