@@ -1,29 +1,25 @@
 package net.cwjn.idf.compat.patchouli;
 
-import com.google.common.reflect.TypeToken;
+import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.JSONUtil;
-import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.commons.io.FileUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
+import java.io.FileWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CreateJsonEntries {
-
-    private static final Gson gson = new Gson();
 
     @SubscribeEvent
     public static void onEntityRegistry(EntityAttributeModificationEvent event) {
@@ -31,7 +27,10 @@ public class CreateJsonEntries {
             JsonEntry entry = new JsonEntry(Util.getEntityRegistryName(entityType).toString(), "", getFormattedCategory(entityType),
                     new DefaultPage("patchouli:entity", Util.getEntityRegistryName(entityType).toString(), ""),
                     new IDFPage(getFormattedIdfCategory(entityType), Util.getEntityRegistryName(entityType).toString()));
-            JSONUtil.writeFile(new File(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/patchouli_books/en_us/entries/hostile/" + Util.getEntityRegistryName(entityType).toString() + ".json").toString()), entry);
+            FileWriter file = new FileWriter();
+            if (entityType.getCategory().isFriendly()) JSONUtil.writeFile(new File(JSONHandler.class.getClassLoader().getResource("data/idf/patchouli_books/en_us/entries/passive/" + Util.getEntityRegistryName(entityType).toString().replace(":", "_") + ".json").getPath()), entry);
+            else JSONUtil.writeFile(new File(JSONHandler.class.getClassLoader().getResource("data/idf/patchouli_books/en_us/entries/hostile/" + Util.getEntityRegistryName(entityType).toString().replace(":", "_") + ".json").getPath()), entry);
+
         }
     }
 

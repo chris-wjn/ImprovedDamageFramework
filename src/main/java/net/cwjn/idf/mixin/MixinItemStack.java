@@ -226,7 +226,7 @@ public abstract class MixinItemStack {
             }
             MutableComponent component2 = Util.textComponent("  ");
             component2.append(Util.translationComponent("idf.icon.weight").withStyle(symbolStyle));
-            component2.append(Util.translationComponent("idf.weight_tooltip"));
+            component2.append(Util.translationComponent("idf.force_tooltip"));
             component2.append(Util.textComponent(df.format(value2)));
             list.add(component2);
         }

@@ -27,16 +27,13 @@ public class EquipmentInspectScreen extends Screen {
     private final int pWidth = 384, pHeight = 512;
     private Player player;
     private Font font;
-    private final ItemStack hoveredItem, currentItem;
+    private final ItemStack currentItem;
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
 
-    private static final ResourceLocation currentItemBox = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/item_inspect/current_item.png");
-    private static final ResourceLocation hoveredItemBox = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/item_inspect/selected_item.png");
     private static final ResourceLocation inspectItemBox = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/item_inspect/item_inspection.png");
 
-    public EquipmentInspectScreen(ItemStack hovered, ItemStack current) {
+    public EquipmentInspectScreen(ItemStack current) {
         super(Component.translatable("idf.equipment_inspect_screen"));
-        hoveredItem = hovered;
         currentItem = current;
     }
 
@@ -105,8 +102,6 @@ public class EquipmentInspectScreen extends Screen {
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, FORCE.get()), left + 110, top + 284, WHITE);
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_SPEED), left + 110, top + 259, WHITE);
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ARMOR_TOUGHNESS), left + 110, top + 309, WHITE);
-        //if (currentItem.getTag().contains("idf.damage_class")) Util.drawCenteredString(font, matrix, Util.textComponent(currentItem.getTag().getString("idf.damage_class")), w/2 - boxWidth/2, h/2, WHITE);
-        //else Util.drawCenteredString(font, matrix, Util.textComponent("N/A"), w/2 - boxWidth/2, h/2, WHITE);
     }
 
     @Override

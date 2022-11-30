@@ -23,9 +23,8 @@ public class ClientEventsForgeBus {
         ItemStack hoveredItem = event.getItemStack();
         if (hoveredItem.hasTag() && hoveredItem.getTag().contains("idf.equipment") && Minecraft.getInstance().player != null) {
             event.getToolTip().add(Component.translatable("idf.press_to_inspect"));
-            ItemStack currentItem = Minecraft.getInstance().player.getItemBySlot(LivingEntity.getEquipmentSlotForItem(hoveredItem));
             if (Keybinds.inspectItem.isDown() && !(Minecraft.getInstance().screen instanceof EquipmentInspectScreen)) {
-                Minecraft.getInstance().pushGuiLayer(new EquipmentInspectScreen(hoveredItem, currentItem));
+                Minecraft.getInstance().pushGuiLayer(new EquipmentInspectScreen(hoveredItem));
                 Keybinds.inspectItem.setDown(false);
             }
         }
