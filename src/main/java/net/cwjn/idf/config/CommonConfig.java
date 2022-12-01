@@ -12,15 +12,12 @@ public class CommonConfig {
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_DAMAGE_SOURCES_NO_INVULN;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ENTITIES;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_RPG_MODULE;
     private static final String[] defaultStringList = {"player", "mob", "sting", "fall"};
     private static final String[] defaultBlacklist = {"minecraft:slime", "minecraft:magma_cube"};
 
     static {
 
         BUILDER.push("Common Config");
-
-        ENABLE_RPG_MODULE = BUILDER.comment("Enable RPG Module (levels, bonfires, stats, etc...)").define("Enable", true);
 
         WHITELISTED_DAMAGE_SOURCES_NO_INVULN = BUILDER.comment("Damage Sources that will not make the target gain invulnerability frames. Takes DamageSource object's msgId field. If you don't know what that is, don't touch this.")
                         .defineList("Whitelisted sources", Arrays.asList(defaultStringList), s -> s instanceof String);

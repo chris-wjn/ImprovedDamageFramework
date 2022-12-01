@@ -30,7 +30,7 @@ public class EquipmentInspectScreen extends Screen {
     private final ItemStack currentItem;
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
 
-    private static final ResourceLocation inspectItemBox = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/item_inspect/item_inspection.png");
+    private static final ResourceLocation inspectItemBox = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/item_inspection.png");
 
     public EquipmentInspectScreen(ItemStack current) {
         super(Component.translatable("idf.equipment_inspect_screen"));
@@ -66,8 +66,6 @@ public class EquipmentInspectScreen extends Screen {
     }
 
     private void drawCurrentItemStrings(PoseStack matrix) {
-        // NAME
-        Util.drawCenteredString(font, matrix, currentItem.getHoverName(), left, top, WHITE);
         // DAMAGE/RESISTANCES
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ATTACK_DAMAGE), left + 200, top + 52, WHITE);
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, ARMOR), left + 313, top + 52, WHITE);

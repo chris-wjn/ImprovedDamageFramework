@@ -225,7 +225,7 @@ public abstract class MixinItemStack {
                 value2 += mappedOperation0.get(IDFAttributes.FORCE.get());
             }
             MutableComponent component2 = Util.textComponent("  ");
-            component2.append(Util.translationComponent("idf.icon.weight").withStyle(symbolStyle));
+            component2.append(Util.translationComponent("idf.icon.force").withStyle(symbolStyle));
             component2.append(Util.translationComponent("idf.force_tooltip"));
             component2.append(Util.textComponent(df.format(value2)));
             list.add(component2);

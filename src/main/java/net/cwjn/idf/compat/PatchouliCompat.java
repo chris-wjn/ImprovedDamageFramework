@@ -1,4 +1,4 @@
-package net.cwjn.idf.compat.patchouli;
+package net.cwjn.idf.compat;
 
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.JSONHandler;

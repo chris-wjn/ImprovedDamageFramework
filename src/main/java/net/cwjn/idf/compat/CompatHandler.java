@@ -1,6 +1,5 @@
 package net.cwjn.idf.compat;
 
-import net.cwjn.idf.compat.patchouli.PatchouliCompat;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;

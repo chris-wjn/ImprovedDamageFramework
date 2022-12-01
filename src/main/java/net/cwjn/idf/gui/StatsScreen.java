@@ -3,9 +3,6 @@ package net.cwjn.idf.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.gui.buttons.AttributePage.AttributeButton;
-import net.cwjn.idf.gui.buttons.AttributePage.BackButton;
-import net.cwjn.idf.gui.buttons.AttributePage.StatButton;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
 import net.minecraft.ChatFormatting;
@@ -24,8 +21,6 @@ import java.text.DecimalFormat;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.cwjn.idf.damage.DamageHandler.armourFormula;
-import static net.cwjn.idf.gui.StatsScreen.Page.MAIN;
-import static net.cwjn.idf.gui.StatsScreen.Page.PAGE_ATTRIBUTES;
 import static net.cwjn.idf.util.Color.*;
 import static net.cwjn.idf.util.Util.numericalAttributeComponent;
 import static net.cwjn.idf.util.Util.translationComponent;
@@ -35,24 +30,15 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 public class StatsScreen extends Screen {
 
     private static final ResourceLocation ATTRIBUTES =
-            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_attributes.png");
-    private static final ResourceLocation BASE =
-            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen_base.png");
+            new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/stat_screen/stat_screen_attributes.png");
 
     private static final DecimalFormat df = new DecimalFormat("##.#");
     private static final Style indicators = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
     private int w;
     private int h;
-    private Page page = MAIN;
-    private StatButton attributeButton, backButton, statsButton;
     public static final DecimalFormat healthFormat = new DecimalFormat();
     private Player player;
     private Font font;
-
-    enum Page {
-        MAIN,
-        PAGE_ATTRIBUTES
-    }
 
     static {
         healthFormat.setMinimumFractionDigits(1);
@@ -71,31 +57,7 @@ public class StatsScreen extends Screen {
         font = minecraft.font;
         w = (minecraft.getWindow().getGuiScaledWidth() - 384)/2;
         h = (minecraft.getWindow().getGuiScaledHeight() - 512)/2 - 7;
-        attributeButton = addRenderableWidget(new AttributeButton(w+28, h+84, (f) -> this.mainToAttributes()));
-        backButton = addRenderableWidget(new BackButton(w+30, h+462, (f) -> this.attributesToMain()));
         //122, 443
-        updateButtonVisibility();
-    }
-
-    private void updateButtonVisibility() {
-        if (page == PAGE_ATTRIBUTES) {
-            attributeButton.visible = false;
-            backButton.visible = true;
-        }
-        else {
-            attributeButton.visible = true;
-            backButton.visible = false;
-        }
-    }
-
-    private void mainToAttributes() {
-        page = PAGE_ATTRIBUTES;
-        updateButtonVisibility();
-    }
-
-    private void attributesToMain() {
-        page = MAIN;
-        updateButtonVisibility();
     }
 
     @Override
@@ -104,15 +66,9 @@ public class StatsScreen extends Screen {
         pPoseStack.pushPose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        if (page == MAIN)  {
-            RenderSystem.setShaderTexture(0, BASE);
-            blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
-        }
-        else  {
-            RenderSystem.setShaderTexture(0, ATTRIBUTES);
-            blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
-            renderAttributes(pPoseStack, pMouseX, pMouseY);
-        }
+        RenderSystem.setShaderTexture(0, ATTRIBUTES);
+        blit(pPoseStack, w, h, 0, 0, 384, 512, 384, 512);
+        renderAttributes(pPoseStack, pMouseX, pMouseY);
         pPoseStack.popPose();
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
@@ -147,14 +103,14 @@ public class StatsScreen extends Screen {
         drawCenteredPercentage(font, matrix, player.getAttributeValue(CRIT_CHANCE.get()), w+104, h+318, ORANGE.getColor());
         drawCenteredPercentage(font, matrix, (player.getAttributeValue(ATTACK_KNOCKBACK)/0.4) * 100, w+104, h+363, VIOLET.getColor());
         drawCenteredPercentage(font, matrix, player.getAttributeValue(KNOCKBACK_RESISTANCE)*100, w+283, h+363, VIOLET.getColor());
-        drawCenteredPercentage(font, matrix, player.getAttributeValue(PENETRATING.get()), w+283, h+318, WHITESMOKE.getColor());
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(PENETRATING.get()), w+223.5f, h+273, WHITESMOKE.getColor());
         drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(LUCK), w+223.5f, h+454, GREENYELLOW.getColor());
         drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(MOVEMENT_SPEED)), w+162, h+454, ChatFormatting.DARK_GREEN.getColor());
-        drawCenteredPercentage(font, matrix, player.getAttributeValue(EVASION.get()), w+223.5f, h+273, ChatFormatting.DARK_GRAY.getColor());
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(EVASION.get()), w+283, h+318, ChatFormatting.DARK_GRAY.getColor());
         drawCenteredPercentage(font, matrix, player.getAttributeValue(LIFESTEAL.get()), w+162, h+273, ChatFormatting.DARK_RED.getColor());
         Util.drawCenteredString(font, matrix, Util.textComponent(df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth())), w + 193.5f, h + 399, INDIANRED.getColor());
-        //163, 454
+        //223.5, 273
     }
 
     private void drawCenteredString(Font font, PoseStack matrix, double value, float x, float y, int colour) {
