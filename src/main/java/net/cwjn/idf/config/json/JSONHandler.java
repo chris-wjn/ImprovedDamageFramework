@@ -207,7 +207,8 @@ public class JSONHandler {
         SortedMap<ResourceLocation, WeaponData> sortedWeaponOp0Map = new TreeMap<>(weaponItemsOp0);
         SortedMap<ResourceLocation, ItemData> sortedWeaponOp1Map = new TreeMap<>(weaponItemsOp1);
         SortedMap<ResourceLocation, ItemData> sortedWeaponOp2Map = new TreeMap<>(weaponItemsOp2);
-        JSONUtil.writeFile(new File(configDir, "entity_data.json"), entityMap);
+        SortedMap<ResourceLocation, EntityData> sortedEntityMap = new TreeMap<>(entityMap);
+        JSONUtil.writeFile(new File(configDir, "entity_data.json"), sortedEntityMap);
         JSONUtil.writeFile(new File(configDir, "armour_items_operation_addition.json"), sortedArmourOp0Map);
         JSONUtil.writeFile(new File(configDir, "armour_items_operation_multiply_base.json"), sortedArmourOp1Map);
         JSONUtil.writeFile(new File(configDir, "armour_items_operation_multiply_total.json"), sortedArmourOp2Map);
