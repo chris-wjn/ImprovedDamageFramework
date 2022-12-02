@@ -23,11 +23,13 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
@@ -41,9 +43,6 @@ public abstract class MixinItemStack {
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
-
-    @Inject(method = "getTooltipLines",
-    at = @At)
 
     /**
      * @author cwJn
