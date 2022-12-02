@@ -41,6 +41,7 @@ public class Util {
 
     private Util() {throw new IllegalAccessError("Util class");}
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
+    private static final Style INDICATOR = Style.EMPTY.withFont(FONT_INDICATORS);
     private static final DecimalFormat attributeFormat = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
     private static final UUID BASE_ATTACK_DAMAGE_UUID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
@@ -394,38 +395,38 @@ public class Util {
                 }
             }
         }
-        MutableComponent returnComponent = textComponent("").withStyle(Style.EMPTY.withFont(FONT_INDICATORS));
+        MutableComponent returnComponent = textComponent("");
         boolean hasAddition = addition != 0, hasBaseMult = base != 0, hasTotalMult = total != 0;
         //if (hasAddition || hasTotalMult || hasBaseMult) returnComponent.append(translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
         if (hasAddition) {
             if (addition < 0) {
-                returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.RED));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.RED).withStyle(INDICATOR));
             } else {
-                returnComponent.append(withColor(textComponent("+" + attributeFormat.format(addition)), Color.LIGHTGREEN));
+                returnComponent.append(withColor(textComponent("+" + attributeFormat.format(addition)), Color.LIGHTGREEN).withStyle(INDICATOR));
             }
             if (hasBaseMult || hasTotalMult) returnComponent.append(", ");
         }
         if (hasBaseMult) {
             if (base < 0) {
-                returnComponent.append(withColor(textComponent("(B × "), Color.RED).withStyle(Style.EMPTY));
-                returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.RED));
-                returnComponent.append(withColor(textComponent(")"), Color.RED).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(translationComponent("idf.base_multiplication"), Color.RED));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.RED).withStyle(INDICATOR));
+                returnComponent.append(withColor(textComponent(")"), Color.RED));
             } else {
-                returnComponent.append(withColor(textComponent("(B × "), Color.LIGHTGREEN).withStyle(Style.EMPTY));
-                returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.LIGHTGREEN));
-                returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(translationComponent("idf.base_multiplication"), Color.LIGHTGREEN));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.LIGHTGREEN).withStyle(INDICATOR));
+                returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN));
             }
-            if (hasTotalMult) returnComponent.append(",   ");
+            if (hasTotalMult) returnComponent.append(", ");
         }
         if (hasTotalMult) {
             if (total < 0) {
-                returnComponent.append(withColor(textComponent("(T × "), Color.RED).withStyle(Style.EMPTY));
-                returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.RED));
-                returnComponent.append(withColor(textComponent(")"), Color.RED).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(translationComponent("idf.total_multiplication"), Color.RED));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.RED).withStyle(INDICATOR));
+                returnComponent.append(withColor(textComponent(")"), Color.RED));
             } else {
-                returnComponent.append(withColor(textComponent("(T × "), Color.LIGHTGREEN).withStyle(Style.EMPTY));
-                returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.LIGHTGREEN));
-                returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN).withStyle(Style.EMPTY));
+                returnComponent.append(withColor(translationComponent("idf.total_multiplication"), Color.LIGHTGREEN));
+                returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.LIGHTGREEN).withStyle(INDICATOR));
+                returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN));
             }
         }
         return returnComponent;

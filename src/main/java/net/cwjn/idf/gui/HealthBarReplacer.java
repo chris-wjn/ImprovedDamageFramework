@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
 public class HealthBarReplacer {
 
     private static final ResourceLocation HEALTH_GUI = new ResourceLocation(
-            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthbar/healthgui.png");
+            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthgui.png");
     private static DecimalFormat healthFormat = new DecimalFormat();
     static {
         healthFormat.setMinimumFractionDigits(1);

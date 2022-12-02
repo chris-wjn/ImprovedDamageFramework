@@ -42,6 +42,9 @@ public abstract class MixinItemStack {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
 
+    @Inject(method = "getTooltipLines",
+    at = @At)
+
     /**
      * @author cwJn
      * @reason

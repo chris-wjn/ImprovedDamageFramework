@@ -145,6 +145,8 @@
   "idf.fleur_de_lis.symbol": "⚜",
   "idf.right_arrow.symbol": "➢",
   "idf.sword.symbol": "⚔ ",
+  "idf.base_multiplication": "(B⁎",
+  "idf.total_multiplication": "(T⁎",
   "idf.ohm.symbol": "Ω",
   "idf.halfmoon.symbol":"◐",
   "idf.infinity.symbol": ": ∞",
@@ -258,12 +260,6 @@
 
   "//EFFECTS": "USED FOR EFFECTS lol",
   "effect.idf.positive_attribute_modifier_effect": "Stat Up!",
-  "effect.idf.negative_attribute_modifier_effect": "Stat Down!",
-
-  "//BLOCKS": "blocks",
-  "block.idf.bonfire_base": "Bonfire",
-
-  "//GUI": "gui",
-  "button.confirm": "Confirm"
+  "effect.idf.negative_attribute_modifier_effect": "Stat Down!"
 
 }
