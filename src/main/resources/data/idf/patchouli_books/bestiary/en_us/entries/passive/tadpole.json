@@ -1,0 +1,16 @@
+{
+  "name": "Tadpole",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:tadpole",
+      "text": "Larval form of frog mob that matures on one of three frog variants depending on the biome in which they mature."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:tadpole"
+    }
+  ]
+}

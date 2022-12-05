@@ -1,0 +1,16 @@
+{
+  "name": "Guardian",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:guardian",
+      "text": "Hostile aquatic mobs that spawn in and around ocean monuments."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:guardian"
+    }
+  ]
+}

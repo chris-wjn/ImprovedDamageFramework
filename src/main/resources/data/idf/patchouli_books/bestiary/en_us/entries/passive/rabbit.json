@@ -1,0 +1,16 @@
+{
+  "name": "Rabbit",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:rabbit",
+      "text": "Uncommon and quick-moving passive mob."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:rabbit"
+    }
+  ]
+}

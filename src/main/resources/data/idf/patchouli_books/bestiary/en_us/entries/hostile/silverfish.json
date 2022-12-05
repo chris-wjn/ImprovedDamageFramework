@@ -1,0 +1,16 @@
+{
+  "name": "Silverfish",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:silverfish",
+      "text": "Small hostile mobs found hiding in stone-like blocks in mountains, strongholds, igloo basements and woodland mansions."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:silverfish"
+    }
+  ]
+}

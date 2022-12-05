@@ -1,0 +1,16 @@
+{
+  "name": "Ocelot",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:ocelot",
+      "text": "Small passive mobs spawning naturally in Jungle biomes."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:ocelot"
+    }
+  ]
+}

@@ -64,7 +64,7 @@ public abstract class MixinItemStack {
             }
         }
 
-        //dont know what this does
+        //don't know what this does
         int j = this.getHideFlags();
         if (shouldShowInTooltip(j, ItemStack.TooltipPart.ADDITIONAL)) {
             thisItemStack.getItem().appendHoverText((ItemStack)(Object)this, player == null ? null : player.level, list, tooltipMode);
@@ -334,19 +334,29 @@ public abstract class MixinItemStack {
 
     private void appendMultipliers(Map<Attribute, Double> mappedOperation1, Map<Attribute, Double> mappedOperation2, List<Component> list) {
         if (!mappedOperation1.isEmpty()) {
-            list.add(Util.withColor(Util.translationComponent("idf.operation1.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGRAY));
+            list.add(Util.withColor(Util.translationComponent("idf.operation1.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGOLDENRODYELLOW));
             for (Map.Entry<Attribute, Double> entry : mappedOperation1.entrySet()) {
-                MutableComponent name = Util.translationComponent(entry.getKey().getDescriptionId());
-                MutableComponent op1 = name.append(Util.textComponent(" " + df.format(entry.getValue() * 100) + "%"));
+                MutableComponent name = Util.textComponent("   ").append(Util.withColor(Util.translationComponent(entry.getKey().getDescriptionId()), Color.LIGHTGRAY));
+                MutableComponent op1;
+                if (entry.getValue() > 0) {
+                    op1 = name.append(Util.withColor(Util.textComponent("  +" + df.format(entry.getValue() * 100) + "%"), Color.LIGHTGREEN));
+                } else {
+                    op1 = name.append(Util.withColor(Util.textComponent("  " + df.format(entry.getValue() * 100) + "%"), Color.TOMATO));
+                }
                 list.add(Util.withColor(op1, Color.GRAY));
             }
         }
         if (!mappedOperation2.isEmpty()) {
-            list.add(Util.withColor(Util.translationComponent("idf.operation2.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGRAY));
+            list.add(Util.withColor(Util.translationComponent("idf.operation2.tooltip").withStyle(ChatFormatting.ITALIC), Color.LIGHTGOLDENRODYELLOW));
             Util.textComponent("");
             for (Map.Entry<Attribute, Double> entry : mappedOperation2.entrySet()) {
-                MutableComponent name = Util.translationComponent(entry.getKey().getDescriptionId());
-                MutableComponent op2 = name.append(Util.textComponent(" " + df.format(entry.getValue() * 100) + "%"));
+                MutableComponent name = Util.textComponent("   ").append(Util.withColor(Util.translationComponent(entry.getKey().getDescriptionId()), Color.LIGHTGRAY));
+                MutableComponent op2;
+                if (entry.getValue() > 0) {
+                    op2 = name.append(Util.withColor(Util.textComponent("  +" + df.format(entry.getValue() * 100) + "%"), Color.GREEN));
+                } else {
+                    op2 = name.append(Util.withColor(Util.textComponent("  " + df.format(entry.getValue() * 100) + "%"), Color.RED));
+                }
                 list.add(Util.withColor(op2, Color.GRAY));
             }
         }

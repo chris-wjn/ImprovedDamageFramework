@@ -6,7 +6,7 @@
     {
       "type": "patchouli:entity",
       "entity": "minecraft:phantom",
-      "text": "Flying, undead, hostile mobs that attack players who haven't slept for three or more days."
+      "text": "Flying undead hostile mob that spawns when the player has not slept or died for three or more days."
     },
     {
       "type": "idf:hostile_entity",

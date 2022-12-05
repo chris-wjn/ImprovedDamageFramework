@@ -1,0 +1,16 @@
+{
+  "name": "Cow",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:cow",
+      "text": "Common passive mob found in most grassy biomes that drops leather and beef when killed."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:cow"
+    }
+  ]
+}

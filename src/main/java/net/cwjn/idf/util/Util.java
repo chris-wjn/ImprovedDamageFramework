@@ -397,8 +397,10 @@ public class Util {
         }
         MutableComponent returnComponent = textComponent("");
         boolean hasAddition = addition != 0, hasBaseMult = base != 0, hasTotalMult = total != 0;
+        boolean hasNothing = true;
         //if (hasAddition || hasTotalMult || hasBaseMult) returnComponent.append(translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
         if (hasAddition) {
+            hasNothing = false;
             if (addition < 0) {
                 returnComponent.append(withColor(textComponent(attributeFormat.format(addition)), Color.RED).withStyle(INDICATOR));
             } else {
@@ -407,6 +409,7 @@ public class Util {
             if (hasBaseMult || hasTotalMult) returnComponent.append(", ");
         }
         if (hasBaseMult) {
+            hasNothing = false;
             if (base < 0) {
                 returnComponent.append(withColor(translationComponent("idf.base_multiplication"), Color.RED));
                 returnComponent.append(withColor(textComponent(attributeFormat.format(base)), Color.RED).withStyle(INDICATOR));
@@ -419,6 +422,7 @@ public class Util {
             if (hasTotalMult) returnComponent.append(", ");
         }
         if (hasTotalMult) {
+            hasNothing = false;
             if (total < 0) {
                 returnComponent.append(withColor(translationComponent("idf.total_multiplication"), Color.RED));
                 returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.RED).withStyle(INDICATOR));
@@ -428,6 +432,9 @@ public class Util {
                 returnComponent.append(withColor(textComponent(attributeFormat.format(total)), Color.LIGHTGREEN).withStyle(INDICATOR));
                 returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN));
             }
+        }
+        if (hasNothing) {
+            returnComponent.append(withColor(textComponent("0"), Color.WHITESMOKE).withStyle(INDICATOR));
         }
         return returnComponent;
     }

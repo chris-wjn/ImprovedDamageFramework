@@ -1,0 +1,16 @@
+{
+  "name": "Piglin",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:piglin",
+      "text": "Mob found in the Nether that is hostile to players unless wearing at least one piece of gold armour."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:piglin"
+    }
+  ]
+}

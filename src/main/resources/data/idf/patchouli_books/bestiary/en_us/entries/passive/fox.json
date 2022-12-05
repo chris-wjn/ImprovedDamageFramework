@@ -1,0 +1,16 @@
+{
+  "name": "Fox",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:fox",
+      "text": "Tameable passive mob spawning in taigas and mountain groves."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:fox"
+    }
+  ]
+}

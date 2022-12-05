@@ -1,0 +1,16 @@
+{
+  "name": "Wolf",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:wolf",
+      "text": "Neutral mob that can be tamed and used to assist in combat with most hostile mobs."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:wolf"
+    }
+  ]
+}

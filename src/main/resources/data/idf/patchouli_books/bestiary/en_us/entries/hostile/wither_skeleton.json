@@ -1,0 +1,16 @@
+{
+  "name": "Wither Skeleton",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:wither_skeleton",
+      "text": "Tall black variants of skeletons that inflict the wither status effect."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:wither_skeleton"
+    }
+  ]
+}

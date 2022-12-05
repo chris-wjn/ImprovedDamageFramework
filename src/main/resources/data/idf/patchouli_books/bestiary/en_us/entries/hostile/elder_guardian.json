@@ -1,0 +1,16 @@
+{
+  "name": "Elder Guardian",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:elder_guardian",
+      "text": "Stronger and larger variant of the guardian."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:elder_guardian"
+    }
+  ]
+}

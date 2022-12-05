@@ -1,0 +1,16 @@
+{
+  "name": "Cod",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:cod",
+      "text": "Common passive fish mob found in oceans."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:cod"
+    }
+  ]
+}

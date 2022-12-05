@@ -1,0 +1,16 @@
+{
+  "name": "Mooshroom",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:mooshroom",
+      "text": "Mushroom covered variety of cow exclusive to the mushroom fields biome."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:mooshroom"
+    }
+  ]
+}

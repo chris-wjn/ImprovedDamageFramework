@@ -1,0 +1,16 @@
+{
+  "name": "Squid",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:squid",
+      "text": "Common passive aquatic mob spawning in rivers and oceans."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:squid"
+    }
+  ]
+}

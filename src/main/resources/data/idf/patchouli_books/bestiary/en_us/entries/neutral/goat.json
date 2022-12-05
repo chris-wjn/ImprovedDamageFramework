@@ -1,0 +1,16 @@
+{
+  "name": "Goat",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:goat",
+      "text": "Mountainous netral mob that can be found in many biomes."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:goat"
+    }
+  ]
+}

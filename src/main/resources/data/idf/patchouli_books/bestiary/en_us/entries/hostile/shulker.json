@@ -1,0 +1,16 @@
+{
+  "name": "Shulker",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:shulker",
+      "text": "Box shaped hostile mobs found in end cities."
+    },
+    {
+      "type": "idf:neutral_entity",
+      "entity": "minecraft:shulker"
+    }
+  ]
+}

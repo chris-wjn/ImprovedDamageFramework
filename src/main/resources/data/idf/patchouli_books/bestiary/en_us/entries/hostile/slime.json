@@ -1,0 +1,16 @@
+{
+  "name": "Slime",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:slime",
+      "text": "Bouncy cube shaped hostile mobs."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:slime"
+    }
+  ]
+}

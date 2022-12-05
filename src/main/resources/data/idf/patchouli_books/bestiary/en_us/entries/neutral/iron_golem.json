@@ -1,0 +1,16 @@
+{
+  "name": "Iron Golem",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:iron_golem",
+      "text": "Large, powerful neutral buildable mob that defends players and villagers."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:iron_golem"
+    }
+  ]
+}

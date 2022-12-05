@@ -1,0 +1,16 @@
+{
+  "name": "Snow Golem",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:snow_golem",
+      "text": "Player created or uncommonly spawning mob that attacks hostile mobs."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:snow_golem"
+    }
+  ]
+}

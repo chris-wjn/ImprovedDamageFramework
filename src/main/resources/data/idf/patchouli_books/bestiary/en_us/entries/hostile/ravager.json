@@ -1,0 +1,16 @@
+{
+  "name": "Ravager",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:ravager",
+      "text": "Large hostile mobs that spawn in raids."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:ravager"
+    }
+  ]
+}

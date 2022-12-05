@@ -9,7 +9,7 @@
       "text": "A common hostile mob that silently approaches players and explodes."
     },
     {
-      "type": "idf:hostile_entity",
+      "type": "idf:passive_entity",
       "entity": "minecraft:creeper"
     }
   ]

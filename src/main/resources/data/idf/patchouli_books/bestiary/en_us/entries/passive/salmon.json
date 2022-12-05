@@ -1,0 +1,16 @@
+{
+  "name": "Salmon",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:salmon",
+      "text": "Common passive fish mob found in oceans and rivers."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:salmon"
+    }
+  ]
+}

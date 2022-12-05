@@ -1,0 +1,16 @@
+{
+  "name": "Panda",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:panda",
+      "text": "Rare neutral mob found in jungles."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:panda"
+    }
+  ]
+}

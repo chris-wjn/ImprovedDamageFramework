@@ -1,0 +1,16 @@
+{
+  "name": "Chicken",
+  "icon": "",
+  "category": "idf:passive",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:chicken",
+      "text": "Feathered passive mob found in grass biomes."
+    },
+    {
+      "type": "idf:passive_entity",
+      "entity": "minecraft:chicken"
+    }
+  ]
+}

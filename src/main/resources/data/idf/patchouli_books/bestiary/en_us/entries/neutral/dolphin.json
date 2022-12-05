@@ -1,0 +1,16 @@
+{
+  "name": "Dolphin",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:dolphin",
+      "text": "Neutral mobs living in non-frozen oceans."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:dolphin"
+    }
+  ]
+}
