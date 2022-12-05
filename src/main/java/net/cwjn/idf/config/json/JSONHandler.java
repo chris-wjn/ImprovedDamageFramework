@@ -260,13 +260,18 @@ public class JSONHandler {
 
     private static void updateItems() {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
+            ItemInterface idfItem = (ItemInterface) item;
+            CompoundTag defaultTag = new CompoundTag();
+            ResourceLocation loc = Util.getItemRegistryName(item);
             if (item instanceof IDFCustomEquipment) {
+                defaultTag.putBoolean("idf.equipment", true);
+                if (weaponItemsOp0.containsKey(loc)) {
+                    defaultTag.putString("idf.damage_class", weaponItemsOp0.get(loc).damageClass());
+                }
+                idfItem.setDefaultTag(defaultTag);
                 continue;
             }
-            ResourceLocation loc = Util.getItemRegistryName(item);
-            ItemInterface idfItem = (ItemInterface) item;
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-            CompoundTag defaultTag = new CompoundTag();
             if (weaponItemsOp0.containsKey(loc) || weaponItemsOp1.containsKey(loc) || weaponItemsOp2.containsKey(loc)) {
                 defaultTag.putBoolean("idf.equipment", true);
                 if (item instanceof SwordItem sword) {
