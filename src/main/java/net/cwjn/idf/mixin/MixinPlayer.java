@@ -165,12 +165,9 @@ public class MixinPlayer {
                     if (targetWasHurt) {
                         //knockback the target and if the player was sprinting, stop their sprint
                         if (knockback > 0) {
-                            if (target instanceof LivingEntity) {
-                                ((LivingEntity)target).knockback((double)((float)knockback * 0.5F), (double) Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F))));
-                            } else {
+                            if (!(target instanceof LivingEntity)) {
                                 target.push((double)(-Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)) * (float)knockback * 0.5F), 0.1D, (double)(Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F)) * (float)knockback * 0.5F));
                             }
-
                             thisPlayer.setDeltaMovement(thisPlayer.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                             thisPlayer.setSprinting(false);
                         }
