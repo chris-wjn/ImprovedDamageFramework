@@ -312,15 +312,6 @@ public class JSONHandler {
                         defaultTag.putString("idf.damage_class", data0.damageClass());
                         idfItem.setMaxDamage(item.getMaxDamage() + data0.durability());
                     }
-                    if (TooltipsCompat.enabled) {
-                        double fire = (data0.fireDamage() * (1 + data1.fireDamage())) * (1 + data2.fireDamage());
-                        double water = (data0.waterDamage() * (1 + data1.waterDamage())) * (1 + data2.waterDamage());
-                        double lightning = (data0.lightningDamage() * (1 + data1.lightningDamage())) * (1 + data2.lightningDamage());
-                        double magic = (data0.magicDamage() * (1 + data1.magicDamage())) * (1 + data2.magicDamage());
-                        double dark = (data0.darkDamage() * (1 + data1.darkDamage())) * (1 + data2.darkDamage());
-                        double phys = (data0.physicalDamage() * (1 + data1.physicalDamage())) * (1 + data2.physicalDamage());
-                        idfItem.getDefaultTags().putInt("idf.tooltip_border", Util.getItemBorderType(idfItem.getDefaultTags().getString("idf.damage_class"), fire, water, lightning, magic, dark, phys));
-                    }
                 }
             }
             if (armourItemsOp0.containsKey(loc) || armourItemsOp1.containsKey(loc) || armourItemsOp2.containsKey(loc)) {

@@ -1,6 +1,7 @@
 package net.cwjn.idf.util;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.attribute.IDFAttributes;
@@ -320,7 +321,47 @@ public class Util {
         return x.floatValue();
     }
 
-    public static int getItemBorderType(String dc, double f, double w, double l, double m, double d, double p) {
+    public static int getItemBorderType(String dc, Multimap<Attribute, AttributeModifier> map) {
+        double f = 0, w = 0, l = 0, m = 0, d = 0, p = 2;
+        for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
+            if (entry.getKey() == IDFAttributes.FIRE_DAMAGE.get()) {
+                if (entry.getValue().getOperation() == ADDITION) {
+                    f += entry.getValue().getAmount();
+                } else {
+                    f += entry.getValue().getAmount() * 10;
+                }
+            } else if (entry.getKey() == IDFAttributes.WATER_DAMAGE.get()) {
+                if (entry.getValue().getOperation() == ADDITION) {
+                    w += entry.getValue().getAmount();
+                } else {
+                    w += entry.getValue().getAmount() * 10;
+                }
+            } else if (entry.getKey() == IDFAttributes.LIGHTNING_DAMAGE.get()) {
+                if (entry.getValue().getOperation() == ADDITION) {
+                    l += entry.getValue().getAmount();
+                } else {
+                    l += entry.getValue().getAmount() * 10;
+                }
+            } else if (entry.getKey() == IDFAttributes.MAGIC_DAMAGE.get()) {
+                if (entry.getValue().getOperation() == ADDITION) {
+                    m += entry.getValue().getAmount();
+                } else {
+                    m += entry.getValue().getAmount() * 10;
+                }
+            } else if (entry.getKey() == IDFAttributes.DARK_DAMAGE.get()) {
+                if (entry.getValue().getOperation() == ADDITION) {
+                    d += entry.getValue().getAmount();
+                } else {
+                    d += entry.getValue().getAmount() * 10;
+                }
+            } else if (entry.getKey() == Attributes.ATTACK_DAMAGE) {
+                if (entry.getValue().getOperation() == ADDITION) {
+                    p += entry.getValue().getAmount();
+                } else {
+                    p += entry.getValue().getAmount() * 10;
+                }
+            }
+        }
         double[] dv = new double[] {f, w, l, m, d, p};
         int index = 5;
         double highest = 0.0D;
