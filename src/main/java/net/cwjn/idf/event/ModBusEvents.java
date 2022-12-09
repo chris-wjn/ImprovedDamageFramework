@@ -9,9 +9,4 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBusEvents {
 
-    @SubscribeEvent
-    public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
-        event.register(IDFParticles.NUMBER_PARTICLE.get(), NumberParticle.Provider::new);
-    }
-
 }

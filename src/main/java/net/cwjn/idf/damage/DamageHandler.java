@@ -190,7 +190,7 @@ public class DamageHandler {
     public static float handleDamageWithDebug(LivingEntity target, DamageSource source, float amount, Logger log) {
         log.debug("----------DAMAGE HANDLER DEBUG----------");
         log.debug("TARGET: " + Util.getEntityRegistryName(target.getType()));
-        log.debug("SOURCE: " + source.getMsgId() + "(" + amount + ")");
+        log.debug("SOURCE: " + source.msgId + "(" + amount + ")");
         log.debug("Source already integrated?: " + (source instanceof IDFInterface));
         log.debug("----------------------------------------");
         if (source.isFall()) {

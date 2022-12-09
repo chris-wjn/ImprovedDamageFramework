@@ -10,8 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.awt.event.KeyEvent;
 
-@OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class Keybinds {
 
     public static KeyMapping openStats;
