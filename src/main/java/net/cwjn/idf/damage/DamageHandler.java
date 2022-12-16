@@ -74,7 +74,7 @@ public class DamageHandler {
         weight = event.getWeight();
         knockback = event.getKnockback();
         float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getPhysicalRes()};
-        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(event.getDef()), 0, 4);
+        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(event.getDef()), 0.5, 2);
         //now we can knockback the target based on the weightMultiplier. The first code is copied from the
         //vanilla knockback handler to get the direction of the knockback. We add the bonus knockback value from
         //the attack afterwards.
@@ -279,7 +279,7 @@ public class DamageHandler {
         log.debug("WEIGHT: " + weight);
         log.debug("---------------------------------------");
         float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getPhysicalRes()};
-        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(target.getAttributeValue(Attributes.ARMOR_TOUGHNESS)), 0, 4);
+        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(target.getAttributeValue(Attributes.ARMOR_TOUGHNESS)), 0.5, 2);
         if (source.getEntity() != null) {
             double d1 = source.getEntity().getX() - target.getX();
             double d0;

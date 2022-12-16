@@ -216,21 +216,21 @@ public abstract class MixinItemStack {
             double value1 = player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
             if (mappedOperation0.containsKey(Attributes.ATTACK_SPEED)) {
                 value1 += mappedOperation0.get(Attributes.ATTACK_SPEED);
+                MutableComponent component1 = Util.textComponent("  ");
+                component1.append(Util.translationComponent("idf.icon.attack_speed").withStyle(symbolStyle));
+                component1.append(Util.translationComponent("idf.attack_speed_tooltip"));
+                component1.append(Util.textComponent(df.format(value1)));
+                list.add(component1);
             }
-            MutableComponent component1 = Util.textComponent("  ");
-            component1.append(Util.translationComponent("idf.icon.attack_speed").withStyle(symbolStyle));
-            component1.append(Util.translationComponent("idf.attack_speed_tooltip"));
-            component1.append(Util.textComponent(df.format(value1)));
-            list.add(component1);
             double value2 = player.getAttributeBaseValue(IDFAttributes.FORCE.get());
             if (mappedOperation0.containsKey(IDFAttributes.FORCE.get())) {
                 value2 += mappedOperation0.get(IDFAttributes.FORCE.get());
+                MutableComponent component2 = Util.textComponent("  ");
+                component2.append(Util.translationComponent("idf.icon.force").withStyle(symbolStyle));
+                component2.append(Util.translationComponent("idf.force_tooltip"));
+                component2.append(Util.textComponent(df.format(value2)));
+                list.add(component2);
             }
-            MutableComponent component2 = Util.textComponent("  ");
-            component2.append(Util.translationComponent("idf.icon.force").withStyle(symbolStyle));
-            component2.append(Util.translationComponent("idf.force_tooltip"));
-            component2.append(Util.textComponent(df.format(value2)));
-            list.add(component2);
         }
         list.add(Util.withColor(Util.translationComponent("idf.attributes.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
         if (damaging) {
@@ -339,9 +339,9 @@ public abstract class MixinItemStack {
                 MutableComponent name = Util.textComponent("   ").append(Util.withColor(Util.translationComponent(entry.getKey().getDescriptionId()), Color.LIGHTGRAY));
                 MutableComponent op1;
                 if (entry.getValue() > 0) {
-                    op1 = name.append(Util.withColor(Util.textComponent("  +" + df.format(entry.getValue() * 100) + "%"), Color.LIGHTGREEN));
+                    op1 = name.append(Util.withColor(Util.textComponent("  +" + df.format((entry.getValue() + 1) * 100) + "%"), Color.LIGHTGREEN));
                 } else {
-                    op1 = name.append(Util.withColor(Util.textComponent("  " + df.format(entry.getValue() * 100) + "%"), Color.TOMATO));
+                    op1 = name.append(Util.withColor(Util.textComponent("  " + df.format((entry.getValue() + 1) * 100) + "%"), Color.TOMATO));
                 }
                 list.add(Util.withColor(op1, Color.GRAY));
             }
@@ -353,9 +353,9 @@ public abstract class MixinItemStack {
                 MutableComponent name = Util.textComponent("   ").append(Util.withColor(Util.translationComponent(entry.getKey().getDescriptionId()), Color.LIGHTGRAY));
                 MutableComponent op2;
                 if (entry.getValue() > 0) {
-                    op2 = name.append(Util.withColor(Util.textComponent("  +" + df.format(entry.getValue() * 100) + "%"), Color.GREEN));
+                    op2 = name.append(Util.withColor(Util.textComponent("  +" + df.format((entry.getValue() + 1) * 100) + "%"), Color.GREEN));
                 } else {
-                    op2 = name.append(Util.withColor(Util.textComponent("  " + df.format(entry.getValue() * 100) + "%"), Color.RED));
+                    op2 = name.append(Util.withColor(Util.textComponent("  " + df.format((entry.getValue() + 1) * 100) + "%"), Color.RED));
                 }
                 list.add(Util.withColor(op2, Color.GRAY));
             }

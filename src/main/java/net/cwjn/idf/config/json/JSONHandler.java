@@ -3,7 +3,6 @@ package net.cwjn.idf.config.json;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.gson.Gson;
 import net.cwjn.idf.api.IDFCustomEquipment;
-import net.cwjn.idf.compat.TooltipsCompat;
 import net.cwjn.idf.config.json.data.*;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
@@ -15,14 +14,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -258,7 +253,7 @@ public class JSONHandler {
         }
     }
 
-    private static void updateItems() {
+    public static void updateItems() {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
             CompoundTag defaultTag = new CompoundTag();

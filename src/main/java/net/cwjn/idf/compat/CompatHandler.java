@@ -8,7 +8,6 @@ public class CompatHandler {
 
     public static void init(FMLCommonSetupEvent event) {
         if (ModList.get().isLoaded("patchouli")) PatchouliCompat.register();
-        if (ModList.get().isLoaded("legendarytooltips")) TooltipsCompat.register();
     }
 
     public static void initClient(FMLClientSetupEvent event) {

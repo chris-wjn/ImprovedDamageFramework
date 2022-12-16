@@ -41,7 +41,7 @@ public class PatchouliCompat implements IComponentProcessor {
     public IVariable process(String key) {
         return switch (key) {
             case "physicalDamage" ->
-                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_DAMAGE) * 2) + data.getAttackDamage()));
+                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_DAMAGE) * 2) + data.getPhysicalDamage()));
             case "fireDamage" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_DAMAGE.get())));
             case "waterDamage" ->
@@ -71,9 +71,9 @@ public class PatchouliCompat implements IComponentProcessor {
             case "movespeed" ->
                     IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.getMovespeed()));
             case "defense" ->
-                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.getArmourToughness()));
+                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.getDefense()));
             case "physicalResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.getArmour())));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.getPhysicalResistance())));
             case "fireResistance" ->
                     IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_RESISTANCE.get()))));
             case "waterResistance" ->

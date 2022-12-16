@@ -86,10 +86,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.43'
-    implementation fg.deobf("curse.maven:iceberg-520110:3898603") //1.19
-    implementation fg.deobf("curse.maven:itemframes-532127:3910283") //1.19
-    implementation fg.deobf("curse.maven:prism-638111:3910027")
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
+    implementation fg.deobf("curse.maven:iceberg-520110:4068355") //1.19
+    implementation fg.deobf("curse.maven:itemframes-532127:4068347") //1.19
+    implementation fg.deobf("curse.maven:prism-638111:3993293")
     //implementation fg.deobf("se.mickelus.mutil:mutil:1.18.2-4.5.0")
     //implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.2")
     implementation fg.deobf("mezz.jei:jei-1.19.2-forge:11.3.0.262")

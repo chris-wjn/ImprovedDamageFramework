@@ -2,7 +2,7 @@ package net.cwjn.idf.event;
 
 import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.compat.TooltipsCompat;
+import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.UpdateJsonFilesCommand;
@@ -32,7 +32,7 @@ public class LogicalEvents {
         Item baseItem = item.getItem();
         if (((ItemInterface) baseItem).getDefaultTags() != null) {
             item.getOrCreateTag().merge(((ItemInterface) baseItem).getDefaultTags());
-            if (TooltipsCompat.enabled && !item.getTag().contains("idf.tooltip_border")) {
+            if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains("idf.tooltip_border")) {
                 item.getTag().putInt("idf.tooltip_border", Util.getItemBorderType(item.getTag().getString("idf.damage_class"), item.getAttributeModifiers(EquipmentSlot.MAINHAND)));
             }
         }

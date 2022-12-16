@@ -35,9 +35,9 @@ public class BonusBaseAttributes {
             //THIRD SECTION: attach bonus attributes defined in entity_data.json
             EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(livingEntity.getType()));
             if (data != null) {
-                if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() + data.getAttackDamage());
-                livingEntity.getAttribute(Attributes.ARMOR).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.getArmour());
-                livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS) + data.getArmourToughness());
+                if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() + data.getPhysicalDamage());
+                livingEntity.getAttribute(Attributes.ARMOR).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.getPhysicalResistance());
+                livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS) + data.getDefense());
                 livingEntity.getAttribute(Attributes.ATTACK_KNOCKBACK).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ATTACK_KNOCKBACK) + data.getKnockback());
                 healthInstance.setBaseValue(healthInstance.getBaseValue() + data.getMaxHP());
                 livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.getKnockbackRes());

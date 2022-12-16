@@ -12,6 +12,7 @@ public class CommonConfig {
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_DAMAGE_SOURCES_NO_INVULN;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ENTITIES;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LEGENDARY_TOOLTIPS_COMPAT_MODE;
     private static final String[] defaultStringList = {"player", "mob", "sting", "fall"};
     private static final String[] defaultBlacklist = {"minecraft:slime", "minecraft:magma_cube"};
 
@@ -19,11 +20,14 @@ public class CommonConfig {
 
         BUILDER.push("Common Config");
 
+        LEGENDARY_TOOLTIPS_COMPAT_MODE = BUILDER.comment("Enable compatibility with Legendary Tooltips. If Legendary Tooltips is not installed, this will do nothing.")
+                .define("Tooltips Compat Enabled", true);
+
         WHITELISTED_DAMAGE_SOURCES_NO_INVULN = BUILDER.comment("Damage Sources that will not make the target gain invulnerability frames. Takes DamageSource object's msgId field. If you don't know what that is, don't touch this.")
-                        .defineList("Whitelisted sources", Arrays.asList(defaultStringList), s -> s instanceof String);
+                .defineList("Whitelisted sources", Arrays.asList(defaultStringList), s -> s instanceof String);
 
         BLACKLISTED_ENTITIES = BUILDER.comment("Entities that are blacklisted from the mob damage source. Will not do anything if 'mob' is not included in Whitelisted sources. Takes the registry name of a mob.")
-                        .defineList("Blacklisted mobs", Arrays.asList(defaultBlacklist), s -> s instanceof String);
+                .defineList("Blacklisted mobs", Arrays.asList(defaultBlacklist), s -> s instanceof String);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

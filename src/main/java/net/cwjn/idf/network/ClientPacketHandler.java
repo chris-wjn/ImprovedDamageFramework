@@ -21,6 +21,7 @@ public class ClientPacketHandler {
         JSONHandler.weaponItemsOp0 = packet.weaponMap0;
         JSONHandler.weaponItemsOp1 = packet.weaponMap1;
         JSONHandler.weaponItemsOp2 = packet.weaponMap2;
+        JSONHandler.updateItems();
     }
 
     public static void addDamageIndicatorParticle(double x, double y, double z, float f, int col, double horizontalOffset, double yOffset, UUID id) {

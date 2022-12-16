@@ -2,8 +2,8 @@ package net.cwjn.idf.config.json.data;
 
 public class EntityData {
 
-    private final double fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, attackDamage,
-                         fireResistance, waterResistance,lightningResistance, magicResistance, darkResistance, armour, armourToughness,
+    private final double fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage,
+                         fireResistance, waterResistance,lightningResistance, magicResistance, darkResistance, physicalResistance, defense,
                          strikeMult, pierceMult, slashMult, crushMult, genericMult,
                          lifesteal, armourPenetration, knockback, force,
                          evasion, maxHP, movespeed, knockbackRes;
@@ -19,15 +19,15 @@ public class EntityData {
         lightningDamage = l;
         magicDamage = m;
         darkDamage = d;
-        attackDamage = ad;
+        physicalDamage = ad;
         damageClass = c;
         fireResistance = fr;
         waterResistance = wr;
         lightningResistance = lr;
         magicResistance = mr;
         darkResistance = dr;
-        armour = a;
-        armourToughness = at;
+        physicalResistance = a;
+        defense = at;
         strikeMult = dcS;
         pierceMult = dcP;
         slashMult = dcSl;
@@ -131,16 +131,16 @@ public class EntityData {
         return knockbackRes;
     }
 
-    public double getAttackDamage() {
-        return attackDamage;
+    public double getPhysicalDamage() {
+        return physicalDamage;
     }
 
-    public double getArmour() {
-        return armour;
+    public double getPhysicalResistance() {
+        return physicalResistance;
     }
 
-    public double getArmourToughness() {
-        return armourToughness;
+    public double getDefense() {
+        return defense;
     }
 
     public double getForce() {
