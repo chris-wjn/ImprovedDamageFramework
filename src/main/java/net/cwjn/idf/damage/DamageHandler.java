@@ -141,14 +141,14 @@ public class DamageHandler {
             }
         }
         //now we calculate for general protection enchantment. We want this to be weaker than specific protection enchants,
-        //so lets make it reduce damage taken by 1.5% per level, capping out at 24% at full prot 4 armour.
+        //so lets make it reduce damage taken by 1.875% per level, capping out at 30% at full prot 4 armour.
         double protLevel = 0;
         for (ItemStack item: target.getArmorSlots()) {
             protLevel += item.getEnchantmentLevel(Enchantments.ALL_DAMAGE_PROTECTION);
         }
         if (protLevel > 0) {
             for (int i = 0; i < 6; i++) {
-                dv[i] *= (1 - (protLevel * 0.015));
+                dv[i] *= (1 - (protLevel * 0.01875));
             }
         }
         //now we factor in the resistance effect. Increases all resistances by 20% per level.
@@ -478,7 +478,7 @@ public class DamageHandler {
 
     public static float damageFormula(float a, float d) {
         if (d == 0) return a; //if res is 0, then we should return true damage.
-
+        if (a >= 100) return 0; //if res is 100, then no damage should be taken.
         //the following formula is a sigmoid function. At 0 res it's true damage, at equal it's 50%.
         // return a - (a/(1 + Math.pow( (e/2.3) , ((a - d)/9) )));
 

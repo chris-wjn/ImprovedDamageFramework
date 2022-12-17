@@ -23,6 +23,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Player.class)
 public class MixinPlayer {
@@ -264,4 +266,12 @@ public class MixinPlayer {
             }
         }
     }
+
+    @Redirect(method = "hurt",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;scalesWithDifficulty()Z"
+    ))
+    private boolean voidDifficultyDamageScaling(DamageSource instance) {
+        return false;
+    }
+
 }

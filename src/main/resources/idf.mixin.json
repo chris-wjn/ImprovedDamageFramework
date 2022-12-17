@@ -7,7 +7,7 @@
     "AccessRangedAttribute",
     "MixinAbstractArrow",
     "MixinCreeper",
-    "MixinDamageSource",
+    "damage.MixinDamageSource",
     "MixinEnchantment",
     "MixinItemStack",
     "MixinLivingEntity",

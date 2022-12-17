@@ -53,12 +53,11 @@ public class JSONHandler {
         Map<String, ItemData> defaultWeaponItemsOp2 = new HashMap<>();// = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_op2.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
         Map<String, EntityData> defaultEntityData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
         Map<String, SourceCatcherData> defaultSourceData = gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
-        //TODO: iron golems, snow golems, villagers not included in this list.
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
             if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
                 defaultEntityData.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(
                         0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike",
-                        25.0D, 25.0D, 25.0D, 25.0D, 25.0D, 0.0D, 0.0D,
+                        0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
                         1.0D, 1.0D, 1.0D, 1.0D, 1.0D,
                         0.0D, 0.0D, 0.4, -1.0D, 0.0D, 0.0D, 0.0D, 0.0D));
             }

@@ -1,4 +1,4 @@
-package net.cwjn.idf.mixin;
+package net.cwjn.idf.mixin.damage;
 
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.capability.data.AuxiliaryData;
@@ -225,7 +225,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource sonicBoom(Entity source) {
-        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.5f, 0.5f, 0, 0, "generic")).setIsConversion();
+        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 1.0f, 0, 0, "generic")).setIsConversion();
     }
 
     /**
