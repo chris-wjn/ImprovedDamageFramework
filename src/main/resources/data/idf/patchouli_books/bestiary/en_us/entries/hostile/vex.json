@@ -6,7 +6,7 @@
     {
       "type": "patchouli:entity",
       "entity": "minecraft:vex",
-      "text": "Flying hostible mob summoned by the Evoker."
+      "text": "Flying hostile mob summoned by the Evoker."
     },
     {
       "type": "idf:hostile_entity",

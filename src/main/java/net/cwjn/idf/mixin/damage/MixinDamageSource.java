@@ -225,7 +225,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource sonicBoom(Entity source) {
-        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 1.0f, 0, 0, "generic")).setIsConversion();
+        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 3.0f, 0, 0, "generic")).setIsConversion();
     }
 
     /**
