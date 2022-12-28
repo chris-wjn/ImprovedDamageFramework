@@ -3,8 +3,19 @@ package net.cwjn.idf.config.json.data;
 import com.google.gson.*;
 import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import oshi.util.tuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+
+import static net.cwjn.idf.attribute.IDFAttributes.*;
+import static net.cwjn.idf.attribute.IDFAttributes.GENERIC_MULT;
+import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 public record ItemData(double physicalDamage, double fireDamage, double waterDamage, double lightningDamage,
                        double magicDamage, double darkDamage, double lifesteal, double armourPenetration, double knockback,
@@ -13,7 +24,7 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
                        double lightningResistance, double magicResistance, double darkResistance, double evasion,
                        double maxHP, double movespeed, double knockbackResistance, double luck,
                        double strikeMultiplier, double pierceMultiplier, double slashMultiplier,
-                       double crushMultiplier, double genericMultiplier) {
+                       double crushMultiplier, double genericMultiplier) implements Iterable<Pair<Attribute, Double>> {
 
     public static ItemData combine(ItemData data1, ItemData data2) {
         return new ItemData(data1.physicalDamage + data2.physicalDamage,
@@ -74,6 +85,52 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
         buffer.writeDouble(slashMultiplier);
         buffer.writeDouble(crushMultiplier);
         buffer.writeDouble(genericMultiplier);
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Pair<Attribute, Double>> iterator() {
+        ArrayList<Pair<Attribute, Double>> values = new ArrayList<>();
+        values.add(new oshi.util.tuples.Pair<>(ATTACK_DAMAGE, physicalDamage));
+        values.add(new oshi.util.tuples.Pair<>(FIRE_DAMAGE.get(), fireDamage));
+        values.add(new oshi.util.tuples.Pair<>(WATER_DAMAGE.get(), waterDamage));
+        values.add(new oshi.util.tuples.Pair<>(LIGHTNING_DAMAGE.get(), lightningDamage));
+        values.add(new oshi.util.tuples.Pair<>(MAGIC_DAMAGE.get(), magicDamage));
+        values.add(new oshi.util.tuples.Pair<>(DARK_DAMAGE.get(), darkDamage));
+        values.add(new oshi.util.tuples.Pair<>(ARMOR_TOUGHNESS, defense));
+        values.add(new oshi.util.tuples.Pair<>(ARMOR, physicalResistance));
+        values.add(new oshi.util.tuples.Pair<>(FIRE_RESISTANCE.get(), fireResistance));
+        values.add(new oshi.util.tuples.Pair<>(WATER_RESISTANCE.get(), waterResistance));
+        values.add(new oshi.util.tuples.Pair<>(LIGHTNING_RESISTANCE.get(), lightningResistance));
+        values.add(new oshi.util.tuples.Pair<>(MAGIC_RESISTANCE.get(), magicResistance));
+        values.add(new oshi.util.tuples.Pair<>(DARK_RESISTANCE.get(), darkResistance));
+        values.add(new oshi.util.tuples.Pair<>(LIFESTEAL.get(), lifesteal));
+        values.add(new oshi.util.tuples.Pair<>(PENETRATING.get(), armourPenetration));
+        values.add(new oshi.util.tuples.Pair<>(CRIT_CHANCE.get(), criticalChance));
+        values.add(new oshi.util.tuples.Pair<>(FORCE.get(), force));
+        values.add(new oshi.util.tuples.Pair<>(ATTACK_KNOCKBACK, knockback));
+        values.add(new oshi.util.tuples.Pair<>(ATTACK_SPEED, attackSpeed));
+        values.add(new oshi.util.tuples.Pair<>(EVASION.get(), evasion));
+        values.add(new oshi.util.tuples.Pair<>(MAX_HEALTH, maxHP));
+        values.add(new oshi.util.tuples.Pair<>(MOVEMENT_SPEED, movespeed));
+        values.add(new oshi.util.tuples.Pair<>(KNOCKBACK_RESISTANCE, knockbackResistance));
+        values.add(new oshi.util.tuples.Pair<>(LUCK, luck));
+        values.add(new oshi.util.tuples.Pair<>(STRIKE_MULT.get(), strikeMultiplier));
+        values.add(new oshi.util.tuples.Pair<>(PIERCE_MULT.get(), pierceMultiplier));
+        values.add(new oshi.util.tuples.Pair<>(SLASH_MULT.get(), slashMultiplier));
+        values.add(new oshi.util.tuples.Pair<>(CRUSH_MULT.get(), crushMultiplier));
+        values.add(new oshi.util.tuples.Pair<>(GENERIC_MULT.get(), genericMultiplier));
+        return values.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Pair<Attribute, Double>> action) {
+        Iterable.super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<Pair<Attribute, Double>> spliterator() {
+        return Iterable.super.spliterator();
     }
 
     public static class ItemSerializer implements JsonSerializer<ItemData>, JsonDeserializer<ItemData> {

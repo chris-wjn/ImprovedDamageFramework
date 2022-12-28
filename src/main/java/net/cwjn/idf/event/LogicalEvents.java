@@ -2,21 +2,24 @@ package net.cwjn.idf.event;
 
 import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.CommonConfig;
-import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.UpdateJsonFilesCommand;
+import net.cwjn.idf.config.CommonConfig;
+import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
@@ -26,12 +29,13 @@ public class LogicalEvents {
 
     public static boolean debugMode = false;
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void updateTags(OnItemStackCreatedEvent event) {
         ItemStack item = event.getItemStack();
         Item baseItem = item.getItem();
-        if (((ItemInterface) baseItem).getDefaultTags() != null) {
-            item.getOrCreateTag().merge(((ItemInterface) baseItem).getDefaultTags());
+        CompoundTag defaultTag = ((ItemInterface) baseItem).getDefaultTags();
+        if (defaultTag != null) {
+            item.getOrCreateTag().merge(defaultTag);
             if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains("idf.tooltip_border")) {
                 item.getTag().putInt("idf.tooltip_border", Util.getItemBorderType(item.getTag().getString("idf.damage_class"), item.getAttributeModifiers(EquipmentSlot.MAINHAND)));
             }
@@ -44,7 +48,7 @@ public class LogicalEvents {
         if (entity.getHealth() > entity.getMaxHealth()) entity.setHealth(entity.getMaxHealth());
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onAttack(AttackEntityEvent event) {
         Player player = event.getEntity();
         if (!player.level.isClientSide()) {

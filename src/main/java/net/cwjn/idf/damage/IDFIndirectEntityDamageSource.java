@@ -2,6 +2,7 @@ package net.cwjn.idf.damage;
 
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource implements IDFInterface {
 
@@ -117,7 +118,7 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         return damageClass;
     }
 
-    public String getMsgId() {
+    public String getName() {
         return this.msgId;
     }
 

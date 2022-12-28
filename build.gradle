@@ -86,7 +86,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.57'
     implementation fg.deobf("curse.maven:iceberg-520110:4068355") //1.19
     implementation fg.deobf("curse.maven:itemframes-532127:4068347") //1.19
     implementation fg.deobf("curse.maven:prism-638111:3993293")

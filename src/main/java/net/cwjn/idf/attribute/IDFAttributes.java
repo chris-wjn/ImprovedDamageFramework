@@ -55,7 +55,6 @@ public class IDFAttributes {
         mixinArmour.setMax(Double.MAX_VALUE);
         mixinArmour.setMin(-Double.MAX_VALUE);
         mixinDefense.setMax(40D);
-        mixinDefense.setMin(1D);
     }
 
 }

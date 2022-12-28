@@ -28,7 +28,6 @@
     "damage.MixinMobEffect",
     "damage.MixinSmallFireball",
     "damage.MixinSnowGolem",
-    "damage.MixinSonicBoom",
     "damage.MixinSweetBerryBushBlock",
     "damage.MixinThornsEnchantment",
     "damage.MixinVex",

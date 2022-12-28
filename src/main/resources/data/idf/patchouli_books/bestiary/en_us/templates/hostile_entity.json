@@ -38,37 +38,37 @@
       "type": "patchouli:text",
       "y": 57,
       "color": "AA9C8A",
-      "text": "$(0)PHYS:$() $(l)#physicalDamage#$()DMG / $(l)#physicalResistance#$()RES"
+      "text": "$(0)PHYS:$() $(l)#physicalDamage#$()DMG / $(l)#physicalResistance#$()%DR"
     },
     {
       "type": "patchouli:text",
       "y": 66,
       "color": "FF9900",
-      "text": "$(0)FIRE:$() $(l)#fireDamage#$()DMG / $(l)#fireResistance#$()RES"
+      "text": "$(0)FIRE:$() $(l)#fireDamage#$()DMG / $(l)#fireResistance#$()%DR"
     },
     {
       "type": "patchouli:text",
       "y": 75,
       "color": "2E73EE",
-      "text": "$(0)WTR:$() $(l)#waterDamage#$()DMG / $(l)#waterResistance#$()RES"
+      "text": "$(0)WTR:$() $(l)#waterDamage#$()DMG / $(l)#waterResistance#$()%DR"
     },
     {
       "type": "patchouli:text",
       "y": 84,
       "color": "FFE175",
-      "text": "$(0)LTNG:$() $(l)#lightningDamage#$()DMG / $(l)#lightningResistance#$()RES"
+      "text": "$(0)LTNG:$() $(l)#lightningDamage#$()DMG / $(l)#lightningResistance#$()%DR"
     },
     {
       "type": "patchouli:text",
       "y": 93,
       "color": "B3FFE7",
-      "text": "$(0)MAG:$() $(l)#magicDamage#$()DMG / $(l)#magicResistance#$()RES"
+      "text": "$(0)MAG:$() $(l)#magicDamage#$()DMG / $(l)#magicResistance#$()%DR"
     },
     {
       "type": "patchouli:text",
       "y": 102,
       "color": "5A265E",
-      "text": "$(0)DARK:$() $(l)#darkDamage#$()DMG / $(l)#darkResistance#$()RES"
+      "text": "$(0)DARK:$() $(l)#darkDamage#$()DMG / $(l)#darkResistance#$()%DR"
     },
     {
       "type": "patchouli:separator",
@@ -78,7 +78,7 @@
     {
       "type": "patchouli:text",
       "y": 116,
-      "text": "$(t:Knockback)KB:$() $(t:% of normal knockback inflicted)$(l)#knockback#%$() / $(t:% of knockback taken)$(l)#knockback_resistance#%$()$(br)$(t:Weight of entity's attacks)WGT: $(l)$(8)#attackWeight#$()$(br)$(t:Lifesteal)LS: $(4)$(l)#lifesteal#%"
+      "text": "$(t:Knockback)KB:$() $(t:% of normal knockback inflicted)$(l)#knockback#%$() / $(t:% of knockback taken)$(l)#knockback_resistance#%$()$(br)$(t:Weight of entity's attacks)FRC: $(l)$(8)#attackWeight#$()$(br)$(t:Lifesteal)LS: $(4)$(l)#lifesteal#%"
     },
     {
       "type": "patchouli:text",

@@ -46,12 +46,15 @@ public class ImprovedDamageFramework {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        LOGGER.info("Loading Improved Damage Framework...");
         event.enqueueWork(ATHandler::alterStaticSources);
+        LOGGER.info(" Altered base game damage sources.");
         event.enqueueWork(IDFAttributes::changeDefaultAttributes);
+        LOGGER.info(" Changed properties of vanilla attributes.");
         PacketHandler.init();
+        LOGGER.info(" Initialized server-client network.");
         CompatHandler.init(event);
-        LOGGER.info("Finished loading Improved Damage Framework!");
+        LOGGER.info(" Finished initializing compat.");
+        LOGGER.info(" Done!");
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

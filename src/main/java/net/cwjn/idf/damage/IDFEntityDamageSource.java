@@ -2,6 +2,7 @@ package net.cwjn.idf.damage;
 
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class IDFEntityDamageSource extends EntityDamageSource implements IDFInterface {
 
@@ -103,11 +104,12 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         return damageClass;
     }
 
-    public String getMsgId() {
+    public String getName() {
         return this.msgId;
     }
 
     public float getKnockback() {
         return knockback;
     }
+
 }

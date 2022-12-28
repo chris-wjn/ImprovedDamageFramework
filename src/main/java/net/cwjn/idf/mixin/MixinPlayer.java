@@ -104,6 +104,7 @@ public class MixinPlayer {
                 ld *= 0.2F + scalar * scalar * 0.8F;
                 md *= 0.2F + scalar * scalar * 0.8F;
                 dd *= 0.2F + scalar * scalar * 0.8F;
+                weight *= 0.2F + scalar * scalar * 0.8F;
                 damageBonus *= scalar;
                 float lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
                 thisPlayer.resetAttackStrengthTicker();

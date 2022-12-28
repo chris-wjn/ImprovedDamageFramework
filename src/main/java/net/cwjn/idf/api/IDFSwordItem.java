@@ -1,25 +1,18 @@
 package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.ItemData;
 import net.cwjn.idf.config.json.data.WeaponData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
-import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.json.JSONHandler;
-import net.cwjn.idf.config.json.data.DamageData;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import static net.cwjn.idf.util.UUIDs.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
@@ -44,13 +37,12 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
         super(tier, (int) physicalDamage, (float) attackSpeed, p);
         ((ItemInterface) this).setDamageClass(damageClass);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        WeaponData data0 = WeaponData.combine(JSONHandler.getWeaponData(Util.getItemRegistryName(this)),
-                new WeaponData(durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
-                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
-                        waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
-                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier));
+        WeaponData data = new WeaponData(durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+                lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
+                waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
+                luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier);
         if (tier instanceof IDFTier modTier) {
-            data0 = WeaponData.combine(data0,
+            data = WeaponData.combine(data,
                     new WeaponData(0, "strike", modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
                             modTier.getLightningDamage(), modTier.getMagicDamage(), modTier.getDarkDamage(), modTier.getLifesteal(), modTier.getArmourPenetration(),
                             modTier.getCriticalChance(), modTier.getForce(), modTier.getKnockback(), modTier.getSpeed(), modTier.getDefense(), modTier.getPhysicalResistance(),
@@ -59,18 +51,17 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
                             modTier.getPierceMultiplier(), modTier.getSlashMultiplier(), modTier.getCrushMultiplier(), modTier.getGenericMultiplier()));
             bonusAttributes.putAll(modTier.getBonusAttributes());
         }
-        this.physicalDamage = data0.physicalDamage();
-        this.fireDamage = data0.fireDamage();
-        this.waterDamage = data0.waterDamage();
-        this.lightningDamage = data0.lightningDamage();
-        this.magicDamage = data0.magicDamage();
-        this.darkDamage = data0.darkDamage();
-        ((ItemInterface) this).setMaxDamage(data0.durability() + this.getMaxDamage());
-        ItemData data1 = JSONHandler.getItemData(Util.getItemRegistryName(this), 1, true);
-        ItemData data2 = JSONHandler.getItemData(Util.getItemRegistryName(this), 2, true);
-        Util.buildWeaponAttributesOp0(builder, data0, 0, 0);
-        Util.buildWeaponAttributesOp1(builder, data1);
-        Util.buildWeaponAttributesOp2(builder, data2);
+        this.physicalDamage = data.physicalDamage();
+        this.fireDamage = data.fireDamage();
+        this.waterDamage = data.waterDamage();
+        this.lightningDamage = data.lightningDamage();
+        this.magicDamage = data.magicDamage();
+        this.darkDamage = data.darkDamage();
+        data.forEach(pair -> {
+            if (pair.getB() != 0) {
+                builder.put(pair.getA(), new AttributeModifier("baseAttributes", pair.getB(), ADDITION));
+            }
+        });
         for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
             builder.put(entry.getKey(), entry.getValue());
         }

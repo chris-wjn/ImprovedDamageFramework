@@ -215,7 +215,7 @@ public class DamageHandler {
         }
         IDFInterface convertedSource = (IDFInterface) source;
         log.debug("----------CONVERSION INFORMATION----------");
-        log.debug("SOURCE: " + convertedSource.getMsgId() + " of class " + convertedSource.getClass().getName());
+        log.debug("SOURCE: " + convertedSource.getName() + " of class " + convertedSource.getClass().getName());
         log.debug("Is Conversion?: " + convertedSource.isConversion());
         log.debug("DAMAGE CLASS: " + convertedSource.getDamageClass());
         log.debug("WEIGHT: " + convertedSource.getWeight());

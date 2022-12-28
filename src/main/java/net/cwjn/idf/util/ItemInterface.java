@@ -17,8 +17,6 @@ public interface ItemInterface {
 
     void setMaxDamage(int i);
 
-    int getMaxDamage();
-
     CompoundTag getDefaultTags();
 
     void setDefaultTag(CompoundTag tag);

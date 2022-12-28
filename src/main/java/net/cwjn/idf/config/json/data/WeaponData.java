@@ -3,8 +3,17 @@ package net.cwjn.idf.config.json.data;
 import com.google.gson.*;
 import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import oshi.util.tuples.Pair;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+
+import static net.cwjn.idf.attribute.IDFAttributes.*;
+import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 public record WeaponData(int durability, String damageClass, double physicalDamage, double fireDamage,
                          double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
@@ -13,7 +22,52 @@ public record WeaponData(int durability, String damageClass, double physicalDama
                          double waterResistance, double lightningResistance, double magicResistance,
                          double darkResistance, double evasion, double maxHP, double movespeed,
                          double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
-                         double slashMultiplier, double crushMultiplier, double genericMultiplier) {
+                         double slashMultiplier, double crushMultiplier, double genericMultiplier) implements Iterable<Pair<Attribute, Double>> {
+
+    @Override
+    public Iterator<Pair<Attribute, Double>> iterator() {
+        ArrayList<Pair<Attribute, Double>> values = new ArrayList<>();
+        values.add(new Pair<>(ATTACK_DAMAGE, physicalDamage));
+        values.add(new Pair<>(FIRE_DAMAGE.get(), fireDamage));
+        values.add(new Pair<>(WATER_DAMAGE.get(), waterDamage));
+        values.add(new Pair<>(LIGHTNING_DAMAGE.get(), lightningDamage));
+        values.add(new Pair<>(MAGIC_DAMAGE.get(), magicDamage));
+        values.add(new Pair<>(DARK_DAMAGE.get(), darkDamage));
+        values.add(new Pair<>(ARMOR_TOUGHNESS, defense));
+        values.add(new Pair<>(ARMOR, physicalResistance));
+        values.add(new Pair<>(FIRE_RESISTANCE.get(), fireResistance));
+        values.add(new Pair<>(WATER_RESISTANCE.get(), waterResistance));
+        values.add(new Pair<>(LIGHTNING_RESISTANCE.get(), lightningResistance));
+        values.add(new Pair<>(MAGIC_RESISTANCE.get(), magicResistance));
+        values.add(new Pair<>(DARK_RESISTANCE.get(), darkResistance));
+        values.add(new Pair<>(LIFESTEAL.get(), lifesteal));
+        values.add(new Pair<>(PENETRATING.get(), armourPenetration));
+        values.add(new Pair<>(CRIT_CHANCE.get(), criticalChance));
+        values.add(new Pair<>(FORCE.get(), force));
+        values.add(new Pair<>(ATTACK_KNOCKBACK, knockback));
+        values.add(new Pair<>(ATTACK_SPEED, attackSpeed));
+        values.add(new Pair<>(EVASION.get(), evasion));
+        values.add(new Pair<>(MAX_HEALTH, maxHP));
+        values.add(new Pair<>(MOVEMENT_SPEED, movespeed));
+        values.add(new Pair<>(KNOCKBACK_RESISTANCE, knockbackResistance));
+        values.add(new Pair<>(LUCK, luck));
+        values.add(new Pair<>(STRIKE_MULT.get(), strikeMultiplier));
+        values.add(new Pair<>(PIERCE_MULT.get(), pierceMultiplier));
+        values.add(new Pair<>(SLASH_MULT.get(), slashMultiplier));
+        values.add(new Pair<>(CRUSH_MULT.get(), crushMultiplier));
+        values.add(new Pair<>(GENERIC_MULT.get(), genericMultiplier));
+        return values.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Pair<Attribute, Double>> action) {
+        Iterable.super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<Pair<Attribute, Double>> spliterator() {
+        return Iterable.super.spliterator();
+    }
 
     public static WeaponData combine(WeaponData data1, WeaponData data2) {
         return new WeaponData(data1.durability + data2.durability, data1.damageClass, data1.physicalDamage + data2.physicalDamage,

@@ -7,6 +7,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Enchantment.class)
 public class MixinEnchantment {
@@ -15,8 +18,8 @@ public class MixinEnchantment {
      * @reason
      * looks better. I don't think other mods will be using this, could be wrong tho.
      */
-    @Overwrite
-    public Component getFullname(int level) {
+    @Inject(method = "getFullname", at=@At("HEAD"), cancellable = true)
+    private void getFullname(int level, CallbackInfoReturnable<Component> callback) {
         Enchantment thisEnchant = (Enchantment)(Object)this;
         MutableComponent component = Util.translationComponent(thisEnchant.getDescriptionId());
         MutableComponent mutablecomponent;
@@ -40,6 +43,6 @@ public class MixinEnchantment {
                 }
             }
         }
-        return mutablecomponent;
+        callback.setReturnValue(mutablecomponent);
     }
 }

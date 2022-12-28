@@ -21,6 +21,6 @@ public class Config {
             ImprovedDamageFramework.LOGGER.error("Failed to create IDF config directory", e);
         }
         JSONHandler.init(dir.toFile());
-        ImprovedDamageFramework.LOGGER.info("Loaded ImprovedDamageFramework config.");
+        ImprovedDamageFramework.LOGGER.info(" Loaded configuration mappings.");
     }
 }

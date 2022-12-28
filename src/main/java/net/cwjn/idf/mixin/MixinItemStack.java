@@ -31,6 +31,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
@@ -44,166 +46,99 @@ public abstract class MixinItemStack {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
 
-    /**
-     * @author cwJn
-     * @reason
-     * Changes the item tooltips (duh). Hopefully no mods need to inject into this method.
-     */
-    @Overwrite
-    public List<Component> getTooltipLines(@Nullable Player player, TooltipFlag tooltipMode) {
-        ItemStack thisItemStack = (ItemStack)(Object) this;
-        List<Component> list = Lists.newArrayList();
-        MutableComponent mutablecomponent = Util.textComponent("").append(thisItemStack.getHoverName());
+    @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasCustomHoverName()Z"))
+    private boolean removeItalicName(ItemStack instance) {
+        return false;
+    }
 
-        //for maps... like treasure maps
-        list.add(mutablecomponent);
-        if (!tooltipMode.isAdvanced() && !thisItemStack.hasCustomHoverName() && thisItemStack.is(Items.FILLED_MAP)) {
-            Integer integer = MapItem.getMapId((ItemStack)(Object)this);
-            if (integer != null) {
-                list.add((Util.textComponent("#" + integer)).withStyle(ChatFormatting.GRAY));
-            }
-        }
-
-        //don't know what this does
-        int j = this.getHideFlags();
-        if (shouldShowInTooltip(j, ItemStack.TooltipPart.ADDITIONAL)) {
-            thisItemStack.getItem().appendHoverText((ItemStack)(Object)this, player == null ? null : player.level, list, tooltipMode);
-        }
-
-        if (thisItemStack.hasTag() && thisItemStack.getTag().contains("idf.equipment")) {
+    @Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasTag()Z", ordinal = 0),
+    locals = LocalCapture.CAPTURE_FAILHARD)
+    private void injectInformationCode(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir, List<Component> list, MutableComponent mutablecomponent, int j) {
+        if (this.hasTag() && this.getTag().contains("idf.equipment")) {
             list.add(Util.withColor(Util.translationComponent("idf.description.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
             MutableComponent durability = Util.textComponent("  ");
             durability.append(Util.translationComponent("idf.icon.durability").withStyle(symbolStyle));
             durability.append(Util.withColor(Util.translationComponent("idf.item.durability"), Color.LIGHTSLATEGREY));
-            if (thisItemStack.isDamageableItem()) {
-                durability.append(Util.withColor(Util.textComponent(": " + (thisItemStack.getMaxDamage() - thisItemStack.getDamageValue()) + "/" + thisItemStack.getMaxDamage()), Color.FLORALWHITE));
+            if (this.isDamageableItem()) {
+                durability.append(Util.withColor(Util.textComponent(": " + (this.getMaxDamage() - this.getDamageValue()) + "/" + this.getMaxDamage()), Color.FLORALWHITE));
             } else {
                 durability.append(Util.withColor(Util.translationComponent("idf.infinity.symbol"), Color.FLORALWHITE));
             }
             list.add(durability);
-            if (thisItemStack.getTag().contains("idf.damage_class")) {
+            if (this.getTag().contains("idf.damage_class")) {
                 MutableComponent damageClass = Util.textComponent("  ");
                 damageClass.append(Util.translationComponent("idf.icon.damage_class").withStyle(symbolStyle));
-                damageClass.append(Util.translationComponent("idf.damage_class.tooltip." + thisItemStack.getTag().getString("idf.damage_class")));
+                damageClass.append(Util.translationComponent("idf.damage_class.tooltip." + this.getTag().getString("idf.damage_class")));
                 list.add(damageClass);
             }
-        } //description
-
-        if (thisItemStack.hasTag()) {
-            if (this.tag.contains("display", 10)) {
-                CompoundTag compoundtag = this.tag.getCompound("display");
-                //list.add(Util.translationComponent("item.durability", this.getMaxDamage() - this.getDamageValue(), this.getMaxDamage()));
-                if (compoundtag.getTagType("Lore") == 9) {
-                    ListTag listtag = compoundtag.getList("Lore", 8);
-                    for(int i = 0; i < listtag.size(); ++i) {
-                        String s = listtag.getString(i);
-                        try {
-                            MutableComponent mutablecomponent1 = Component.Serializer.fromJson(s);
-                            if (mutablecomponent1 != null) {
-                                //if (this.tag.contains("idf.equipment")) {
-                                    //TODO: add weapon scaling and other info here.
-                                    list.add(Util.withColor(mutablecomponent1, Color.LIGHTGRAY));
-                                //} else {
-                                //    list.add(Util.withColor(mutablecomponent1, Color.LIGHTGRAY));
-                                //}
-                            }
-                        } catch (Exception exception) {
-                            compoundtag.remove("Lore");
-                        }
-                    }
-                }
-            }
         }
+    }
 
-        if (shouldShowInTooltip(j, ItemStack.TooltipPart.MODIFIERS)) {
-            Map<Attribute, Double> mappedOperation0 = new HashMap<>(5);
-            Map<Attribute, Double> mappedOperation1 = new HashMap<>();
-            Map<Attribute, Double> mappedOperation2 = new HashMap<>();
-            for (EquipmentSlot equipmentslot : EquipmentSlot.values()) { //for each equipment slot, check the modifiers the item gives
-                Multimap<Attribute, AttributeModifier> multimap = thisItemStack.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
-                if (!multimap.isEmpty()) { //make sure there is at least one entry in the map
-                    for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) { //iterate through each attribute and attribute modifier pair.
-                        AttributeModifier attributemodifier = entry.getValue(); //get the modifier in this iteration
-                        Attribute attribute = entry.getKey();
-                        double modifierAmount = attributemodifier.getAmount(); //get the amount that it modifies by
-                        AttributeModifier.Operation operation = attributemodifier.getOperation();
-                        if (modifierAmount != 0) {
-                            if (operation == AttributeModifier.Operation.ADDITION) {
-                                if (mappedOperation0.containsKey(attribute)) {
-                                    mappedOperation0.put(attribute, (modifierAmount + mappedOperation0.get(attribute)));
-                                } else {
-                                    mappedOperation0.put(attribute, modifierAmount);
-                                }
-                            } else if (operation == AttributeModifier.Operation.MULTIPLY_BASE) {
-                                if (mappedOperation1.containsKey(attribute)) {
-                                    mappedOperation1.put(attribute, (modifierAmount + mappedOperation1.get(attribute)));
-                                } else {
-                                    mappedOperation1.put(attribute, modifierAmount);
-                                }
+    @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 1))
+    private boolean removeEnchantmentDisplay(int hideFlags, ItemStack.TooltipPart tooltipPart) {
+        return false;
+    }
+
+    @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 2))
+    private boolean removeColourDisplay(int hideFlags, ItemStack.TooltipPart tooltipPart) {
+        return false;
+    }
+
+    @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3))
+    private boolean removeVanillaModifiersTooltip(int hideFlags, ItemStack.TooltipPart tooltipPart) {
+        return false;
+    }
+
+    @Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3),
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    private void injectCustomModifiersTooltip(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> callback, List<Component> list, MutableComponent mutablecomponent, int j) {
+        Map<Attribute, Double> mappedOperation0 = new HashMap<>(5);
+        Map<Attribute, Double> mappedOperation1 = new HashMap<>();
+        Map<Attribute, Double> mappedOperation2 = new HashMap<>();
+        for (EquipmentSlot equipmentslot : EquipmentSlot.values()) { //for each equipment slot, check the modifiers the item gives
+            Multimap<Attribute, AttributeModifier> multimap = this.getAttributeModifiers(equipmentslot); //attribute and modifier map for the slot in this iteration
+            if (!multimap.isEmpty()) { //make sure there is at least one entry in the map
+                for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) { //iterate through each attribute and attribute modifier pair.
+                    AttributeModifier attributemodifier = entry.getValue(); //get the modifier in this iteration
+                    Attribute attribute = entry.getKey();
+                    double modifierAmount = attributemodifier.getAmount(); //get the amount that it modifies by
+                    AttributeModifier.Operation operation = attributemodifier.getOperation();
+                    if (modifierAmount != 0) {
+                        if (operation == AttributeModifier.Operation.ADDITION) {
+                            if (mappedOperation0.containsKey(attribute)) {
+                                mappedOperation0.put(attribute, (modifierAmount + mappedOperation0.get(attribute)));
                             } else {
-                                if (mappedOperation2.containsKey(attribute)) {
-                                    mappedOperation2.put(attribute, (modifierAmount + mappedOperation2.get(attribute)));
-                                } else {
-                                    mappedOperation2.put(attribute, modifierAmount);
-                                }
+                                mappedOperation0.put(attribute, modifierAmount);
+                            }
+                        } else if (operation == AttributeModifier.Operation.MULTIPLY_BASE) {
+                            if (mappedOperation1.containsKey(attribute)) {
+                                mappedOperation1.put(attribute, (modifierAmount + mappedOperation1.get(attribute)));
+                            } else {
+                                mappedOperation1.put(attribute, modifierAmount);
+                            }
+                        } else {
+                            if (mappedOperation2.containsKey(attribute)) {
+                                mappedOperation2.put(attribute, (modifierAmount + mappedOperation2.get(attribute)));
+                            } else {
+                                mappedOperation2.put(attribute, modifierAmount);
                             }
                         }
                     }
                 }
             }
-            if (thisItemStack.hasTag() && thisItemStack.getTag().contains("idf.equipment")) appendAttributes(player, list, mappedOperation0, mappedOperation1, mappedOperation2);
-        } //attributes
+        }
+        if (this.hasTag() && this.getTag().contains("idf.equipment")) appendAttributes(player, list, mappedOperation0, mappedOperation1, mappedOperation2);
+    }
 
-        if (thisItemStack.hasTag()) {
-            if (shouldShowInTooltip(j, ItemStack.TooltipPart.ENCHANTMENTS)) {
-                if (!EnchantmentHelper.getEnchantments((ItemStack)(Object)this).isEmpty() && !(thisItemStack.getItem() instanceof EnchantedBookItem)) {
-                    list.add(Util.withColor(Util.translationComponent("idf.enchantments.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
-                    ItemStack.appendEnchantmentNames(list, thisItemStack.getEnchantmentTags());
-                    list.add(Util.textComponent(""));
-                }
-            }
-            if (shouldShowInTooltip(j, ItemStack.TooltipPart.UNBREAKABLE) && this.tag.getBoolean("Unbreakable")) {
-                list.add((Util.translationComponent("item.unbreakable")).withStyle(ChatFormatting.BLUE));
-            }
-
-            if (shouldShowInTooltip(j, ItemStack.TooltipPart.CAN_DESTROY) && this.tag.contains("CanDestroy", 9)) {
-                ListTag listtag1 = this.tag.getList("CanDestroy", 8);
-                if (!listtag1.isEmpty()) {
-                    list.add(Component.empty());
-                    list.add((Util.translationComponent("item.canBreak")).withStyle(ChatFormatting.GRAY));
-
-                    for(int k = 0; k < listtag1.size(); ++k) {
-                        list.addAll(expandBlockState(listtag1.getString(k)));
-                    }
-                }
-            }
-
-            if (shouldShowInTooltip(j, ItemStack.TooltipPart.CAN_PLACE) && this.tag.contains("CanPlaceOn", 9)) {
-                ListTag listtag2 = this.tag.getList("CanPlaceOn", 8);
-                if (!listtag2.isEmpty()) {
-                    list.add(Component.empty());
-                    list.add((Util.translationComponent("item.canPlace")).withStyle(ChatFormatting.GRAY));
-
-                    for(int l = 0; l < listtag2.size(); ++l) {
-                        list.addAll(expandBlockState(listtag2.getString(l)));
-                    }
-                }
-            }
-        } //enchantments
-
-        if (tooltipMode.isAdvanced()) {
-            if (thisItemStack.isDamaged()) {
-                list.add(Util.translationComponent("item.durability", thisItemStack.getMaxDamage() - thisItemStack.getDamageValue(), thisItemStack.getMaxDamage()));
-            }
-
-            list.add((Util.textComponent(Registry.ITEM.getKey(thisItemStack.getItem()).toString())).withStyle(ChatFormatting.DARK_GRAY));
-            if (thisItemStack.hasTag()) {
-                list.add((Util.translationComponent("item.nbt_tags", this.tag.getAllKeys().size())).withStyle(ChatFormatting.DARK_GRAY));
+    @Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 4),
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    private void injectEnchantmentTooltip(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir, List<Component> list, MutableComponent mutablecomponent, int j) {
+        if (shouldShowInTooltip(j, ItemStack.TooltipPart.ENCHANTMENTS)) {
+            if (!EnchantmentHelper.getEnchantments((ItemStack)(Object)this).isEmpty() && !(this.getItem() instanceof EnchantedBookItem)) {
+                list.add(Util.withColor(Util.translationComponent("idf.enchantments.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
+                ItemStack.appendEnchantmentNames(list, this.getEnchantmentTags());
             }
         }
-
-        net.minecraftforge.event.ForgeEventFactory.onItemTooltip((ItemStack)(Object)this, player, list, tooltipMode);
-        return list;
     }
 
     private void appendAttributes(Player player, List<Component> list, Map<Attribute, Double> mappedOperation0, Map<Attribute, Double> mappedOperation1, Map<Attribute, Double> mappedOperation2) {
@@ -213,21 +148,21 @@ public abstract class MixinItemStack {
         boolean aux = hasAuxiliary(mappedOperation0);
         boolean mult = hasMultipliers(mappedOperation1, mappedOperation2);
         if (damaging) {
-            double value1 = player.getAttributeBaseValue(Attributes.ATTACK_SPEED);
             if (mappedOperation0.containsKey(Attributes.ATTACK_SPEED)) {
-                value1 += mappedOperation0.get(Attributes.ATTACK_SPEED);
+                double value1 = mappedOperation0.get(Attributes.ATTACK_SPEED);
                 MutableComponent component1 = Util.textComponent("  ");
                 component1.append(Util.translationComponent("idf.icon.attack_speed").withStyle(symbolStyle));
                 component1.append(Util.translationComponent("idf.attack_speed_tooltip"));
+                if (value1 > 0) component1.append("+");
                 component1.append(Util.textComponent(df.format(value1)));
                 list.add(component1);
             }
-            double value2 = player.getAttributeBaseValue(IDFAttributes.FORCE.get());
             if (mappedOperation0.containsKey(IDFAttributes.FORCE.get())) {
-                value2 += mappedOperation0.get(IDFAttributes.FORCE.get());
+                double value2 = mappedOperation0.get(IDFAttributes.FORCE.get());
                 MutableComponent component2 = Util.textComponent("  ");
                 component2.append(Util.translationComponent("idf.icon.force").withStyle(symbolStyle));
                 component2.append(Util.translationComponent("idf.force_tooltip"));
+                if (value2 > 0) component2.append("+");
                 component2.append(Util.textComponent(df.format(value2)));
                 list.add(component2);
             }
@@ -465,7 +400,7 @@ public abstract class MixinItemStack {
 
     private void appendDamageComponent(@NotNull Player player, List<Component> list, Map<Attribute, Double> mappedAttributes) {
         if (mappedAttributes.containsKey(Attributes.ATTACK_DAMAGE)) {
-            double value = mappedAttributes.get(Attributes.ATTACK_DAMAGE) + player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus((ItemStack) (Object) this, MobType.UNDEFINED);
+            double value = mappedAttributes.get(Attributes.ATTACK_DAMAGE) + EnchantmentHelper.getDamageBonus((ItemStack) (Object) this, MobType.UNDEFINED);
             if (value != 0) {
                 MutableComponent component = Util.textComponent("  ");
                 component.append(Util.translationComponent("idf.icon.physical_damage").withStyle(symbolStyle));
@@ -624,19 +559,23 @@ public abstract class MixinItemStack {
         MinecraftForge.EVENT_BUS.post(event);
     }
 
-    @Shadow
-    private int getHideFlags() {
+    @Shadow private int getHideFlags() {
         throw new IllegalStateException("Mixin failed to shadow getHideFlags()");
     }
-    @Shadow
-    private CompoundTag tag;
-    @Shadow
-    private static boolean shouldShowInTooltip(int p_41627_, ItemStack.TooltipPart p_41628_) {
+    @Shadow private CompoundTag tag;
+    @Shadow private static boolean shouldShowInTooltip(int p_41627_, ItemStack.TooltipPart p_41628_) {
         throw new IllegalStateException("Mixin failed to shadow shouldShowInTooltip(int i, ItemStack.TooltipPart xxx)");
     }
-    @Shadow
-    private static Collection<Component> expandBlockState(String p_41762_) {
+    @Shadow private static Collection<Component> expandBlockState(String p_41762_) {
         throw new IllegalStateException("Mixin failed to shadow expandBlockState(String s)");
     }
+    @Shadow public abstract ListTag getEnchantmentTags();
+    @Shadow public abstract Item getItem();
+    @Shadow public abstract Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot p_41639_);
+    @Shadow public abstract int getDamageValue();
+    @Shadow public abstract int getMaxDamage();
+    @Shadow public abstract boolean isDamageableItem();
+    @Shadow @Nullable public abstract CompoundTag getTag();
+    @Shadow public abstract boolean hasTag();
 }
 

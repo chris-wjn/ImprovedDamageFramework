@@ -16,6 +16,6 @@ public interface IDFInterface {
     boolean isConversion();
     IDFInterface setIsConversion();
     IDFInterface setTrue();
-    String getMsgId();
+    String getName();
 
 }

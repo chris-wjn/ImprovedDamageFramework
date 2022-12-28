@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableMultimap;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.ArmourData;
 import net.cwjn.idf.config.json.data.ItemData;
-import net.cwjn.idf.config.json.data.ResistanceData;
-import net.cwjn.idf.config.json.data.WeaponData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,7 +14,9 @@ import net.minecraft.world.item.ArmorMaterial;
 
 import java.util.Map;
 
-public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment{
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+
+public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
     private final double armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes;
 
@@ -31,13 +31,12 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment{
                          Map<Attribute, AttributeModifier> bonusAttributes) {
         super(material, slot, p);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        ArmourData data0 = ArmourData.combine(JSONHandler.getArmourData(Util.getItemRegistryName(this)),
-                new ArmourData(durability, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+        ArmourData data = new ArmourData(durability, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
                         lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
                         waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
-                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier));
+                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier);
         if (material instanceof IDFArmourMaterial idfMaterial) {
-            data0 = ArmourData.combine(data0,
+            data = ArmourData.combine(data,
                     new ArmourData(0, idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
                             idfMaterial.getLightningDamage(slot), idfMaterial.getMagicDamage(slot), idfMaterial.getDarkDamage(slot), idfMaterial.getLifesteal(slot), idfMaterial.getArmourPenetration(slot),
                             idfMaterial.getCriticalChance(slot), idfMaterial.getForce(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot), idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot),
@@ -46,19 +45,18 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment{
                             idfMaterial.getPierceForSlot(slot), idfMaterial.getSlashForSlot(slot), idfMaterial.getCrushForSlot(slot), idfMaterial.getGenericForSlot(slot)));
             bonusAttributes.putAll(idfMaterial.getBonusAttributes());
         }
-        armour = data0.physicalResistance();
-        this.defense = data0.defense();
-        fireRes = data0.fireResistance();
-        waterRes = data0.waterResistance();
-        lightningRes = data0.lightningResistance();
-        magicRes = data0.magicResistance();
-        darkRes = data0.darkResistance();
-        ((ItemInterface) this).setMaxDamage(data0.durability() + this.getMaxDamage());
-        ItemData data1 = JSONHandler.getItemData(Util.getItemRegistryName(this), 1, true);
-        ItemData data2 = JSONHandler.getItemData(Util.getItemRegistryName(this), 2, true);
-        Util.buildArmourAttributesOp0(builder, slot, data0, 0, 0, 0);
-        Util.buildArmourAttributesOp1(builder, slot, data1);
-        Util.buildArmourAttributesOp2(builder, slot, data2);
+        armour = data.physicalResistance();
+        this.defense = data.defense();
+        fireRes = data.fireResistance();
+        waterRes = data.waterResistance();
+        lightningRes = data.lightningResistance();
+        magicRes = data.magicResistance();
+        darkRes = data.darkResistance();
+        data.forEach(pair -> {
+            if (pair.getB() != 0) {
+                builder.put(pair.getA(), new AttributeModifier("baseAttributes", pair.getB(), ADDITION));
+            }
+        });
         for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
             builder.put(entry.getKey(), entry.getValue());
         }
