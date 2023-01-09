@@ -5,7 +5,6 @@ import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
-import net.cwjn.idf.enchantment.IDFEnchantments;
 import net.cwjn.idf.event.ClientEventsModBus;
 import net.cwjn.idf.gui.HealthBarReplacer;
 import net.cwjn.idf.gui.StatsScreen;
@@ -38,7 +37,6 @@ public class ImprovedDamageFramework {
         MinecraftForge.EVENT_BUS.register(this);
 
         IDFAttributes.ATTRIBUTES.register(bus);
-        IDFEnchantments.ENCHANTMENTS.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
