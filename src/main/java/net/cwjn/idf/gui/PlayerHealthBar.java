@@ -3,10 +3,8 @@ package net.cwjn.idf.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -14,14 +12,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.text.DecimalFormat;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
-public class HealthBarReplacer {
+public class PlayerHealthBar {
 
     private static final ResourceLocation HEALTH_GUI = new ResourceLocation(
             ImprovedDamageFramework.MOD_ID + ":textures/gui/healthgui.png");
