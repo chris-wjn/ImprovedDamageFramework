@@ -1,4 +1,4 @@
-package net.cwjn.idf.gui;
+package net.cwjn.idf.hud;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -69,8 +69,6 @@ public class HealthBarReplacer {
         client.gui.blit(matrix, xBar + 4, y - 2, 0, 0, (int) healthMap, 13);
         client.gui.blit(matrix, xBar + 4, y - 2, 0, 13, (int) absorptionMap, 13);
         RenderSystem.disableBlend();
-        matrix.popPose();
-        matrix.pushPose();
         matrix.popPose();
     }
 

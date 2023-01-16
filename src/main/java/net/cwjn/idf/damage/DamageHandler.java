@@ -279,7 +279,7 @@ public class DamageHandler {
         log.debug("WEIGHT: " + weight);
         log.debug("---------------------------------------");
         float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getPhysicalRes()};
-        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(target.getAttributeValue(Attributes.ARMOR_TOUGHNESS)), 0.5, 2);
+        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(event.getDef()), 0.5, 2);
         if (source.getEntity() != null) {
             double d1 = source.getEntity().getX() - target.getX();
             double d0;
@@ -478,7 +478,7 @@ public class DamageHandler {
 
     public static float damageFormula(float a, float d) {
         if (d == 0) return a; //if res is 0, then we should return true damage.
-        if (a >= 100) return 0; //if res is 100, then no damage should be taken.
+        if (d >= 100) return 0; //if res is 100, then no damage should be taken.
         //the following formula is a sigmoid function. At 0 res it's true damage, at equal it's 50%.
         // return a - (a/(1 + Math.pow( (e/2.3) , ((a - d)/9) )));
 

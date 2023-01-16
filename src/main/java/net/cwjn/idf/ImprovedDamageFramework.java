@@ -6,7 +6,7 @@ import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
 import net.cwjn.idf.event.ClientEventsModBus;
-import net.cwjn.idf.gui.HealthBarReplacer;
+import net.cwjn.idf.hud.HealthBarReplacer;
 import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
