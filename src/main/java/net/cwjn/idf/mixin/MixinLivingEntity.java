@@ -23,6 +23,8 @@ import javax.annotation.Nullable;
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
 
+    @Shadow @Final public int invulnerableDuration;
+
     /**
      * @author cwJn
      *
@@ -92,7 +94,8 @@ public class MixinLivingEntity {
     @Inject(method = "hurt", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 0), cancellable = true)
     private void injectOverrideLogic(DamageSource source, float val, CallbackInfoReturnable<Boolean> callback) {
         String msgID = source.getMsgId();
-        if (CommonConfig.WHITELISTED_DAMAGE_SOURCES_NO_INVULN.get().contains(msgID)) {
+        if (CommonConfig.WHITELISTED_SOURCES_NO_INVULN.get().contains(msgID) ||
+                (this.invulnerableDuration <= 10 && CommonConfig.WHITELISTED_SOURCES_REDUCED_INVULN.get().contains(msgID))) {
             if (source.getEntity() == null) {
                 this.actuallyHurt(source, val);
             } else {

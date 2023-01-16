@@ -43,8 +43,7 @@ public class ClientEventsForgeBus {
     }
 
     public static boolean checkShiftDown() {
-        if (Screen.hasShiftDown()) return true;
-        return false;
+        return Screen.hasShiftDown();
     }
 
 }
