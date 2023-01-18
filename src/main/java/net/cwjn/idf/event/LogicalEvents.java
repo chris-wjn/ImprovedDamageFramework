@@ -3,7 +3,6 @@ package net.cwjn.idf.event;
 import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
-import net.cwjn.idf.command.UpdateJsonFilesCommand;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
@@ -79,7 +78,6 @@ public class LogicalEvents {
 
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
-        new UpdateJsonFilesCommand(event.getDispatcher());
         new ChangeDebugStatusCommand(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
     }

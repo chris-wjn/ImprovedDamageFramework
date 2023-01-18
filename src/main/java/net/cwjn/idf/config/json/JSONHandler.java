@@ -24,15 +24,21 @@ import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
+import static net.cwjn.idf.util.Util.getUUID;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ARMOR;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -261,6 +267,80 @@ public class JSONHandler {
         ImprovedDamageFramework.LOGGER.info("Restored client mappings");
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onShutDownEvent(ServerStoppedEvent event) {
+        if (!event.getServer().isDedicatedServer()) {
+            SortedMap<String, ArmourData> sortedArmourOp0Map = new TreeMap<>();
+            for (Map.Entry<ResourceLocation, ArmourData> entry : armourItemsOp0.entrySet()) {
+                sortedArmourOp0Map.put(entry.getKey().toString(), entry.getValue());
+            }
+            SortedMap<String, ItemData> sortedArmourOp1Map = new TreeMap<>();
+            for (Map.Entry<ResourceLocation, ItemData> entry : armourItemsOp1.entrySet()) {
+                sortedArmourOp1Map.put(entry.getKey().toString(), entry.getValue());
+            }
+            SortedMap<String, ItemData> sortedArmourOp2Map = new TreeMap<>();
+            for (Map.Entry<ResourceLocation, ItemData> entry : armourItemsOp2.entrySet()) {
+                sortedArmourOp2Map.put(entry.getKey().toString(), entry.getValue());
+            }
+            SortedMap<String, WeaponData> sortedWeaponOp0Map = new TreeMap<>();
+            for (Map.Entry<ResourceLocation, WeaponData> entry : weaponItemsOp0.entrySet()) {
+                sortedWeaponOp0Map.put(entry.getKey().toString(), entry.getValue());
+            }
+            SortedMap<String, ItemData> sortedWeaponOp1Map = new TreeMap<>();
+            for (Map.Entry<ResourceLocation, ItemData> entry : weaponItemsOp1.entrySet()) {
+                sortedWeaponOp1Map.put(entry.getKey().toString(), entry.getValue());
+            }
+            SortedMap<String, ItemData> sortedWeaponOp2Map = new TreeMap<>();
+            for (Map.Entry<ResourceLocation, ItemData> entry : weaponItemsOp2.entrySet()) {
+                sortedWeaponOp2Map.put(entry.getKey().toString(), entry.getValue());
+            }
+            File configDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework").toFile();
+            JSONUtil.writeFile(new File(configDir, "armour_items_operation_addition.json"), sortedArmourOp0Map);
+            JSONUtil.writeFile(new File(configDir, "armour_items_operation_multiply_base.json"), sortedArmourOp1Map);
+            JSONUtil.writeFile(new File(configDir, "armour_items_operation_multiply_total.json"), sortedArmourOp2Map);
+            JSONUtil.writeFile(new File(configDir, "weapon_items_operation_addition.json"), sortedWeaponOp0Map);
+            JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_base.json"), sortedWeaponOp1Map);
+            JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_total.json"), sortedWeaponOp2Map);
+        }
+    }
+
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    @SubscribeEvent
+    public static void onServerShutdown(ServerStoppedEvent event) {
+        SortedMap<String, ArmourData> sortedArmourOp0Map = new TreeMap<>();
+        for (Map.Entry<ResourceLocation, ArmourData> entry : armourItemsOp0.entrySet()) {
+            sortedArmourOp0Map.put(entry.getKey().toString(), entry.getValue());
+        }
+        SortedMap<String, ItemData> sortedArmourOp1Map = new TreeMap<>();
+        for (Map.Entry<ResourceLocation, ItemData> entry : armourItemsOp1.entrySet()) {
+            sortedArmourOp1Map.put(entry.getKey().toString(), entry.getValue());
+        }
+        SortedMap<String, ItemData> sortedArmourOp2Map = new TreeMap<>();
+        for (Map.Entry<ResourceLocation, ItemData> entry : armourItemsOp2.entrySet()) {
+            sortedArmourOp2Map.put(entry.getKey().toString(), entry.getValue());
+        }
+        SortedMap<String, WeaponData> sortedWeaponOp0Map = new TreeMap<>();
+        for (Map.Entry<ResourceLocation, WeaponData> entry : weaponItemsOp0.entrySet()) {
+            sortedWeaponOp0Map.put(entry.getKey().toString(), entry.getValue());
+        }
+        SortedMap<String, ItemData> sortedWeaponOp1Map = new TreeMap<>();
+        for (Map.Entry<ResourceLocation, ItemData> entry : weaponItemsOp1.entrySet()) {
+            sortedWeaponOp1Map.put(entry.getKey().toString(), entry.getValue());
+        }
+        SortedMap<String, ItemData> sortedWeaponOp2Map = new TreeMap<>();
+        for (Map.Entry<ResourceLocation, ItemData> entry : weaponItemsOp2.entrySet()) {
+            sortedWeaponOp2Map.put(entry.getKey().toString(), entry.getValue());
+        }
+        File configDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework").toFile();
+        JSONUtil.writeFile(new File(configDir, "armour_items_operation_addition.json"), sortedArmourOp0Map);
+        JSONUtil.writeFile(new File(configDir, "armour_items_operation_multiply_base.json"), sortedArmourOp1Map);
+        JSONUtil.writeFile(new File(configDir, "armour_items_operation_multiply_total.json"), sortedArmourOp2Map);
+        JSONUtil.writeFile(new File(configDir, "weapon_items_operation_addition.json"), sortedWeaponOp0Map);
+        JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_base.json"), sortedWeaponOp1Map);
+        JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_total.json"), sortedWeaponOp2Map);
+    }
+
     public static EntityData getEntityData(ResourceLocation key) {
         return entityMap.getOrDefault(key, null);
     }
@@ -296,7 +376,7 @@ public class JSONHandler {
                 if (data0 != null) {
                     data0.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier("data0", pair.getB(), ADDITION));
+                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), ADDITION), "data0", pair.getB(), ADDITION));
                         }
                     });
                     defaultTag.putString("idf.damage_class", data0.damageClass());
@@ -305,14 +385,14 @@ public class JSONHandler {
                 if (data1 != null) {
                     data1.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier("data1", pair.getB(), MULTIPLY_BASE));
+                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_BASE),"data1", pair.getB(), MULTIPLY_BASE));
                         }
                     });
                 }
                 if (data2 != null) {
                     data2.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier("data2", pair.getB(), MULTIPLY_TOTAL));
+                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_TOTAL),"data2", pair.getB(), MULTIPLY_TOTAL));
                         }
                     });
                 }
@@ -325,7 +405,7 @@ public class JSONHandler {
                 if (data0 != null) {
                     data0.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier("data0", pair.getB(), ADDITION));
+                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), ADDITION),"data0", pair.getB(), ADDITION));
                         }
                     });
                     idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
@@ -333,14 +413,14 @@ public class JSONHandler {
                 if (data1 != null) {
                     data1.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier("data1", pair.getB(), MULTIPLY_BASE));
+                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_BASE),"data1", pair.getB(), MULTIPLY_BASE));
                         }
                     });
                 }
                 if (data2 != null) {
                     data2.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier("data2", pair.getB(), MULTIPLY_TOTAL));
+                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_TOTAL),"data2", pair.getB(), MULTIPLY_TOTAL));
                         }
                     });
                 }

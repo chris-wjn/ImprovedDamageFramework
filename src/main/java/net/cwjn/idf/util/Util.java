@@ -1,12 +1,9 @@
 package net.cwjn.idf.util;
 
-import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.json.data.ArmourData;
-import net.cwjn.idf.config.json.data.ItemData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.FriendlyByteBuf;
@@ -17,11 +14,9 @@ import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,13 +24,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_INDICATORS;
-import static net.cwjn.idf.util.UUIDs.*;
+import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
+import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 public class Util {
 
@@ -44,9 +41,138 @@ public class Util {
     private static final Style INDICATOR = Style.EMPTY.withFont(FONT_INDICATORS);
     private static final DecimalFormat attributeFormat = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
-    private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
-    private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT_OP1 = new UUID[]{UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()};
-    private static final UUID[] ARMOR_MODIFIER_UUID_PER_SLOT_OP2 = new UUID[]{UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()};
+    private static final Map<Attribute, UUID> baseStatUUIDs = new HashMap<>();
+    private static final Map<Attribute, UUID> baseMultiplier1UUIDs = new HashMap<>();
+    private static final Map<Attribute, UUID> baseMultiplier2UUIDs = new HashMap<>();
+
+    static {
+        baseStatUUIDs.put(ATTACK_DAMAGE, UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF")); //BASE_ATTACK_DAMAGE_UUID
+        baseStatUUIDs.put(FIRE_DAMAGE.get(), UUID.fromString("f36ff4f2-8cbb-4a46-9657-a77676046872"));
+        baseStatUUIDs.put(WATER_DAMAGE.get(), UUID.fromString("a301624b-8186-47e3-9aef-8cf6a2e01635"));
+        baseStatUUIDs.put(LIGHTNING_DAMAGE.get(), UUID.fromString("20e62cd2-89a5-4107-a43d-3a6197bca618"));
+        baseStatUUIDs.put(MAGIC_DAMAGE.get(), UUID.fromString("8104d749-42d6-40d4-9a41-51846ae62449"));
+        baseStatUUIDs.put(DARK_DAMAGE.get(), UUID.fromString("b4a9113d-0049-46dc-83ac-4126475bc563"));
+        baseStatUUIDs.put(ATTACK_SPEED, UUID.fromString("cc8c7274-ddbd-4a33-bbf8-0ce398d27b13"));
+        baseStatUUIDs.put(ATTACK_KNOCKBACK, UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3")); //BASE_ATTACK_SPEED_SPEED
+        baseStatUUIDs.put(FORCE.get(), UUID.fromString("4cd3bb13-f792-4e7e-bc8e-a4e87abd38e7"));
+        baseStatUUIDs.put(LIFESTEAL.get(), UUID.fromString("40533165-2509-4ccb-923c-12cafe1b219b"));
+        baseStatUUIDs.put(CRIT_CHANCE.get(), UUID.fromString("b980dbd0-a70a-42c3-9118-f40504ad9886"));
+        baseStatUUIDs.put(PENETRATING.get(), UUID.fromString("cb4bd5b1-733a-4a10-b9c7-6352bb626b98"));
+        baseStatUUIDs.put(ARMOR_TOUGHNESS, UUID.fromString("f354b836-5417-41df-9c9c-341b0fbb3289"));
+        baseStatUUIDs.put(ARMOR, UUID.fromString("396cc31e-c4b7-4156-a3b9-97391ff46db8"));
+        baseStatUUIDs.put(FIRE_RESISTANCE.get(), UUID.fromString("0bfb4c93-f3f0-430e-a07b-e716aeff2240"));
+        baseStatUUIDs.put(WATER_RESISTANCE.get(), UUID.fromString("88bf93fe-247b-4378-ac8a-b8902df47332"));
+        baseStatUUIDs.put(LIGHTNING_RESISTANCE.get(), UUID.fromString("f4339705-bde5-476a-bf62-f471332db68a"));
+        baseStatUUIDs.put(MAGIC_RESISTANCE.get(), UUID.fromString("c50cadec-c12f-4837-86ce-50ad7563ad93"));
+        baseStatUUIDs.put(DARK_RESISTANCE.get(), UUID.fromString("47c49fdf-6649-41db-9bd9-b3ea8026616a"));
+        baseStatUUIDs.put(EVASION.get(), UUID.fromString("1f5f7bee-80a8-4e00-ac8f-9e1407ca4353"));
+        baseStatUUIDs.put(MAX_HEALTH, UUID.fromString("4eb842bc-615a-469c-b693-c7849b39a8bd"));
+        baseStatUUIDs.put(MOVEMENT_SPEED, UUID.fromString("e1b21b9f-8212-4e62-9ecd-67f8d6cb583b"));
+        baseStatUUIDs.put(KNOCKBACK_RESISTANCE, UUID.fromString("8857d392-cb02-4d92-998b-56cf768c5334"));
+        baseStatUUIDs.put(LUCK, UUID.fromString("a65ee3f5-2655-41e2-b233-3333620dbdd3"));
+        baseStatUUIDs.put(STRIKE_MULT.get(), UUID.fromString("9f6ccdac-6035-4af7-a851-0a32086fbbcf"));
+        baseStatUUIDs.put(PIERCE_MULT.get(), UUID.fromString("a3bb573c-3553-4f50-97e3-feaacf8ec504"));
+        baseStatUUIDs.put(SLASH_MULT.get(), UUID.fromString("055b0d8f-f5ba-4c8f-9d0b-664e31821744"));
+        baseStatUUIDs.put(CRUSH_MULT.get(), UUID.fromString("608491b9-6ba1-419a-9707-7ec698c3041f"));
+        baseStatUUIDs.put(GENERIC_MULT.get(), UUID.fromString("81660c31-d54b-4dd0-8a3c-9c16a8a186ac"));
+    }
+
+    static {
+        baseMultiplier1UUIDs.put(ATTACK_DAMAGE, UUID.fromString("f9a8d1e1-6a5f-4799-b5a5-b9f7c8e6acb7"));
+        baseMultiplier1UUIDs.put(FIRE_DAMAGE.get(), UUID.fromString("e9b7c6d2-3f4a-4c51-9a6f-c8e5d7f6b9c8"));
+        baseMultiplier1UUIDs.put(WATER_DAMAGE.get(), UUID.fromString("d8c6b5e3-2e3b-3d40-8a5e-b7d4c6e5a8b9"));
+        baseMultiplier1UUIDs.put(LIGHTNING_DAMAGE.get(), UUID.fromString("c7d5a4f4-1d2c-2c3f-7a4d-a6c3b5d495a8"));
+        baseMultiplier1UUIDs.put(MAGIC_DAMAGE.get(), UUID.fromString("b6e493e5-0c1d-1b2e-6a3c-95b2a4c384b7"));
+        baseMultiplier1UUIDs.put(DARK_DAMAGE.get(), UUID.fromString("a5f382f6-fb0e-0a1f-5a2b-84a1b3c273b6"));
+        baseMultiplier1UUIDs.put(ATTACK_SPEED, UUID.fromString("95e271f7-ea0f-f910-4a1a-73a0c2b162b5"));
+        baseMultiplier1UUIDs.put(ATTACK_KNOCKBACK, UUID.fromString("84d160f8-d900-e801-3a09-62a1b1b051b4"));
+        baseMultiplier1UUIDs.put(FORCE.get(), UUID.fromString("73c04ff9-c701-d702-2a08-51a0c0a040b3"));
+        baseMultiplier1UUIDs.put(LIFESTEAL.get(), UUID.fromString("62b03efa-b602-c603-1a07-40a1b09030b2"));
+        baseMultiplier1UUIDs.put(CRIT_CHANCE.get(), UUID.fromString("51a02dfb-a503-b504-0a06-30a2a08020b1"));
+        baseMultiplier1UUIDs.put(PENETRATING.get(), UUID.fromString("40a01cfc-9404-a405-fa05-20a3a07030b0"));
+        baseMultiplier1UUIDs.put(ARMOR_TOUGHNESS, UUID.fromString("30a00bfd-8305-9306-ea04-10a4a06040af"));
+        baseMultiplier1UUIDs.put(ARMOR, UUID.fromString("20a09afe-7206-8207-da03-00a5a05050ae"));
+        baseMultiplier1UUIDs.put(FIRE_RESISTANCE.get(), UUID.fromString("10b08afd-6107-7108-ca02-f0b4a04040ad"));
+        baseMultiplier1UUIDs.put(WATER_RESISTANCE.get(), UUID.fromString("00c07bee-5008-6109-ba01-e0c3a03030ac"));
+        baseMultiplier1UUIDs.put(LIGHTNING_RESISTANCE.get(), UUID.fromString("f0d06afd-3f09-510a-aa00-d0d2a02020ab"));
+        baseMultiplier1UUIDs.put(MAGIC_RESISTANCE.get(), UUID.fromString("e0e05bfe-2e0a-400b-9a0f-c0e1a01010aa"));
+        baseMultiplier1UUIDs.put(DARK_RESISTANCE.get(), UUID.fromString("d0f04cff-1d0b-300c-8a0e-b0f09f000a9a"));
+        baseMultiplier1UUIDs.put(EVASION.get(), UUID.fromString("c0803c00-0c0c-200d-7a0d-a0e09e010a89"));
+        baseMultiplier1UUIDs.put(MAX_HEALTH, UUID.fromString("b0902b01-fb0d-100e-6a0c-90d08d020a78"));
+        baseMultiplier1UUIDs.put(MOVEMENT_SPEED, UUID.fromString("a1c2d3e4-5f6g-7h8i-9j0k-a1b2c3d4e5f6"));
+        baseMultiplier1UUIDs.put(KNOCKBACK_RESISTANCE, UUID.fromString("b2d3e4f5-6g7h-8i9j-0ka1-b2c3d4e5f6g7"));
+        baseMultiplier1UUIDs.put(LUCK, UUID.fromString("c3e4f5g6-7h8i-9j0k-a1b2-c3d4e5f6g7h8"));
+        baseMultiplier1UUIDs.put(STRIKE_MULT.get(), UUID.fromString("d4f5g6h7-8i9j-0ka1-b2c3-d4e5f6g7h8i9"));
+        baseMultiplier1UUIDs.put(PIERCE_MULT.get(), UUID.fromString("e5g6h7i8-9j0k-a1b2-c3d4-e5f6g7h8i9j0"));
+        baseMultiplier1UUIDs.put(SLASH_MULT.get(), UUID.fromString("f6h7i8j9-0ka1-b2c3-d4e5-f6g7h8i9j0k1"));
+        baseMultiplier1UUIDs.put(CRUSH_MULT.get(), UUID.fromString("g7i8j9k0-a1b2-c3d4-e5f6-g7h8i9j0k1a2"));
+        baseMultiplier1UUIDs.put(GENERIC_MULT.get(), UUID.fromString("h8j9k0l1-b2c3-d4e5-f6g7-h8i9j0k1a2b3"));
+    }
+
+    static {
+        baseMultiplier2UUIDs.put(ATTACK_DAMAGE, UUID.fromString("a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6"));
+        baseMultiplier2UUIDs.put(FIRE_DAMAGE.get(), UUID.fromString("b1c2d3e4-f5e7-b6a8-d9c0-f2e1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(WATER_DAMAGE.get(), UUID.fromString("c1d2e3f4-e5d7-c5b8-e9b0-e3d2a3b4c5d6"));
+        baseMultiplier2UUIDs.put(LIGHTNING_DAMAGE.get(), UUID.fromString("d1e2f3g4-d5c7-d4a8-f9a0-d4c2a3b4c5d6"));
+        baseMultiplier2UUIDs.put(MAGIC_DAMAGE.get(), UUID.fromString("e1f2g3h4-c5b7-e3a8-g990-c5b2a3b4c5d6"));
+        baseMultiplier2UUIDs.put(DARK_DAMAGE.get(), UUID.fromString("f1g2h3i4-b4a7-f2a8-h980-b4a2a3b4c5d6"));
+        baseMultiplier2UUIDs.put(ATTACK_SPEED, UUID.fromString("g1h2i3j4-a3b6-g1a8-i970-a3b1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(ATTACK_KNOCKBACK, UUID.fromString("h1i2j3k4-b2c5-h1b8-j960-b2c1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(FORCE.get(), UUID.fromString("i1j2k3l4-c1d4-i1c8-k950-c1d1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(LIFESTEAL.get(), UUID.fromString("j1k2l3m4-d1e3-j1d8-l940-d1e1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(CRIT_CHANCE.get(), UUID.fromString("k1l2m3n4-e1f2-k1e8-m930-e1f1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(PENETRATING.get(), UUID.fromString("l1m2n3o4-f1g1-l1n3o4-g1h0-m920-f1g1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(ARMOR_TOUGHNESS, UUID.fromString("m1n2o3p4-h1i9-n910-h1i1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(ARMOR, UUID.fromString("n1o2p3q4-i8j7-o900-i8j1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(FIRE_RESISTANCE.get(), UUID.fromString("o1p2q3r4-j6k5-p8f0-j6k1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(WATER_RESISTANCE.get(), UUID.fromString("p1q2r3s4-k4l3-q7e0-k4l1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(LIGHTNING_RESISTANCE.get(), UUID.fromString("q1r2s3t4-l2m1-r6d0-l2m1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(MAGIC_RESISTANCE.get(), UUID.fromString("r1s2t3u4-m0n9-s5c0-m0n1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(DARK_RESISTANCE.get(), UUID.fromString("s1t2u3v4-n8o7-t4b0-n8o1a3b4c5d6"));
+        baseMultiplier2UUIDs.put(EVASION.get(), UUID.fromString("d0803c00-0c0c-200d-7a0d-a0e09e010a89"));
+        baseMultiplier2UUIDs.put(MAX_HEALTH, UUID.fromString("e0902b01-fb0d-100e-6a0c-90d08d020a78"));
+        baseMultiplier2UUIDs.put(MOVEMENT_SPEED, UUID.fromString("f1c2d3e4-5f6g-7h8i-9j0k-a1b2c3d4e5f6"));
+        baseMultiplier2UUIDs.put(KNOCKBACK_RESISTANCE, UUID.fromString("g2d3e4f5-6g7h-8i9j-0ka1-b2c3d4e5f6g7"));
+        baseMultiplier2UUIDs.put(LUCK, UUID.fromString("h3e4f5g6-7h8i-9j0k-a1b2-c3d4e5f6g7h8"));
+        baseMultiplier2UUIDs.put(STRIKE_MULT.get(), UUID.fromString("i4f5g6h7-8i9j-0ka1-b2c3-d4e5f6g7h8i9"));
+        baseMultiplier2UUIDs.put(PIERCE_MULT.get(), UUID.fromString("j5g6h7i8-9j0k-a1b2-c3d4-e5f6g7h8i9j0"));
+        baseMultiplier2UUIDs.put(SLASH_MULT.get(), UUID.fromString("k6h7i8j9-0ka1-b2c3-d4e5-f6g7h8i9j0k1"));
+        baseMultiplier2UUIDs.put(CRUSH_MULT.get(), UUID.fromString("l7i8j9k0-a1b2-c3d4-e5f6-g7h8i9j0k1a2"));
+        baseMultiplier2UUIDs.put(GENERIC_MULT.get(), UUID.fromString("m8j9k0l1-b2c3-d4e5-f6g7-h8i9j0k1a2b3"));
+
+    }
+
+    static {
+        baseMultiplier1UUIDs.put(ATTACK_DAMAGE, UUID.fromString("b9a8d1e1-6a5f-4799-b5a5-b9f7c8e6acb7"));
+        baseMultiplier1UUIDs.put(FIRE_DAMAGE.get(), UUID.fromString("c9b7c6d2-3f4a-4c51-9a6f-c8e5d7f6b9c8"));
+        baseMultiplier1UUIDs.put(WATER_DAMAGE.get(), UUID.fromString("d8c6b5e3-2e3b-3d40-8a5e-b7d4c6e5a8b9"));
+        baseMultiplier1UUIDs.put(LIGHTNING_DAMAGE.get(), UUID.fromString("e7d5a4f4-1d2c-2c3f-7a4d-a6c3b5d495a8"));
+        baseMultiplier1UUIDs.put(MAGIC_DAMAGE.get(), UUID.fromString("f6e493e5-0c1d-1b2e-6a3c-95b2a4c384b7"));
+        baseMultiplier1UUIDs.put(DARK_DAMAGE.get(), UUID.fromString("a5f382f6-fb0e-0a1f-5a2b-84a1b3c273b6"));
+        baseMultiplier1UUIDs.put(ATTACK_SPEED, UUID.fromString("a5e271f7-ea0f-f910-4a1a-73a0c2b162b5"));
+        baseMultiplier1UUIDs.put(ATTACK_KNOCKBACK, UUID.fromString("a4d160f8-d900-e801-3a09-62a1b1b051b4"));
+        baseMultiplier1UUIDs.put(FORCE.get(), UUID.fromString("a3c04ff9-c701-d702-2a08-51a0c0a040b3"));
+        baseMultiplier1UUIDs.put(LIFESTEAL.get(), UUID.fromString("a2b03efa-b602-c603-1a07-40a1b09030b2"));
+        baseMultiplier1UUIDs.put(CRIT_CHANCE.get(), UUID.fromString("a1a02dfb-a503-b504-0a06-30a2a08020b1"));
+        baseMultiplier1UUIDs.put(PENETRATING.get(), UUID.fromString("a0a01cfc-9404-a405-fa05-20a3a07030b0"));
+        baseMultiplier1UUIDs.put(ARMOR_TOUGHNESS, UUID.fromString("a0a00bfd-8305-9306-ea04-10a4a06040af"));
+        baseMultiplier1UUIDs.put(ARMOR, UUID.fromString("b0a09afe-7206-8207-da03-00a5a05050ae"));
+        baseMultiplier1UUIDs.put(FIRE_RESISTANCE.get(), UUID.fromString("c0b08afd-6107-7108-ca02-f0b4a04040ad"));
+        baseMultiplier1UUIDs.put(WATER_RESISTANCE.get(), UUID.fromString("d0c07bee-5008-6109-ba01-e0c3a03030ac"));
+        baseMultiplier1UUIDs.put(LIGHTNING_RESISTANCE.get(), UUID.fromString("e0d06afd-3f09-510a-aa00-d0d2a02020ab"));
+        baseMultiplier1UUIDs.put(MAGIC_RESISTANCE.get(), UUID.fromString("f0e05bfe-2e0a-400b-9a0f-c0e1a01010aa"));
+        baseMultiplier1UUIDs.put(DARK_RESISTANCE.get(), UUID.fromString("g0f04cff-1d0b-300c-8a0e-b0f0a00020a9"));
+    }
+
+    public static UUID getUUID(Attribute a, AttributeModifier.Operation o) {
+        if (o == ADDITION) {
+            return baseStatUUIDs.get(a);
+        } else if (o == MULTIPLY_BASE) {
+            return baseMultiplier1UUIDs.get(a);
+        } else {
+            return baseMultiplier2UUIDs.get(a);
+        }
+    }
 
     public static MutableComponent withColor(MutableComponent text, int color) {
         return text.withStyle(text.getStyle().withColor(net.minecraft.network.chat.TextColor.fromRgb(color & 0xFFFFFF)));
@@ -103,144 +229,6 @@ public class Util {
         return ForgeRegistries.ITEMS.getValue(loc);
     }
 
-    public static void buildWeaponAttributesOp2(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder, ItemData data) {
-        if (data == null) return;
-        putIfExists(builder, Attributes.ATTACK_DAMAGE, new AttributeModifier(TOTAL_MULTIPLY_ATTACK_DAMAGE_UUID, "Weapon modifier", data.physicalDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ATTACK_SPEED, new AttributeModifier(TOTAL_MULTIPLY_ATTACK_SPEED_UUID, "Weapon modifier", data.attackSpeed(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.FIRE_DAMAGE.get(), new AttributeModifier(TOTAL_MULTIPLY_FIRE_DAMAGE_UUID, "Weapon modifier", data.fireDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.WATER_DAMAGE.get(), new AttributeModifier(TOTAL_MULTIPLY_WATER_DAMAGE_UUID, "Weapon modifier", data.waterDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.LIGHTNING_DAMAGE.get(), new AttributeModifier(TOTAL_MULTIPLY_LIGHTNING_DAMAGE_UUID, "Weapon modifier", data.lightningDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.MAGIC_DAMAGE.get(), new AttributeModifier(TOTAL_MULTIPLY_MAGIC_DAMAGE_UUID, "Weapon modifier", data.magicDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.DARK_DAMAGE.get(), new AttributeModifier(TOTAL_MULTIPLY_DARK_DAMAGE_UUID, "Weapon modifier", data.darkDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier(TOTAL_MULTIPLY_CRITICAL_CHANCE_UUID, "Weapon modifier", data.criticalChance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.FORCE.get(), new AttributeModifier(TOTAL_MULTIPLY_FORCE_UUID, "Weapon modifier", data.force(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.PENETRATING.get(), new AttributeModifier(TOTAL_MULTIPLY_ARMOUR_PENETRATION_UUID, "Weapon modifier", data.armourPenetration(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.LIFESTEAL.get(), new AttributeModifier(TOTAL_MULTIPLY_LIFESTEAL_UUID, "Weapon modifier", data.lifesteal(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(TOTAL_MULTIPLY_KNOCKBACK_UUID, "Weapon modifier", data.knockback(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(TOTAL_MULTIPLY_DEFENSE_UUID, "Weapon modifier", data.defense(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ARMOR, new AttributeModifier(TOTAL_MULTIPLY_PHYSICAL_RESISTANCE_UUID, "Weapon modifier", data.physicalResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.FIRE_RESISTANCE.get(), new AttributeModifier(TOTAL_MULTIPLY_FIRE_RESISTANCE_UUID, "Weapon modifier", data.fireResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.WATER_RESISTANCE.get(), new AttributeModifier(TOTAL_MULTIPLY_WATER_RESISTANCE_UUID, "Weapon modifier", data.waterResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.LIGHTNING_RESISTANCE.get(), new AttributeModifier(TOTAL_MULTIPLY_LIGHTNING_RESISTANCE_UUID, "Weapon modifier", data.lightningResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.MAGIC_RESISTANCE.get(), new AttributeModifier(TOTAL_MULTIPLY_MAGIC_RESISTANCE_UUID, "Weapon modifier", data.magicResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.DARK_RESISTANCE.get(), new AttributeModifier(TOTAL_MULTIPLY_DARK_RESISTANCE_UUID, "Weapon modifier", data.darkResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.EVASION.get(), new AttributeModifier(TOTAL_MULTIPLY_EVASION_UUID, "Weapon modifier", data.evasion(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.MAX_HEALTH, new AttributeModifier(TOTAL_MULTIPLY_MAXHP_UUID, "Weapon modifier", data.maxHP(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.MOVEMENT_SPEED, new AttributeModifier(TOTAL_MULTIPLY_MOVESPEED_UUID, "Weapon modifier", data.movespeed(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(TOTAL_MULTIPLY_KNOCKBACK_RESISTANCE_UUID, "Weapon modifier", data.knockbackResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.LUCK, new AttributeModifier(TOTAL_MULTIPLY_LUCK_UUID, "Weapon modifier", data.luck(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(TOTAL_MULTIPLY_STRIKE_MULTIPLIER_UUID, "Weapon modifier", data.strikeMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(TOTAL_MULTIPLY_PIERCE_MULTIPLIER_UUID, "Weapon modifier", data.pierceMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.SLASH_MULT.get(), new AttributeModifier(TOTAL_MULTIPLY_SLASH_MULTIPLIER_UUID, "Weapon modifier", data.slashMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.CRUSH_MULT.get(), new AttributeModifier(TOTAL_MULTIPLY_CRUSH_MULTIPLIER_UUID, "Weapon modifier", data.crushMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.GENERIC_MULT.get(), new AttributeModifier(TOTAL_MULTIPLY_GENERIC_MULTIPLIER_UUID, "Weapon modifier", data.genericMultiplier(), MULTIPLY_TOTAL));
-    }
-
-    public static void buildArmourAttributesOp0(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder, EquipmentSlot slot, ArmourData data,
-                                                double defaultArmour, double defaultToughness, double defaultKBR) {
-        UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT[slot.getIndex()];
-        putIfExists(builder, Attributes.ATTACK_DAMAGE, new AttributeModifier(uuid, "Base physical damage", data.physicalDamage(), ADDITION));
-        putIfExists(builder, IDFAttributes.FIRE_DAMAGE.get(), new AttributeModifier(uuid, "Base fire damage", data.fireDamage(), ADDITION));
-        putIfExists(builder, IDFAttributes.WATER_DAMAGE.get(), new AttributeModifier(uuid, "Base water damage", data.waterDamage(), ADDITION));
-        putIfExists(builder, IDFAttributes.LIGHTNING_DAMAGE.get(), new AttributeModifier(uuid, "Base lightning damage", data.lightningDamage(), ADDITION));
-        putIfExists(builder, IDFAttributes.MAGIC_DAMAGE.get(), new AttributeModifier(uuid, "Base magic damage", data.magicDamage(), ADDITION));
-        putIfExists(builder, IDFAttributes.DARK_DAMAGE.get(), new AttributeModifier(uuid, "Base dark damage", data.darkDamage(), ADDITION));
-        putIfExists(builder, IDFAttributes.LIFESTEAL.get(), new AttributeModifier(uuid, "Base lifesteal", data.lifesteal(), ADDITION));
-        putIfExists(builder, IDFAttributes.PENETRATING.get(), new AttributeModifier(uuid, "Base armour penetration", data.armourPenetration(), ADDITION));
-        putIfExists(builder, IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier(uuid, "Base critical chance", data.criticalChance(), ADDITION));
-        putIfExists(builder, IDFAttributes.FORCE.get(), new AttributeModifier(uuid, "Base force", data.force(), ADDITION));
-        putIfExists(builder, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(uuid, "Base knockback", data.knockback(), ADDITION));
-        putIfExists(builder, Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Base attack speed", data.attackSpeed(), ADDITION));
-        putIfExists(builder, Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", defaultArmour + data.physicalResistance(), ADDITION));
-        putIfExists(builder, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", defaultToughness + data.defense(), ADDITION));
-        putIfExists(builder, IDFAttributes.FIRE_RESISTANCE.get(), new AttributeModifier(uuid, "Base fire resistance", data.fireResistance(), ADDITION));
-        putIfExists(builder, IDFAttributes.WATER_RESISTANCE.get(), new AttributeModifier(uuid, "Base water resistance", data.waterResistance(), ADDITION));
-        putIfExists(builder, IDFAttributes.LIGHTNING_RESISTANCE.get(), new AttributeModifier(uuid, "Base lightning resistance", data.lightningResistance(), ADDITION));
-        putIfExists(builder, IDFAttributes.MAGIC_RESISTANCE.get(), new AttributeModifier(uuid, "Base magic resistance", data.magicResistance(), ADDITION));
-        putIfExists(builder, IDFAttributes.DARK_RESISTANCE.get(), new AttributeModifier(uuid, "Base dark resistance", data.darkResistance(), ADDITION));
-        putIfExists(builder, Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", defaultKBR + data.knockbackResistance(), ADDITION));
-        putIfExists(builder, Attributes.MAX_HEALTH, new AttributeModifier(uuid, "Base max health", data.maxHP(), ADDITION));
-        putIfExists(builder, Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Base movespeed", data.movespeed(), ADDITION));
-        putIfExists(builder, Attributes.LUCK, new AttributeModifier(uuid, "Base luck", data.luck(), ADDITION));
-        putIfExists(builder, IDFAttributes.EVASION.get(), new AttributeModifier(uuid, "Base evasion", data.evasion(), ADDITION));
-        putIfExists(builder, IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(uuid, "Base strike multiplier", data.strikeMultiplier(), ADDITION));
-        putIfExists(builder, IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(uuid, "Base pierce multiplier", data.pierceMultiplier(), ADDITION));
-        putIfExists(builder, IDFAttributes.SLASH_MULT.get(), new AttributeModifier(uuid, "Base slash multiplier", data.slashMultiplier(), ADDITION));
-        putIfExists(builder, IDFAttributes.CRUSH_MULT.get(), new AttributeModifier(uuid, "Base crush multiplier", data.crushMultiplier(), ADDITION));
-        putIfExists(builder, IDFAttributes.GENERIC_MULT.get(), new AttributeModifier(uuid, "Base generic multiplier", data.genericMultiplier(), ADDITION));
-    }
-    public static void buildArmourAttributesOp1(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder, EquipmentSlot slot, ItemData data) {
-        UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT_OP1[slot.getIndex()];
-        putIfExists(builder, Attributes.ATTACK_DAMAGE, new AttributeModifier(uuid, "Base multiply physical damage", data.physicalDamage(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.FIRE_DAMAGE.get(), new AttributeModifier(uuid, "Base multiply fire damage", data.fireDamage(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.WATER_DAMAGE.get(), new AttributeModifier(uuid, "Base multiply water damage", data.waterDamage(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.LIGHTNING_DAMAGE.get(), new AttributeModifier(uuid, "Base multiply lightning damage", data.lightningDamage(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.MAGIC_DAMAGE.get(), new AttributeModifier(uuid, "Base multiply magic damage", data.magicDamage(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.DARK_DAMAGE.get(), new AttributeModifier(uuid, "Base multiply dark damage", data.darkDamage(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.LIFESTEAL.get(), new AttributeModifier(uuid, "Base multiply lifesteal", data.lifesteal(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.PENETRATING.get(), new AttributeModifier(uuid, "Base multiply armour penetration", data.armourPenetration(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier(uuid, "Base multiply critical chance", data.criticalChance(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.FORCE.get(), new AttributeModifier(uuid, "Base multiply force", data.force(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(uuid, "Base multiply knockback", data.knockback(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Base multiply attack speed", data.attackSpeed(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier base multiply", data.physicalResistance(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness base multiply", data.defense(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.FIRE_RESISTANCE.get(), new AttributeModifier(uuid, "Base multiply fire resistance", data.fireResistance(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.WATER_RESISTANCE.get(), new AttributeModifier(uuid, "Base multiply water resistance", data.waterResistance(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.LIGHTNING_RESISTANCE.get(), new AttributeModifier(uuid, "Base multiply lightning resistance", data.lightningResistance(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.MAGIC_RESISTANCE.get(), new AttributeModifier(uuid, "Base multiply magic resistance", data.magicResistance(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.DARK_RESISTANCE.get(), new AttributeModifier(uuid, "Base multiply dark resistance", data.darkResistance(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", data.knockbackResistance(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.MAX_HEALTH, new AttributeModifier(uuid, "Base multiply max health", data.maxHP(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Base multiply movespeed", data.movespeed(), MULTIPLY_BASE));
-        putIfExists(builder, Attributes.LUCK, new AttributeModifier(uuid, "Base multiply luck", data.luck(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.EVASION.get(), new AttributeModifier(uuid, "Base multiply evasion", data.evasion(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(uuid, "Base multiply strike multiplier", data.strikeMultiplier(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(uuid, "Base multiply pierce multiplier", data.pierceMultiplier(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.SLASH_MULT.get(), new AttributeModifier(uuid, "Base multiply slash multiplier", data.slashMultiplier(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.CRUSH_MULT.get(), new AttributeModifier(uuid, "Base multiply crush multiplier", data.crushMultiplier(), MULTIPLY_BASE));
-        putIfExists(builder, IDFAttributes.GENERIC_MULT.get(), new AttributeModifier(uuid, "Base multiply generic multiplier", data.genericMultiplier(), MULTIPLY_BASE));
-    }
-
-    public static void buildArmourAttributesOp2(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder, EquipmentSlot slot, ItemData data) {
-        UUID uuid = ARMOR_MODIFIER_UUID_PER_SLOT_OP2[slot.getIndex()];
-        putIfExists(builder, Attributes.ATTACK_DAMAGE, new AttributeModifier(uuid, "Total multiply physical damage", data.physicalDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.FIRE_DAMAGE.get(), new AttributeModifier(uuid, "Total multiply fire damage", data.fireDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.WATER_DAMAGE.get(), new AttributeModifier(uuid, "Total multiply water damage", data.waterDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.LIGHTNING_DAMAGE.get(), new AttributeModifier(uuid, "Total multiply lightning damage", data.lightningDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.MAGIC_DAMAGE.get(), new AttributeModifier(uuid, "Total multiply magic damage", data.magicDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.DARK_DAMAGE.get(), new AttributeModifier(uuid, "Total multiply dark damage", data.darkDamage(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.LIFESTEAL.get(), new AttributeModifier(uuid, "Total multiply lifesteal", data.lifesteal(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.PENETRATING.get(), new AttributeModifier(uuid, "Total multiply armour penetration", data.armourPenetration(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier(uuid, "Total multiply critical chance", data.criticalChance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.FORCE.get(), new AttributeModifier(uuid, "Total multiply force", data.force(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ATTACK_KNOCKBACK, new AttributeModifier(uuid, "Total multiply knockback", data.knockback(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ATTACK_SPEED, new AttributeModifier(uuid, "Total multiply attack speed", data.attackSpeed(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier total multiply", data.physicalResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness total multiply", data.defense(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.FIRE_RESISTANCE.get(), new AttributeModifier(uuid, "Total multiply fire resistance", data.fireResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.WATER_RESISTANCE.get(), new AttributeModifier(uuid, "Total multiply water resistance", data.waterResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.LIGHTNING_RESISTANCE.get(), new AttributeModifier(uuid, "Total multiply lightning resistance", data.lightningResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.MAGIC_RESISTANCE.get(), new AttributeModifier(uuid, "Total multiply magic resistance", data.magicResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.DARK_RESISTANCE.get(), new AttributeModifier(uuid, "Total multiply dark resistance", data.darkResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", data.knockbackResistance(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.MAX_HEALTH, new AttributeModifier(uuid, "Total multiply max health", data.maxHP(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.MOVEMENT_SPEED, new AttributeModifier(uuid, "Total multiply movespeed", data.movespeed(), MULTIPLY_TOTAL));
-        putIfExists(builder, Attributes.LUCK, new AttributeModifier(uuid, "Total multiply luck", data.luck(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.EVASION.get(), new AttributeModifier(uuid, "Total multiply evasion", data.evasion(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(uuid, "Total multiply strike multiplier", data.strikeMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(uuid, "Total multiply pierce multiplier", data.pierceMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.SLASH_MULT.get(), new AttributeModifier(uuid, "Total multiply slash multiplier", data.slashMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.CRUSH_MULT.get(), new AttributeModifier(uuid, "Total multiply crush multiplier", data.crushMultiplier(), MULTIPLY_TOTAL));
-        putIfExists(builder, IDFAttributes.GENERIC_MULT.get(), new AttributeModifier(uuid, "Total multiply generic multiplier", data.genericMultiplier(), MULTIPLY_TOTAL));
-    }
-    
-    private static void putIfExists(ImmutableMultimap.Builder<Attribute, AttributeModifier> builder, Attribute a, AttributeModifier am) {
-        if (am.getAmount() != 0) {
-            builder.put(a, am);
-        }
-    }
-
     public static float pBPS(double attribute) {
         BigDecimal x = new BigDecimal(attribute * 43.178 - 0.02141);
         x = x.setScale(1, RoundingMode.HALF_UP);
@@ -256,7 +244,7 @@ public class Util {
     public static int getItemBorderType(String dc, Multimap<Attribute, AttributeModifier> map) {
         double f = 0, w = 0, l = 0, m = 0, d = 0, p = 2;
         for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
-            if (entry.getKey() == IDFAttributes.FIRE_DAMAGE.get()) {
+            if (entry.getKey() == FIRE_DAMAGE.get()) {
                 if (entry.getValue().getOperation() == ADDITION) {
                     f += entry.getValue().getAmount();
                 } else {
@@ -286,7 +274,7 @@ public class Util {
                 } else {
                     d += entry.getValue().getAmount() * 10;
                 }
-            } else if (entry.getKey() == Attributes.ATTACK_DAMAGE) {
+            } else if (entry.getKey() == ATTACK_DAMAGE) {
                 if (entry.getValue().getOperation() == ADDITION) {
                     p += entry.getValue().getAmount();
                 } else {
@@ -330,7 +318,7 @@ public class Util {
     }
 
     /*
-        Below methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
+        Following 2 methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
      */
     public static String readString(FriendlyByteBuf buffer) {
         String string = "";
