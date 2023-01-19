@@ -1,9 +1,6 @@
 package net.cwjn.idf.network;
 
 import com.mojang.math.Vector3f;
-import mezz.jei.common.plugins.jei.JeiInternalPlugin;
-import mezz.jei.common.runtime.JeiHelpers;
-import mezz.jei.forge.JustEnoughItemsClient;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.particle.IDFParticles;

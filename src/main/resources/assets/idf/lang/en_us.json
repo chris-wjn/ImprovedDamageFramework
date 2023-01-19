@@ -214,8 +214,15 @@
   "idf.debug_message_on": "Debug enabled.",
   "idf.debug_message_off": "Debug disabled.",
 
-  "//EFFECTS": "USED FOR EFFECTS lol",
-  "effect.idf.positive_attribute_modifier_effect": "Stat Up!",
-  "effect.idf.negative_attribute_modifier_effect": "Stat Down!"
+  "idf.trait.embers": "Embers",
+  "idf.trait.embers.desc": "Adds fire damage",
+  "idf.trait.aqua": "Aqua",
+  "idf.trait.aqua.desc": "Adds water damage",
+  "idf.trait.charged": "Charged",
+  "idf.trait.charged.desc": "Adds lightning damage",
+  "idf.trait.arcane": "Arcane",
+  "idf.trait.arcane.desc": "Adds magic damage",
+  "idf.trait.occult": "Occult",
+  "idf.trait.occult.desc": "Adds dark damage"
 
 }

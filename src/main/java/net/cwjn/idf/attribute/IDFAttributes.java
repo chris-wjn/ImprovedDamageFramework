@@ -15,12 +15,15 @@ public class IDFAttributes {
 
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, ImprovedDamageFramework.MOD_ID);
 
+
+
     //elemental damage types
     public static final RegistryObject<Attribute> FIRE_DAMAGE = register("idf.fire_damage", () -> new RangedAttribute("fire_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> WATER_DAMAGE = register("idf.water_damage", () -> new RangedAttribute("water_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> LIGHTNING_DAMAGE = register("idf.lightning_damage", () -> new RangedAttribute("lightning_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> MAGIC_DAMAGE = register("idf.magic_damage", () -> new RangedAttribute("magic_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> DARK_DAMAGE = register("idf.dark_damage", () -> new RangedAttribute("dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> HOLY_DAMAGE = register("idf.holy_damage", () -> new RangedAttribute("holy_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary offensive attributes
     public static final RegistryObject<Attribute> FORCE = register("idf.force", () -> new RangedAttribute("force", 1.0D, -1.0D, 40).setSyncable(true));
     public static final RegistryObject<Attribute> LIFESTEAL = register("idf.lifesteal", () -> new RangedAttribute("lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
@@ -32,6 +35,7 @@ public class IDFAttributes {
     public static final RegistryObject<Attribute> LIGHTNING_RESISTANCE = register("idf.lightning_resistance", () -> new RangedAttribute("lightning_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> MAGIC_RESISTANCE = register("idf.magic_resistance", () -> new RangedAttribute("magic_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> DARK_RESISTANCE = register("idf.dark_resistance", () -> new RangedAttribute("dark_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> HOLY_RESISTANCE = register("idf.holy_resistance", () -> new RangedAttribute("holy_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
     //damage class multipliers
     public static final RegistryObject<Attribute> STRIKE_MULT = register("idf.strike_mult", () -> new RangedAttribute("strike_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> PIERCE_MULT = register("idf.pierce_mult", () -> new RangedAttribute("pierce_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
@@ -52,6 +56,8 @@ public class IDFAttributes {
         Attributes.KNOCKBACK_RESISTANCE.setSyncable(true);
         AccessRangedAttribute mixinArmour = (AccessRangedAttribute) Attributes.ARMOR;
         AccessRangedAttribute mixinDefense = (AccessRangedAttribute) Attributes.ARMOR_TOUGHNESS;
+        AccessRangedAttribute mixinHealth = (AccessRangedAttribute) Attributes.MAX_HEALTH;
+        mixinHealth.setMax(Double.MAX_VALUE);
         mixinArmour.setMax(Double.MAX_VALUE);
         mixinArmour.setMin(-Double.MAX_VALUE);
         mixinDefense.setMax(40D);
