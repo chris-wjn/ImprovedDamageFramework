@@ -26,7 +26,7 @@ import static net.minecraft.commands.Commands.literal;
 
 public class GrantStatsCommand {
 
-    public GrantStatsCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext ctx) {
+    /*public GrantStatsCommand(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext ctx) {
         dispatcher.register(literal("addattribute").requires(player -> player.hasPermission(2))
                 .then(argument("item", ItemArgument.item(ctx)))
                 .then(argument("attribute", ResourceKeyArgument.key(Registry.ATTRIBUTE_REGISTRY)))
@@ -37,10 +37,10 @@ public class GrantStatsCommand {
                             AttributeModifier.Operation.fromValue(IntegerArgumentType.getInteger(stack, "operation")),
                             DoubleArgumentType.getDouble(stack, "amount"));
                 }));
-    }
+    }*/
 
-    private static int addAttribute(Item item, Attribute a, AttributeModifier.Operation op, double amt) {
+    /*private static int addAttribute(Item item, Attribute a, AttributeModifier.Operation op, double amt) {
 
-    }
+    }*/
 
 }

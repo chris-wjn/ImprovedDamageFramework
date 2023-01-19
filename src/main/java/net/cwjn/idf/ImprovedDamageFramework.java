@@ -10,7 +10,6 @@ import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.hud.PlayerHealthBar;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
-import net.cwjn.idf.util.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;

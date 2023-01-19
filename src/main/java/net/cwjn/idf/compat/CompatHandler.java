@@ -12,6 +12,10 @@ public class CompatHandler {
             PatchouliCompat.register();
             ImprovedDamageFramework.LOGGER.info("IMPROVED DAMAGE FRAMEWORK: Patchouli compat loaded.");
         }
+        if (ModList.get().isLoaded("silentgear")) {
+            SilentGearCompat.register();
+            ImprovedDamageFramework.LOGGER.info("IMPROVED DAMAGE FRAMEWORK: SilentGear compat loaded.");
+        }
     }
 
     public static void initClient(FMLClientSetupEvent event) {

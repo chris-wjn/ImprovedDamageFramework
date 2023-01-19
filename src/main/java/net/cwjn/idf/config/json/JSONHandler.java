@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -25,7 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -34,11 +34,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static net.cwjn.idf.util.Util.getUUID;
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_BASE;
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ARMOR;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
@@ -361,6 +362,7 @@ public class JSONHandler {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
             CompoundTag defaultTag = new CompoundTag();
+            int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item.getDefaultInstance()).getFilterFlag();
             ResourceLocation loc = Util.getItemRegistryName(item);
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
             if (baseModifiers.get(loc) != null) {
@@ -376,7 +378,7 @@ public class JSONHandler {
                 if (data0 != null) {
                     data0.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), ADDITION), "data0", pair.getB(), ADDITION));
+                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "data0", pair.getB(), ADDITION));
                         }
                     });
                     defaultTag.putString("idf.damage_class", data0.damageClass());
@@ -385,14 +387,14 @@ public class JSONHandler {
                 if (data1 != null) {
                     data1.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_BASE),"data1", pair.getB(), MULTIPLY_BASE));
+                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_BASE[equipmentSlot],"data1", pair.getB(), MULTIPLY_BASE));
                         }
                     });
                 }
                 if (data2 != null) {
                     data2.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_TOTAL),"data2", pair.getB(), MULTIPLY_TOTAL));
+                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"data2", pair.getB(), MULTIPLY_TOTAL));
                         }
                     });
                 }
@@ -405,7 +407,7 @@ public class JSONHandler {
                 if (data0 != null) {
                     data0.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), ADDITION),"data0", pair.getB(), ADDITION));
+                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot],"data0", pair.getB(), ADDITION));
                         }
                     });
                     idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
@@ -413,14 +415,14 @@ public class JSONHandler {
                 if (data1 != null) {
                     data1.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_BASE),"data1", pair.getB(), MULTIPLY_BASE));
+                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_BASE[equipmentSlot],"data1", pair.getB(), MULTIPLY_BASE));
                         }
                     });
                 }
                 if (data2 != null) {
                     data2.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(getUUID(pair.getA(), MULTIPLY_TOTAL),"data2", pair.getB(), MULTIPLY_TOTAL));
+                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"data2", pair.getB(), MULTIPLY_TOTAL));
                         }
                     });
                 }
