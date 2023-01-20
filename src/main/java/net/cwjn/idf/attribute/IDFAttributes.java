@@ -15,8 +15,6 @@ public class IDFAttributes {
 
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, ImprovedDamageFramework.MOD_ID);
 
-
-
     //elemental damage types
     public static final RegistryObject<Attribute> FIRE_DAMAGE = register("idf.fire_damage", () -> new RangedAttribute("fire_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> WATER_DAMAGE = register("idf.water_damage", () -> new RangedAttribute("water_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));

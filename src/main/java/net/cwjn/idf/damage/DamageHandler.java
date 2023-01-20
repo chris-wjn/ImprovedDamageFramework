@@ -1,5 +1,6 @@
 package net.cwjn.idf.damage;
 
+import net.cwjn.idf.api.event.PreDamageMultipliersEvent;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.data.SourceCatcherData;
@@ -23,26 +24,21 @@ import java.util.Map;
 public class DamageHandler {
 
     public static float handleDamage(LivingEntity target, DamageSource source, float amount) {
-        //In ATHandler we leave fall damage as purely physical, so we can calculate this here.
-        if (source.isFall()) {
-            double fallLevel = 0;
-            for (ItemStack item : target.getArmorSlots()) {
-                fallLevel += item.getEnchantmentLevel(Enchantments.FALL_PROTECTION);
-            }
-            amount *= (1 - (fallLevel * 0.0625));
-        }
+
         //If the source isn't integrated, integrate it. Maintains isFall, isExplosion, and isProjectile.
         if (!(source instanceof IDFInterface)) source = SourceCatcherData.convert(source);
         //since we integrated the source in the line above, it should be guaranteed that we can cast the source without issue.
         IDFInterface convertedSource = (IDFInterface) source;
+
         //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
-        //we initialize default values to minimize the possibility of null pointer crashes.
         float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, weight, knockback;
         String damageClass;
+
+        //if the source is a conversion from a vanilla source, we take the physical amount provided and spread it across all damage types
+        //according the ratios given. This means the values of all the damage types should be < 1.0, and any leftovers should remain as
+        //physical damage. Otherwise, the source is a regular instance of IDFDamage, so we don't have to convert anything. The values given here
+        //should be flat values we want to use directly. Amount just corresponds to the physical damage.
         if (convertedSource.isConversion()) {
-            //if the source is a conversion from a vanilla source, we take the physical amount provided and spread it across all damage types
-            //according the ratios given. This means the values of all the damage types should be < 1.0, and any leftovers should remain as
-            //physical damage.
             fireDamage = convertedSource.getFire() * amount;
             waterDamage = convertedSource.getWater() * amount;
             lightningDamage = convertedSource.getLightning() * amount;
@@ -50,8 +46,6 @@ public class DamageHandler {
             darkDamage = convertedSource.getDark() * amount;
             physicalDamage = amount - (fireDamage + waterDamage + lightningDamage + magicDamage + darkDamage);
         } else {
-            //otherwise, the source is a regular instance of IDFDamage, so we don't have to convert anything. The values given here
-            //should be flat values we want to use directly. Amount just corresponds to the physical damage.
             fireDamage = convertedSource.getFire();
             waterDamage = convertedSource.getWater();
             lightningDamage = convertedSource.getLightning();
@@ -59,22 +53,26 @@ public class DamageHandler {
             darkDamage = convertedSource.getDark();
             physicalDamage = amount;
         }
-        //we run the premitigation event first, then put the damage and resistance values into an array here to easily loop through them and apply modifiers.
-        //Pen and lifesteal need to be divided by 100 to get a value between 0.0 and 1.0 which we can use in math.
-        PreMitigationDamageEvent event = new PreMitigationDamageEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, convertedSource.getPen()/100, convertedSource.getLifesteal()/100, convertedSource.getKnockback(), convertedSource.getWeight(),
+
+        //run our numbers through the pre-multiplier event. Use the armour formula to convert elemental armour values to resistances.
+        //divide pen and lifesteal by 100, so we can get a usable number between 0 and 1
+        PreDamageMultipliersEvent event = new PreDamageMultipliersEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, convertedSource.getPen()/100, convertedSource.getLifesteal()/100, convertedSource.getKnockback(), convertedSource.getWeight(),
                 (float) armourFormula(target.getAttributeValue(IDFAttributes.FIRE_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(IDFAttributes.WATER_RESISTANCE.get())),
                 (float) armourFormula(target.getAttributeValue(IDFAttributes.LIGHTNING_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(IDFAttributes.MAGIC_RESISTANCE.get())),
                 (float) armourFormula(target.getAttributeValue(IDFAttributes.DARK_RESISTANCE.get())), (float) armourFormula(target.getAttributeValue(Attributes.ARMOR)),
                 (float) target.getAttributeValue(Attributes.ARMOR_TOUGHNESS), convertedSource.getDamageClass());
         MinecraftForge.EVENT_BUS.post(event);
+
+        //grab the values from the event after it's been fired. We put the damage and resistance values into arrays, so they can be looped through.
+        //this is the only place we use force and defense, so we can just calculate the ratio here.
         float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        weight = event.getWeight();
+        double weightMultiplier = event.getWeight() == -1 ? 1 : Mth.clamp(Math.sqrt(event.getWeight())/Math.sqrt(event.getDef()), 0.5, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getPhysicalRes()};
-        double weightMultiplier = weight == -1 ? 1 : Mth.clamp(Math.sqrt(weight)/Math.sqrt(event.getDef()), 0.5, 2);
+
         //now we can knockback the target based on the weightMultiplier. The first code is copied from the
         //vanilla knockback handler to get the direction of the knockback. We add the bonus knockback value from
         //the attack afterwards.
@@ -87,26 +85,35 @@ public class DamageHandler {
             target.hurtDir = (float)(Mth.atan2(d0, d1) * (double)(180F / (float)Math.PI) - (double)target.getYRot());
             target.knockback(knockback*weightMultiplier, d1, d0);
         }
+
         //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
         //to all the damage types. Then iterate through the damage values and apply the weight/defense multiplier followed by
-        //the damage class multiplier
+        //the damage class multiplier. Then multiply each damage value by the correct multiplier.
         Map<String, Double> mappedMultipliers = new HashMap<>(3);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", target.getAttributeValue(IDFAttributes.PIERCE_MULT.get()));
         mappedMultipliers.put("slash", target.getAttributeValue(IDFAttributes.SLASH_MULT.get()));
         mappedMultipliers.put("crush", target.getAttributeValue(IDFAttributes.CRUSH_MULT.get()));
         mappedMultipliers.put("generic", target.getAttributeValue(IDFAttributes.GENERIC_MULT.get()));
-        //now multiply each damage value by the correct multiplier.
         for (int i = 0; i < 6; i++) {
             dv[i] *= weightMultiplier;
             dv[i] *= mappedMultipliers.get(damageClass);
         }
+
         //now that we have the final pre-mitigation values, check if the source is true damage. If it is,
         //there's no need to do the rest of the method.
         if (convertedSource.isTrue()) return sum(dv);
+
         //now we can factor in blast protection, fire protection and projectile protection. Reduce each damage type by 6.25% per
         //level of blast and projectile respectively. Assuming the highest any player could get is 16 (prot 4 on each armour piece),
         //this means having maxed out of either makes you take 100% reduced damage from these sources.
+        if (source.isFall()) {
+            double fallLevel = 0;
+            for (ItemStack item : target.getArmorSlots()) {
+                fallLevel += item.getEnchantmentLevel(Enchantments.FALL_PROTECTION);
+            }
+            amount *= (1 - (fallLevel * 0.0625));
+        }
         if (source.isProjectile()) {
             double projectileLevel = 0;
             for (ItemStack item : target.getArmorSlots()) {
