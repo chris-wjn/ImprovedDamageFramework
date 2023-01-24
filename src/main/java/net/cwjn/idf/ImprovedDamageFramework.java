@@ -6,6 +6,7 @@ import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
 import net.cwjn.idf.event.ClientEventsModBus;
+import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.hud.PlayerHealthBar;
 import net.cwjn.idf.network.PacketHandler;
@@ -57,6 +58,7 @@ public class ImprovedDamageFramework {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatsScreen.class);
+        MinecraftForge.EVENT_BUS.register(StatScreen.class);
         MinecraftForge.EVENT_BUS.register(new ClientEventsModBus());
         if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::deleteArmorHud);

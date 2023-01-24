@@ -5,10 +5,8 @@ import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.event.ClientEventsForgeBus;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Util;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.*;
@@ -23,9 +21,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 
@@ -45,6 +42,11 @@ public abstract class MixinItemStack {
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
+
+    @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Ljava/util/function/UnaryOperator;)Lnet/minecraft/network/chat/MutableComponent;"))
+    private MutableComponent removeRarityStyler(MutableComponent instance, UnaryOperator<Style> p_130939_) {
+        return instance;
+    }
 
     @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasCustomHoverName()Z"))
     private boolean removeItalicName(ItemStack instance) {

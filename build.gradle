@@ -129,7 +129,6 @@ dependencies {
     //implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.2")
 
     //SILENTGEAR + SILENTLIB
-    implementation fg.deobf("curse.maven:silentgear-297039:4285448")
     implementation fg.deobf("net.silentchaos512:silent-lib:${project.sl_version}") {
         exclude module: "forge"
     }

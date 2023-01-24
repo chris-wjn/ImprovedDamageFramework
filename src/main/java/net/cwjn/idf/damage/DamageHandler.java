@@ -104,8 +104,8 @@ public class DamageHandler {
         //there's no need to do the rest of the method.
         if (convertedSource.isTrue()) return sum(dv);
 
-        //now we can factor in blast protection, fire protection and projectile protection. Reduce each damage type by 6.25% per
-        //level of blast and projectile respectively. Assuming the highest any player could get is 16 (prot 4 on each armour piece),
+        //now we can factor in fall protection, blast protection, fire protection and projectile protection. Reduce each damage type by 6.25% per
+        //level of blast and projectile. Assuming the highest any player could get is 16 (prot 4 on each armour piece),
         //this means having maxed out of either makes you take 100% reduced damage from these sources.
         if (source.isFall()) {
             double fallLevel = 0;
