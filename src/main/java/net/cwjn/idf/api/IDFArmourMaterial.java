@@ -20,7 +20,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
             armourPenetration, knockback, criticalChance, force, attackSpeed, defense,
             physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance,
             maxHP, movespeed, luck, evasion,
-            strike, pierce, slash, crush, generic;
+            strike, pierce, slash;
     private final Map<Attribute, AttributeModifier> bonusAttributes;
     private final int enchantmentValue;
     private final SoundEvent sound;
@@ -32,7 +32,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
                              double[] force, double[] attackSpeed, double[] defense, double[] physicalResistance,
                              double[] f, double[] w, double[] l, double[] m, double[] d,
                              double[] hp, double[] ms, double[] luck, double[] evasion,
-                             double[] str, double[] prc, double[] sls, double[] crs, double[] gen,
+                             double[] str, double[] prc, double[] sls,
                              Map<Attribute, AttributeModifier> bonusAttributes, int enchantability, SoundEvent equipSound, float KBR, Supplier<Ingredient> repairIngredient) {
         this.name = name;
         this.durabilityMultiplier = durabilityMult;
@@ -67,8 +67,6 @@ public class IDFArmourMaterial implements ArmorMaterial {
         strike = str;
         pierce = prc;
         slash = sls;
-        crush = crs;
-        generic = gen;
     }
 
     public int getDurabilityForSlot(EquipmentSlot slot) {
@@ -208,14 +206,6 @@ public class IDFArmourMaterial implements ArmorMaterial {
 
     public double getSlashForSlot(EquipmentSlot slot) {
         return this.slash[slot.getIndex()];
-    }
-
-    public double getCrushForSlot(EquipmentSlot slot) {
-        return this.crush[slot.getIndex()];
-    }
-
-    public double getGenericForSlot(EquipmentSlot slot) {
-        return this.generic[slot.getIndex()];
     }
 
     public Map<Attribute, AttributeModifier> getBonusAttributes() {

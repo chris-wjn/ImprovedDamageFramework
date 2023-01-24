@@ -3,13 +3,10 @@ package net.cwjn.idf.config.json.data;
 import com.google.gson.*;
 import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import javax.json.Json;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,7 +14,6 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
-import static net.cwjn.idf.attribute.IDFAttributes.GENERIC_MULT;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 public record ArmourData(int durability, double physicalDamage, double fireDamage,
@@ -27,7 +23,7 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
                          double waterResistance, double lightningResistance, double magicResistance,
                          double darkResistance, double evasion, double maxHP, double movespeed,
                          double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
-                         double slashMultiplier, double crushMultiplier, double genericMultiplier) implements Iterable<Pair<Attribute, Double>> {
+                         double slashMultiplier) implements Iterable<Pair<Attribute, Double>> {
 
     public static ArmourData combine(ArmourData data1, ArmourData data2) {
         return new ArmourData(data1.durability + data2.durability, data1.physicalDamage + data2.physicalDamage,
@@ -39,14 +35,13 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
                 data1.waterResistance + data2.waterResistance, data1.lightningResistance + data2.lightningResistance, data1.magicResistance + data2.magicResistance,
                 data1.darkResistance + data2.darkResistance, data1.evasion + data2.evasion, data1.maxHP + data2.maxHP, data1.movespeed + data1.movespeed,
                 data1.knockbackResistance + data2.knockbackResistance, data1.luck + data2.luck, data1.strikeMultiplier + data2.strikeMultiplier,
-                data1.pierceMultiplier + data2.pierceMultiplier, data1.slashMultiplier + data2.slashMultiplier, data1.crushMultiplier + data2.crushMultiplier,
-                data1.genericMultiplier + data2.genericMultiplier);
+                data1.pierceMultiplier + data2.pierceMultiplier, data1.slashMultiplier + data2.slashMultiplier);
     }
 
     public static ArmourData empty() {
         return new ArmourData(0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     public static ArmourData readArmourData(FriendlyByteBuf buffer) {
@@ -55,7 +50,7 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
-                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+                buffer.readDouble(), buffer.readDouble());
     }
 
     public void writeArmourData(FriendlyByteBuf buffer) {
@@ -87,8 +82,6 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
         buffer.writeDouble(strikeMultiplier);
         buffer.writeDouble(pierceMultiplier);
         buffer.writeDouble(slashMultiplier);
-        buffer.writeDouble(crushMultiplier);
-        buffer.writeDouble(genericMultiplier);
     }
 
     @NotNull
@@ -122,8 +115,6 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
         values.add(new Pair<>(STRIKE_MULT.get(), strikeMultiplier));
         values.add(new Pair<>(PIERCE_MULT.get(), pierceMultiplier));
         values.add(new Pair<>(SLASH_MULT.get(), slashMultiplier));
-        values.add(new Pair<>(CRUSH_MULT.get(), crushMultiplier));
-        values.add(new Pair<>(GENERIC_MULT.get(), genericMultiplier));
         return values.iterator();
     }
 
@@ -172,11 +163,9 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
                     obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(2).getAsDouble(),
                     obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(3).getAsDouble(),
                     obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(4).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(0).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(1).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(2).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(3).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(4).getAsDouble());
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash").get(0).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash").get(1).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash").get(2).getAsDouble());
         }
 
         @Override
@@ -187,13 +176,13 @@ public record ArmourData(int durability, double physicalDamage, double fireDamag
             Util.addAllToJsonArray(OFFENSIVE_AUXILIARY, data.lifesteal, data.armourPenetration, data.criticalChance, data.force, data.knockback, data.attackSpeed);
             Util.addAllToJsonArray(RESISTANCE_TYPES, data.defense, data.physicalResistance, data.fireResistance, data.waterResistance, data.lightningResistance, data.magicResistance, data.darkResistance);
             Util.addAllToJsonArray(DEFENSIVE_AUXILIARY, data.evasion, data.maxHP, data.movespeed, data.knockbackResistance, data.luck);
-            Util.addAllToJsonArray(MULTIPLIERS, data.strikeMultiplier, data.pierceMultiplier, data.slashMultiplier, data.crushMultiplier, data.genericMultiplier);
+            Util.addAllToJsonArray(MULTIPLIERS, data.strikeMultiplier, data.pierceMultiplier, data.slashMultiplier);
             obj.addProperty("Bonus Durability", data.durability);
             obj.add("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark", DAMAGE_TYPES);
             obj.add("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed", OFFENSIVE_AUXILIARY);
             obj.add("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark", RESISTANCE_TYPES);
             obj.add("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck", DEFENSIVE_AUXILIARY);
-            obj.add("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic", MULTIPLIERS);
+            obj.add("MULTIPLIERS: Strike / Pierce / Slash", MULTIPLIERS);
             return obj;
         }
 

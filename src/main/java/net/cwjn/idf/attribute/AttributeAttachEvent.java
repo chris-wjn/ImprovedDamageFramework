@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import static net.cwjn.idf.attribute.IDFElement.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class AttributeAttachEvent {
@@ -19,7 +20,7 @@ public class AttributeAttachEvent {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(entityType));
             if (data != null) {
-                event.add(entityType, IDFAttributes.FIRE_DAMAGE.get(), data.getFireDamage());
+                event.add(entityType, FIRE.damage, data.getFireDamage());
                 event.add(entityType, IDFAttributes.WATER_DAMAGE.get(), data.getWaterDamage());
                 event.add(entityType, IDFAttributes.LIGHTNING_DAMAGE.get(), data.getLightningDamage());
                 event.add(entityType, IDFAttributes.MAGIC_DAMAGE.get(), data.getMagicDamage());
@@ -34,8 +35,6 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.getStrikeMult());
                 event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.getPierceMult());
                 event.add(entityType, IDFAttributes.SLASH_MULT.get(), data.getSlashMult());
-                event.add(entityType, IDFAttributes.CRUSH_MULT.get(), data.getCrushMult());
-                event.add(entityType, IDFAttributes.GENERIC_MULT.get(), data.getGenericMult());
                 //AUXILIARY
                 event.add(entityType, IDFAttributes.EVASION.get(), data.getEvasion());
                 event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.getLifesteal());
@@ -59,8 +58,6 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.STRIKE_MULT.get());
                 event.add(entityType, IDFAttributes.PIERCE_MULT.get());
                 event.add(entityType, IDFAttributes.SLASH_MULT.get());
-                event.add(entityType, IDFAttributes.CRUSH_MULT.get());
-                event.add(entityType, IDFAttributes.GENERIC_MULT.get());
                 //AUXILIARY
                 event.add(entityType, IDFAttributes.EVASION.get());
                 event.add(entityType, IDFAttributes.LIFESTEAL.get());

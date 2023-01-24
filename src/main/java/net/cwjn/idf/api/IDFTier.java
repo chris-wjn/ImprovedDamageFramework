@@ -22,7 +22,7 @@ public class IDFTier implements Tier {
             lifesteal, armourPenetration, criticalChance, force, knockback,
             defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance,
             evasion, maxHP, movespeed, knockbackResistance, luck,
-            strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier;
+            strikeMultiplier, pierceMultiplier, slashMultiplier;
     private final Map<Attribute, AttributeModifier> bonusAttributes;
     private final TagKey<Block> tag;
 
@@ -31,7 +31,7 @@ public class IDFTier implements Tier {
                    double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
                    double defense, double physicalResistance, double fireResistance, double waterResistance, double lightningResistance, double magicResistance, double darkResistance,
                    double evasion, double maxHP, double movespeed, double knockbackResistance, double luck,
-                   double strikeMultiplier, double pierceMultiplier, double slashMultiplier, double crushMultiplier, double genericMultiplier,
+                   double strikeMultiplier, double pierceMultiplier, double slashMultiplier,
                    Map<Attribute, AttributeModifier> bonusAttributes, @NotNull TagKey<Block> tag) {
         this.level = level;
         this.durability = durability;
@@ -64,8 +64,6 @@ public class IDFTier implements Tier {
         this.strikeMultiplier = strikeMultiplier;
         this.pierceMultiplier = pierceMultiplier;
         this.slashMultiplier = slashMultiplier;
-        this.crushMultiplier = crushMultiplier;
-        this.genericMultiplier = genericMultiplier;
         this.bonusAttributes = bonusAttributes;
         this.tag = tag;
     }
@@ -203,14 +201,6 @@ public class IDFTier implements Tier {
 
     public double getSlashMultiplier() {
         return slashMultiplier;
-    }
-
-    public double getCrushMultiplier() {
-        return crushMultiplier;
-    }
-
-    public double getGenericMultiplier() {
-        return genericMultiplier;
     }
 
     public Map<Attribute, AttributeModifier> getBonusAttributes() {

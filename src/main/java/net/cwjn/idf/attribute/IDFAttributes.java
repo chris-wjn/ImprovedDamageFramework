@@ -38,8 +38,6 @@ public class IDFAttributes {
     public static final RegistryObject<Attribute> STRIKE_MULT = register("idf.strike_mult", () -> new RangedAttribute("strike_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> PIERCE_MULT = register("idf.pierce_mult", () -> new RangedAttribute("pierce_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> SLASH_MULT = register("idf.slash_mult", () -> new RangedAttribute("slash_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> CRUSH_MULT = register("idf.crush_mult", () -> new RangedAttribute("crush_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> GENERIC_MULT = register("idf.generic_mult", () -> new RangedAttribute("generic_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary defensive attributes
     public static final RegistryObject<Attribute> EVASION = register("idf.evasion", () -> new RangedAttribute("evasion", 0.0D, 0.0D, 100.0D).setSyncable(true));
 

@@ -90,16 +90,12 @@ public class StatsScreen extends Screen {
         drawCenteredPercentage(font, matrix, armourFormula(player.getAttributeValue(DARK_RESISTANCE.get())), w+232, h+177.5f, DARK_COLOUR.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(ATTACK_SPEED)), w+104, h+408, ChatFormatting.YELLOW.getColor());
         drawCenteredString(font, matrix, player.getAttributeValue(FORCE.get()), w+282, h+408, ChatFormatting.GRAY.getColor());
-        drawCenteredString(font, matrix, player.getAttributeValue(CRUSH_MULT.get()) * 100, w+67f, h+211.5f,
-                player.getAttributeValue(CRUSH_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(STRIKE_MULT.get())*100), w+136f, h+211.5f,
                 player.getAttributeValue(STRIKE_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(PIERCE_MULT.get())*100), w+205f, h+211.5f,
                 player.getAttributeValue(PIERCE_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
         drawCenteredString(font, matrix, (player.getAttributeValue(SLASH_MULT.get())*100), w+274f, h+211.5f,
                 player.getAttributeValue(SLASH_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
-        drawCenteredString(font, matrix, (player.getAttributeValue(GENERIC_MULT.get())*100), w+343f, h+211.5f,
-                player.getAttributeValue(GENERIC_MULT.get()) > 1.0 ? ChatFormatting.RED.getColor() : ChatFormatting.GREEN.getColor());
         drawCenteredPercentage(font, matrix, player.getAttributeValue(CRIT_CHANCE.get()), w+104, h+318, ORANGE.getColor());
         drawCenteredPercentage(font, matrix, (player.getAttributeValue(ATTACK_KNOCKBACK)/0.4) * 100, w+104, h+363, VIOLET.getColor());
         drawCenteredPercentage(font, matrix, player.getAttributeValue(KNOCKBACK_RESISTANCE)*100, w+283, h+363, VIOLET.getColor());

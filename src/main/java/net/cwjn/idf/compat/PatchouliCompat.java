@@ -102,18 +102,6 @@ public class PatchouliCompat implements IComponentProcessor {
                                     IVariable.wrap("+" + multFormat.format((DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.SLASH_MULT.get()) - 1.0) * 100) + "%")
                                     :
                                     IVariable.wrap(multFormat.format((DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.SLASH_MULT.get()) - 1.0) * 100) + "%");
-            case "crush" ->
-                    DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) == 1.0 ? null :
-                            DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) > 1.0 ?
-                                    IVariable.wrap("+" + multFormat.format((DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) - 1.0) * 100) + "%")
-                                    :
-                                    IVariable.wrap(multFormat.format((DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) - 1.0) * 100) + "%");
-            case "generic" ->
-                    DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) == 1.0 ? null :
-                            DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) > 1.0 ?
-                                    IVariable.wrap("+" + multFormat.format((DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) - 1.0) * 100) + "%")
-                                    :
-                                    IVariable.wrap(multFormat.format((DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) - 1.0) * 100) + "%");
             case "strikeColour" ->
                     DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.STRIKE_MULT.get()) == 1.0 ? null :
                             DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.STRIKE_MULT.get()) > 1.0 ?
@@ -126,14 +114,6 @@ public class PatchouliCompat implements IComponentProcessor {
                     DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.SLASH_MULT.get()) == 1.0 ? null :
                             DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.SLASH_MULT.get()) > 1.0 ?
                                     IVariable.wrap("a") : IVariable.wrap("c");
-            case "crushColour" ->
-                    DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) == 1.0 ? null :
-                            DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) > 1.0 ?
-                                    IVariable.wrap("a") : IVariable.wrap("c");
-            case "genericColour" ->
-                    DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) == 1.0 ? null :
-                            DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) > 1.0 ?
-                                    IVariable.wrap("a") : IVariable.wrap("c");
             case "strikeMsg" ->
                     DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.STRIKE_MULT.get()) == 1.0 ? null :
                             IVariable.wrap("STK ");
@@ -143,12 +123,6 @@ public class PatchouliCompat implements IComponentProcessor {
             case "slashMsg" ->
                     DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.SLASH_MULT.get()) == 1.0 ? null :
                             IVariable.wrap("SLS ");
-            case "crushMsg" ->
-                    DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.CRUSH_MULT.get()) == 1.0 ? null :
-                            IVariable.wrap("CSH ");
-            case "genericMsg" ->
-                    DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.GENERIC_MULT.get()) == 1.0 ? null :
-                            IVariable.wrap("GEN ");
             default -> null;
         };
     }

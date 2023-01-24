@@ -93,8 +93,6 @@ public class DamageHandler {
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", target.getAttributeValue(IDFAttributes.PIERCE_MULT.get()));
         mappedMultipliers.put("slash", target.getAttributeValue(IDFAttributes.SLASH_MULT.get()));
-        mappedMultipliers.put("crush", target.getAttributeValue(IDFAttributes.CRUSH_MULT.get()));
-        mappedMultipliers.put("generic", target.getAttributeValue(IDFAttributes.GENERIC_MULT.get()));
         for (int i = 0; i < 6; i++) {
             dv[i] *= weightMultiplier;
             dv[i] *= mappedMultipliers.get(damageClass);
@@ -299,8 +297,6 @@ public class DamageHandler {
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", target.getAttributeValue(IDFAttributes.PIERCE_MULT.get()));
         mappedMultipliers.put("slash", target.getAttributeValue(IDFAttributes.SLASH_MULT.get()));
-        mappedMultipliers.put("crush", target.getAttributeValue(IDFAttributes.CRUSH_MULT.get()));
-        mappedMultipliers.put("generic", target.getAttributeValue(IDFAttributes.GENERIC_MULT.get()));
         log.debug("----------TARGET RESISTANCE INFORMATION----------");
         log.debug("TARGET HEALTH: " + target.getHealth());
         log.debug("RESISTANCE NUMBERS (fire, water, lightning, magic, dark, physical, defense): " +

@@ -14,7 +14,6 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
-import static net.cwjn.idf.attribute.IDFAttributes.GENERIC_MULT;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 public record ItemData(double physicalDamage, double fireDamage, double waterDamage, double lightningDamage,
@@ -23,8 +22,7 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
                        double physicalResistance, double fireResistance, double waterResistance,
                        double lightningResistance, double magicResistance, double darkResistance, double evasion,
                        double maxHP, double movespeed, double knockbackResistance, double luck,
-                       double strikeMultiplier, double pierceMultiplier, double slashMultiplier,
-                       double crushMultiplier, double genericMultiplier) implements Iterable<Pair<Attribute, Double>> {
+                       double strikeMultiplier, double pierceMultiplier, double slashMultiplier) implements Iterable<Pair<Attribute, Double>> {
 
     public static ItemData combine(ItemData data1, ItemData data2) {
         return new ItemData(data1.physicalDamage + data2.physicalDamage,
@@ -36,14 +34,13 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
                 data1.waterResistance + data2.waterResistance, data1.lightningResistance + data2.lightningResistance, data1.magicResistance + data2.magicResistance,
                 data1.darkResistance + data2.darkResistance, data1.evasion + data2.evasion, data1.maxHP + data2.maxHP, data1.movespeed + data1.movespeed,
                 data1.knockbackResistance + data2.knockbackResistance, data1.luck + data2.luck, data1.strikeMultiplier + data2.strikeMultiplier,
-                data1.pierceMultiplier + data2.pierceMultiplier, data1.slashMultiplier + data2.slashMultiplier, data1.crushMultiplier + data2.crushMultiplier,
-                data1.genericMultiplier + data2.genericMultiplier);
+                data1.pierceMultiplier + data2.pierceMultiplier, data1.slashMultiplier + data2.slashMultiplier);
     }
 
     public static ItemData empty() {
         return new ItemData(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     public static ItemData readItemData(FriendlyByteBuf buffer) {
@@ -52,7 +49,7 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
                 buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(),
-                buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+                buffer.readDouble(), buffer.readDouble());
     }
 
     public void writeItemData(FriendlyByteBuf buffer) {
@@ -83,8 +80,6 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
         buffer.writeDouble(strikeMultiplier);
         buffer.writeDouble(pierceMultiplier);
         buffer.writeDouble(slashMultiplier);
-        buffer.writeDouble(crushMultiplier);
-        buffer.writeDouble(genericMultiplier);
     }
 
     @NotNull
@@ -118,8 +113,6 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
         values.add(new oshi.util.tuples.Pair<>(STRIKE_MULT.get(), strikeMultiplier));
         values.add(new oshi.util.tuples.Pair<>(PIERCE_MULT.get(), pierceMultiplier));
         values.add(new oshi.util.tuples.Pair<>(SLASH_MULT.get(), slashMultiplier));
-        values.add(new oshi.util.tuples.Pair<>(CRUSH_MULT.get(), crushMultiplier));
-        values.add(new oshi.util.tuples.Pair<>(GENERIC_MULT.get(), genericMultiplier));
         return values.iterator();
     }
 
@@ -167,11 +160,9 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
                     obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(2).getAsDouble(),
                     obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(3).getAsDouble(),
                     obj.getAsJsonArray("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck").get(4).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(0).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(1).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(2).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(3).getAsDouble(),
-                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic").get(4).getAsDouble());
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash").get(0).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash").get(1).getAsDouble(),
+                    obj.getAsJsonArray("MULTIPLIERS: Strike / Pierce / Slash").get(2).getAsDouble());
         }
 
         @Override
@@ -182,12 +173,12 @@ public record ItemData(double physicalDamage, double fireDamage, double waterDam
             Util.addAllToJsonArray(OFFENSIVE_AUXILIARY, data.lifesteal, data.armourPenetration, data.criticalChance, data.force, data.knockback, data.attackSpeed);
             Util.addAllToJsonArray(RESISTANCE_TYPES, data.defense, data.physicalResistance, data.fireResistance, data.waterResistance, data.lightningResistance, data.magicResistance, data.darkResistance);
             Util.addAllToJsonArray(DEFENSIVE_AUXILIARY, data.evasion, data.maxHP, data.movespeed, data.knockbackResistance, data.luck);
-            Util.addAllToJsonArray(MULTIPLIERS, data.strikeMultiplier, data.pierceMultiplier, data.slashMultiplier, data.crushMultiplier, data.genericMultiplier);
+            Util.addAllToJsonArray(MULTIPLIERS, data.strikeMultiplier, data.pierceMultiplier, data.slashMultiplier);
             obj.add("DAMAGE: Physical / Fire / Water / Lightning / Magic / Dark", DAMAGE_TYPES);
             obj.add("OFFENSIVE AUXILIARY: Lifesteal / Armour Penetration / Crit Chance / Force / Knockback / AttackSpeed", OFFENSIVE_AUXILIARY);
             obj.add("RESISTANCE: Defense / Physical / Fire / Water / Lightning / Magic / Dark", RESISTANCE_TYPES);
             obj.add("DEFENSIVE AUXILIARY: Evasion / Max HP / Movespeed / Knockback Resistance / Luck", DEFENSIVE_AUXILIARY);
-            obj.add("MULTIPLIERS: Strike / Pierce / Slash / Crush / Generic", MULTIPLIERS);
+            obj.add("MULTIPLIERS: Strike / Pierce / Slash", MULTIPLIERS);
             return obj;
         }
 

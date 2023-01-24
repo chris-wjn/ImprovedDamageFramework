@@ -16,14 +16,6 @@ public enum IDFElement {
         resistance = res;
     }
 
-    private final Attribute damage, resistance;
-
-    public Attribute r() {
-        return resistance;
-    }
-
-    public Attribute d() {
-        return damage;
-    }
+    public final Attribute damage, resistance;
 
 }

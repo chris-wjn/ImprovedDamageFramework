@@ -2,6 +2,7 @@ package net.cwjn.idf.mixin;
 
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
 import net.cwjn.idf.damage.*;
 import net.cwjn.idf.event.LogicalEvents;
@@ -25,6 +26,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import static net.cwjn.idf.attribute.IDFElement.HOLY;
 
 @Mixin(Player.class)
 public class MixinPlayer {

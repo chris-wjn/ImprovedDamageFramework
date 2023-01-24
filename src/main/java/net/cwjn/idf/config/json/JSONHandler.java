@@ -85,7 +85,7 @@ public class JSONHandler {
                         0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike",
                         0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
                         1.0D, 1.0D, 1.0D, 1.0D, 1.0D,
-                        0.0D, 0.0D, 0.4, -1.0D, 0.0D, 0.0D, 0.0D, 0.0D));
+                        0.0D, 0.0D, 0.4, -1.0D, 0.0D, 0.0D));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
@@ -96,7 +96,7 @@ public class JSONHandler {
                             0, 0, 0, 0, 0,
                                     0, 0, 0, 0, 0, 0, 0,
                                     0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0));
+                                    0, 0, 0, 0));
                 } else {
                     String dc = "strike";
                     if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
@@ -110,7 +110,7 @@ public class JSONHandler {
                                     0, 0, 0, 0, 0,
                                     0, 0, 0, 0, 0, 0, 0,
                                     0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0));
+                                    0, 0, 0, 0));
                 }
                 defaultWeaponItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
                 defaultWeaponItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
@@ -131,7 +131,7 @@ public class JSONHandler {
                                     0, 0, 0, 0, 0,
                                     0, 0, 0, 0, 0, 0, 0,
                                     0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0));
+                                    0, 0, 0, 0));
                     defaultWeaponItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
                     defaultWeaponItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
                 }

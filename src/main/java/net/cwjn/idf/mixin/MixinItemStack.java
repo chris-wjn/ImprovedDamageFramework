@@ -239,34 +239,6 @@ public abstract class MixinItemStack {
             }
             list.add(component);
         }
-        if (mappedAttributes.containsKey(IDFAttributes.CRUSH_MULT.get())) {
-            double value = mappedAttributes.get(IDFAttributes.CRUSH_MULT.get()) * 100;
-            MutableComponent component = Util.textComponent("  ");
-            if (value < 0) {
-                component.append(Util.translationComponent("idf.icon.crush").withStyle(symbolStyle));
-                component.append(Util.withColor(Util.translationComponent("idf.crush_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
-            } else {
-                component.append(Util.translationComponent("idf.icon.crush").withStyle(symbolStyle));
-                component.append(Util.withColor(Util.translationComponent("idf.crush_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
-            }
-            list.add(component);
-        }
-        if (mappedAttributes.containsKey(IDFAttributes.GENERIC_MULT.get())) {
-            double value = mappedAttributes.get(IDFAttributes.GENERIC_MULT.get()) * 100;
-            MutableComponent component = Util.textComponent("  ");
-            if (value < 0) {
-                component.append(Util.translationComponent("idf.icon.generic").withStyle(symbolStyle));
-                component.append(Util.withColor(Util.translationComponent("idf.generic_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(Util.textComponent("" + df.format(value) + "%"), Color.LIGHTGREEN));
-            } else {
-                component.append(Util.translationComponent("idf.icon.generic").withStyle(symbolStyle));
-                component.append(Util.withColor(Util.translationComponent("idf.generic_tooltip"), Color.FLORALWHITE));
-                component.append(Util.withColor(Util.textComponent("+" + df.format(value) + "%"), ChatFormatting.RED));
-            }
-            list.add(component);
-        }
     }
 
     private void appendMultipliers(Map<Attribute, Double> mappedOperation1, Map<Attribute, Double> mappedOperation2, List<Component> list) {
@@ -540,8 +512,7 @@ public abstract class MixinItemStack {
     }
 
     private static boolean hasDamageClass(Map<Attribute, Double> map) {
-        return map.containsKey(IDFAttributes.STRIKE_MULT.get()) || map.containsKey(IDFAttributes.PIERCE_MULT.get()) || map.containsKey(IDFAttributes.SLASH_MULT.get())
-                || map.containsKey(IDFAttributes.CRUSH_MULT.get()) || map.containsKey(IDFAttributes.GENERIC_MULT.get());
+        return map.containsKey(IDFAttributes.STRIKE_MULT.get()) || map.containsKey(IDFAttributes.PIERCE_MULT.get()) || map.containsKey(IDFAttributes.SLASH_MULT.get());
     }
 
     private static boolean hasAuxiliary(Map<Attribute, Double> map) {

@@ -25,7 +25,7 @@ public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
                         double magicDamage, double darkDamage, double lifesteal, double pen, double crit, double force, double knockback, double speed, Properties p, Map<Attribute, AttributeModifier> bonusAttributes,
                          TagKey<Block> tag) {
         this(tier, durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
-                lifesteal, pen, crit, force, knockback, speed, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p, bonusAttributes, tag);
+                lifesteal, pen, crit, force, knockback, speed, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p, bonusAttributes, tag);
     }
 
     public IDFDiggerItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage,
@@ -35,7 +35,7 @@ public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
                          double waterResistance, double lightningResistance, double magicResistance,
                          double darkResistance, double evasion, double maxHP, double movespeed,
                          double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
-                         double slashMultiplier, double crushMultiplier, double genericMultiplier,
+                         double slashMultiplier,
                          Properties p, Map<Attribute, AttributeModifier> bonusAttributes, TagKey<Block> tag) {
         super((float) physicalDamage, (float) attackSpeed, tier, tag, p);
         this.physicalDamage = physicalDamage;
@@ -49,7 +49,7 @@ public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
         WeaponData data = new WeaponData(durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
                         lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
                         waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
-                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier);
+                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier);
         if (tier instanceof IDFTier modTier) {
             data = WeaponData.combine(data,
                     new WeaponData(0, "strike", modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
@@ -57,7 +57,7 @@ public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
                             modTier.getCriticalChance(), modTier.getForce(), modTier.getKnockback(), modTier.getSpeed(), modTier.getDefense(), modTier.getPhysicalResistance(),
                             modTier.getFireResistance(), modTier.getWaterResistance(), modTier.getLightningResistance(), modTier.getMagicResistance(), modTier.getDarkResistance(),
                             modTier.getEvasion(), modTier.getMaxHP(), modTier.getMovespeed(), modTier.getKnockbackResistance(), modTier.getLuck(), modTier.getStrikeMultiplier(),
-                            modTier.getPierceMultiplier(), modTier.getSlashMultiplier(), modTier.getCrushMultiplier(), modTier.getGenericMultiplier()));
+                            modTier.getPierceMultiplier(), modTier.getSlashMultiplier()));
             bonusAttributes.putAll(modTier.getBonusAttributes());
         }
         data.forEach(pair -> {

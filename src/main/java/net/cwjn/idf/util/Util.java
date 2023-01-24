@@ -187,8 +187,6 @@ public class Util {
                 case "strike" -> 5;
                 case "pierce" -> 6;
                 case "slash" -> 7;
-                case "crush" -> 8;
-                case "generic" -> 9;
                 default -> 10;
             };
         }

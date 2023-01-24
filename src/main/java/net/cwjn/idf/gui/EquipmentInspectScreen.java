@@ -83,8 +83,6 @@ public class EquipmentInspectScreen extends Screen {
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, STRIKE_MULT.get()), left+ 259, top + 366, WHITE);
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, PIERCE_MULT.get()), left+ 259, top + 391, WHITE);
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, SLASH_MULT.get()), left+ 259, top + 416, WHITE);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, CRUSH_MULT.get()), left+ 259, top + 441, WHITE);
-        Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, GENERIC_MULT.get()), left+ 259, top + 466, WHITE);
         // OFFENSIVE AUXILIARY
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, LIFESTEAL.get()), left + 259, top + 234, WHITE);
         Util.drawCenteredString(font, matrix, Util.getComponentFromAttribute(currentItem, PENETRATING.get()), left + 259, top + 259, WHITE);

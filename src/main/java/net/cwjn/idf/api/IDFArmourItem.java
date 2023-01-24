@@ -27,14 +27,14 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
                          double waterResistance, double lightningResistance, double magicResistance,
                          double darkResistance, double evasion, double maxHP, double movespeed,
                          double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
-                         double slashMultiplier, double crushMultiplier, double genericMultiplier,
+                         double slashMultiplier,
                          Map<Attribute, AttributeModifier> bonusAttributes) {
         super(material, slot, p);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         ArmourData data = new ArmourData(durability, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
                         lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
                         waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
-                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier, crushMultiplier, genericMultiplier);
+                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier);
         if (material instanceof IDFArmourMaterial idfMaterial) {
             data = ArmourData.combine(data,
                     new ArmourData(0, idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
@@ -42,7 +42,7 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
                             idfMaterial.getCriticalChance(slot), idfMaterial.getForce(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot), idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot),
                             idfMaterial.getFireResForSlot(slot), idfMaterial.getWaterResForSlot(slot), idfMaterial.getLightningResForSlot(slot), idfMaterial.getMagicResForSlot(slot), idfMaterial.getDarkResForSlot(slot),
                             idfMaterial.getEvasionForSlot(slot), idfMaterial.getMaxHPForSlot(slot), idfMaterial.getMovespeedForSlot(slot), idfMaterial.getKnockbackResistance(), idfMaterial.getLuckForSlot(slot), idfMaterial.getStrikeForSlot(slot),
-                            idfMaterial.getPierceForSlot(slot), idfMaterial.getSlashForSlot(slot), idfMaterial.getCrushForSlot(slot), idfMaterial.getGenericForSlot(slot)));
+                            idfMaterial.getPierceForSlot(slot), idfMaterial.getSlashForSlot(slot)));
             bonusAttributes.putAll(idfMaterial.getBonusAttributes());
         }
         armour = data.physicalResistance();

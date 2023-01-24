@@ -4,14 +4,14 @@ public class EntityData {
 
     private final double fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage,
                          fireResistance, waterResistance,lightningResistance, magicResistance, darkResistance, physicalResistance, defense,
-                         strikeMult, pierceMult, slashMult, crushMult, genericMult,
+                         strikeMult, pierceMult, slashMult,
                          lifesteal, armourPenetration, knockback, force,
                          evasion, maxHP, movespeed, knockbackRes;
     private final String damageClass;
 
     public EntityData(double f, double w, double l, double m, double d, double ad, String c,
                       double fr, double wr, double lr, double mr, double dr, double a, double at,
-                      double dcS, double dcP, double dcSl, double dcC, double dcG,
+                      double dcS, double dcP, double dcSl,
                       double lifesteal, double pen, double kb, double wt,
                       double eva, double hp, double ms, double kr) {
         fireDamage = f;
@@ -31,8 +31,6 @@ public class EntityData {
         strikeMult = dcS;
         pierceMult = dcP;
         slashMult = dcSl;
-        crushMult= dcC;
-        genericMult = dcG;
         this.lifesteal = lifesteal;
         armourPenetration = pen;
         knockback = kb;
@@ -97,14 +95,6 @@ public class EntityData {
 
     public double getSlashMult() {
         return slashMult;
-    }
-
-    public double getCrushMult() {
-        return crushMult;
-    }
-
-    public double getGenericMult() {
-        return genericMult;
     }
 
     public double getLifesteal() {
