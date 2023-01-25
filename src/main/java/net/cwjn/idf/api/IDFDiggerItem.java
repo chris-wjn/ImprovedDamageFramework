@@ -62,7 +62,7 @@ public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
         }
         data.forEach(pair -> {
             if (pair.getB() != 0) {
-                builder.put(pair.getA(), new AttributeModifier("baseAttributes", pair.getB(), ADDITION));
+                builder.put(pair.getA(), new AttributeModifier(Util.UUID_BASE_STAT_ADDITION[0], "data0", pair.getB(), ADDITION));
             }
         });
         for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {

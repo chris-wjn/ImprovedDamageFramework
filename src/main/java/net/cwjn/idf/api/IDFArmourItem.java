@@ -54,7 +54,7 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
         darkRes = data.darkResistance();
         data.forEach(pair -> {
             if (pair.getB() != 0) {
-                builder.put(pair.getA(), new AttributeModifier("baseAttributes", pair.getB(), ADDITION));
+                builder.put(pair.getA(), new AttributeModifier(Util.UUID_BASE_STAT_ADDITION[this.getSlot().getFilterFlag()], "data0", pair.getB(), ADDITION));
             }
         });
         for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {

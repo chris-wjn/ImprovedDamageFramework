@@ -1,8 +1,6 @@
 package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
-import net.cwjn.idf.config.json.JSONHandler;
-import net.cwjn.idf.config.json.data.ItemData;
 import net.cwjn.idf.config.json.data.WeaponData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
@@ -13,6 +11,7 @@ import net.minecraft.world.item.Tier;
 
 import java.util.Map;
 
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
@@ -59,7 +58,7 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
         this.darkDamage = data.darkDamage();
         data.forEach(pair -> {
             if (pair.getB() != 0) {
-                builder.put(pair.getA(), new AttributeModifier("baseAttributes", pair.getB(), ADDITION));
+                builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "data0", pair.getB(), ADDITION));
             }
         });
         for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
