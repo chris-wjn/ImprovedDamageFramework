@@ -28,7 +28,7 @@ public class CategoryButton extends Button {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, STAT_GUI);
         blit(matrix, x, y, this.isHoveredOrFocused() ? 31 : 5, 203, 22, 22);
-        blit(matrix, x, y, type.locX, type.locY, 16, 16);
+        blit(matrix, x+2, y+2, type.locX, type.locY, 16, 16);
     }
 
 }

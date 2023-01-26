@@ -31,7 +31,7 @@ public class DamageHandler {
         IDFInterface convertedSource = (IDFInterface) source;
 
         //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
-        float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, weight, knockback;
+        float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, knockback;
         String damageClass;
 
         //if the source is a conversion from a vanilla source, we take the physical amount provided and spread it across all damage types
