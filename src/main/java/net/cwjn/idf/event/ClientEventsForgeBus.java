@@ -56,7 +56,7 @@ public class ClientEventsForgeBus {
 
     private static void onInput(Minecraft minecraft, int key, int action) {
         if (Keybinds.openStats.isDown() && minecraft.screen == null) {
-            minecraft.setScreen(new StatsScreen());
+            minecraft.setScreen(new StatScreen());
         }
     }
 

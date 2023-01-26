@@ -29,13 +29,12 @@ public class TabButton extends AbstractButton {
     @Override
     public void render(@NotNull PoseStack matrix, int mouseX, int mouseY, float pTicks) {
         Minecraft minecraft = Minecraft.getInstance();
-        active = !(minecraft.screen instanceof InventoryScreen) || !((InventoryScreen) minecraft.screen).getRecipeBookComponent().isVisible();
-        if (active) {
+        if (!(minecraft.screen instanceof InventoryScreen) || !((InventoryScreen) minecraft.screen).getRecipeBookComponent().isVisible()) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShaderTexture(0, STAT_GUI);
             blit(matrix, x, y, selected ? 31 : 0, 166, width, height);
-            blit(matrix, x + (selected ? 8 : 10), y + 6, 240, 128 + type.iconIndex * 16, 16, 16);
+            blit(matrix, x + (selected ? 8 : 9), y + 6, 176, type.iconIndex * 16, 16, 16);
         }
     }
 
