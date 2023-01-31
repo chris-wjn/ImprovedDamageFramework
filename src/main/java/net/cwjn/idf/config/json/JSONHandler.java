@@ -8,6 +8,9 @@ import com.google.gson.GsonBuilder;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.IDFCustomEquipment;
 import net.cwjn.idf.config.json.data.*;
+import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
+import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.util.ItemInterface;
@@ -31,9 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -68,6 +69,10 @@ public class JSONHandler {
             registerTypeAdapter(ArmourData.class, new ArmourData.ArmourSerializer()).
             registerTypeAdapter(WeaponData.class, new WeaponData.WeaponSerializer()).
             registerTypeAdapter(ItemData.class, new ItemData.ItemSerializer()).
+            registerTypeAdapter(EntityData.class, new EntityData.EntityDataSerializer()).
+            registerTypeAdapter(OffensiveData.class, new OffensiveData.OffensiveDataSerializer()).
+            registerTypeAdapter(DefensiveData.class, new DefensiveData.DefensiveDataSerializer()).
+            registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
             create();
 
     public static void init(File configDir) {
@@ -77,27 +82,22 @@ public class JSONHandler {
         Map<String, WeaponData> defaultWeaponItemsOp0  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_addition.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
         Map<String, ItemData> defaultWeaponItemsOp1 = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_multiply_base.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
         Map<String, ItemData> defaultWeaponItemsOp2  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_multiply_total.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, EntityData> defaultEntityData = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
-        Map<String, SourceCatcherData> defaultSourceData = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
+        Map<String, EntityData> defaultEntityData = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
+        Map<String, SourceCatcherData> defaultSourceData = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
             if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
                 defaultEntityData.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(
-                        "strike", 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
-                        0.0D, 0.0D, 0.0D, -1.0D, 0.4D, 0.0D, 0.0D,
-                        0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
-                        0.0D, 0.0D, 0.0, 0.0D, 0.0D, 0.0D,
-                        1.0D, 1.0D, 1.0D));
+                        "strike", OffensiveData.entityStandard(), DefensiveData.entityStandard(), AuxiliaryData.empty()));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             if (item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem) {
                 if (item instanceof IDFCustomEquipment modItem) {
                     defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0,
-                                    0, 0, 0, 0));
+                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(),
+                                    OffensiveData.empty(),
+                                    DefensiveData.empty(),
+                                    AuxiliaryData.empty()));
                 } else {
                     String dc = "strike";
                     if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
@@ -107,47 +107,65 @@ public class JSONHandler {
                         dc = "pierce";
                     }
                     defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, dc, 0, 0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0,
-                                    0, 0, 0, 0));
+                            new WeaponData(0, dc,
+                                    OffensiveData.empty(),
+                                    DefensiveData.empty(),
+                                    AuxiliaryData.empty()));
                 }
-                defaultWeaponItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
-                defaultWeaponItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
+                defaultWeaponItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                        OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()
+                ));
+                defaultWeaponItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                        OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()
+                ));
             }
             else {
-                Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
-                double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                if (damageVal > 0) {
-                    String dc = "strike";
-                    if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
-                        dc = "slash";
+                if (item instanceof IDFCustomEquipment modItem) {
+                    defaultArmourItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
+                            OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                    defaultArmourItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                            OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                    defaultArmourItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                            OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                } else {
+                    Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
+                    double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum();
+                    if (damageVal > 0) {
+                        String dc = "strike";
+                        if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
+                            dc = "slash";
+                        }
+                        if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
+                            dc = "pierce";
+                        }
+                        defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
+                                new WeaponData(0, dc,
+                                        OffensiveData.empty(),
+                                        DefensiveData.empty(),
+                                        AuxiliaryData.empty()));
+                        defaultWeaponItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()
+                        ));
+                        defaultWeaponItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()
+                        ));
                     }
-                    if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
-                        dc = "pierce";
+                    Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
+                    Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
+                    Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
+                    Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
+                    double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                            armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                            armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                            armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
+                    if (armorVal > 0) {
+                        defaultArmourItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
+                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                        defaultArmourItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                        defaultArmourItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
                     }
-                    defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, dc, 0, 0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0, 0, 0,
-                                    0, 0, 0, 0, 0,
-                                    0, 0, 0, 0));
-                    defaultWeaponItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
-                    defaultWeaponItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
-                }
-                Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
-                Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
-                Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
-                Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
-                double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                        armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                        armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                        armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                if (armorVal > 0) {
-                    defaultArmourItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(), ArmourData.empty());
-                    defaultArmourItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
-                    defaultArmourItemsOp2.putIfAbsent(Util.getItemRegistryName(item).toString(), ItemData.empty());
                 }
             }
         }
