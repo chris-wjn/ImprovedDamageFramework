@@ -20,27 +20,27 @@ public class AttributeAttachEvent {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(entityType));
             if (data != null) {
-                event.add(entityType, FIRE.damage, data.getFireDamage());
-                event.add(entityType, IDFAttributes.WATER_DAMAGE.get(), data.getWaterDamage());
-                event.add(entityType, IDFAttributes.LIGHTNING_DAMAGE.get(), data.getLightningDamage());
-                event.add(entityType, IDFAttributes.MAGIC_DAMAGE.get(), data.getMagicDamage());
-                event.add(entityType, IDFAttributes.DARK_DAMAGE.get(), data.getDarkDamage());
+                event.add(entityType, FIRE.damage, data.fireDamage());
+                event.add(entityType, IDFAttributes.WATER_DAMAGE.get(), data.waterDamage());
+                event.add(entityType, IDFAttributes.LIGHTNING_DAMAGE.get(), data.lightningDamage());
+                event.add(entityType, IDFAttributes.MAGIC_DAMAGE.get(), data.magicDamage());
+                event.add(entityType, IDFAttributes.DARK_DAMAGE.get(), data.darkDamage());
                 //resistances
-                event.add(entityType, IDFAttributes.FIRE_RESISTANCE.get(), data.getFireResistance());
-                event.add(entityType, IDFAttributes.WATER_RESISTANCE.get(), data.getWaterResistance());
-                event.add(entityType, IDFAttributes.LIGHTNING_RESISTANCE.get(), data.getLightningResistance());
-                event.add(entityType, IDFAttributes.MAGIC_RESISTANCE.get(), data.getMagicResistance());
-                event.add(entityType, IDFAttributes.DARK_RESISTANCE.get(), data.getDarkResistance());
+                event.add(entityType, IDFAttributes.FIRE_RESISTANCE.get(), data.fireResistance());
+                event.add(entityType, IDFAttributes.WATER_RESISTANCE.get(), data.waterResistance());
+                event.add(entityType, IDFAttributes.LIGHTNING_RESISTANCE.get(), data.lightningResistance());
+                event.add(entityType, IDFAttributes.MAGIC_RESISTANCE.get(), data.magicResistance());
+                event.add(entityType, IDFAttributes.DARK_RESISTANCE.get(), data.darkResistance());
                 //DAMAGE CLASS MULTIPLIERS
-                event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.getStrikeMult());
-                event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.getPierceMult());
-                event.add(entityType, IDFAttributes.SLASH_MULT.get(), data.getSlashMult());
+                event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.strikeMultiplier());
+                event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.pierceMultiplier());
+                event.add(entityType, IDFAttributes.SLASH_MULT.get(), data.slashMultiplier());
                 //AUXILIARY
-                event.add(entityType, IDFAttributes.EVASION.get(), data.getEvasion());
-                event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.getLifesteal());
-                event.add(entityType, IDFAttributes.PENETRATING.get(), data.getArmourPenetration());
-                event.add(entityType, IDFAttributes.FORCE.get(), data.getForce());
-                event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
+                event.add(entityType, IDFAttributes.EVASION.get(), data.evasion());
+                event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.lifesteal());
+                event.add(entityType, IDFAttributes.PENETRATING.get(), data.armourPenetration());
+                event.add(entityType, IDFAttributes.FORCE.get(), data.force());
+                event.add(entityType, IDFAttributes.CRIT_CHANCE.get(), data.criticalChance());
             } else {
                 //damage types
                 event.add(entityType, IDFAttributes.FIRE_DAMAGE.get());

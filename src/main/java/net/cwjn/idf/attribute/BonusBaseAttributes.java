@@ -35,13 +35,13 @@ public class BonusBaseAttributes {
             //THIRD SECTION: attach bonus attributes defined in entity_data.json
             EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(livingEntity.getType()));
             if (data != null) {
-                if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() + data.getPhysicalDamage());
-                livingEntity.getAttribute(Attributes.ARMOR).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.getPhysicalResistance());
-                livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS) + data.getDefense());
-                livingEntity.getAttribute(Attributes.ATTACK_KNOCKBACK).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ATTACK_KNOCKBACK) + data.getKnockback());
-                healthInstance.setBaseValue(healthInstance.getBaseValue() + data.getMaxHP());
-                livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.getKnockbackRes());
-                livingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) + data.getMovespeed());
+                if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() + data.physicalDamage());
+                livingEntity.getAttribute(Attributes.ARMOR).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.physicalResistance());
+                livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS) + data.defense());
+                livingEntity.getAttribute(Attributes.ATTACK_KNOCKBACK).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ATTACK_KNOCKBACK) + data.knockback());
+                healthInstance.setBaseValue(healthInstance.getBaseValue() + data.maxHP());
+                livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.knockbackResistance());
+                livingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) + data.movespeed());
             }
             //FOURTH SECTION: heal the entity to their new max hp
             if (livingEntity.getHealth() < livingEntity.getMaxHealth()) livingEntity.heal(livingEntity.getMaxHealth() - livingEntity.getHealth());

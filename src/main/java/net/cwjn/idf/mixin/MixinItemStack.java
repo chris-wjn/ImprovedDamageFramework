@@ -43,10 +43,10 @@ public abstract class MixinItemStack {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
 
-    @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Ljava/util/function/UnaryOperator;)Lnet/minecraft/network/chat/MutableComponent;"))
+    /*@Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Ljava/util/function/UnaryOperator;)Lnet/minecraft/network/chat/MutableComponent;"))
     private MutableComponent removeRarityStyler(MutableComponent instance, UnaryOperator<Style> p_130939_) {
         return instance;
-    }
+    }*/
 
     @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasCustomHoverName()Z"))
     private boolean removeItalicName(ItemStack instance) {

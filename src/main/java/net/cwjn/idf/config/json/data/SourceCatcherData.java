@@ -9,179 +9,67 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 
-public class SourceCatcherData {
+public record SourceCatcherData(float fire, float water, float lightning, float magic, float dark, float pen, float lifesteal, float weight, String damageClass, boolean isTrueDamage) {
 
-    private final float fire;
-    private final float water;
-    private final float lightning;
-    private final float magic;
-    private final float dark;
-    private final float pen;
-    private final float lifesteal;
-    private final float weight;
-    private final String damageClass;
-    private final boolean isTrueDamage;
-
-    public float getFire() {
-        return fire;
-    }
-
-    public float getWater() {
-        return water;
-    }
-
-    public float getLightning() {
-        return lightning;
-    }
-
-    public float getMagic() {
-        return magic;
-    }
-
-    public float getDark() {
-        return dark;
-    }
-
-    public float getPen() {
-        return pen;
-    }
-
-    public float getLifesteal() {
-        return lifesteal;
-    }
-
-    public String getDamageClass() {
-        return damageClass;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public boolean isTrueDamage() {
-        return isTrueDamage;
-    }
-
-    public SourceCatcherData(float f, float w, float l, float m, float d, float p, float ls, float wt, String dc, boolean isTrue) {
-        damageClass = dc;
-        fire = f;
-        water = w;
-        lightning = l;
-        magic = m;
-        dark = d;
-        pen = p;
-        lifesteal = ls;
-        weight = wt;
-        this.isTrueDamage = isTrue;
-    }
-
-    public static DamageSource convert(DamageSource source) {
+    public static IDFInterface convert(DamageSource source) {
+        if (source instanceof IDFInterface) return (IDFInterface) source;
         final boolean isFall = source.isFall();
+        final boolean isFire = source.isFire();
         final boolean isProjectile = source.isProjectile();
         final boolean isExplosion = source.isExplosion();
+        final boolean isBypassInvul = source.isBypassInvul();
         DamageSource newSource;
-        if (source instanceof IndirectEntityDamageSource) {
-            if (JSONHandler.sourceMap.containsKey(source.msgId)) {
-                SourceCatcherData data = JSONHandler.sourceMap.get(source.msgId);
-                if (data.isTrueDamage() || source.isBypassInvul()) {
+        if (JSONHandler.sourceMap.containsKey(source.msgId)) {
+            SourceCatcherData data = JSONHandler.sourceMap.get(source.msgId);
+            if (data.isTrueDamage) {
+                if (source instanceof IndirectEntityDamageSource) {
                     newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
-                            data.getFire(),
-                            data.getWater(),
-                            data.getLightning(),
-                            data.getMagic(),
-                            data.getDark(),
-                            data.getPen(),
-                            data.getLifesteal(),
-                            data.getWeight(),
-                            data.getDamageClass()).setIsConversion().setTrue();
-                } else {
-                    newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
-                            data.getFire(),
-                            data.getWater(),
-                            data.getLightning(),
-                            data.getMagic(),
-                            data.getDark(),
-                            data.getPen(),
-                            data.getLifesteal(),
-                            data.getWeight(),
-                            data.getDamageClass()).setIsConversion();
-                }
-                if (isFall) newSource.setIsFall();
-                if (isProjectile) newSource.setProjectile();
-                if (isExplosion) newSource.setExplosion();
-                return newSource;
-            }
-        } else if (source instanceof EntityDamageSource) {
-            if (JSONHandler.sourceMap.containsKey(source.msgId)) {
-                SourceCatcherData data = JSONHandler.sourceMap.get(source.msgId);
-                if (data.isTrueDamage() || source.isBypassInvul()) {
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.damageClass).setIsConversion().setTrue();
+                } else if (source instanceof EntityDamageSource) {
                     newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
-                            data.getFire(),
-                            data.getWater(),
-                            data.getLightning(),
-                            data.getMagic(),
-                            data.getDark(),
-                            data.getPen(),
-                            data.getLifesteal(),
-                            data.getWeight(),
-                            data.getDamageClass()).setIsConversion().setTrue();
-                } else {
-                    newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
-                            data.getFire(),
-                            data.getWater(),
-                            data.getLightning(),
-                            data.getMagic(),
-                            data.getDark(),
-                            data.getPen(),
-                            data.getLifesteal(),
-                            data.getWeight(),
-                            data.getDamageClass()).setIsConversion();
-                }
-                if (isFall) newSource.setIsFall();
-                if (isProjectile) newSource.setProjectile();
-                if (isExplosion) newSource.setExplosion();
-                return newSource;
-            }
-        } else {
-            if (JSONHandler.sourceMap.containsKey(source.msgId)) {
-                SourceCatcherData data = JSONHandler.sourceMap.get(source.msgId);
-                if (data.isTrueDamage() || source.isBypassInvul()) {
-                    newSource = new IDFDamageSource(source.msgId,
-                            data.getFire(),
-                            data.getWater(),
-                            data.getLightning(),
-                            data.getMagic(),
-                            data.getDark(),
-                            data.getPen(),
-                            data.getLifesteal(),
-                            data.getWeight(),
-                            data.getDamageClass()).setIsConversion().setTrue();
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.damageClass).setIsConversion().setTrue();
                 } else {
                     newSource = new IDFDamageSource(source.msgId,
-                            data.getFire(),
-                            data.getWater(),
-                            data.getLightning(),
-                            data.getMagic(),
-                            data.getDark(),
-                            data.getPen(),
-                            data.getLifesteal(),
-                            data.getWeight(),
-                            data.getDamageClass()).setIsConversion();
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.damageClass).setIsConversion().setTrue();
                 }
-                if (isFall) newSource.setIsFall();
-                if (isProjectile) newSource.setProjectile();
-                if (isExplosion) newSource.setExplosion();
-                return newSource;
+            } else {
+                if (source instanceof IndirectEntityDamageSource) {
+                    newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.damageClass).setIsConversion();
+                } else if (source instanceof EntityDamageSource) {
+                    newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.damageClass).setIsConversion();
+                } else {
+                    newSource = new IDFDamageSource(source.msgId,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.damageClass).setIsConversion();
+                }
+            }
+        } else {
+            if (source instanceof IndirectEntityDamageSource) {
+                newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
+                        0, 0, 0, 0, 0, 0, 0, -1,
+                        "strike").setIsConversion();
+            } else if (source instanceof EntityDamageSource) {
+                newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
+                        0, 0, 0, 0, 0, 0, 0, -1,
+                        "strike").setIsConversion();
+            } else {
+                newSource = new IDFDamageSource(source.msgId,
+                        0, 0, 0, 0, 0, 0, 0, -1,
+                        "strike").setIsConversion();
             }
         }
-        if (source.isBypassInvul()) {
-            newSource =  new IDFDamageSource(source.msgId, "strike").setTrue();
-        } else {
-            newSource = new IDFDamageSource(source.msgId, "strike");
-        }
+        if (isBypassInvul) newSource.bypassInvul();
+        if (isFire) newSource.setIsFire();
         if (isFall) newSource.setIsFall();
         if (isProjectile) newSource.setProjectile();
         if (isExplosion) newSource.setExplosion();
-        return newSource;
+        return (IDFInterface) newSource;
     }
 }

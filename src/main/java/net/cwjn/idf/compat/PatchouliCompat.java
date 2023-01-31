@@ -41,7 +41,7 @@ public class PatchouliCompat implements IComponentProcessor {
     public IVariable process(String key) {
         return switch (key) {
             case "physicalDamage" ->
-                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_DAMAGE) * 2) + data.getPhysicalDamage()));
+                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_DAMAGE) * 2) + data.physicalDamage()));
             case "fireDamage" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_DAMAGE.get())));
             case "waterDamage" ->
@@ -61,19 +61,19 @@ public class PatchouliCompat implements IComponentProcessor {
             case "evasion" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.EVASION.get())));
             case "knockback" ->
-                    IVariable.wrap(df.format(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_KNOCKBACK) + data.getKnockback())/0.4)*100));
+                    IVariable.wrap(df.format(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_KNOCKBACK) + data.knockback())/0.4)*100));
             case "knockback_resistance" ->
-                    IVariable.wrap(df.format(100-(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.getKnockbackRes()))*100)));
+                    IVariable.wrap(df.format(100-(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.knockbackResistance()))*100)));
             case "damageClass" ->
-                    IVariable.wrap(data.getDamageClass().toUpperCase());
+                    IVariable.wrap(data.damageClass().toUpperCase());
             case "health" ->
-                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MAX_HEALTH) * 5) + data.getMaxHP()));
+                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MAX_HEALTH) * 5) + data.maxHP()));
             case "movespeed" ->
-                    IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.getMovespeed()));
+                    IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.movespeed()));
             case "defense" ->
-                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.getDefense()));
+                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.defense()));
             case "physicalResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.getPhysicalResistance())));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.physicalResistance())));
             case "fireResistance" ->
                     IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_RESISTANCE.get()))));
             case "waterResistance" ->

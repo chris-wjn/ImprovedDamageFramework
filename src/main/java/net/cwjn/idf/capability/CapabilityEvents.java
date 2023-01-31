@@ -56,7 +56,7 @@ public class CapabilityEvents {
             LivingEntity entity = event.getEntity();
             entity.getCapability(AuxiliaryProvider.AUXILIARY_DATA).ifPresent(h -> {
                 if (JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())) != null)
-                    h.setDamageClass(JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())).getDamageClass());
+                    h.setDamageClass(JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())).damageClass());
                 if ((item.hasTag() && item.getTag().contains("idf.damage_class"))) {
                     h.setDamageClass(item.getTag().getString("idf.damage_class"));
                 } else {

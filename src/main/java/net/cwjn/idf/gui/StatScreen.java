@@ -36,13 +36,13 @@ public class StatScreen extends Screen {
         super.init();
         left = (width - 176) / 2;
         top = (height - 166) / 2;
-        damageButton = addRenderableWidget(new CategoryButton(left + 44, top + 15,
+        damageButton = addRenderableWidget(new CategoryButton(left + 32, top + 15,
                 Component.empty(),
                 (f) -> changeScreen(DAMAGE), DAMAGE));
-        resistanceButton = addRenderableWidget(new CategoryButton(left + 88, top + 15,
+        resistanceButton = addRenderableWidget(new CategoryButton(left + 76, top + 15,
                 Component.empty(),
                 (f) -> changeScreen(RESISTANCE), RESISTANCE));
-        playerButton = addRenderableWidget(new CategoryButton(left + 132, top + 15,
+        playerButton = addRenderableWidget(new CategoryButton(left + 120, top + 15,
                 Component.empty(),
                 (f) -> changeScreen(PLAYER), PLAYER));
     }

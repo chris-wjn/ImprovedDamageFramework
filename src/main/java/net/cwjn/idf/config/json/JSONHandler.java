@@ -82,10 +82,11 @@ public class JSONHandler {
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
             if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
                 defaultEntityData.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(
-                        0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, "strike",
-                        0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
-                        1.0D, 1.0D, 1.0D, 1.0D, 1.0D,
-                        0.0D, 0.0D, 0.4, -1.0D, 0.0D, 0.0D));
+                        "strike", 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
+                        0.0D, 0.0D, 0.0D, -1.0D, 0.4D, 0.0D, 0.0D,
+                        0.0D, 0.0D, 0.0D, 0.0D, 0.0D,
+                        0.0D, 0.0D, 0.0, 0.0D, 0.0D, 0.0D,
+                        1.0D, 1.0D, 1.0D));
             }
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {

@@ -25,10 +25,8 @@ public class DamageHandler {
 
     public static float handleDamage(LivingEntity target, DamageSource source, float amount) {
 
-        //If the source isn't integrated, integrate it. Maintains isFall, isExplosion, and isProjectile.
-        if (!(source instanceof IDFInterface)) source = SourceCatcherData.convert(source);
-        //since we integrated the source in the line above, it should be guaranteed that we can cast the source without issue.
-        IDFInterface convertedSource = (IDFInterface) source;
+        //Integrate the source to an IDFSource
+        IDFInterface convertedSource = SourceCatcherData.convert(source);
 
         //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
         float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, physicalDamage, pen, lifesteal, knockback;
@@ -216,9 +214,8 @@ public class DamageHandler {
             log.debug("isExplosion?: " + source.isExplosion());
             log.debug("isProjectile?: " + source.isExplosion());
             log.debug("isBypassInvuln?: " + source.isBypassInvul());
-            source = SourceCatcherData.convert(source);
         }
-        IDFInterface convertedSource = (IDFInterface) source;
+        IDFInterface convertedSource = SourceCatcherData.convert(source);
         log.debug("----------CONVERSION INFORMATION----------");
         log.debug("SOURCE: " + convertedSource.getName() + " of class " + convertedSource.getClass().getName());
         log.debug("Is Conversion?: " + convertedSource.isConversion());

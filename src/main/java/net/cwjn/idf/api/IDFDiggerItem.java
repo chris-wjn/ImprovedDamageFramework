@@ -57,7 +57,7 @@ public class IDFDiggerItem extends DiggerItem implements IDFCustomEquipment {
                             modTier.getCriticalChance(), modTier.getForce(), modTier.getKnockback(), modTier.getSpeed(), modTier.getDefense(), modTier.getPhysicalResistance(),
                             modTier.getFireResistance(), modTier.getWaterResistance(), modTier.getLightningResistance(), modTier.getMagicResistance(), modTier.getDarkResistance(),
                             modTier.getEvasion(), modTier.getMaxHP(), modTier.getMovespeed(), modTier.getKnockbackResistance(), modTier.getLuck(), modTier.getStrikeMultiplier(),
-                            modTier.getPierceMultiplier(), modTier.getSlashMultiplier()));
+                            modTier.getPierceMultiplier(), modTier.getSlsashMultiplier()));
             bonusAttributes.putAll(modTier.getBonusAttributes());
         }
         data.forEach(pair -> {

@@ -23,12 +23,11 @@ public class CategoryButton extends Button {
 
     @Override
     public void renderButton(PoseStack matrix, int mouseX, int mouseY, float pTicks) {
-        super.renderButton(matrix, mouseX, mouseY, pTicks);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, STAT_GUI);
-        blit(matrix, x, y, this.isHoveredOrFocused() ? 31 : 5, 203, 22, 22);
-        blit(matrix, x+2, y+2, type.locX, type.locY, 16, 16);
+        blit(matrix, x, y, this.isHoveredOrFocused() ? 31 : 2, 196, 24, 24);
+        blit(matrix, x+4, y+4, type.locX, type.locY, 16, 16);
     }
 
 }
