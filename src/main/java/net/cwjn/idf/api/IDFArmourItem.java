@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMultimap;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.ArmourData;
 import net.cwjn.idf.config.json.data.ItemData;
+import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
+import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,20 +24,23 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
     private final double armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes;
 
     public IDFArmourItem(ArmorMaterial material, EquipmentSlot slot, Properties p, int durability, double physicalDamage, double fireDamage,
-                         double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
+                         double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
                          double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
                          double attackSpeed, double defense, double physicalResistance, double fireResistance,
                          double waterResistance, double lightningResistance, double magicResistance,
-                         double darkResistance, double evasion, double maxHP, double movespeed,
+                         double darkResistance, double holyResistance, double evasion, double maxHP, double movespeed,
                          double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
                          double slashMultiplier,
                          Map<Attribute, AttributeModifier> bonusAttributes) {
         super(material, slot, p);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        ArmourData data = new ArmourData(durability, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
-                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
-                        waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
-                        luck, strikeMultiplier, pierceMultiplier, slashMultiplier);
+        ArmourData data = new ArmourData(durability,
+                new OffensiveData(physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
+                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed),
+                new DefensiveData(defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance,
+                        darkResistance, holyResistance, evasion, knockbackResistance, strikeMultiplier, pierceMultiplier, slashMultiplier),
+                new AuxiliaryData(maxHP, movespeed, luck)
+                );
         if (material instanceof IDFArmourMaterial idfMaterial) {
             data = ArmourData.combine(data,
                     new ArmourData(0, idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
