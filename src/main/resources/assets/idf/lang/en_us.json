@@ -214,6 +214,7 @@
   "idf.debug_message_on": "Debug enabled.",
   "idf.debug_message_off": "Debug disabled.",
 
+  "//SILENTGEAR TRAITS": "",
   "idf.trait.embers": "Embers",
   "idf.trait.embers.desc": "Adds fire damage",
   "idf.trait.aqua": "Aqua",
@@ -223,6 +224,24 @@
   "idf.trait.arcane": "Arcane",
   "idf.trait.arcane.desc": "Adds magic damage",
   "idf.trait.occult": "Occult",
-  "idf.trait.occult.desc": "Adds dark damage"
+  "idf.trait.occult.desc": "Adds dark damage",
+
+  "//TETRA": "",
+  "idf.stats.fire_damage": "Fire Damage",
+  "idf.stats.fire_damage.tooltip": "+§e%s §rfire damage",
+  "idf.stats.water_damage": "Water Damage",
+  "idf.stats.water_damage.tooltip": "+§e%s §rwater damage",
+  "idf.stats.lightning_damage": "Lightning Damage",
+  "idf.stats.lightning_damage.tooltip": "+§e%s §rlightning damage",
+  "idf.stats.magic_damage": "Magic Damage",
+  "idf.stats.magic_damage.tooltip": "+§e%s §rmagic damage",
+  "idf.stats.dark_damage": "Dark Damage",
+  "idf.stats.dark_damage.tooltip": "+§e%s §rdark damage",
+  "idf.stats.pen": "Armour Penetration",
+  "idf.stats.pen.tooltip": "+§e%s §rArmour Penetration",
+  "idf.stats.lifesteal": "Lifesteal",
+  "idf.stats.lifesteal.tooltip": "+§e%s §rLifesteal",
+  "idf.stats.crit_chance": "Critical Strike Chance",
+  "idf.stats.crit_chance.tooltip": "+§e%s §rCritical Strike Chance",
 
 }

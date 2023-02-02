@@ -1,0 +1,14 @@
+{
+  "type": "tetra:modular_item",
+  "modules": [
+    ["sword/basic_blade"],
+    ["sword/heavy_blade"],
+    ["sword/machete"],
+    ["sword/short_blade"],
+    ["sword/throwing_knife"],
+    ["double/basic_axe_left"],
+    ["double/sickle_left"],
+    ["double/claw_left"],
+    ["double/adze_left"]
+  ]
+}

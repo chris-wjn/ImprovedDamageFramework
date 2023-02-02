@@ -21,7 +21,7 @@ import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operati
 
 public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
-    private final double armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes;
+    private final double armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes, holyRes;
 
     public IDFArmourItem(ArmorMaterial material, EquipmentSlot slot, Properties p, int durability, double physicalDamage, double fireDamage,
                          double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
@@ -43,21 +43,26 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
                 );
         if (material instanceof IDFArmourMaterial idfMaterial) {
             data = ArmourData.combine(data,
-                    new ArmourData(0, idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
-                            idfMaterial.getLightningDamage(slot), idfMaterial.getMagicDamage(slot), idfMaterial.getDarkDamage(slot), idfMaterial.getLifesteal(slot), idfMaterial.getArmourPenetration(slot),
-                            idfMaterial.getCriticalChance(slot), idfMaterial.getForce(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot), idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot),
-                            idfMaterial.getFireResForSlot(slot), idfMaterial.getWaterResForSlot(slot), idfMaterial.getLightningResForSlot(slot), idfMaterial.getMagicResForSlot(slot), idfMaterial.getDarkResForSlot(slot),
-                            idfMaterial.getEvasionForSlot(slot), idfMaterial.getMaxHPForSlot(slot), idfMaterial.getMovespeedForSlot(slot), idfMaterial.getKnockbackResistance(), idfMaterial.getLuckForSlot(slot), idfMaterial.getStrikeForSlot(slot),
-                            idfMaterial.getPierceForSlot(slot), idfMaterial.getSlashForSlot(slot)));
+                    new ArmourData(0, new OffensiveData(idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
+                            idfMaterial.getLightningDamage(slot), idfMaterial.getMagicDamage(slot), idfMaterial.getDarkDamage(slot), idfMaterial.getHolyDamage(slot),
+                            idfMaterial.getLifesteal(slot), idfMaterial.getArmourPenetration(slot), idfMaterial.getCriticalChance(slot),
+                            idfMaterial.getForce(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot)),
+                            new DefensiveData(idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot), idfMaterial.getFireResForSlot(slot),
+                                    idfMaterial.getWaterResForSlot(slot), idfMaterial.getLightningResForSlot(slot), idfMaterial.getMagicResForSlot(slot),
+                                    idfMaterial.getDarkResForSlot(slot), idfMaterial.getHolyResistance(slot), idfMaterial.getEvasionForSlot(slot),
+                                    idfMaterial.getKnockbackResistance(), idfMaterial.getStrikeForSlot(slot), idfMaterial.getPierceForSlot(slot),
+                                    idfMaterial.getSlashForSlot(slot)),
+                            new AuxiliaryData(idfMaterial.getMaxHPForSlot(slot), idfMaterial.getMovespeedForSlot(slot), idfMaterial.getLuckForSlot(slot))));
             bonusAttributes.putAll(idfMaterial.getBonusAttributes());
         }
-        armour = data.physicalResistance();
-        this.defense = data.defense();
-        fireRes = data.fireResistance();
-        waterRes = data.waterResistance();
-        lightningRes = data.lightningResistance();
-        magicRes = data.magicResistance();
-        darkRes = data.darkResistance();
+        armour = data.dData().pRes();
+        this.defense = data.dData().defense();
+        fireRes = data.dData().fRes();
+        waterRes = data.dData().wRes();
+        lightningRes = data.dData().lRes();
+        magicRes = data.dData().mRes();
+        darkRes = data.dData().dRes();
+        holyRes = data.dData().hRes();
         data.forEach(pair -> {
             if (pair.getB() != 0) {
                 builder.put(pair.getA(), new AttributeModifier(Util.UUID_BASE_STAT_ADDITION[this.getSlot().getFilterFlag()], "data0", pair.getB(), ADDITION));
@@ -71,7 +76,7 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
     @Override
     public int getDefense() {
-        return (int) (armour + fireRes + waterRes + lightningRes + magicRes + darkRes);
+        return (int) (armour + fireRes + waterRes + lightningRes + magicRes + darkRes + holyRes);
     }
 
     @Override

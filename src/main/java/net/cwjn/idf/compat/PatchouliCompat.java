@@ -3,6 +3,9 @@ package net.cwjn.idf.compat;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.EntityData;
+import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
+import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.damage.DamageHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -35,13 +38,15 @@ public class PatchouliCompat implements IComponentProcessor {
         String name = variables.get("entity").asString();
         data = JSONHandler.getEntityData(new ResourceLocation(name));
         type = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name));
+        if (data == null) data = new EntityData("MOB NOT IN JSON FILE!", OffensiveData.entityStandard(),
+                DefensiveData.entityStandard(), AuxiliaryData.empty());
     }
 
     @Override
     public IVariable process(String key) {
         return switch (key) {
             case "physicalDamage" ->
-                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_DAMAGE) * 2) + data.physicalDamage()));
+                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_DAMAGE) * 2) + data.oData().pDmg()));
             case "fireDamage" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_DAMAGE.get())));
             case "waterDamage" ->
@@ -61,19 +66,19 @@ public class PatchouliCompat implements IComponentProcessor {
             case "evasion" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.EVASION.get())));
             case "knockback" ->
-                    IVariable.wrap(df.format(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_KNOCKBACK) + data.knockback())/0.4)*100));
+                    IVariable.wrap(df.format(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ATTACK_KNOCKBACK) + data.oData().kb())/0.4)*100));
             case "knockback_resistance" ->
-                    IVariable.wrap(df.format(100-(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.knockbackResistance()))*100)));
+                    IVariable.wrap(df.format(100-(((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.dData().kbr()))*100)));
             case "damageClass" ->
                     IVariable.wrap(data.damageClass().toUpperCase());
             case "health" ->
-                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MAX_HEALTH) * 5) + data.maxHP()));
+                    IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MAX_HEALTH) * 5) + data.aData().hp()));
             case "movespeed" ->
-                    IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.movespeed()));
+                    IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.aData().ms()));
             case "defense" ->
-                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.defense()));
+                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.dData().defense()));
             case "physicalResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.physicalResistance())));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.dData().pRes())));
             case "fireResistance" ->
                     IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_RESISTANCE.get()))));
             case "waterResistance" ->

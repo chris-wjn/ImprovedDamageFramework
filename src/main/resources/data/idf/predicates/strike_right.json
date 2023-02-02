@@ -1,0 +1,6 @@
+{
+  "type": "tetra:modular_item",
+  "modules": [
+    ["double/basic_hammer_right"]
+  ]
+}

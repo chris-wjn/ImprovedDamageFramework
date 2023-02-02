@@ -36,7 +36,9 @@
     "equipment.MixinArmorItem",
     "equipment.MixinDiggerItem",
     "equipment.MixinItem",
-    "equipment.MixinSwordItem"
+    "equipment.MixinSwordItem",
+    "tetra.MixinItemModularHandheld",
+    "tetra.MixinSweepingEffect"
   ],
   "injectors": {
     "defaultRequire": 1

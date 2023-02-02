@@ -91,6 +91,7 @@ public class DamageHandler {
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
         mappedMultipliers.put("pierce", target.getAttributeValue(IDFAttributes.PIERCE_MULT.get()));
         mappedMultipliers.put("slash", target.getAttributeValue(IDFAttributes.SLASH_MULT.get()));
+        mappedMultipliers.put("none", 1D);
         for (int i = 0; i < 6; i++) {
             dv[i] *= weightMultiplier;
             dv[i] *= mappedMultipliers.get(damageClass);

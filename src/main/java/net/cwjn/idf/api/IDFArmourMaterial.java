@@ -16,9 +16,9 @@ public class IDFArmourMaterial implements ArmorMaterial {
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
     private final String name;
     private final int durabilityMultiplier;
-    private final double[] physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, lifesteal,
+    private final double[] physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, lifesteal,
             armourPenetration, knockback, criticalChance, force, attackSpeed, defense,
-            physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance,
+            physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance, holyResistance,
             maxHP, movespeed, luck, evasion,
             strike, pierce, slash;
     private final Map<Attribute, AttributeModifier> bonusAttributes;
@@ -28,9 +28,9 @@ public class IDFArmourMaterial implements ArmorMaterial {
     private final LazyLoadedValue<Ingredient> repairIngredient;
 
     public IDFArmourMaterial(String name, int durabilityMult, double[] physicalDamage, double[] fireDamage, double[] waterDamage, double[] lightningDamage,
-                             double[] magicDamage, double[] darkDamage, double[] lifesteal, double[] armourPenetration, double[] knockback, double[] criticalChance,
+                             double[] magicDamage, double[] darkDamage, double[] holyDamage, double[] lifesteal, double[] armourPenetration, double[] knockback, double[] criticalChance,
                              double[] force, double[] attackSpeed, double[] defense, double[] physicalResistance,
-                             double[] f, double[] w, double[] l, double[] m, double[] d,
+                             double[] f, double[] w, double[] l, double[] m, double[] d, double[] h,
                              double[] hp, double[] ms, double[] luck, double[] evasion,
                              double[] str, double[] prc, double[] sls,
                              Map<Attribute, AttributeModifier> bonusAttributes, int enchantability, SoundEvent equipSound, float KBR, Supplier<Ingredient> repairIngredient) {
@@ -42,6 +42,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
         this.lightningDamage = lightningDamage;
         this.magicDamage = magicDamage;
         this.darkDamage = darkDamage;
+        this.holyDamage = holyDamage;
         this.lifesteal = lifesteal;
         this.armourPenetration = armourPenetration;
         this.knockback = knockback;
@@ -60,6 +61,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
         lightningResistance = l;
         magicResistance = m;
         darkResistance = d;
+        holyResistance = h;
         maxHP = hp;
         movespeed = ms;
         this.luck = luck;
@@ -110,6 +112,10 @@ public class IDFArmourMaterial implements ArmorMaterial {
 
     public double getDarkDamage(EquipmentSlot slot) {
         return darkDamage[slot.getIndex()];
+    }
+
+    public double getHolyDamage(EquipmentSlot slot) {
+        return holyDamage[slot.getIndex()];
     }
 
     public double getLifesteal(EquipmentSlot slot) {
@@ -178,6 +184,10 @@ public class IDFArmourMaterial implements ArmorMaterial {
 
     public double getDarkResForSlot(EquipmentSlot slot) {
         return this.darkResistance[slot.getIndex()];
+    }
+
+    public double getHolyResistance(EquipmentSlot slot) {
+        return holyResistance[slot.getIndex()];
     }
 
     public double getMaxHPForSlot(EquipmentSlot slot) {

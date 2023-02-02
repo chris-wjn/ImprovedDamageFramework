@@ -3,8 +3,12 @@ package net.cwjn.idf.config.json;
 import com.google.gson.*;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.config.json.data.ArmourData;
+import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.data.ItemData;
 import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
+import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -17,6 +21,10 @@ public class JSONUtil {
             registerTypeAdapter(ArmourData.class, new ArmourData.ArmourSerializer()).
             registerTypeAdapter(WeaponData.class, new WeaponData.WeaponSerializer()).
             registerTypeAdapter(ItemData.class, new ItemData.ItemSerializer()).
+            registerTypeAdapter(EntityData.class, new EntityData.EntityDataSerializer()).
+            registerTypeAdapter(OffensiveData.class, new OffensiveData.OffensiveDataSerializer()).
+            registerTypeAdapter(DefensiveData.class, new DefensiveData.DefensiveDataSerializer()).
+            registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
             create();
 
     public static <T> T getOrCreateConfigFile(File configDir, String configName, T defaults, Type type) {

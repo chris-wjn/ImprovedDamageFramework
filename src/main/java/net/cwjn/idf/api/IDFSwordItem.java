@@ -2,6 +2,9 @@ package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
 import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
+import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -16,46 +19,54 @@ import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operati
 
 public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
 
-    private final double physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage;
+    private final double physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage;
 
     public IDFSwordItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage, double waterDamage, double lightningDamage,
-                        double magicDamage, double darkDamage, double lifesteal, double pen, double crit, double force, double knockback, double speed, Properties p, Map<Attribute, AttributeModifier> bonusAttributes) {
-        this(tier, durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
-                lifesteal, pen, crit, force, knockback, speed, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p, bonusAttributes);
+                        double magicDamage, double darkDamage, double holyDamage, double lifesteal, double pen, double crit, double force, double knockback, double speed, Properties p, Map<Attribute, AttributeModifier> bonusAttributes) {
+        this(tier, durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
+                lifesteal, pen, crit, force, knockback, speed, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p, bonusAttributes);
     }
 
     public IDFSwordItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage,
-                        double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
+                        double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
                         double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
                         double attackSpeed, double defense, double physicalResistance, double fireResistance,
                         double waterResistance, double lightningResistance, double magicResistance,
-                        double darkResistance, double evasion, double maxHP, double movespeed,
+                        double darkResistance, double holyResistance, double evasion, double maxHP, double movespeed,
                         double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
                         double slashMultiplier,
                         Properties p, Map<Attribute, AttributeModifier> bonusAttributes) {
         super(tier, (int) physicalDamage, (float) attackSpeed, p);
         ((ItemInterface) this).setDamageClass(damageClass);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        WeaponData data = new WeaponData(durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
-                lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed, defense, physicalResistance, fireResistance,
-                waterResistance, lightningResistance, magicResistance, darkResistance, evasion, maxHP, movespeed, knockbackResistance,
-                luck, strikeMultiplier, pierceMultiplier, slashMultiplier);
+        WeaponData data = new WeaponData(durability, damageClass,
+                new OffensiveData(physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
+                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed),
+                new DefensiveData(defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance,
+                        darkResistance, holyResistance, evasion, knockbackResistance, strikeMultiplier, pierceMultiplier, slashMultiplier),
+                new AuxiliaryData(maxHP, movespeed, luck)
+        );
         if (tier instanceof IDFTier modTier) {
             data = WeaponData.combine(data,
-                    new WeaponData(0, "strike", modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
-                            modTier.getLightningDamage(), modTier.getMagicDamage(), modTier.getDarkDamage(), modTier.getLifesteal(), modTier.getArmourPenetration(),
-                            modTier.getCriticalChance(), modTier.getForce(), modTier.getKnockback(), modTier.getSpeed(), modTier.getDefense(), modTier.getPhysicalResistance(),
-                            modTier.getFireResistance(), modTier.getWaterResistance(), modTier.getLightningResistance(), modTier.getMagicResistance(), modTier.getDarkResistance(),
-                            modTier.getEvasion(), modTier.getMaxHP(), modTier.getMovespeed(), modTier.getKnockbackResistance(), modTier.getLuck(), modTier.getStrikeMultiplier(),
-                            modTier.getPierceMultiplier(), modTier.getSlashMultiplier()));
+                    new WeaponData(0, "", new OffensiveData(modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
+                            modTier.getLightningDamage(), modTier.getMagicDamage(), modTier.getDarkDamage(), modTier.getHolyDamage(),
+                            modTier.getLifesteal(), modTier.getArmourPenetration(), modTier.getCriticalChance(),
+                            modTier.getForce(), modTier.getKnockback(), modTier.getSpeed()),
+                            new DefensiveData(modTier.getDefense(), modTier.getPhysicalResistance(), modTier.getFireResistance(),
+                                    modTier.getWaterResistance(), modTier.getLightningResistance(), modTier.getMagicResistance(),
+                                    modTier.getDarkResistance(), modTier.getHolyResistance(), modTier.getEvasion(),
+                                    modTier.getKnockbackResistance(), modTier.getStrikeMultiplier(), modTier.getPierceMultiplier(),
+                                    modTier.getSlashMultiplier()),
+                            new AuxiliaryData(modTier.getMaxHP(), modTier.getMovespeed(), modTier.getLuck())));
             bonusAttributes.putAll(modTier.getBonusAttributes());
         }
-        this.physicalDamage = data.physicalDamage();
-        this.fireDamage = data.fireDamage();
-        this.waterDamage = data.waterDamage();
-        this.lightningDamage = data.lightningDamage();
-        this.magicDamage = data.magicDamage();
-        this.darkDamage = data.darkDamage();
+        this.physicalDamage = physicalDamage;
+        this.fireDamage = fireDamage;
+        this.waterDamage = waterDamage;
+        this.lightningDamage = lightningDamage;
+        this.magicDamage = magicDamage;
+        this.darkDamage = darkDamage;
+        this.holyDamage = holyDamage;
         data.forEach(pair -> {
             if (pair.getB() != 0) {
                 builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "data0", pair.getB(), ADDITION));
@@ -90,6 +101,10 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
 
     public double getDarkDamage() {
         return darkDamage;
+    }
+
+    public double getHolyDamage() {
+        return holyDamage;
     }
 
 }

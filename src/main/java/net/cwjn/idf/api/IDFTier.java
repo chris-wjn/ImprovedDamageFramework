@@ -18,18 +18,18 @@ public class IDFTier implements Tier {
     private final int level, durability, enchantability;
     private final float speed;
     private final double
-            physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage,
+            physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
             lifesteal, armourPenetration, criticalChance, force, knockback,
-            defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance,
+            defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance, holyResistance,
             evasion, maxHP, movespeed, knockbackResistance, luck,
             strikeMultiplier, pierceMultiplier, slashMultiplier;
     private final Map<Attribute, AttributeModifier> bonusAttributes;
     private final TagKey<Block> tag;
 
     public IDFTier(int level, int durability, float speed, int enchantability, Supplier<Ingredient> item,
-                   double physicalDamage, double fireDamage, double waterDamage, double lightningDamage, double magicDamage, double darkDamage,
+                   double physicalDamage, double fireDamage, double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
                    double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
-                   double defense, double physicalResistance, double fireResistance, double waterResistance, double lightningResistance, double magicResistance, double darkResistance,
+                   double defense, double physicalResistance, double fireResistance, double waterResistance, double lightningResistance, double magicResistance, double darkResistance, double holyResistance,
                    double evasion, double maxHP, double movespeed, double knockbackResistance, double luck,
                    double strikeMultiplier, double pierceMultiplier, double slashMultiplier,
                    Map<Attribute, AttributeModifier> bonusAttributes, @NotNull TagKey<Block> tag) {
@@ -44,6 +44,7 @@ public class IDFTier implements Tier {
         this.lightningDamage = lightningDamage;
         this.magicDamage = magicDamage;
         this.darkDamage = darkDamage;
+        this.holyDamage = holyDamage;
         this.lifesteal = lifesteal;
         this.armourPenetration = armourPenetration;
         this.criticalChance = criticalChance;
@@ -56,6 +57,7 @@ public class IDFTier implements Tier {
         this.lightningResistance = lightningResistance;
         this.magicResistance = magicResistance;
         this.darkResistance = darkResistance;
+        this.holyResistance = holyResistance;
         this.evasion = evasion;
         this.maxHP = maxHP;
         this.movespeed = movespeed;
@@ -205,5 +207,13 @@ public class IDFTier implements Tier {
 
     public Map<Attribute, AttributeModifier> getBonusAttributes() {
         return bonusAttributes;
+    }
+
+    public double getHolyResistance() {
+        return holyResistance;
+    }
+
+    public double getHolyDamage() {
+        return holyDamage;
     }
 }

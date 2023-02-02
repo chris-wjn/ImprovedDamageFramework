@@ -1,5 +1,7 @@
 package net.cwjn.idf.mixin;
 
+import net.cwjn.idf.mixin.tetra.MixinItemModularHandheld;
+import net.minecraftforge.fml.ModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,7 +23,14 @@ public class IDFMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return true;
+        if (mixinClassName.equals("net.cwjn.idf.mixin.tetra$MixinItemModularHandheld") ||
+            mixinClassName.equals("net.cwjn.idf.mixin.tetra$MixinModularBowItem") ||
+            mixinClassName.equals("net.cwjn.idf.mixin.tetra$MixinModularCrossbowItem") ||
+            mixinClassName.equals("net.cwjn.idf.mixin.tetra$MixinSweepingEffect")) {
+            return ModList.get().isLoaded("tetra");
+        } else {
+            return true;
+        }
     }
 
     @Override

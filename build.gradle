@@ -112,9 +112,9 @@ dependencies {
     implementation fg.deobf("curse.maven:itemframes-532127:4068347")
     implementation fg.deobf("curse.maven:prism-638111:3993293")
 
-    //UPDATE TETRA MICK I BEG U BRO
-    //implementation fg.deobf("se.mickelus.mutil:mutil:1.18.2-4.5.0")
-    //implementation fg.deobf("se.mickelus.tetra:tetra:1.18.2-4.9.2")
+    //TETRA
+    implementation fg.deobf("curse.maven:mutil-351914:3941314")
+    implementation fg.deobf("curse.maven:tetra-289712:4370833")
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
