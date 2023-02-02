@@ -17,7 +17,7 @@ public class CategoryButton extends Button {
     StatScreen.Icon type;
 
     public CategoryButton(int x, int y, Component component, OnPress onPress, StatScreen.Icon iconType) {
-        super(x, y, 18, 18, component, onPress);
+        super(x, y, 22, 22, component, onPress);
         type = iconType;
     }
 
@@ -26,8 +26,8 @@ public class CategoryButton extends Button {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, STAT_GUI);
-        blit(matrix, x, y, this.isHoveredOrFocused() ? 31 : 2, 196, 24, 24);
-        blit(matrix, x+4, y+4, type.locX, type.locY, 16, 16);
+        blit(matrix, x, y, this.isHoveredOrFocused() ? 31 : 2, 196, 22, 22);
+        blit(matrix, x+3, y+3, type.locX, type.locY, 16, 16);
     }
 
 }

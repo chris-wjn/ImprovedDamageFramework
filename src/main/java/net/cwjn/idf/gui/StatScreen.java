@@ -25,7 +25,7 @@ public class StatScreen extends Screen {
 
     private CategoryButton damageButton, resistanceButton, playerButton;
     private int left, top;
-    private Icon currentScreen;
+    private Icon currentScreen = DAMAGE;
 
     public StatScreen() {
         super(translationComponent("idf.stats_screen"));
@@ -36,13 +36,13 @@ public class StatScreen extends Screen {
         super.init();
         left = (width - 176) / 2;
         top = (height - 166) / 2;
-        damageButton = addRenderableWidget(new CategoryButton(left + 32, top + 15,
+        damageButton = addRenderableWidget(new CategoryButton(left + 7, top + 7,
                 Component.empty(),
                 (f) -> changeScreen(DAMAGE), DAMAGE));
-        resistanceButton = addRenderableWidget(new CategoryButton(left + 76, top + 15,
+        resistanceButton = addRenderableWidget(new CategoryButton(left + 33, top + 7,
                 Component.empty(),
                 (f) -> changeScreen(RESISTANCE), RESISTANCE));
-        playerButton = addRenderableWidget(new CategoryButton(left + 120, top + 15,
+        playerButton = addRenderableWidget(new CategoryButton(left + 59, top + 7,
                 Component.empty(),
                 (f) -> changeScreen(PLAYER), PLAYER));
     }
@@ -58,6 +58,21 @@ public class StatScreen extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, STAT_GUI);
         blit(matrix, left, top, 0, 0, 176, 166);
+        switch (currentScreen) {
+            case DAMAGE:
+                font.draw(matrix, "Fire Damage", left+16, top+36, 0x802028);
+                font.draw(matrix, "Water Damage", left+16, top+52, 0x1c234f);
+                font.draw(matrix, "Lightning Damage", left+16, top+68, 0x8f5e1d);
+                break;
+            case RESISTANCE:
+                font.draw(matrix, "Fire Resistance", left+16, top+32, 0x802028);
+                font.draw(matrix, "Water Resistance", left+16, top+48, 0x1c234f);
+                font.draw(matrix, "Lightning Resistance", left+16, top+64, 0x8f5e1d);
+                break;
+            case PLAYER:
+                break;
+
+        }
         super.render(matrix, mouseX, mouseY, pTicks);
     }
 
