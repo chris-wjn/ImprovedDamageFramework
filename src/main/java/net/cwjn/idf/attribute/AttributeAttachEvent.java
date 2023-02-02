@@ -50,12 +50,14 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.LIGHTNING_DAMAGE.get());
                 event.add(entityType, IDFAttributes.MAGIC_DAMAGE.get());
                 event.add(entityType, IDFAttributes.DARK_DAMAGE.get());
+                event.add(entityType, HOLY.damage);
                 //resistances
                 event.add(entityType, IDFAttributes.FIRE_RESISTANCE.get());
                 event.add(entityType, IDFAttributes.WATER_RESISTANCE.get());
                 event.add(entityType, IDFAttributes.LIGHTNING_RESISTANCE.get());
                 event.add(entityType, IDFAttributes.MAGIC_RESISTANCE.get());
                 event.add(entityType, IDFAttributes.DARK_RESISTANCE.get());
+                event.add(entityType, HOLY.resistance);
                 //DAMAGE CLASS MULTIPLIERS
                 event.add(entityType, IDFAttributes.STRIKE_MULT.get());
                 event.add(entityType, IDFAttributes.PIERCE_MULT.get());
