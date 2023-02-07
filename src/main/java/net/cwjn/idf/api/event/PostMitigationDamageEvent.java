@@ -5,16 +5,17 @@ import net.minecraftforge.eventbus.api.Event;
 
 public class PostMitigationDamageEvent extends Event {
 
-    private float[] damage = new float[6];
+    private float[] damage = new float[7];
     private final LivingEntity target;
 
-    public PostMitigationDamageEvent(LivingEntity target, float fire, float water, float lightning, float magic, float dark, float physical) {
+    public PostMitigationDamageEvent(LivingEntity target, float fire, float water, float lightning, float magic, float dark, float holy, float physical) {
         damage[0] = fire;
         damage[1] = water;
         damage[2] = lightning;
         damage[3] = magic;
         damage[4] = dark;
-        damage[5] = physical;
+        damage[5] = holy;
+        damage[6] = physical;
         this.target = target;
     }
 
@@ -66,12 +67,20 @@ public class PostMitigationDamageEvent extends Event {
         damage[4] = dark;
     }
 
-    public float getPhysical() {
+    public float getHoly() {
         return damage[5];
     }
 
+    public void setHoly(float holy) {
+        damage[5] = holy;
+    }
+
+    public float getPhysical() {
+        return damage[6];
+    }
+
     public void setPhysical(float physical) {
-        damage[5] = physical;
+        damage[6] = physical;
     }
 
     public LivingEntity getTarget() {

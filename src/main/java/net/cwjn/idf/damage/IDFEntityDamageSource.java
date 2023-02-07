@@ -6,17 +6,18 @@ import org.jetbrains.annotations.NotNull;
 
 public class IDFEntityDamageSource extends EntityDamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen, lifesteal, weight, knockback;
+    private final float fire, water, lightning, magic, dark, holy, pen, lifesteal, weight, knockback;
     private final String damageClass; //strike, pierce, slash, crush, generic
     private boolean isTrue = false, isConversion = false;
 
-    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float pen, float ls, String dc) {
+    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float h, float pen, float ls, String dc) {
         super(msgId, entity);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         this.pen = pen;
         lifesteal = ls;
         weight = -1;
@@ -24,13 +25,14 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         damageClass = dc;
     }
 
-    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float pen, float ls, float wt, String dc) {
+    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float h, float pen, float ls, float wt, String dc) {
         super(msgId, entity);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         this.pen = pen;
         lifesteal = ls;
         weight = wt;
@@ -38,13 +40,14 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         damageClass = dc;
     }
 
-    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float pen, float ls, float kb, float wt, String dc) {
+    public IDFEntityDamageSource(String msgId, Entity entity, float f, float w, float l, float m, float d, float h, float pen, float ls, float kb, float wt, String dc) {
         super(msgId, entity);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         this.pen = pen;
         lifesteal = ls;
         weight = wt;
@@ -87,6 +90,10 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
     }
 
     public float getDark() { return dark; }
+
+    public float getHoly() {
+        return holy;
+    }
 
     public float getPen() {
         return pen;

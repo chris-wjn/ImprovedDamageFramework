@@ -5,17 +5,22 @@ import net.minecraftforge.eventbus.api.Event;
 
 public class PreDamageMultipliersEvent extends Event {
 
-    private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, physicalDmg, pen, lifesteal, weight, knockback;
-    private float fireRes, waterRes, lightningRes, magicRes, darkRes, physicalRes, def;
+    private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, holyDmg, physicalDmg, pen, lifesteal, weight, knockback;
+    private float fireRes, waterRes, lightningRes, magicRes, darkRes, holyRes, physicalRes, def;
     private String damageClass;
     private final LivingEntity target;
 
-    public PreDamageMultipliersEvent(LivingEntity target, float fireDmg, float waterDmg, float lightningDmg, float magicDmg, float darkDmg, float physicalDmg, float pen, float lifesteal, float knockback, float weight, float fireRes, float waterRes, float lightningRes, float magicRes, float darkRes, float physicalRes, float def, String damageClass) {
+    public PreDamageMultipliersEvent(LivingEntity target,
+                                     float fireDmg, float waterDmg, float lightningDmg, float magicDmg, float darkDmg, float holyDmg, float physicalDmg,
+                                     float pen, float lifesteal, float knockback, float weight,
+                                     float fireRes, float waterRes, float lightningRes, float magicRes, float darkRes, float holyRes, float physicalRes,
+                                     float def, String damageClass) {
         this.fireDmg = fireDmg;
         this.waterDmg = waterDmg;
         this.lightningDmg = lightningDmg;
         this.magicDmg = magicDmg;
         this.darkDmg = darkDmg;
+        this.holyDmg = holyDmg;
         this.physicalDmg = physicalDmg;
         this.pen = pen;
         this.lifesteal = lifesteal;
@@ -26,6 +31,7 @@ public class PreDamageMultipliersEvent extends Event {
         this.lightningRes = lightningRes;
         this.magicRes = magicRes;
         this.darkRes = darkRes;
+        this.holyRes = holyRes;
         this.physicalRes = physicalRes;
         this.def = def;
         this.damageClass = damageClass;
@@ -70,6 +76,14 @@ public class PreDamageMultipliersEvent extends Event {
 
     public void setDarkDmg(float darkDmg) {
         this.darkDmg = darkDmg;
+    }
+
+    public float getHolyDmg() {
+        return holyDmg;
+    }
+
+    public void setHolyDmg(float holyDmg) {
+        this.holyDmg = holyDmg;
     }
 
     public float getPhysicalDmg() {
@@ -154,6 +168,14 @@ public class PreDamageMultipliersEvent extends Event {
 
     public void setDarkRes(float darkRes) {
         this.darkRes = darkRes;
+    }
+
+    public float getHolyRes() {
+        return holyRes;
+    }
+
+    public void setHolyRes(float holyRes) {
+        this.holyRes = holyRes;
     }
 
     public float getPhysicalRes() {

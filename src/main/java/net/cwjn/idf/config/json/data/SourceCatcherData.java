@@ -9,7 +9,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 
-public record SourceCatcherData(float fire, float water, float lightning, float magic, float dark, float pen, float lifesteal, float weight, String damageClass, boolean isTrueDamage) {
+public record SourceCatcherData(float fire, float water, float lightning, float magic, float dark, float holy, float pen, float lifesteal, float weight, String damageClass, boolean isTrueDamage) {
 
     public static IDFInterface convert(DamageSource source) {
         if (source instanceof IDFInterface) return (IDFInterface) source;
@@ -24,44 +24,44 @@ public record SourceCatcherData(float fire, float water, float lightning, float 
             if (data.isTrueDamage) {
                 if (source instanceof IndirectEntityDamageSource) {
                     newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
-                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.holy, data.pen, data.lifesteal, data.weight,
                             data.damageClass).setIsConversion().setTrue();
                 } else if (source instanceof EntityDamageSource) {
                     newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
-                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.holy, data.pen, data.lifesteal, data.weight,
                             data.damageClass).setIsConversion().setTrue();
                 } else {
                     newSource = new IDFDamageSource(source.msgId,
-                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.holy, data.pen, data.lifesteal, data.weight,
                             data.damageClass).setIsConversion().setTrue();
                 }
             } else {
                 if (source instanceof IndirectEntityDamageSource) {
                     newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
-                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.holy, data.pen, data.lifesteal, data.weight,
                             data.damageClass).setIsConversion();
                 } else if (source instanceof EntityDamageSource) {
                     newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
-                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.holy, data.pen, data.lifesteal, data.weight,
                             data.damageClass).setIsConversion();
                 } else {
                     newSource = new IDFDamageSource(source.msgId,
-                            data.fire, data.water, data.lightning, data.magic, data.dark, data.pen, data.lifesteal, data.weight,
+                            data.fire, data.water, data.lightning, data.magic, data.dark, data.holy, data.pen, data.lifesteal, data.weight,
                             data.damageClass).setIsConversion();
                 }
             }
         } else {
             if (source instanceof IndirectEntityDamageSource) {
                 newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
-                        0, 0, 0, 0, 0, 0, 0, -1,
+                        0, 0, 0, 0, 0, 0, 0, 0,
                         "strike").setIsConversion();
             } else if (source instanceof EntityDamageSource) {
                 newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
-                        0, 0, 0, 0, 0, 0, 0, -1,
+                        0, 0, 0, 0, 0, 0, 0, 0,
                         "strike").setIsConversion();
             } else {
                 newSource = new IDFDamageSource(source.msgId,
-                        0, 0, 0, 0, 0, 0, 0, -1,
+                        0, 0, 0, 0, 0, 0, 0, 0,
                         "strike").setIsConversion();
             }
         }

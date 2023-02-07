@@ -7,6 +7,7 @@ public interface IDFInterface {
     float getLightning();
     float getMagic();
     float getDark();
+    float getHoly();
     float getPen();
     float getLifesteal();
     float getWeight();

@@ -3,7 +3,6 @@ package net.cwjn.idf.event;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.EquipmentInspectScreen;
 import net.cwjn.idf.gui.StatScreen;
-import net.cwjn.idf.gui.StatsScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
 import net.cwjn.idf.util.Keybinds;
 import net.minecraft.client.Minecraft;

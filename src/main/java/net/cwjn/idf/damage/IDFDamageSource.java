@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class IDFDamageSource extends DamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen, lifesteal, weight, knockback;
+    private final float fire, water, lightning, magic, dark, holy, pen, lifesteal, weight, knockback;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -16,6 +16,7 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         lightning = 0;
         magic = 0;
         dark = 0;
+        holy = 0;
         pen = 0;
         lifesteal = 0;
         weight = -1;
@@ -23,13 +24,14 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         damageClass = dc;
     }
 
-    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, float ls, String dc) {
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, String dc) {
         super(msgId);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         damageClass = dc;
         lifesteal = ls;
         weight = -1;
@@ -37,13 +39,14 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         this.pen = pen;
     }
 
-    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, float ls, float wt, String dc) {
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, float wt, String dc) {
         super(msgId);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         damageClass = dc;
         lifesteal = ls;
         weight = wt;
@@ -51,13 +54,14 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         this.pen = pen;
     }
 
-    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float pen, float ls, float kb, float wt, String dc) {
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, float kb, float wt, String dc) {
         super(msgId);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         damageClass = dc;
         lifesteal = ls;
         weight = wt;
@@ -100,6 +104,10 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
     }
 
     public float getDark() { return dark; }
+
+    public float getHoly() {
+        return holy;
+    }
 
     public float getPen() {
         return pen;

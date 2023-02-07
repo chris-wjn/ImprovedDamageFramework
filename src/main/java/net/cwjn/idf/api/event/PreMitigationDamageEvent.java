@@ -5,30 +5,30 @@ import net.minecraftforge.eventbus.api.Event;
 
 public class PreMitigationDamageEvent extends Event {
 
-    private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, physicalDmg, pen, lifesteal, weight, knockback;
-    private float fireRes, waterRes, lightningRes, magicRes, darkRes, physicalRes, def;
-    private String damageClass;
+    private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, holyDmg, physicalDmg, pen, lifesteal;
+    private float fireRes, waterRes, lightningRes, magicRes, darkRes, holyRes, physicalRes;
     private final LivingEntity target;
 
-    public PreMitigationDamageEvent(LivingEntity target, float fireDmg, float waterDmg, float lightningDmg, float magicDmg, float darkDmg, float physicalDmg, float pen, float lifesteal, float knockback, float weight, float fireRes, float waterRes, float lightningRes, float magicRes, float darkRes, float physicalRes, float def, String damageClass) {
+    public PreMitigationDamageEvent(LivingEntity target,
+                                    float fireDmg, float waterDmg, float lightningDmg, float magicDmg, float darkDmg, float holyDmg, float physicalDmg,
+                                    float pen, float lifesteal,
+                                    float fireRes, float waterRes, float lightningRes, float magicRes, float darkRes, float holyRes, float physicalRes) {
         this.fireDmg = fireDmg;
         this.waterDmg = waterDmg;
         this.lightningDmg = lightningDmg;
         this.magicDmg = magicDmg;
         this.darkDmg = darkDmg;
         this.physicalDmg = physicalDmg;
+        this.holyDmg = holyDmg;
         this.pen = pen;
         this.lifesteal = lifesteal;
-        this.knockback = knockback;
-        this.weight = weight;
         this.fireRes = fireRes;
         this.waterRes = waterRes;
         this.lightningRes = lightningRes;
         this.magicRes = magicRes;
         this.darkRes = darkRes;
+        this.holyRes = holyRes;
         this.physicalRes = physicalRes;
-        this.def = def;
-        this.damageClass = damageClass;
         this.target = target;
     }
 
@@ -96,22 +96,6 @@ public class PreMitigationDamageEvent extends Event {
         this.lifesteal = lifesteal;
     }
 
-    public String getDamageClass() {
-        return damageClass;
-    }
-
-    public void setDamageClass(String damageClass) {
-        this.damageClass = damageClass;
-    }
-
-    public float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(float weight) {
-        this.weight = weight;
-    }
-
     public LivingEntity getTarget() {
         return target;
     }
@@ -164,12 +148,20 @@ public class PreMitigationDamageEvent extends Event {
         this.physicalRes = physicalRes;
     }
 
-    public float getDef() {
-        return def;
+    public float getHolyDmg() {
+        return holyDmg;
     }
 
-    public void setDef(float def) {
-        this.def = def;
+    public void setHolyDmg(float holyDmg) {
+        this.holyDmg = holyDmg;
+    }
+
+    public float getHolyRes() {
+        return holyRes;
+    }
+
+    public void setHolyRes(float holyRes) {
+        this.holyRes = holyRes;
     }
 
     @Override
@@ -177,11 +169,4 @@ public class PreMitigationDamageEvent extends Event {
         return false;
     }
 
-    public float getKnockback() {
-        return knockback;
-    }
-
-    public void setKnockback(float knockback) {
-        this.knockback = knockback;
-    }
 }

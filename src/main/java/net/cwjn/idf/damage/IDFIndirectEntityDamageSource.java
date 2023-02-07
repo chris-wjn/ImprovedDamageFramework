@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, pen, lifesteal, weight, knockback;
+    private final float fire, water, lightning, magic, dark, holy, pen, lifesteal, weight, knockback;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -17,6 +17,7 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         lightning = 0;
         magic = 0;
         dark = 0;
+        holy = 0;
         pen = 0;
         lifesteal = 0;
         weight = -1;
@@ -24,13 +25,14 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         damageClass = dc;
     }
 
-    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, float ls, String dc) {
+    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float h, float p, float ls, String dc) {
         super(msgId, source, trueSource);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         pen = p;
         lifesteal = ls;
         weight = -1;
@@ -38,13 +40,14 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         damageClass = dc;
     }
 
-    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, float ls, float wt, String dc) {
+    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float h, float p, float ls, float wt, String dc) {
         super(msgId, source, trueSource);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         pen = p;
         lifesteal = ls;
         weight = wt;
@@ -52,13 +55,14 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         damageClass = dc;
     }
 
-    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float p, float ls, float kb, float wt, String dc) {
+    public IDFIndirectEntityDamageSource (String msgId, Entity source, Entity trueSource, float f, float w, float l, float m, float d, float h, float p, float ls, float kb, float wt, String dc) {
         super(msgId, source, trueSource);
         fire = f;
         water = w;
         lightning = l;
         magic = m;
         dark = d;
+        holy = h;
         pen = p;
         lifesteal = ls;
         weight = wt;
@@ -101,6 +105,10 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
     }
 
     public float getDark() { return dark; }
+
+    public float getHoly() {
+        return holy;
+    }
 
     public float getPen() {
         return pen;
