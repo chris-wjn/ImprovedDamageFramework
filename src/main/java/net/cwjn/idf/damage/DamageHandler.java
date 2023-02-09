@@ -237,6 +237,12 @@ public class DamageHandler {
         log.debug("---> Dark: " + convertedSource.getDark());
         log.debug("---> Holy: " + convertedSource.getHoly());
         log.debug("---> Physical: " + amount);
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Damage Class: " + convertedSource.getDamageClass());
+        log.debug("---> Force: " + convertedSource.getWeight());
+        log.debug("---> Pen: " + convertedSource.getPen());
+        log.debug("---> Lifesteal: " + convertedSource.getLifesteal());
+        log.debug("---> Knockback: " + convertedSource.getKnockback());
 
         //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
         float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage, pen, lifesteal, knockback;

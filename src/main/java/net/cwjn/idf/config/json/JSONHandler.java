@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.IDFCustomEquipment;
+import net.cwjn.idf.api.event.OnItemAttributeRework;
 import net.cwjn.idf.config.json.data.*;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
@@ -28,6 +29,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -447,6 +449,7 @@ public class JSONHandler {
                     });
                 }
             }
+            MinecraftForge.EVENT_BUS.post(new OnItemAttributeRework(builder, defaultTag));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
         }
