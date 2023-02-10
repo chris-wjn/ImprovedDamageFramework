@@ -170,9 +170,10 @@ public class Color {
     public static final Color PHYSICAL_COLOUR = named("PhysicalColour", 11181194);
     public static final Color FIRE_COLOUR = named("FireColour", 16753920);
     public static final Color WATER_COLOUR = named("WaterColour", 3044334);
-    public static final Color LIGHTNING_COLOUR = named("LightningColour", 16769397);
+    public static final Color LIGHTNING_COLOUR = named("LightningColour", 16769615);
     public static final Color MAGIC_COLOUR = named("MagicColour", 11796455);
     public static final Color DARK_COLOUR = named("DarkColour", 5908062);
+    public static final Color HOLY_COLOUR = named("HolyColour", 16449429);
     private final int color;
     private final int red;
     private final int green;

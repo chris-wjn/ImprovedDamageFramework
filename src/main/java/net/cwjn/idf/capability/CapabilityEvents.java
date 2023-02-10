@@ -1,5 +1,6 @@
 package net.cwjn.idf.capability;
 
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.capability.data.AuxiliaryData;
@@ -77,6 +78,7 @@ public class CapabilityEvents {
                 h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
                 h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
                 h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
+                h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
                 h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
                 h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
@@ -92,6 +94,7 @@ public class CapabilityEvents {
                 h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
                 h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
                 h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
+                h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
                 h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
                 h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));

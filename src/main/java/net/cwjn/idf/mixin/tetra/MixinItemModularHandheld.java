@@ -1,6 +1,7 @@
 package net.cwjn.idf.mixin.tetra;
 
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -41,11 +42,12 @@ public abstract class MixinItemModularHandheld implements IModularItem {
         double ld = this.getAttributeValue(itemStack, IDFAttributes.LIGHTNING_DAMAGE.get()) * (double)critMultiplier * damageMultiplier;
         double md = this.getAttributeValue(itemStack, IDFAttributes.MAGIC_DAMAGE.get()) * (double)critMultiplier * damageMultiplier;
         double dd = this.getAttributeValue(itemStack, IDFAttributes.DARK_DAMAGE.get()) * (double)critMultiplier * damageMultiplier;
+        double hd = this.getAttributeValue(itemStack, IDFElement.HOLY.damage) * (double)critMultiplier * damageMultiplier;
         double pen = this.getAttributeValue(itemStack, IDFAttributes.PENETRATING.get());
         double weight = this.getAttributeValue(itemStack, IDFAttributes.FORCE.get());
         String damageClass = itemStack.getOrCreateTag().getString("idf.damage_class");
         if (damageClass.equals("")) damageClass = "strike";
-        boolean success = target.hurt(new IDFEntityDamageSource("player", player, (float) fd, (float) wd, (float) ld, (float) md, (float) dd, (float) pen, (float) weight, damageClass), (float) ad);
+        boolean success = target.hurt(new IDFEntityDamageSource("player", player, (float) fd, (float) wd, (float) ld, (float) md, (float) dd, (float) hd, (float) pen, (float) weight, damageClass), (float) ad);
         if (success) {
             EnchantmentHelper.doPostHurtEffects(target, player);
             EffectHelper.applyEnchantmentHitEffects(itemStack, target, player);

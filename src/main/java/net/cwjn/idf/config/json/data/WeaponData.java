@@ -34,6 +34,7 @@ public record WeaponData(int durability, String damageClass, OffensiveData oData
         values.add(new Pair<>(LIGHTNING_DAMAGE.get(), oData.lDmg()));
         values.add(new Pair<>(MAGIC_DAMAGE.get(), oData.mDmg()));
         values.add(new Pair<>(DARK_DAMAGE.get(), oData.dDmg()));
+        values.add(new Pair<>(HOLY_DAMAGE.get(), oData.hDmg()));
         values.add(new Pair<>(ARMOR_TOUGHNESS, dData.defense()));
         values.add(new Pair<>(ARMOR, dData.pRes()));
         values.add(new Pair<>(FIRE_RESISTANCE.get(), dData.fRes()));
@@ -41,6 +42,7 @@ public record WeaponData(int durability, String damageClass, OffensiveData oData
         values.add(new Pair<>(LIGHTNING_RESISTANCE.get(), dData.lRes()));
         values.add(new Pair<>(MAGIC_RESISTANCE.get(), dData.mRes()));
         values.add(new Pair<>(DARK_RESISTANCE.get(), dData.dRes()));
+        values.add(new Pair<>(HOLY_RESISTANCE.get(), dData.hRes()));
         values.add(new Pair<>(LIFESTEAL.get(), oData.ls()));
         values.add(new Pair<>(PENETRATING.get(), oData.pen()));
         values.add(new Pair<>(CRIT_CHANCE.get(), oData.crit()));

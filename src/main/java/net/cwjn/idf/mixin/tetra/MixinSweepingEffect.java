@@ -44,6 +44,7 @@ public class MixinSweepingEffect {
         float ld = (float) (attacker.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float md = (float) (attacker.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float dd = (float) (attacker.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
+        float hd = (float) (attacker.getAttributeValue(IDFAttributes.HOLY_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float pen = (float) attacker.getAttributeValue(IDFAttributes.PENETRATING.get());
         float force = (float) attacker.getAttributeValue(IDFAttributes.FORCE.get());
         float knockback = trueSweep ? (float)(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) + 1) * 0.5F : 0.5F;
@@ -60,10 +61,10 @@ public class MixinSweepingEffect {
         }).forEach((entity) -> {
             entity.knockback((double)knockback, (double) Mth.sin(attacker.getYRot() * 3.1415927F / 180.0F), (double)(-Mth.cos(attacker.getYRot() * 3.1415927F / 180.0F)));
             DamageSource damageSource = attacker instanceof Player ?
-                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, pen, force,
+                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, force,
                     attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                     :
-                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, pen, force,
+                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, force,
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
             if (trueSweep) {
                 ItemEffectHandler.applyHitEffects(itemStack, entity, attacker);
@@ -91,6 +92,7 @@ public class MixinSweepingEffect {
         float ld = (float) (attacker.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float md = (float) (attacker.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float dd = (float) (attacker.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
+        float hd = (float) (attacker.getAttributeValue(IDFAttributes.HOLY_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float pen = (float) attacker.getAttributeValue(IDFAttributes.PENETRATING.get());
         float force = (float) attacker.getAttributeValue(IDFAttributes.FORCE.get());
         float knockback = 0.5F + (float)EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) * 0.5F;
@@ -106,10 +108,10 @@ public class MixinSweepingEffect {
             ItemEffectHandler.applyHitEffects(itemStack, entity, attacker);
             EffectHelper.applyEnchantmentHitEffects(itemStack, entity, attacker);
             DamageSource damageSource = attacker instanceof Player ?
-                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, pen, force,
+                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, force,
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                     :
-                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, pen, force,
+                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, force,
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
             causeTruesweepDamage(damageSource, damage, itemStack, attacker, entity);
         });

@@ -38,7 +38,8 @@ public class DamageIndicatorEvents {
                     random.nextFloat(-0.333333f, 0),
                     random.nextFloat(0, 0.333333f),
                     random.nextFloat(0.333333f, 0.6666667f),
-                    random.nextFloat(0.6666667f, 1.0f)));
+                    random.nextFloat(0.6666667f, 1.0f),
+                    random.nextFloat(1.0f, 1.333333f)));
             if (event.getFire() > 0) {
                 int loc = random.nextInt(locs.size());
                 PacketHandler.serverToNearPoint(new DisplayDamageIndicatorPacket(x, y, z, event.getFire(), locs.get(loc), Color.FIRE_COLOUR.getColor(), id), x, y, z, 15, target.getCommandSenderWorld().dimension());
@@ -67,6 +68,10 @@ public class DamageIndicatorEvents {
             if (event.getPhysical() > 0) {
                 int loc = random.nextInt(locs.size());
                 PacketHandler.serverToNearPoint(new DisplayDamageIndicatorPacket(x, y, z, event.getPhysical(), locs.get(loc), Color.PHYSICAL_COLOUR.getColor(), id), x, y, z, 15, target.getCommandSenderWorld().dimension());
+            }
+            if (event.getHoly() > 0) {
+                int loc = random.nextInt(locs.size());
+                PacketHandler.serverToNearPoint(new DisplayDamageIndicatorPacket(x, y, z, event.getHoly(), locs.get(loc), Color.HOLY_COLOUR.getColor(), id), x, y, z, 15, target.getCommandSenderWorld().dimension());
             }
         }
     }

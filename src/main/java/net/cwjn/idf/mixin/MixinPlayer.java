@@ -90,6 +90,7 @@ public class MixinPlayer {
                 float ld = (float)thisPlayer.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
                 float md = (float)thisPlayer.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
                 float dd = (float)thisPlayer.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
+                float hd = (float)thisPlayer.getAttributeValue(HOLY.damage);
                 float pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
                 float weight = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
                 float damageBonus;
@@ -107,12 +108,13 @@ public class MixinPlayer {
                 ld *= 0.2F + scalar * scalar * 0.8F;
                 md *= 0.2F + scalar * scalar * 0.8F;
                 dd *= 0.2F + scalar * scalar * 0.8F;
+                hd *= 0.2F + scalar * scalar * 0.8F;
                 weight *= 0.2F + scalar * scalar * 0.8F;
                 damageBonus *= scalar;
                 float lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
                 thisPlayer.resetAttackStrengthTicker();
 
-                if (ad > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || damageBonus > 0.0F) { //only run if there's actually damage
+                if (ad > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || hd > 0.0F || damageBonus > 0.0F) { //only run if there's actually damage
 
                     //check for knockback
                     boolean fullStrength = scalar > 0.9F;
@@ -138,6 +140,7 @@ public class MixinPlayer {
                         ld *= hitResult.getDamageModifier();
                         md *= hitResult.getDamageModifier();
                         dd *= hitResult.getDamageModifier();
+                        hd *= hitResult.getDamageModifier();
                     }
 
                     //add damage bonus to physical damage, and check if the attack is a sweepAttack
@@ -166,7 +169,7 @@ public class MixinPlayer {
                     //this is where we actually set the target to be hurt, and check to see if the hurt event went through
                     Vec3 direction = target.getDeltaMovement();
                     String damageClass = thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
-                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, pen, lifesteal, knockback, weight, damageClass), ad);
+                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, weight, damageClass), ad);
 
                     if (targetWasHurt) {
                         //knockback the target and if the player was sprinting, stop their sprint
@@ -180,17 +183,19 @@ public class MixinPlayer {
 
                         //if the attack was sweeping, check for entities near the target and attack them
                         if (isSweepAttack) {
-                            float sweepingAD = 1.0F + EnchantmentHelper.getSweepingDamageRatio(thisPlayer) * ad;
-                            float sweepingFD = EnchantmentHelper.getSweepingDamageRatio(thisPlayer) * fd;
-                            float sweepingWD = EnchantmentHelper.getSweepingDamageRatio(thisPlayer) * wd;
-                            float sweepingLD = EnchantmentHelper.getSweepingDamageRatio(thisPlayer) * ld;
-                            float sweepingMD = EnchantmentHelper.getSweepingDamageRatio(thisPlayer) * md;
-                            float sweepingDD = EnchantmentHelper.getSweepingDamageRatio(thisPlayer) * dd;
+                            float ratio = EnchantmentHelper.getSweepingDamageRatio(thisPlayer);
+                            float sweepingAD = 1.0F + ratio * ad;
+                            float sweepingFD = ratio * fd;
+                            float sweepingWD = ratio * wd;
+                            float sweepingLD = ratio * ld;
+                            float sweepingMD = ratio * md;
+                            float sweepingDD = ratio * dd;
+                            float sweepingHD = ratio * hd;
 
                             for(LivingEntity livingentity : thisPlayer.level.getEntitiesOfClass(LivingEntity.class, thisPlayer.getItemInHand(InteractionHand.MAIN_HAND).getSweepHitBox(thisPlayer, target))) {
                                 if (livingentity != thisPlayer && livingentity != target && !thisPlayer.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).isMarker()) && thisPlayer.distanceToSqr(livingentity) < 9.0D) {
                                     livingentity.knockback((double)0.4F, (double)Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F))));
-                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, pen, 0, weight,
+                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, sweepingHD, pen, 0, weight,
                                             thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass()), sweepingAD);
                                 }
                             }

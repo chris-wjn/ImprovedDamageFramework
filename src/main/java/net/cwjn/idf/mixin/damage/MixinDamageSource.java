@@ -1,6 +1,7 @@
 package net.cwjn.idf.mixin.damage;
 
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.capability.data.AuxiliaryData;
 import net.cwjn.idf.capability.data.ProjectileHelper;
 import net.cwjn.idf.capability.provider.ArrowHelperProvider;
@@ -37,12 +38,13 @@ public class MixinDamageSource {
         final float lightning = (float) bee.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
         final float magic = (float) bee.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
         final float dark = (float) bee.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
+        final float holy = (float) bee.getAttributeValue(IDFElement.HOLY.damage);
         final float pen = (float) bee.getAttributeValue(IDFAttributes.PENETRATING.get());
         final float lifesteal = (float) bee.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         final float weight = (float) bee.getAttributeValue(IDFAttributes.FORCE.get());
         final float knockback = (float) bee.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         AuxiliaryData data = bee.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
-        return new IDFEntityDamageSource("sting", bee, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, data.getDamageClass());
+        return new IDFEntityDamageSource("sting", bee, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, data.getDamageClass());
     }
 
     /**
@@ -57,12 +59,13 @@ public class MixinDamageSource {
         final float lightning = (float) mob.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
         final float magic = (float) mob.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
         final float dark = (float) mob.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
+        final float holy = (float) mob.getAttributeValue(IDFElement.HOLY.damage);
         final float pen = (float) mob.getAttributeValue(IDFAttributes.PENETRATING.get());
         final float lifesteal = (float) mob.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         final float weight = (float) mob.getAttributeValue(IDFAttributes.FORCE.get());
         final float knockback = (float)mob.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
         AuxiliaryData data = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
-        return new IDFEntityDamageSource("mob", mob, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, data.getDamageClass());
+        return new IDFEntityDamageSource("mob", mob, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, data.getDamageClass());
     }
 
     /**
@@ -76,6 +79,7 @@ public class MixinDamageSource {
         float lightning = 0;
         float magic = 0;
         float dark = 0;
+        float holy = 0;
         float pen = 0;
         float lifesteal = 0;
         float knockback = 0;
@@ -87,6 +91,7 @@ public class MixinDamageSource {
             lightning = (float) indirectSource.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
             magic = (float) indirectSource.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
             dark = (float) indirectSource.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
+            holy = (float) indirectSource.getAttributeValue(IDFElement.HOLY.damage);
             pen = (float) indirectSource.getAttributeValue(IDFAttributes.PENETRATING.get());
             lifesteal = (float) indirectSource.getAttributeValue(IDFAttributes.LIFESTEAL.get());
             knockback = (float) indirectSource.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
@@ -94,7 +99,7 @@ public class MixinDamageSource {
             AuxiliaryData data = indirectSource.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
             damageClass = data.getDamageClass();
         }
-        return new IDFIndirectEntityDamageSource("mob", source, indirectSource, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, damageClass);
+        return new IDFIndirectEntityDamageSource("mob", source, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, damageClass);
     }
 
     /**
@@ -108,6 +113,7 @@ public class MixinDamageSource {
         float lightning = 0;
         float magic = 0;
         float dark = 0;
+        float holy = 0;
         float pen = 0;
         float lifesteal = 0;
         float knockback = 0;
@@ -120,13 +126,14 @@ public class MixinDamageSource {
             lightning = helper.getLightning();
             magic = helper.getMagic();
             dark = helper.getDark();
+            holy = helper.getHoly();
             pen = helper.getPen();
             lifesteal = helper.getLifesteal();
             knockback = helper.getKnockback();
             weight = helper.getWeight();
             damageClass = helper.getDamageClass();
         }
-        return (new IDFIndirectEntityDamageSource("arrow", arrow, indirectSource, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, damageClass)).setProjectile();
+        return (new IDFIndirectEntityDamageSource("arrow", arrow, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, damageClass)).setProjectile();
     }
 
     /**
@@ -140,6 +147,7 @@ public class MixinDamageSource {
         float lightning = 0;
         float magic = 0;
         float dark = 0;
+        float holy = 0;
         float pen = 0;
         float lifesteal = 0;
         float knockback = 0;
@@ -152,13 +160,14 @@ public class MixinDamageSource {
             lightning = helper.getLightning();
             magic = helper.getMagic();
             dark = helper.getDark();
+            holy = helper.getHoly();
             pen = helper.getPen();
             lifesteal = helper.getLifesteal();
             knockback = helper.getKnockback();
             weight = helper.getWeight();
             damageClass = helper.getDamageClass();
         }
-        return (new IDFIndirectEntityDamageSource("trident", source, indirectSource, fire, water, lightning, magic, dark, pen, lifesteal, knockback, weight, damageClass)).setProjectile();
+        return (new IDFIndirectEntityDamageSource("trident", source, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, damageClass)).setProjectile();
     }
 
     /**
@@ -168,7 +177,7 @@ public class MixinDamageSource {
     @Overwrite
     public static DamageSource fireworks(FireworkRocketEntity firework, @Nullable Entity indirectSource) {
         return (new IDFIndirectEntityDamageSource("fireworks", firework, indirectSource,
-                0.5f, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setExplosion();
+                0.5f, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setExplosion();
     }
 
     /**
@@ -178,9 +187,9 @@ public class MixinDamageSource {
     @Overwrite
     public static DamageSource fireball(Fireball fireball, @Nullable Entity indirectSource) {
         return indirectSource == null ?
-                (new IDFIndirectEntityDamageSource("onFire", fireball, fireball, 1, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setIsFire().setProjectile()
+                (new IDFIndirectEntityDamageSource("onFire", fireball, fireball, 1, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setIsFire().setProjectile()
                 :
-                (new IDFIndirectEntityDamageSource("fireball", fireball, indirectSource, 1, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setIsFire().setProjectile();
+                (new IDFIndirectEntityDamageSource("fireball", fireball, indirectSource, 1, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setIsFire().setProjectile();
     }
 
     /**
@@ -189,7 +198,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource witherSkull(WitherSkull witherSkull, Entity indirectSource) {
-        return (new IDFIndirectEntityDamageSource("witherSkull", witherSkull, indirectSource, 0, 0, 0, 0, 1, 0, 0, "strike")).setIsConversion().setProjectile();
+        return (new IDFIndirectEntityDamageSource("witherSkull", witherSkull, indirectSource, 0, 0, 0, 0, 1, 0, 0, 0, "strike")).setIsConversion().setProjectile();
     }
 
     /**
@@ -198,7 +207,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource thrown(Entity source, @Nullable Entity indirectSource) {
-        return (new IDFIndirectEntityDamageSource("thrown", source, indirectSource, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setProjectile();
+        return (new IDFIndirectEntityDamageSource("thrown", source, indirectSource, 0, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setProjectile();
     }
 
     /**
@@ -207,7 +216,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource indirectMagic(Entity source, @Nullable Entity indirectSource) {
-        return (new IDFIndirectEntityDamageSource("indirectMagic", source, indirectSource, 0, 0, 0, 1, 0, 0, 0, "generic")).setIsConversion();
+        return (new IDFIndirectEntityDamageSource("indirectMagic", source, indirectSource, 0, 0, 0, 1, 0, 0, 0, 0, "generic")).setIsConversion();
     }
 
     /**
@@ -216,7 +225,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource thorns(Entity source) {
-        return (new IDFEntityDamageSource("thorns", source, 0, 0, 0, 1, 0, 0, 0, "pierce")).setIsConversion();
+        return (new IDFEntityDamageSource("thorns", source, 0, 0, 0, 1, 0, 0, 0, 0, "pierce")).setIsConversion();
     }
 
     /**
@@ -225,7 +234,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource sonicBoom(Entity source) {
-        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 3.0f, 0, 0, "generic")).setIsConversion();
+        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 3.0f, 0, 0, 0,"generic")).setIsConversion();
     }
 
     /**
@@ -235,9 +244,9 @@ public class MixinDamageSource {
     @Overwrite
     public static DamageSource explosion(@Nullable LivingEntity livingEntity) {
         return livingEntity != null ?
-                (new IDFEntityDamageSource("explosion.player", livingEntity, 0.5f, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setScalesWithDifficulty().setExplosion()
+                (new IDFEntityDamageSource("explosion.player", livingEntity, 0.5f, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setScalesWithDifficulty().setExplosion()
                 :
-                (new IDFDamageSource("explosion", 0.5f, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setScalesWithDifficulty().setExplosion();
+                (new IDFDamageSource("explosion", 0.5f, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setScalesWithDifficulty().setExplosion();
     }
 
 }

@@ -35,6 +35,6 @@ public class ATHandler {
         //dark sources
         DamageSource.WITHER = new DarkDamageSource("wither", "none");
         //mixed sources
-        DamageSource.DRAGON_BREATH = new IDFDamageSource("dragonBreath", 0.5f,  0, 0, 0.5f, 0, 0, 0, "none").setIsConversion();
+        DamageSource.DRAGON_BREATH = new IDFDamageSource("dragonBreath", 0.5f,  0, 0, 0.5f, 0, 0, 0, 0, "none").setIsConversion();
     }
 }

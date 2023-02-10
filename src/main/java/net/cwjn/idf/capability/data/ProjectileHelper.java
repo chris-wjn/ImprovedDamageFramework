@@ -9,6 +9,7 @@ public class ProjectileHelper {
     private float lightning = 0;
     private float magic = 0;
     private float dark = 0;
+    private float holy = 0;
     private float phys = 0;
     private float pen = 0;
     private float crit = 0;
@@ -35,6 +36,10 @@ public class ProjectileHelper {
 
     public void setDark(float dark) {
         this.dark = dark;
+    }
+
+    public void setHoly(float holy) {
+        this.holy = holy;
     }
 
     public void setPen(float pen) {
@@ -85,6 +90,10 @@ public class ProjectileHelper {
         return dark;
     }
 
+    public float getHoly() {
+        return holy;
+    }
+
     public float getPen() {
         return pen;
     }
@@ -103,6 +112,7 @@ public class ProjectileHelper {
         tag.putFloat("lightning", lightning);
         tag.putFloat("magic", magic);
         tag.putFloat("dark", dark);
+        tag.putFloat("holy", holy);
         tag.putFloat("physical", phys);
         tag.putFloat("pen", pen);
         tag.putFloat("crit", crit);
@@ -116,6 +126,7 @@ public class ProjectileHelper {
         lightning = tag.getFloat("lightning");
         magic = tag.getFloat("magic");
         dark = tag.getFloat("dark");
+        holy = tag.getFloat("holy");
         phys = tag.getFloat("physical");
         pen = tag.getFloat("pen");
         crit = tag.getFloat("crit");

@@ -186,7 +186,7 @@ public class DamageHandler {
         //then, create a variable to store the final damage,
         //then we do the damage math for fire, water, lightning, magic, dark, and holy.
         PostMitigationDamageEvent postMitigation = new PostMitigationDamageEvent(target, 0, 0, 0, 0, 0, 0, 0);
-        rv[6] = rv[6] * (1.0f - pen); //factor in armour pen
+        rv[6] = rv[6] * (1.0f - (pen/100)); //factor in armour pen
         for (int i = 0; i < 7; i++) {
             if (dv[i] > 0) {
                 postMitigation.setDamage(
@@ -202,7 +202,7 @@ public class DamageHandler {
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 if (lifesteal != 0) {
-                    livingEntity.heal(returnValue * lifesteal);
+                    livingEntity.heal(returnValue * (lifesteal/100));
                 }
             }
         }
@@ -214,7 +214,7 @@ public class DamageHandler {
         log.debug("---------------STARTING DEBUGGER---------------");
         log.debug("--> Source: " + source.msgId);
         log.debug("--> Amount: " + amount);
-        log.debug("--> Target: " + target.getDisplayName());
+        log.debug("--> Target: " + target.getName());
         if (source.isFall()) log.debug("--> isFall");
         if (source.isFire()) log.debug("--> isFire");
         if (source.isProjectile()) log.debug("--> isProjectile");
@@ -225,24 +225,6 @@ public class DamageHandler {
 
         //Integrate the source to an IDFSource
         IDFInterface convertedSource = SourceCatcherData.convert(source);
-        log.debug("");
-        log.debug("-> Converted Source Information:");
-        if (convertedSource.isConversion()) log.debug("--> isConversion");
-        if (convertedSource.isTrue()) log.debug("--> isTrue");
-        log.debug("--> Damage Numbers:");
-        log.debug("---> Fire: " + convertedSource.getFire());
-        log.debug("---> Water: " + convertedSource.getWater());
-        log.debug("---> Lightning: " + convertedSource.getLightning());
-        log.debug("---> Magic: " + convertedSource.getMagic());
-        log.debug("---> Dark: " + convertedSource.getDark());
-        log.debug("---> Holy: " + convertedSource.getHoly());
-        log.debug("---> Physical: " + amount);
-        log.debug("--> Auxiliary Information:");
-        log.debug("---> Damage Class: " + convertedSource.getDamageClass());
-        log.debug("---> Force: " + convertedSource.getWeight());
-        log.debug("---> Pen: " + convertedSource.getPen());
-        log.debug("---> Lifesteal: " + convertedSource.getLifesteal());
-        log.debug("---> Knockback: " + convertedSource.getKnockback());
 
         //create variables to hold the damage, damage class, pen, and lifesteal. damage is flat numbers, pen and lifesteal are % values ranging from 0-100.
         float fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage, pen, lifesteal, knockback;
@@ -270,6 +252,25 @@ public class DamageHandler {
             physicalDamage = amount;
         }
 
+        log.debug("");
+        log.debug("-> Converted Source Information:");
+        if (convertedSource.isConversion()) log.debug("--> isConversion");
+        if (convertedSource.isTrue()) log.debug("--> isTrue");
+        log.debug("--> Damage Numbers:");
+        log.debug("---> Fire: " + fireDamage);
+        log.debug("---> Water: " + waterDamage);
+        log.debug("---> Lightning: " + lightningDamage);
+        log.debug("---> Magic: " + magicDamage);
+        log.debug("---> Dark: " + darkDamage);
+        log.debug("---> Holy: " + holyDamage);
+        log.debug("---> Physical: " + physicalDamage);
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Damage Class: " + convertedSource.getDamageClass());
+        log.debug("---> Force: " + convertedSource.getWeight());
+        log.debug("---> Pen: " + convertedSource.getPen());
+        log.debug("---> Lifesteal: " + convertedSource.getLifesteal());
+        log.debug("---> Knockback: " + convertedSource.getKnockback());
+
         //run our numbers through the pre-multiplier event. Use the armour formula to convert elemental armour values to resistances.
         PreDamageMultipliersEvent event = new PreDamageMultipliersEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage,
                 convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getWeight(),
@@ -289,6 +290,33 @@ public class DamageHandler {
         double weightMultiplier = event.getWeight() <= 0 ? 1 : Mth.clamp(Math.sqrt(event.getWeight())/Math.sqrt(event.getDef() <= 0 ? 1 : event.getDef()), 0.5, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getHolyRes(), event.getPhysicalRes()};
+
+        log.debug("");
+        log.debug("-> Pre Damage Multipliers:");
+        log.debug("--> Damage Numbers:");
+        log.debug("---> Fire: " + dv[0]);
+        log.debug("---> Water: " + dv[1]);
+        log.debug("---> Lightning: " + dv[2]);
+        log.debug("---> Magic: " + dv[3]);
+        log.debug("---> Dark: " + dv[4]);
+        log.debug("---> Holy: " + dv[5]);
+        log.debug("---> Physical: " + dv[6]);
+        log.debug("--> Resistance Numbers:");
+        log.debug("---> Fire: " + rv[0]);
+        log.debug("---> Water: " + rv[1]);
+        log.debug("---> Lightning: " + rv[2]);
+        log.debug("---> Magic: " + rv[3]);
+        log.debug("---> Dark: " + rv[4]);
+        log.debug("---> Holy: " + rv[5]);
+        log.debug("---> Physical: " + rv[6]);
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Damage Class: " + damageClass);
+        log.debug("---> Force: " + event.getWeight());
+        log.debug("---> Defense: " + event.getDef());
+        log.debug("---> Force/Defense: " + weightMultiplier);
+        log.debug("---> Pen: " + pen);
+        log.debug("---> Lifesteal: " + lifesteal);
+        log.debug("---> Knockback: " + knockback);
 
         //now we can knockback the target based on the weightMultiplier. The first code is copied from the
         //vanilla knockback handler to get the direction of the knockback. We add the bonus knockback value from
@@ -316,6 +344,28 @@ public class DamageHandler {
             dv[i] *= mappedMultipliers.get(damageClass);
         }
 
+        log.debug("");
+        log.debug("-> Post Damage Multipliers");
+        log.debug("--> Damage Numbers:");
+        log.debug("---> Fire: " + dv[0]);
+        log.debug("---> Water: " + dv[1]);
+        log.debug("---> Lightning: " + dv[2]);
+        log.debug("---> Magic: " + dv[3]);
+        log.debug("---> Dark: " + dv[4]);
+        log.debug("---> Holy: " + dv[5]);
+        log.debug("---> Physical: " + dv[6]);
+        log.debug("--> Resistance Numbers:");
+        log.debug("---> Fire: " + rv[0]);
+        log.debug("---> Water: " + rv[1]);
+        log.debug("---> Lightning: " + rv[2]);
+        log.debug("---> Magic: " + rv[3]);
+        log.debug("---> Dark: " + rv[4]);
+        log.debug("---> Holy: " + rv[5]);
+        log.debug("---> Physical: " + rv[6]);
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Pen: " + pen);
+        log.debug("---> Lifesteal: " + lifesteal);
+
         //now that we have the final pre-mitigation values, check if the source is true damage. If it is,
         //there's no need to do the rest of the method.
         if (convertedSource.isTrue()) return sum(dv);
@@ -328,6 +378,28 @@ public class DamageHandler {
         pen = event2.getPen();
         lifesteal = event2.getLifesteal();
         rv = new float[]{event2.getFireRes(), event2.getWaterRes(), event2.getLightningRes(), event2.getMagicRes(), event2.getDarkRes(), event2.getHolyRes(), event2.getPhysicalRes()};
+
+        log.debug("");
+        log.debug("-> Pre Enchantments");
+        log.debug("--> Damage Numbers:");
+        log.debug("---> Fire: " + dv[0]);
+        log.debug("---> Water: " + dv[1]);
+        log.debug("---> Lightning: " + dv[2]);
+        log.debug("---> Magic: " + dv[3]);
+        log.debug("---> Dark: " + dv[4]);
+        log.debug("---> Holy: " + dv[5]);
+        log.debug("---> Physical: " + dv[6]);
+        log.debug("--> Resistance Numbers:");
+        log.debug("---> Fire: " + rv[0]);
+        log.debug("---> Water: " + rv[1]);
+        log.debug("---> Lightning: " + rv[2]);
+        log.debug("---> Magic: " + rv[3]);
+        log.debug("---> Dark: " + rv[4]);
+        log.debug("---> Holy: " + rv[5]);
+        log.debug("---> Physical: " + rv[6]);
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Pen: " + pen);
+        log.debug("---> Lifesteal: " + lifesteal);
 
         //now we can factor in fall protection, blast protection, fire protection and projectile protection. Reduce each damage type by 6.25% per
         //level of blast and projectile. Assuming the highest any player could get is 16 (prot 4 on each armour piece),
@@ -396,11 +468,34 @@ public class DamageHandler {
         }
         //hurt the player's armour for the sum of the damage now.
         target.hurtArmor(source, sum(dv));
+
+        log.debug("");
+        log.debug("-> Pre Mitigation");
+        log.debug("--> Damage Numbers:");
+        log.debug("---> Fire: " + dv[0]);
+        log.debug("---> Water: " + dv[1]);
+        log.debug("---> Lightning: " + dv[2]);
+        log.debug("---> Magic: " + dv[3]);
+        log.debug("---> Dark: " + dv[4]);
+        log.debug("---> Holy: " + dv[5]);
+        log.debug("---> Physical: " + dv[6]);
+        log.debug("--> Resistance Numbers:");
+        log.debug("---> Fire: " + rv[0]);
+        log.debug("---> Water: " + rv[1]);
+        log.debug("---> Lightning: " + rv[2]);
+        log.debug("---> Magic: " + rv[3]);
+        log.debug("---> Dark: " + rv[4]);
+        log.debug("---> Holy: " + rv[5]);
+        log.debug("---> Physical: " + rv[6]);
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Pen: " + pen);
+        log.debug("---> Lifesteal: " + lifesteal);
+
         //now we start calculating the final damage value. We need to post the PostMitigation event,
         //then, create a variable to store the final damage,
         //then we do the damage math for fire, water, lightning, magic, dark, and holy.
         PostMitigationDamageEvent postMitigation = new PostMitigationDamageEvent(target, 0, 0, 0, 0, 0, 0, 0);
-        rv[6] = rv[6] * (1.0f - pen); //factor in armour pen
+        rv[6] = rv[6] * (1.0f - (pen/100)); //factor in armour pen
         for (int i = 0; i < 7; i++) {
             if (dv[i] > 0) {
                 postMitigation.setDamage(
@@ -410,13 +505,29 @@ public class DamageHandler {
             }
         }
         MinecraftForge.EVENT_BUS.post(postMitigation);
+
+        log.debug("");
+        log.debug("-> Post Mitigation");
+        log.debug("--> Damage Numbers:");
+        log.debug("---> Fire: " + postMitigation.getFire());
+        log.debug("---> Water: " + postMitigation.getWater());
+        log.debug("---> Lightning: " + postMitigation.getLightning());
+        log.debug("---> Magic: " + postMitigation.getMagic());
+        log.debug("---> Dark: " + postMitigation.getDark());
+        log.debug("---> Holy: " + postMitigation.getHoly());
+        log.debug("---> Physical: " + postMitigation.getPhysical());
+        log.debug("--> Auxiliary Information:");
+        log.debug("---> Lifesteal: " + lifesteal);
+
         float returnValue = sum(postMitigation.getDamage());
         //final thing we do is give lifesteal to the attacker, if it was a source of entity damage that was done.
         if (convertedSource instanceof EntityDamageSource) {
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 if (lifesteal != 0) {
-                    livingEntity.heal(returnValue * lifesteal);
+                    log.debug("");
+                    log.debug("-> Lifesteal healed entity for " + returnValue*(lifesteal/100));
+                    livingEntity.heal(returnValue * (lifesteal/100));
                 }
             }
         }
