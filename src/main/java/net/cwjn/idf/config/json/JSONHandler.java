@@ -95,9 +95,10 @@ public class JSONHandler {
         }
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             if (item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem) {
+                boolean r = item instanceof BowItem || item instanceof CrossbowItem;
                 if (item instanceof IDFCustomEquipment modItem) {
                     defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(),
+                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), r,
                                     OffensiveData.empty(),
                                     DefensiveData.empty(),
                                     AuxiliaryData.empty()));
@@ -110,7 +111,7 @@ public class JSONHandler {
                         dc = "pierce";
                     }
                     defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, dc,
+                            new WeaponData(0, dc, r,
                                     OffensiveData.empty(),
                                     DefensiveData.empty(),
                                     AuxiliaryData.empty()));
@@ -123,7 +124,7 @@ public class JSONHandler {
                 ));
             }
             else {
-                if (item instanceof IDFCustomEquipment modItem) {
+                if (item instanceof IDFCustomEquipment) {
                     defaultArmourItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
                             OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
                     defaultArmourItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
@@ -133,7 +134,7 @@ public class JSONHandler {
                 } else {
                     Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
                     double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                    if (damageVal > 0) {
+                    if (damageVal != 0) {
                         String dc = "strike";
                         if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
                             dc = "slash";
@@ -142,7 +143,7 @@ public class JSONHandler {
                             dc = "pierce";
                         }
                         defaultWeaponItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                                new WeaponData(0, dc,
+                                new WeaponData(0, dc, false,
                                         OffensiveData.empty(),
                                         DefensiveData.empty(),
                                         AuxiliaryData.empty()));
@@ -161,7 +162,7 @@ public class JSONHandler {
                             armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                             armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
                             armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                    if (armorVal > 0) {
+                    if (armorVal != 0) {
                         defaultArmourItemsOp0.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
                                 OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
                         defaultArmourItemsOp1.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
@@ -395,6 +396,7 @@ public class JSONHandler {
             if (weaponItemsOp0.containsKey(loc) || weaponItemsOp1.containsKey(loc) || weaponItemsOp2.containsKey(loc)) {
                 defaultTag.putBoolean("idf.equipment", true);
                 WeaponData data0 = weaponItemsOp0.get(loc);
+                defaultTag.putBoolean("idf.ranged_weapon", data0.ranged());
                 ItemData data1 = weaponItemsOp1.get(loc);
                 ItemData data2 = weaponItemsOp2.get(loc);
                 if (data0 != null) {

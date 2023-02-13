@@ -39,7 +39,7 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
         super(tier, (int) physicalDamage, (float) attackSpeed, p);
         ((ItemInterface) this).setDamageClass(damageClass);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        WeaponData data = new WeaponData(durability, damageClass,
+        WeaponData data = new WeaponData(durability, damageClass, false,
                 new OffensiveData(physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
                         lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed),
                 new DefensiveData(defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance,
@@ -48,7 +48,7 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
         );
         if (tier instanceof IDFTier modTier) {
             data = WeaponData.combine(data,
-                    new WeaponData(0, "", new OffensiveData(modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
+                    new WeaponData(0, "", false, new OffensiveData(modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
                             modTier.getLightningDamage(), modTier.getMagicDamage(), modTier.getDarkDamage(), modTier.getHolyDamage(),
                             modTier.getLifesteal(), modTier.getArmourPenetration(), modTier.getCriticalChance(),
                             modTier.getForce(), modTier.getKnockback(), modTier.getSpeed()),

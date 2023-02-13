@@ -53,8 +53,8 @@ public abstract class MixinItemStack {
         return false;
     }
 
-    @Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasTag()Z", ordinal = 0),
-    locals = LocalCapture.CAPTURE_FAILHARD)
+    //@Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasTag()Z", ordinal = 0),
+    //locals = LocalCapture.CAPTURE_FAILHARD)
     private void injectInformationCode(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir, List<Component> list, MutableComponent mutablecomponent, int j) {
         if (this.hasTag() && this.getTag().contains("idf.equipment")) {
             list.add(Util.withColor(Util.translationComponent("idf.description.tooltip").withStyle(ChatFormatting.BOLD), Color.FLORALWHITE));
@@ -91,8 +91,8 @@ public abstract class MixinItemStack {
         return false;
     }
 
-    @Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3),
-            locals = LocalCapture.CAPTURE_FAILHARD)
+    //@Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3),
+    //        locals = LocalCapture.CAPTURE_FAILHARD)
     private void injectCustomModifiersTooltip(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> callback, List<Component> list, MutableComponent mutablecomponent, int j) {
         Map<Attribute, Double> mappedOperation0 = new HashMap<>(5);
         Map<Attribute, Double> mappedOperation1 = new HashMap<>();
@@ -132,8 +132,8 @@ public abstract class MixinItemStack {
         if (this.hasTag() && this.getTag().contains("idf.equipment")) appendAttributes(player, list, mappedOperation0, mappedOperation1, mappedOperation2);
     }
 
-    @Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 4),
-            locals = LocalCapture.CAPTURE_FAILHARD)
+    //@Inject(method = "getTooltipLines", at=@At(shift = At.Shift.BEFORE, value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 4),
+    //        locals = LocalCapture.CAPTURE_FAILHARD)
     private void injectEnchantmentTooltip(Player player, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir, List<Component> list, MutableComponent mutablecomponent, int j) {
         if (shouldShowInTooltip(j, ItemStack.TooltipPart.ENCHANTMENTS)) {
             if (!EnchantmentHelper.getEnchantments((ItemStack)(Object)this).isEmpty() && !(this.getItem() instanceof EnchantedBookItem)) {
