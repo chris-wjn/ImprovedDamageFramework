@@ -1,5 +1,6 @@
 package net.cwjn.idf.event;
 
+import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.EquipmentInspectScreen;
 import net.cwjn.idf.gui.StatScreen;
@@ -15,7 +16,9 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
@@ -58,6 +62,7 @@ public class ClientEventsForgeBus {
         //get variables from event
         List<Component> list = event.getToolTip();
         ItemStack item = event.getItemStack();
+        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
         //durability, damage class, and attack speed (if melee weapon)
         if (item.hasTag() && item.getTag().contains("idf.equipment")) {
             MutableComponent component = Util.textComponent("");
@@ -77,7 +82,7 @@ public class ClientEventsForgeBus {
                 if (!item.getTag().getBoolean("idf.ranged_weapon")) {
                     component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
                     component.append(Util.translationComponent("idf.icon.attack_speed").withStyle(symbolStyle));
-                    double atkSpd = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item)).get(Attributes.ATTACK_SPEED).stream().
+                    double atkSpd = item.getAttributeModifiers(slot).get(Attributes.ATTACK_SPEED).stream().
                             filter(m -> m.getOperation() == ADDITION).
                             mapToDouble(AttributeModifier::getAmount).
                             sum();
@@ -86,7 +91,10 @@ public class ClientEventsForgeBus {
             }
             list.add(component);
         }
-
+        Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(slot);
+        for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) {
+            
+        }
     }
 
     @SubscribeEvent
