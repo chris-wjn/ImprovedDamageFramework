@@ -1,6 +1,7 @@
 package net.cwjn.idf.event;
 
 import com.google.common.collect.Multimap;
+import com.google.common.collect.SortedSetMultimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.EquipmentInspectScreen;
 import net.cwjn.idf.gui.StatScreen;
@@ -63,8 +64,10 @@ public class ClientEventsForgeBus {
         List<Component> list = event.getToolTip();
         ItemStack item = event.getItemStack();
         EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
+        boolean doAttributeTooltips = false;
         //durability, damage class, and attack speed (if melee weapon)
         if (item.hasTag() && item.getTag().contains("idf.equipment")) {
+            doAttributeTooltips = true;
             MutableComponent component = Util.textComponent("");
             component.append(Util.translationComponent("idf.icon.durability").withStyle(symbolStyle));
             if (item.isDamageableItem()) {
@@ -91,9 +94,12 @@ public class ClientEventsForgeBus {
             }
             list.add(component);
         }
-        Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(slot);
-        for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) {
-            
+        if (doAttributeTooltips) {
+
+            SortedSetMultimap<Attribute, AttributeModifier> multimap = (SortedSetMultimap<Attribute, AttributeModifier>) item.getAttributeModifiers(slot);
+            for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) {
+
+            }
         }
     }
 
