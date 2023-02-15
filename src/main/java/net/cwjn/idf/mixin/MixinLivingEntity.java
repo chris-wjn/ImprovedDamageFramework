@@ -1,5 +1,7 @@
 package net.cwjn.idf.mixin;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.*;
@@ -11,14 +13,26 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
+import org.antlr.v4.runtime.misc.MultiMap;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Map;
+
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
@@ -65,8 +79,66 @@ public class MixinLivingEntity {
         }
     }
 
+    @Inject(method = "collectEquipmentChanges", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/world/entity/ai/attributes/AttributeMap;addTransientAttributeModifiers(Lcom/google/common/collect/Multimap;)V"),
+    locals = LocalCapture.CAPTURE_FAILHARD)
+    private void captureLocalsForRedirect(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> callback, Map map, EquipmentSlot[] var2, int var3, int var4, EquipmentSlot equipmentslot, ItemStack itemstack, ItemStack itemstack1) {
+        slotOfItem = equipmentslot;
+        item = itemstack;
+    }
+
+    private EquipmentSlot slotOfItem;
+    private ItemStack item;
+
+    @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ai/attributes/AttributeMap;addTransientAttributeModifiers(Lcom/google/common/collect/Multimap;)V"))
+    private void changeMainhandAttributeLogic(AttributeMap livingEntityAttributes, Multimap<Attribute, AttributeModifier> itemAttributeModifers) {
+        Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
+        if (slotOfItem == EquipmentSlot.MAINHAND) {
+            if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
+                for (Map.Entry<Attribute, AttributeModifier> entry : itemAttributeModifers.entries()) {
+                    String name = entry.getKey().getDescriptionId().toLowerCase();
+                    if (!(name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") ||
+                            name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))) {
+                        newMap.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            } else {
+                for (Map.Entry<Attribute, AttributeModifier> entry : itemAttributeModifers.entries()) {
+                    if (entry.getKey().getDescriptionId().toLowerCase().contains("damage") || entry.getKey().getDescriptionId().toLowerCase().contains("attack_speed")) {
+                        Collection<AttributeModifier> mods = itemAttributeModifers.get(entry.getKey());
+                        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+                        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                        double finalValue = f1 * f2;
+                        newMap.put(entry.getKey(), new AttributeModifier("mainhandConversion", finalValue, ADDITION));
+                    } else {
+                        newMap.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            livingEntityAttributes.addTransientAttributeModifiers(newMap);
+            return;
+        }
+        if (slotOfItem.getType() == EquipmentSlot.Type.ARMOR) {
+            for (Map.Entry<Attribute, AttributeModifier> entry : itemAttributeModifers.entries()) {
+                if (entry.getKey().getDescriptionId().toLowerCase().contains("armor_toughness")) {
+                    Collection<AttributeModifier> mods = itemAttributeModifers.get(entry.getKey());
+                    final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                    double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+                    double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                    double finalValue = f1*f2;
+                    newMap.put(entry.getKey(), new AttributeModifier("armourConversion", finalValue, ADDITION));
+                } else {
+                    newMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            livingEntityAttributes.addTransientAttributeModifiers(newMap);
+            return;
+        }
+        livingEntityAttributes.addTransientAttributeModifiers(itemAttributeModifers);
+    }
     /*
-    All the following methods were written by me, cwJn, to change the vanilla way iFrames and knockback is handled.
+    All the following methods were written by me to change the vanilla way iFrames and knockback is handled.
     By default, any instance of damage will knockback the entity slightly. This is fkn stupid, and makes no sense.
     Knockback is now handled in idf.damage.DamageHandler. For iFrames, it will no longer hurt the entity with the difference
     in damage if the new attack is higher. If the target is in iFrames, they are immune to anything except damage sources

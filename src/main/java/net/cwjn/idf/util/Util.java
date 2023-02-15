@@ -24,9 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_INDICATORS;
@@ -41,6 +39,8 @@ public class Util {
     private static final Style INDICATOR = Style.EMPTY.withFont(FONT_INDICATORS);
     private static final DecimalFormat attributeFormat = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
+    public static final List<Component> damageTooltip = new ArrayList<>();
+    public static final List<Component> resistanceTooltip = new ArrayList<>();
     public static final UUID[] UUID_BASE_STAT_ADDITION = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F7"),
             UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F0"),
@@ -62,6 +62,25 @@ public class Util {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FA"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C62"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC8")};
+
+    static {
+        MutableComponent damageComponent = Util.textComponent(" ");
+        damageComponent.append(Util.translationComponent("idf.icon.damage").withStyle(ICON));
+        damageComponent.append(Util.translationComponent("idf.damage.tooltip"));
+        damageTooltip.add(damageComponent);
+        MutableComponent resistanceComponent = Util.textComponent(" ");
+        damageComponent.append(Util.translationComponent("idf.icon.resistance").withStyle(ICON));
+        damageComponent.append(Util.translationComponent("idf.resistance.tooltip"));
+        resistanceTooltip.add(resistanceComponent);
+    }
+
+    public static List<Component> getNewDamageTooltip() {
+        return List.copyOf(damageTooltip);
+    }
+
+    public static List<Component> getNewResistanceTooltip() {
+        return List.copyOf(resistanceTooltip);
+    }
 
     public static MutableComponent withColor(MutableComponent text, int color) {
         return text.withStyle(text.getStyle().withColor(net.minecraft.network.chat.TextColor.fromRgb(color & 0xFFFFFF)));
