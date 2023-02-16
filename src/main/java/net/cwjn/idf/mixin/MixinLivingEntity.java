@@ -14,13 +14,11 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.antlr.v4.runtime.misc.MultiMap;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -79,23 +77,14 @@ public class MixinLivingEntity {
         }
     }
 
-    @Inject(method = "collectEquipmentChanges", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/world/entity/ai/attributes/AttributeMap;addTransientAttributeModifiers(Lcom/google/common/collect/Multimap;)V"),
-    locals = LocalCapture.CAPTURE_FAILHARD)
-    private void captureLocalsForRedirect(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> callback, Map map, EquipmentSlot[] var2, int var3, int var4, EquipmentSlot equipmentslot, ItemStack itemstack, ItemStack itemstack1) {
-        slotOfItem = equipmentslot;
-        item = itemstack;
-    }
-
-    private EquipmentSlot slotOfItem;
-    private ItemStack item;
-
     @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/ai/attributes/AttributeMap;addTransientAttributeModifiers(Lcom/google/common/collect/Multimap;)V"))
-    private void changeMainhandAttributeLogic(AttributeMap livingEntityAttributes, Multimap<Attribute, AttributeModifier> itemAttributeModifers) {
+            target = "Lnet/minecraft/world/item/ItemStack;getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
+    private Multimap<Attribute, AttributeModifier> changeMainhandAttributeLogic(ItemStack item, EquipmentSlot slot) {
         Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
-        if (slotOfItem == EquipmentSlot.MAINHAND) {
+        Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
+        if (slot == EquipmentSlot.MAINHAND) {
             if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
-                for (Map.Entry<Attribute, AttributeModifier> entry : itemAttributeModifers.entries()) {
+                for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
                     if (!(name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") ||
                             name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))) {
@@ -103,39 +92,39 @@ public class MixinLivingEntity {
                     }
                 }
             } else {
-                for (Map.Entry<Attribute, AttributeModifier> entry : itemAttributeModifers.entries()) {
-                    if (entry.getKey().getDescriptionId().toLowerCase().contains("damage") || entry.getKey().getDescriptionId().toLowerCase().contains("attack_speed")) {
-                        Collection<AttributeModifier> mods = itemAttributeModifers.get(entry.getKey());
+                for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
+                    if (entry.getKey().getDescriptionId().toLowerCase().contains("damage") ||
+                        entry.getKey().getDescriptionId().toLowerCase().contains("attack_speed") ||
+                        entry.getKey().getDescriptionId().toLowerCase().contains("force")) {
+                        Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
                         final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                         double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
                         double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                         double finalValue = f1 * f2;
-                        newMap.put(entry.getKey(), new AttributeModifier("mainhandConversion", finalValue, ADDITION));
+                        newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "mainhandConversion", finalValue, ADDITION));
                     } else {
                         newMap.put(entry.getKey(), entry.getValue());
                     }
                 }
             }
-            livingEntityAttributes.addTransientAttributeModifiers(newMap);
-            return;
+            return newMap;
         }
-        if (slotOfItem.getType() == EquipmentSlot.Type.ARMOR) {
-            for (Map.Entry<Attribute, AttributeModifier> entry : itemAttributeModifers.entries()) {
+        if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+            for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                 if (entry.getKey().getDescriptionId().toLowerCase().contains("armor_toughness")) {
-                    Collection<AttributeModifier> mods = itemAttributeModifers.get(entry.getKey());
+                    Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
                     double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                     double finalValue = f1*f2;
-                    newMap.put(entry.getKey(), new AttributeModifier("armourConversion", finalValue, ADDITION));
+                    newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "armourConversion", finalValue, ADDITION));
                 } else {
                     newMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            livingEntityAttributes.addTransientAttributeModifiers(newMap);
-            return;
+            return newMap;
         }
-        livingEntityAttributes.addTransientAttributeModifiers(itemAttributeModifers);
+        return oldMap;
     }
     /*
     All the following methods were written by me to change the vanilla way iFrames and knockback is handled.

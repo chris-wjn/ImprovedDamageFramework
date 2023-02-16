@@ -62,6 +62,13 @@ public class Util {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FA"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C62"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC8")};
+    public static final UUID[] UUID_STAT_CONVERSION = {
+            UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FA"),
+            UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F3"),
+            UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C62"),
+            UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FB"),
+            UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C63"),
+            UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC9")};
 
     static {
         MutableComponent damageComponent = Util.textComponent(" ");

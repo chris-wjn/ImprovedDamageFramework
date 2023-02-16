@@ -107,7 +107,6 @@ public class ClientEventsForgeBus {
             list.add(component);
         }
         if (doAttributeTooltips) {
-            list.add(Util.textComponent(""));
             Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(slot);
             List<Component> damage = new ArrayList<>();
             List<Component> resistance = new ArrayList<>();
@@ -128,25 +127,25 @@ public class ClientEventsForgeBus {
                     if (name.contains("armor_toughness")) continue;
                 }
                 MutableComponent component = Util.textComponent("");
-                component.append(Util.translationComponent("icon." + a.getDescriptionId()).withStyle(symbolStyle));
+                component.append(Util.translationComponent("idf.icon." + a.getDescriptionId()).withStyle(symbolStyle));
                 Collection<AttributeModifier> mods = multimap.get(a);
                 if (slot == EquipmentSlot.MAINHAND && name.contains("damage")) {
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
                     double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                     double finalValue = f1*f2;
-                    component.append(Util.textComponent(finalValue+""));
+                    component.append(Util.textComponent(finalValue+"").withStyle(ChatFormatting.YELLOW));
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    component.append(flat + "");
+                    component.append(Util.textComponent(flat + "").withStyle(ChatFormatting.YELLOW));
                     double baseMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).sum();
-                    if (baseMult != 0) component.append(" + " + (baseMult + 1) * 100 + "%");
+                    if (baseMult != 0) component.append(" + " + (baseMult + 1) * 100 + "%").withStyle(ChatFormatting.YELLOW);
                     double totalMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    if (totalMult != 1) component.append(" + " + totalMult * 100 + "%");
+                    if (totalMult != 1) component.append(" + " + totalMult * 100 + "%").withStyle(ChatFormatting.YELLOW);
                 }
                 if (name.contains("damage")) {
                     damage.add(Util.textComponent(" ").append(component));
-                } else if (name.contains("resistance") || name.contains("armor")) {
+                } else if (name.contains("resistance") && !name.contains("knock") || name.contains("armor")) {
                     resistance.add(Util.textComponent(" ").append(component));
                 } else {
                     other.add(component);
