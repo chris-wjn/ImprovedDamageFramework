@@ -1,14 +1,1 @@
-{
-  "example": {
-    "fire": 0.0,
-    "water": 0.0,
-    "lightning": 0.0,
-    "magic": 0.0,
-    "dark": 0.0,
-    "pen": 0.0,
-    "lifesteal": 0.0,
-    "weight": 0.0,
-    "damageClass": "pierce",
-    "isTrueDamage": false
-  }
-}
+{}

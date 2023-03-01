@@ -9,13 +9,21 @@ public record DefensiveData (double defense, double pRes, double fRes, double wR
                              double eva, double kbr, double str, double prc, double sls) {
 
     public static DefensiveData entityStandard() {
-        return new DefensiveData(1, 0, 0, 0, 0, 0, 0, 0,
+        return new DefensiveData(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 1.0, 1.0, 1.0);
     }
 
     public static DefensiveData empty() {
         return new DefensiveData(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0);
+    }
+
+    public static DefensiveData resistance(double d, double p, double f, double w, double l, double m, double da, double h) {
+        return new DefensiveData(d, p, f, w, l, m, da, h, 0, 0, 0, 0, 0);
+    }
+
+    public static DefensiveData resistanceAndClass(double d, double p, double f, double w, double l, double m, double da, double h, double st, double pr, double sl) {
+        return new DefensiveData(d, p, f, w, l, m, da, h, 0, 0, st, pr, sl);
     }
 
     public static DefensiveData combine (DefensiveData data1, DefensiveData data2) {

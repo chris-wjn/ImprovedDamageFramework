@@ -25,7 +25,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,14 +32,18 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static net.cwjn.idf.ImprovedDamageFramework.IAFLoaded;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_BASE;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
@@ -76,20 +79,21 @@ public class JSONHandler {
             registerTypeAdapter(OffensiveData.class, new OffensiveData.OffensiveDataSerializer()).
             registerTypeAdapter(DefensiveData.class, new DefensiveData.DefensiveDataSerializer()).
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
+            registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObjectSerializer()).
             create();
 
     public static void init(File configDir) {
-        Map<String, ArmourData> defaultArmourItemsOp0  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_operation_addition.json")))), new TypeToken<Map<String, ArmourData>>(){}.getType());
-        Map<String, ItemData> defaultArmourItemsOp1  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_operation_multiply_base.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, ItemData> defaultArmourItemsOp2  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_operation_multiply_total.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, WeaponData> defaultWeaponItemsOp0  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_addition.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
-        Map<String, ItemData> defaultWeaponItemsOp1 = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_multiply_base.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, ItemData> defaultWeaponItemsOp2  = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_multiply_total.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, EntityData> defaultEntityData = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
-        Map<String, SourceCatcherData> defaultSourceData = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
+        Map<String, ArmourData> defaultArmourItemsOp0  = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_operation_addition.json")))), new TypeToken<Map<String, ArmourData>>(){}.getType());
+        Map<String, ItemData> defaultArmourItemsOp1  = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_operation_multiply_base.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, ItemData> defaultArmourItemsOp2  = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_operation_multiply_total.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, WeaponData> defaultWeaponItemsOp0  = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_addition.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
+        Map<String, ItemData> defaultWeaponItemsOp1 = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_multiply_base.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, ItemData> defaultWeaponItemsOp2  = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_operation_multiply_total.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, EntityData> defaultEntityData = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
+        Map<String, SourceCatcherData> defaultSourceData = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
             if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
-                defaultEntityData.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(
+                defaultEntityData.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(null,
                         "strike", OffensiveData.entityStandard(), DefensiveData.entityStandard(), AuxiliaryData.empty()));
             }
         }
@@ -267,6 +271,21 @@ public class JSONHandler {
         JSONUtil.writeFile(new File(configDir, "weapon_items_operation_addition.json"), sortedWeaponOp0Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_base.json"), sortedWeaponOp1Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_operation_multiply_total.json"), sortedWeaponOp2Map);
+        if (ModList.get().isLoaded("iaf")) {
+            File iafDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedAdventureFramework").toFile();
+            Map<String, RpgItemData> weapons = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/weapons.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
+            Map<String, RpgItemData> armour = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/armour.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
+            for (String s : sortedWeaponOp0Map.keySet()) {
+                weapons.putIfAbsent(s, RpgItemData.empty());
+            }
+            for (String s : sortedArmourOp0Map.keySet()) {
+                armour.putIfAbsent(s, RpgItemData.empty());
+            }
+            Map<String, RpgItemData> sortedWeapons = new TreeMap<>(weapons);
+            Map<String, RpgItemData> sortedArmour = new TreeMap<>(armour);
+            JSONUtil.writeFile(new File(iafDir, "weapons.json"), sortedWeapons);
+            JSONUtil.writeFile(new File(iafDir, "armour.json"), sortedArmour);
+        }
     }
 
     @OnlyIn(Dist.DEDICATED_SERVER)
@@ -366,7 +385,12 @@ public class JSONHandler {
     }
 
     public static EntityData getEntityData(ResourceLocation key) {
-        return entityMap.getOrDefault(key, null);
+        EntityData data = entityMap.getOrDefault(key, null);
+        if (data == null) return null;
+        return new EntityData(null, data.damageClass(),
+                OffensiveData.combine(data.oData(), data.template().getOffensiveData()),
+                DefensiveData.combine(data.dData(), data.template().getDefensiveData()),
+                AuxiliaryData.combine(data.aData(), data.template().getAuxiliaryData()));
     }
 
     private static void saveVanillaStats() {

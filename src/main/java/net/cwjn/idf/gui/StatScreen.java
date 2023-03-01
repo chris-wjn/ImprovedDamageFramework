@@ -124,13 +124,13 @@ public class StatScreen extends Screen {
         drawCenteredString(font, matrix, player.getAttributeValue(HOLY.damage), left+70, top+136, 0x111111);
         font.draw(matrix, drawIconAndString("lifesteal", "lifesteal"), left+96, top+47, 0xffffff);
         drawbar(matrix, left+96, top+47);
-        drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.LIFESTEAL.get()), left+149, top+47, 0x111111);
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(IDFAttributes.LIFESTEAL.get()), left+149, top+47, 0x111111);
         font.draw(matrix, drawIconAndString("armour_penetration", "armour_penetration"), left+96, top+63, 0xffffff);
         drawbar(matrix, left+96, top+63);
-        drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.PENETRATING.get()), left+149, top+63, 0x111111);
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(IDFAttributes.PENETRATING.get()), left+149, top+63, 0x111111);
         font.draw(matrix, drawIconAndString("critical_chance", "critical_chance"), left+96, top+79, 0xffffff);
         drawbar(matrix, left+96, top+79);
-        drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()), left+149, top+79, 0x111111);
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()), left+149, top+79, 0x111111);
         font.draw(matrix, drawIconAndString("force", "force"), left+96, top+95, 0xffffff);
         drawbar(matrix, left+96, top+95);
         drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.FORCE.get()), left+149, top+95, 0x111111);
@@ -169,10 +169,10 @@ public class StatScreen extends Screen {
         drawCenteredString(font, matrix, player.getAttributeValue(Attributes.ARMOR_TOUGHNESS), left+149, top+47, 0x111111);
         font.draw(matrix, drawIconAndString("knockback_resistance", "knockback_resistance"), left+96, top+63, 0xffffff);
         drawbar(matrix, left+96, top+63);
-        drawCenteredString(font, matrix, player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), left+149, top+63, 0x111111);
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)*100, left+149, top+63, 0x111111);
         font.draw(matrix, drawIconAndString("evasion", "evasion"), left+96, top+79, 0xffffff);
         drawbar(matrix, left+96, top+79);
-        drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.EVASION.get()), left+149, top+79, 0x111111);
+        drawCenteredPercentage(font, matrix, player.getAttributeValue(IDFAttributes.EVASION.get()), left+149, top+79, 0x111111);
         font.draw(matrix, drawIconAndString("strike", "strike"), left+96, top+95, 0xffffff);
         drawbar(matrix, left+96, top+95);
         drawCenteredPercentage(font, matrix, (player.getAttributeValue(IDFAttributes.STRIKE_MULT.get())*100), left+149, top+95,

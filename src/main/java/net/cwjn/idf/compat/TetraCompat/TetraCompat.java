@@ -34,17 +34,17 @@ public class TetraCompat {
 
     private static final Gson gson = new Gson();
     private static final ItemPredicateModular isPierce = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/predicates/pierce.json")))), JsonObject.class));
+            .getResourceAsStream("data/idf/tetra_predicates/pierce.json")))), JsonObject.class));
     private static final ItemPredicateModular isSlash = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/predicates/slash.json")))), JsonObject.class));
+            .getResourceAsStream("data/idf/tetra_predicates/slash.json")))), JsonObject.class));
     private static final ItemPredicateModular isStrike = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/predicates/strike.json")))), JsonObject.class));
+            .getResourceAsStream("data/idf/tetra_predicates/strike.json")))), JsonObject.class));
     private static final ItemPredicateModular isPierceRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/predicates/pierce_right.json")))), JsonObject.class));
+            .getResourceAsStream("data/idf/tetra_predicates/pierce_right.json")))), JsonObject.class));
     private static final ItemPredicateModular isSlashRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/predicates/slash_right.json")))), JsonObject.class));
+            .getResourceAsStream("data/idf/tetra_predicates/slash_right.json")))), JsonObject.class));
     private static final ItemPredicateModular isStrikeRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/predicates/strike_right.json")))), JsonObject.class));
+            .getResourceAsStream("data/idf/tetra_predicates/strike_right.json")))), JsonObject.class));
 
     public static void register() {
         MinecraftForge.EVENT_BUS.register(TetraCompat.class);

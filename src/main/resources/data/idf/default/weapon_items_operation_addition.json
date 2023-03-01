@@ -1,0 +1,1322 @@
+{
+  "minecraft:bow": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": true,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 3.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 10.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 4.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 5.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:crossbow": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": true,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:diamond_axe": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:diamond_hoe": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:diamond_pickaxe": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:diamond_shovel": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:diamond_sword": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:golden_axe": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:golden_hoe": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:golden_pickaxe": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:golden_shovel": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:golden_sword": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:iron_axe": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:iron_hoe": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:iron_pickaxe": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:iron_shovel": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:iron_sword": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:netherite_axe": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:netherite_hoe": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:netherite_pickaxe": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:netherite_shovel": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:netherite_sword": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:stone_axe": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:stone_hoe": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:stone_pickaxe": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:stone_shovel": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:stone_sword": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:trident": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wooden_axe": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wooden_hoe": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wooden_pickaxe": {
+    "Bonus Durability": 0,
+    "Damage Class": "pierce",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wooden_shovel": {
+    "Bonus Durability": 0,
+    "Damage Class": "strike",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wooden_sword": {
+    "Bonus Durability": 0,
+    "Damage Class": "slash",
+    "Ranged?": false,
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Resistance - PHYSICAL": 0.0,
+      "Resistance - FIRE": 0.0,
+      "Resistance - WATER": 0.0,
+      "Resistance - LIGHTNING": 0.0,
+      "Resistance - MAGIC": 0.0,
+      "Resistance - DARK": 0.0,
+      "Resistance - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Defense": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 0.0,
+      "Luck": 0.0
+    }
+  }
+}

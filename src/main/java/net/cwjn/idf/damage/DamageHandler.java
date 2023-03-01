@@ -72,7 +72,7 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getWeight() <= 0 ? 1 : Mth.clamp(Math.sqrt(event.getWeight())/Math.sqrt(event.getDef() <= 0 ? 1 : event.getDef()), 0.5, 2);
+        double weightMultiplier = event.getWeight() < 0 ? 1 : Mth.clamp(Math.sqrt(event.getWeight())/Math.sqrt(event.getDef() <= 0 ? 1 : event.getDef()), 0.5, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getHolyRes(), event.getPhysicalRes()};
 

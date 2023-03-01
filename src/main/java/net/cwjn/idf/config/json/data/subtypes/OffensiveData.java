@@ -13,6 +13,10 @@ public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, 
                 0, 0, 0, 0.4, 0);
     }
 
+    public static OffensiveData damage(double p, double f, double w, double l, double m, double d, double h) {
+        return new OffensiveData(p, f, w, l, m, d, h, 0, 0, 0, 0, 0.4, 0);
+    }
+
     public static OffensiveData empty() {
         return new OffensiveData(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0.0, 0);

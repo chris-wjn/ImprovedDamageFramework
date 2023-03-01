@@ -27,6 +27,7 @@ public class ImprovedDamageFramework {
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "idf";
+    public static boolean IAFLoaded = false;
     public static final ResourceLocation FONT_ICONS = new ResourceLocation("idf", "icons");
     public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
 

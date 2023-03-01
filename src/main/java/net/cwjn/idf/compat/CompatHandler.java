@@ -17,10 +17,15 @@ public class CompatHandler {
             TetraCompat.register();
             ImprovedDamageFramework.LOGGER.info("Tetra compat loaded.");
         }
+        if (ImprovedDamageFramework.IAFLoaded) {
+            ImprovedDamageFramework.LOGGER.info("Detected ImprovedAdventureFramework. Good choice.");
+        }
     }
 
     public static void initClient(FMLClientSetupEvent event) {
-        TetraCompat.registerClient();
+        if (ModList.get().isLoaded("tetra")) {
+            TetraCompat.registerClient();
+        }
     }
 
 }
