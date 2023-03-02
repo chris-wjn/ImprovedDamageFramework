@@ -38,7 +38,7 @@ public class PatchouliCompat implements IComponentProcessor {
         String name = variables.get("entity").asString();
         data = JSONHandler.getEntityData(new ResourceLocation(name));
         type = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name));
-        if (data == null) data = new EntityData("MOB NOT IN JSON FILE!", OffensiveData.entityStandard(),
+        if (data == null) data = new EntityData(null, "MOB NOT IN JSON FILE!", OffensiveData.entityStandard(),
                 DefensiveData.entityStandard(), AuxiliaryData.empty());
     }
 
