@@ -1,10 +1,13 @@
 package net.cwjn.idf.compat;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.compat.TetraCompat.TetraCompat;
+import net.cwjn.idf.compat.patchouli.PatchouliCompat;
+import net.cwjn.idf.compat.tetra.TetraCompat;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+
+import java.net.URISyntaxException;
 
 public class CompatHandler {
 

@@ -1,4 +1,4 @@
-package net.cwjn.idf.compat.TetraCompat;
+package net.cwjn.idf.compat.tetra;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

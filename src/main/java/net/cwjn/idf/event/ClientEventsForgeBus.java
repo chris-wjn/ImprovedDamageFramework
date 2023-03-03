@@ -26,7 +26,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +50,10 @@ public class ClientEventsForgeBus {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final DecimalFormat onePlace = new DecimalFormat("#.#");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
+
+    public static void onJoinWorld(PlayerEvent.PlayerLoggedInEvent event) {
+        event.getEntity().getPersistentData();
+    }
 
     public static void addInspectText(ItemTooltipEvent event) {
         ItemStack hoveredItem = event.getItemStack();

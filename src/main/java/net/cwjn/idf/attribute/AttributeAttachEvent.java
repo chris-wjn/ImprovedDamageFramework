@@ -1,8 +1,8 @@
 package net.cwjn.idf.attribute;
 
+import net.cwjn.idf.Data;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.Config;
-import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +18,7 @@ public class AttributeAttachEvent {
     public static void attachAttributes(EntityAttributeModificationEvent event) {
         Config.init();
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-            EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(entityType));
+            EntityData data = Data.LogicalData.getEntityData(Util.getEntityRegistryName(entityType));
             if (data != null) {
                 event.add(entityType, FIRE.damage, data.oData().fDmg());
                 event.add(entityType, WATER.damage, data.oData().wDmg());

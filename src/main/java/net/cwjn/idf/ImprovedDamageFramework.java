@@ -5,7 +5,7 @@ import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
-import net.cwjn.idf.event.ClientEventsModBus;
+import net.cwjn.idf.gui.BestiaryScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.hud.PlayerHealthBar;
 import net.cwjn.idf.network.PacketHandler;
@@ -21,6 +21,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.net.URISyntaxException;
 
 @Mod("idf")
 public class ImprovedDamageFramework {
@@ -58,7 +60,7 @@ public class ImprovedDamageFramework {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatScreen.class);
-        MinecraftForge.EVENT_BUS.register(new ClientEventsModBus());
+        MinecraftForge.EVENT_BUS.register(BestiaryScreen.class);
         if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::deleteArmorHud);
         CompatHandler.initClient(event);

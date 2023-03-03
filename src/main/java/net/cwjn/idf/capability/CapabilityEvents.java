@@ -1,5 +1,6 @@
 package net.cwjn.idf.capability;
 
+import net.cwjn.idf.Data;
 import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
@@ -9,7 +10,6 @@ import net.cwjn.idf.capability.provider.ArrowHelperProvider;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
 import net.cwjn.idf.capability.provider.TridentHelperProvider;
 import net.cwjn.idf.config.json.data.EntityData;
-import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +37,7 @@ public class CapabilityEvents {
     @SubscribeEvent
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof LivingEntity entity) {
-            EntityData data = JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())); //get the mob's json data
+            EntityData data = Data.LogicalData.getEntityData(Util.getEntityRegistryName(entity.getType())); //get the mob's json data
             if (data != null) {
                 event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "auxiliary"), new AuxiliaryProvider());
                 event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "arrow_helper"), new ArrowHelperProvider());
@@ -56,8 +56,8 @@ public class CapabilityEvents {
             ItemStack item = event.getTo();
             LivingEntity entity = event.getEntity();
             entity.getCapability(AuxiliaryProvider.AUXILIARY_DATA).ifPresent(h -> {
-                if (JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())) != null)
-                    h.setDamageClass(JSONHandler.getEntityData(Util.getEntityRegistryName(entity.getType())).damageClass());
+                if (Data.LogicalData.getEntityData(Util.getEntityRegistryName(entity.getType())) != null)
+                    h.setDamageClass(Data.LogicalData.getEntityData(Util.getEntityRegistryName(entity.getType())).damageClass());
                 if ((item.hasTag() && item.getTag().contains("idf.damage_class"))) {
                     h.setDamageClass(item.getTag().getString("idf.damage_class"));
                 } else {

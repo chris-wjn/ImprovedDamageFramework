@@ -1,7 +1,8 @@
-package net.cwjn.idf.compat;
+package net.cwjn.idf.compat.patchouli;
 
+import net.cwjn.idf.Data;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.json.JSONHandler;
+import net.cwjn.idf.config.json.JSONUtil;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
@@ -10,6 +11,7 @@ import net.cwjn.idf.damage.DamageHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -17,6 +19,8 @@ import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 
 import static net.cwjn.idf.util.Util.mBPS;
@@ -36,7 +40,7 @@ public class PatchouliCompat implements IComponentProcessor {
     @Override
     public void setup(IVariableProvider variables) {
         String name = variables.get("entity").asString();
-        data = JSONHandler.getEntityData(new ResourceLocation(name));
+        data = Data.LogicalData.getEntityData(new ResourceLocation(name));
         type = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name));
         if (data == null) data = new EntityData(null, "MOB NOT IN JSON FILE!", OffensiveData.entityStandard(),
                 DefensiveData.entityStandard(), AuxiliaryData.empty());
@@ -130,6 +134,17 @@ public class PatchouliCompat implements IComponentProcessor {
                             IVariable.wrap("SLS ");
             default -> null;
         };
+    }
+
+    public static void createPages() throws URISyntaxException {
+        ResourceGrabber grabber = new ResourceGrabber();
+        for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
+            String name = entityType.toString();
+            String category = entityType.getCategory() == MobCategory.MONSTER ? "idf:hostile" : "idf:nonhostile";
+            Path path = Path.of(grabber.getClass().getClassLoader().getResource("/data/idf/patchouli_books/bestiary/en_us/entries/" +
+                    category.substring(4) + "/" + name + ".json").getPath());
+            JSONUtil.writeFile(path.toFile(), new PageObject(name, category, name));
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package net.cwjn.idf.network;
 
 import com.mojang.math.Vector3f;
+import net.cwjn.idf.Data;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.particle.IDFParticles;
@@ -11,16 +12,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
+import static net.cwjn.idf.Data.LogicalData.*;
+
 @OnlyIn(Dist.CLIENT)
 public class ClientPacketHandler {
 
     public static void syncClientConfig(SyncClientConfigPacket packet) {
-        JSONHandler.armourItemsOp0 = packet.armourMap0;
-        JSONHandler.armourItemsOp1 = packet.armourMap1;
-        JSONHandler.armourItemsOp2 = packet.armourMap2;
-        JSONHandler.weaponItemsOp0 = packet.weaponMap0;
-        JSONHandler.weaponItemsOp1 = packet.weaponMap1;
-        JSONHandler.weaponItemsOp2 = packet.weaponMap2;
+        LOGICAL_ARMOUR_MAP_OP_0 = packet.armourMap0;
+        LOGICAL_ARMOUR_MAP_OP_1 = packet.armourMap1;
+        LOGICAL_ARMOUR_MAP_OP_2 = packet.armourMap2;
+        LOGICAL_WEAPON_MAP_OP_0 = packet.weaponMap0;
+        LOGICAL_WEAPON_MAP_OP_1 = packet.weaponMap1;
+        LOGICAL_WEAPON_MAP_OP_2 = packet.weaponMap2;
         JSONHandler.updateItems();
     }
 
