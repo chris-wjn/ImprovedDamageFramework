@@ -1,7 +1,6 @@
 package net.cwjn.idf.event;
 
 import com.google.common.collect.Multimap;
-import com.google.common.collect.SortedSetMultimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.gui.EquipmentInspectScreen;
 import net.cwjn.idf.gui.StatScreen;
@@ -26,9 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,7 +34,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
@@ -50,10 +46,6 @@ public class ClientEventsForgeBus {
     private static final DecimalFormat df = new DecimalFormat("#.##");
     private static final DecimalFormat onePlace = new DecimalFormat("#.#");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
-
-    public static void onJoinWorld(PlayerEvent.PlayerLoggedInEvent event) {
-        event.getEntity().getPersistentData();
-    }
 
     public static void addInspectText(ItemTooltipEvent event) {
         ItemStack hoveredItem = event.getItemStack();
@@ -135,19 +127,17 @@ public class ClientEventsForgeBus {
                 MutableComponent component = Util.textComponent("");
                 component.append(Util.translationComponent("idf.icon." + a.getDescriptionId()).withStyle(symbolStyle));
                 Collection<AttributeModifier> mods = multimap.get(a);
-                if (slot == EquipmentSlot.MAINHAND && name.contains("damage")) {
+                if (slot.getType() == EquipmentSlot.Type.HAND && name.contains("damage")) {
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
-                    double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    double finalValue = f1*f2;
-                    component.append(Util.textComponent(finalValue+"").withStyle(ChatFormatting.YELLOW));
+                    double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                    double finalValue = flat*mult;
+                    component.append(Util.textComponent(finalValue+""));
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    component.append(Util.textComponent(flat + "").withStyle(ChatFormatting.YELLOW));
-                    double baseMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).sum();
-                    if (baseMult != 0) component.append(" + " + (baseMult + 1) * 100 + "%").withStyle(ChatFormatting.YELLOW);
+
+                    component.append(Util.textComponent(flat + ""));
                     double totalMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    if (totalMult != 1) component.append(" + " + totalMult * 100 + "%").withStyle(ChatFormatting.YELLOW);
+                    if (totalMult != 1) component.append(" + " + totalMult * 100 + "%");
                 }
                 if (name.contains("damage")) {
                     damage.add(Util.textComponent(" ").append(component));
@@ -157,9 +147,17 @@ public class ClientEventsForgeBus {
                     other.add(component);
                 }
             }
+            while (!other.isEmpty()) {
+                MutableComponent component = Util.textComponent("");
+                for (int i = 1; i <= 3; ++i) {
+                    component.append(other.remove(0));
+                    if (!other.isEmpty() && i < 3) component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
+                    if (other.isEmpty()) break;
+                }
+                list.add(component);
+            }
             if (damage.size() > 1) list.addAll(damage);
             if (resistance.size() > 1) list.addAll(resistance);
-            list.addAll(other);
         }
     }
 

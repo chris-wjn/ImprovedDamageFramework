@@ -1,10 +1,10 @@
 package net.cwjn.idf.config.json.data;
 
-import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.damage.IDFDamageSource;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.cwjn.idf.damage.IDFIndirectEntityDamageSource;
 import net.cwjn.idf.damage.IDFInterface;
+import net.cwjn.idf.data.CommonData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
@@ -19,8 +19,8 @@ public record SourceCatcherData(float fire, float water, float lightning, float 
         final boolean isExplosion = source.isExplosion();
         final boolean isBypassInvul = source.isBypassInvul();
         DamageSource newSource;
-        if (JSONHandler.sourceMap.containsKey(source.msgId)) {
-            SourceCatcherData data = JSONHandler.sourceMap.get(source.msgId);
+        if (CommonData.LOGICAL_SOURCE_MAP.containsKey(source.msgId)) {
+            SourceCatcherData data = CommonData.LOGICAL_SOURCE_MAP.get(source.msgId);
             if (data.isTrueDamage) {
                 if (source instanceof IndirectEntityDamageSource) {
                     newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),

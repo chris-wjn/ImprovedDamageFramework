@@ -16,40 +16,32 @@ import java.util.function.Supplier;
 
 public class SyncClientConfigPacket implements IDFPacket {
 
-    public final Map<ResourceLocation, WeaponData> weaponMap0;
-    public final Map<ResourceLocation, ItemData> weaponMap1;
-    public final Map<ResourceLocation, ItemData> weaponMap2;
-    public final Map<ResourceLocation, ArmourData> armourMap0;
-    public final Map<ResourceLocation, ItemData> armourMap1;
-    public final Map<ResourceLocation, ItemData> armourMap2;
+    public final Map<ResourceLocation, WeaponData> weaponFlat;
+    public final Map<ResourceLocation, ItemData> weaponMult;
+    public final Map<ResourceLocation, ArmourData> armourFlat;
+    public final Map<ResourceLocation, ItemData> armourMult;
 
-    public SyncClientConfigPacket(Map<ResourceLocation, WeaponData> weaponMap0, Map<ResourceLocation, ItemData> weaponMap1, Map<ResourceLocation, ItemData> weaponMap2,
-                                  Map<ResourceLocation, ArmourData> armourMap0, Map<ResourceLocation, ItemData> armourMap1, Map<ResourceLocation, ItemData> armourMap2) {
-        this.weaponMap0 = weaponMap0;
-        this.weaponMap1 = weaponMap1;
-        this.weaponMap2 = weaponMap2;
-        this.armourMap0 = armourMap0;
-        this.armourMap1 = armourMap1;
-        this.armourMap2 = armourMap2;
+    public SyncClientConfigPacket(Map<ResourceLocation, WeaponData> weaponMap0, Map<ResourceLocation, ItemData> weaponMap2,
+                                  Map<ResourceLocation, ArmourData> armourMap0, Map<ResourceLocation, ItemData> armourMap2) {
+        this.weaponFlat = weaponMap0;
+        this.weaponMult = weaponMap2;
+        this.armourFlat = armourMap0;
+        this.armourMult = armourMap2;
     }
 
     public static void encode(SyncClientConfigPacket packet, FriendlyByteBuf buffer) {
-        buffer.writeMap(packet.weaponMap0, FriendlyByteBuf::writeResourceLocation, (buf, WeaponData) -> WeaponData.writeWeaponData(buf));
-        buffer.writeMap(packet.weaponMap1, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
-        buffer.writeMap(packet.weaponMap2, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
-        buffer.writeMap(packet.armourMap0, FriendlyByteBuf::writeResourceLocation, (buf, ArmourData) -> ArmourData.writeArmourData(buf));
-        buffer.writeMap(packet.armourMap1, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
-        buffer.writeMap(packet.armourMap2, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
+        buffer.writeMap(packet.weaponFlat, FriendlyByteBuf::writeResourceLocation, (buf, WeaponData) -> WeaponData.writeWeaponData(buf));
+        buffer.writeMap(packet.weaponMult, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
+        buffer.writeMap(packet.armourFlat, FriendlyByteBuf::writeResourceLocation, (buf, ArmourData) -> ArmourData.writeArmourData(buf));
+        buffer.writeMap(packet.armourMult, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
     }
 
     public static SyncClientConfigPacket decode(FriendlyByteBuf buffer) {
         Map<ResourceLocation, WeaponData> weaponMap00 = buffer.readMap(FriendlyByteBuf::readResourceLocation, WeaponData::readWeaponData);
-        Map<ResourceLocation, ItemData> weaponMap11 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
         Map<ResourceLocation, ItemData> weaponMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
         Map<ResourceLocation, ArmourData> armourMap00 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ArmourData::readArmourData);
-        Map<ResourceLocation, ItemData> armourMap11 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
         Map<ResourceLocation, ItemData> armourMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
-        return new SyncClientConfigPacket(weaponMap00, weaponMap11, weaponMap22, armourMap00, armourMap11, armourMap22);
+        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22);
     }
 
     public static void handle(SyncClientConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {

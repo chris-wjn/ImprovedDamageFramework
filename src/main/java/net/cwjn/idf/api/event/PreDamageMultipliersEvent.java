@@ -1,6 +1,7 @@
 package net.cwjn.idf.api.event;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 public class PreDamageMultipliersEvent extends Event {

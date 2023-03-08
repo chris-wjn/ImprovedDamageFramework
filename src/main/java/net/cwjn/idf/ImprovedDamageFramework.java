@@ -5,6 +5,8 @@ import net.cwjn.idf.compat.CompatHandler;
 import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
+import net.cwjn.idf.data.ClientData;
+import net.cwjn.idf.data.ServerData;
 import net.cwjn.idf.gui.BestiaryScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.hud.PlayerHealthBar;
@@ -18,11 +20,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.net.URISyntaxException;
 
 @Mod("idf")
 public class ImprovedDamageFramework {
@@ -35,8 +36,9 @@ public class ImprovedDamageFramework {
 
     public ImprovedDamageFramework() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
         MinecraftForge.EVENT_BUS.register(this);
 
         IDFAttributes.ATTRIBUTES.register(bus);
@@ -46,7 +48,7 @@ public class ImprovedDamageFramework {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
+    private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(ATHandler::alterStaticSources);
         LOGGER.info(" Altered base game damage sources.");
         event.enqueueWork(IDFAttributes::changeDefaultAttributes);
@@ -58,9 +60,14 @@ public class ImprovedDamageFramework {
         LOGGER.info(" Done!");
     }
 
+    private void serverSetup(final FMLDedicatedServerSetupEvent event) {
+        ServerData.registerEvents(MinecraftForge.EVENT_BUS);
+    }
+
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatScreen.class);
         MinecraftForge.EVENT_BUS.register(BestiaryScreen.class);
+        ClientData.registerEvents(MinecraftForge.EVENT_BUS);
         if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::deleteArmorHud);
         CompatHandler.initClient(event);

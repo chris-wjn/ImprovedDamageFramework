@@ -1,7 +1,7 @@
 package net.cwjn.idf.attribute;
 
-import net.cwjn.idf.Data;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,7 +33,7 @@ public class BonusBaseAttributes {
             if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() * 2);
             healthInstance.setBaseValue(healthInstance.getBaseValue() * 5);
             //THIRD SECTION: attach bonus attributes defined in entity_data.json
-            EntityData data = Data.LogicalData.getEntityData(Util.getEntityRegistryName(livingEntity.getType()));
+            EntityData data = CommonData.getEntityData(Util.getEntityRegistryName(livingEntity.getType()));
             if (data != null) {
                 if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() + data.oData().pDmg());
                 livingEntity.getAttribute(Attributes.ARMOR).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.dData().pRes());

@@ -1,5 +1,6 @@
 package net.cwjn.idf.damage;
 
+import net.cwjn.idf.api.event.LivingLifestealEvent;
 import net.cwjn.idf.api.event.PreDamageMultipliersEvent;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
@@ -202,7 +203,9 @@ public class DamageHandler {
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 if (lifesteal != 0) {
-                    livingEntity.heal(returnValue * (lifesteal/100));
+                    LivingLifestealEvent lsEvent = new LivingLifestealEvent(livingEntity, target, returnValue * (lifesteal/100));
+                    MinecraftForge.EVENT_BUS.post(lsEvent);
+                    livingEntity.heal(lsEvent.getHealAmount());
                 }
             }
         }
@@ -525,9 +528,11 @@ public class DamageHandler {
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 if (lifesteal != 0) {
+                    LivingLifestealEvent lsEvent = new LivingLifestealEvent(livingEntity, target, returnValue * (lifesteal/100));
+                    MinecraftForge.EVENT_BUS.post(lsEvent);
+                    livingEntity.heal(lsEvent.getHealAmount());
                     log.debug("");
-                    log.debug("-> Lifesteal healed entity for " + returnValue*(lifesteal/100));
-                    livingEntity.heal(returnValue * (lifesteal/100));
+                    log.debug("-> Lifesteal healed entity for " + lsEvent.getHealAmount());
                 }
             }
         }

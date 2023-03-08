@@ -77,12 +77,17 @@ public class MixinLivingEntity {
         }
     }
 
+
+    /*
+    In vanilla, there are three kinds of attribute modifiers: Addition, Multiply Base, and Multiply Total.
+    Multiply Base works very strangely and doesn't really make sense in the context
+     */
     @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
     private Multimap<Attribute, AttributeModifier> changeMainhandAttributeLogic(ItemStack item, EquipmentSlot slot) {
         Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
         Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
-        if (slot == EquipmentSlot.MAINHAND) {
+        if (slot.getType() == EquipmentSlot.Type.HAND) {
             if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
                 for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
@@ -126,6 +131,7 @@ public class MixinLivingEntity {
         }
         return oldMap;
     }
+
     /*
     All the following methods were written by me to change the vanilla way iFrames and knockback is handled.
     By default, any instance of damage will knockback the entity slightly. This is fkn stupid, and makes no sense.

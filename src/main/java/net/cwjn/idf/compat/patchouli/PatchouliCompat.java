@@ -1,6 +1,5 @@
 package net.cwjn.idf.compat.patchouli;
 
-import net.cwjn.idf.Data;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.JSONUtil;
 import net.cwjn.idf.config.json.data.EntityData;
@@ -8,6 +7,7 @@ import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
 import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.damage.DamageHandler;
+import net.cwjn.idf.data.CommonData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,7 +40,7 @@ public class PatchouliCompat implements IComponentProcessor {
     @Override
     public void setup(IVariableProvider variables) {
         String name = variables.get("entity").asString();
-        data = Data.LogicalData.getEntityData(new ResourceLocation(name));
+        data = CommonData.getEntityData(new ResourceLocation(name));
         type = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name));
         if (data == null) data = new EntityData(null, "MOB NOT IN JSON FILE!", OffensiveData.entityStandard(),
                 DefensiveData.entityStandard(), AuxiliaryData.empty());

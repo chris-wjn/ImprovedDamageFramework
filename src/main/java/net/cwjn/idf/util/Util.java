@@ -252,6 +252,18 @@ public class Util {
         buffer.writeChar('\0');
     }
 
+    public static List<Component> format(List<Component> list) {
+        List<Component> returnList = new ArrayList<>();
+        for (int i = 0; i < list.size(); ++i) {
+            MutableComponent c = (MutableComponent) list.get(i);
+            if (i < list.size()-1) {
+                c.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
+            }
+            returnList.add(c);
+        }
+        return returnList;
+    }
+
     public static MutableComponent getComponentFromAttribute (ItemStack item, Attribute a) {
         double addition = 0;
         double base = 0;
@@ -318,4 +330,17 @@ public class Util {
             array.add(v);
         }
     }
+
+    public static void addFormatedComponents(List<Component> masterList, List<Component> list, int currentRun, MutableComponent currentComp) {
+        if (list.isEmpty()) return;
+        currentComp.append(list.remove(0));
+        if (currentRun < 3 && !list.isEmpty()) currentComp.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
+        if (currentRun >= 3) {
+            masterList.add(currentComp);
+            addFormatedComponents(masterList, list, 1, Util.textComponent(""));
+        } else {
+            addFormatedComponents(masterList, list, currentRun+1, currentComp);
+        }
+    }
+
 }
