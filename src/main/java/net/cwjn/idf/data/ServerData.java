@@ -27,7 +27,7 @@ import static net.cwjn.idf.data.CommonData.*;
 @OnlyIn(Dist.DEDICATED_SERVER)
 public class ServerData {
 
-    public static void registerEvents(IEventBus bus) {
+    public static void register(IEventBus bus) {
         bus.addListener(ServerData::onPlayerLoginEventServer);
         bus.addListener(ServerData::onServerShutdown);
     }

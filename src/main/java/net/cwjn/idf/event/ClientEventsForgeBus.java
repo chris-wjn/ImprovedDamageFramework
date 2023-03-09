@@ -43,8 +43,8 @@ import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operati
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventsForgeBus {
 
-    private static final DecimalFormat df = new DecimalFormat("#.##");
-    private static final DecimalFormat onePlace = new DecimalFormat("#.#");
+    private static final DecimalFormat hundredths = new DecimalFormat("#.##");
+    private static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
 
     public static void addInspectText(ItemTooltipEvent event) {
@@ -92,7 +92,7 @@ public class ClientEventsForgeBus {
                             filter(m -> m.getOperation() == ADDITION).
                             mapToDouble(AttributeModifier::getAmount).
                             sum();
-                    component.append(Util.textComponent(onePlace.format(4 + atkSpd)));
+                    component.append(Util.textComponent(tenths.format(4 + atkSpd)));
                 }
             } else {
                 component.append(Util.translationComponent("idf.icon.defense").withStyle(symbolStyle));
@@ -100,7 +100,7 @@ public class ClientEventsForgeBus {
                         filter(m -> m.getOperation() == ADDITION).
                         mapToDouble(AttributeModifier::getAmount).
                         sum();
-                component.append(Util.textComponent(onePlace.format(def)));
+                component.append(Util.textComponent(tenths.format(def)));
             }
             list.add(component);
         }
@@ -131,13 +131,12 @@ public class ClientEventsForgeBus {
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                     double finalValue = flat*mult;
-                    component.append(Util.textComponent(finalValue+""));
+                    component.append(Util.textComponent(Util.threeDigit(tenths.format(finalValue))));
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-
-                    component.append(Util.textComponent(flat + ""));
+                    component.append(Util.textComponent(Util.threeDigit(tenths.format(flat))));
                     double totalMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    if (totalMult != 1) component.append(" + " + totalMult * 100 + "%");
+                    if (totalMult != 1) component.append(" + " + Util.threeDigit(tenths.format(totalMult * 100)) + "%");
                 }
                 if (name.contains("damage")) {
                     damage.add(Util.textComponent(" ").append(component));

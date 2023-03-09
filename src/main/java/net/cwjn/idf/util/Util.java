@@ -331,6 +331,21 @@ public class Util {
         }
     }
 
+    public static String threeDigit(String number) {
+        int i = number.length();
+        int c = number.contains(".") ? 4 : 3;
+        if (c == 3 && i > 3) return "999";
+        if (c == 3 && i != 3) number = number + ".";
+        if (i <= c) {
+            for (int n = 0; n < c - i; ++n) {
+                number = number + "0";
+            }
+        } else {
+            number = number.substring(0, 3);
+        }
+        return number;
+    }
+
     public static void addFormatedComponents(List<Component> masterList, List<Component> list, int currentRun, MutableComponent currentComp) {
         if (list.isEmpty()) return;
         currentComp.append(list.remove(0));
