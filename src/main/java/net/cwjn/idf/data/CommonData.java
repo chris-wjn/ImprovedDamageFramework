@@ -1,5 +1,6 @@
 package net.cwjn.idf.data;
 
+import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.*;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;

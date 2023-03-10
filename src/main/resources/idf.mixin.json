@@ -43,5 +43,8 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "idf.mixin-refmap.json"
+  "refmap": "idf.mixin-refmap.json",
+  "client": [
+    "MixinClientTextTooltip"
+  ]
 }

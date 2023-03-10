@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
+import static net.cwjn.idf.ImprovedDamageFramework.*;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
@@ -45,7 +45,8 @@ public class ClientEventsForgeBus {
 
     private static final DecimalFormat hundredths = new DecimalFormat("#.##");
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
-    private static final Style symbolStyle = Style.EMPTY.withFont(FONT_ICONS);
+    private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
+    private static final Style JRPG = Style.EMPTY.withFont(FONT_ALTIMA);
 
     public static void addInspectText(ItemTooltipEvent event) {
         ItemStack hoveredItem = event.getItemStack();
@@ -71,7 +72,7 @@ public class ClientEventsForgeBus {
         if (item.hasTag() && item.getTag().contains("idf.equipment")) {
             doAttributeTooltips = true;
             MutableComponent component = Util.textComponent("");
-            component.append(Util.translationComponent("idf.icon.durability").withStyle(symbolStyle));
+            component.append(Util.translationComponent("idf.icon.durability").withStyle(ICON));
             if (item.isDamageableItem()) {
                 double percentage = (double)(item.getMaxDamage()-item.getDamageValue())/(double)item.getMaxDamage();
                 component.append(Util.withColor(
@@ -83,11 +84,11 @@ public class ClientEventsForgeBus {
             component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
             if (item.getTag().contains("idf.damage_class")) {
                 isWeapon = true;
-                component.append(Util.translationComponent("idf.icon.damage_class").withStyle(symbolStyle));
+                component.append(Util.translationComponent("idf.icon.damage_class").withStyle(ICON));
                 component.append(Util.translationComponent("idf.damage_class.tooltip." + item.getTag().getString("idf.damage_class")));
                 if (!item.getTag().getBoolean("idf.ranged_weapon")) {
                     component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
-                    component.append(Util.translationComponent("idf.icon.attack_speed").withStyle(symbolStyle));
+                    component.append(Util.translationComponent("idf.icon.attack_speed").withStyle(ICON));
                     double atkSpd = item.getAttributeModifiers(slot).get(Attributes.ATTACK_SPEED).stream().
                             filter(m -> m.getOperation() == ADDITION).
                             mapToDouble(AttributeModifier::getAmount).
@@ -95,7 +96,7 @@ public class ClientEventsForgeBus {
                     component.append(Util.textComponent(tenths.format(4 + atkSpd)));
                 }
             } else {
-                component.append(Util.translationComponent("idf.icon.defense").withStyle(symbolStyle));
+                component.append(Util.translationComponent("idf.icon.defense").withStyle(ICON));
                 double def = item.getAttributeModifiers(slot).get(Attributes.ARMOR_TOUGHNESS).stream().
                         filter(m -> m.getOperation() == ADDITION).
                         mapToDouble(AttributeModifier::getAmount).
@@ -109,11 +110,11 @@ public class ClientEventsForgeBus {
             List<Component> damage = new ArrayList<>();
             List<Component> resistance = new ArrayList<>();
             MutableComponent damageComponent = Util.textComponent("");
-            damageComponent.append(Util.translationComponent("idf.icon.damage").withStyle(symbolStyle));
+            damageComponent.append(Util.translationComponent("idf.icon.damage").withStyle(ICON));
             damageComponent.append(Util.translationComponent("idf.damage.tooltip").withStyle(ChatFormatting.BLUE));
             damage.add(damageComponent);
             MutableComponent resistanceComponent = Util.textComponent("");
-            resistanceComponent.append(Util.translationComponent("idf.icon.resistance").withStyle(symbolStyle));
+            resistanceComponent.append(Util.translationComponent("idf.icon.resistance").withStyle(ICON));
             resistanceComponent.append(Util.translationComponent("idf.resistance.tooltip").withStyle(ChatFormatting.BLUE));
             resistance.add(resistanceComponent);
             List<Component> other = new ArrayList<>();
@@ -125,18 +126,18 @@ public class ClientEventsForgeBus {
                     if (name.contains("armor_toughness")) continue;
                 }
                 MutableComponent component = Util.textComponent("");
-                component.append(Util.translationComponent("idf.icon." + a.getDescriptionId()).withStyle(symbolStyle));
+                component.append(Util.translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
                 Collection<AttributeModifier> mods = multimap.get(a);
                 if (slot.getType() == EquipmentSlot.Type.HAND && name.contains("damage")) {
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                     double finalValue = flat*mult;
-                    component.append(Util.textComponent(Util.threeDigit(tenths.format(finalValue))));
+                    component.append(Util.textComponent(Util.threeDigit(hundredths.format(finalValue))).withStyle(JRPG));
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    component.append(Util.textComponent(Util.threeDigit(tenths.format(flat))));
+                    component.append(Util.textComponent(Util.threeDigit(hundredths.format(flat))));
                     double totalMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    if (totalMult != 1) component.append(" + " + Util.threeDigit(tenths.format(totalMult * 100)) + "%");
+                    if (totalMult != 1) component.append(Util.textComponent(" + " + Util.threeDigit(hundredths.format(totalMult * 100)) + "%").withStyle(JRPG));
                 }
                 if (name.contains("damage")) {
                     damage.add(Util.textComponent(" ").append(component));

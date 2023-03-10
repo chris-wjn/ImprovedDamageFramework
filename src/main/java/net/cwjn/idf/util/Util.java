@@ -358,4 +358,45 @@ public class Util {
         }
     }
 
+    public static String toSuperscript(int number) {
+        System.out.println("⁶");
+        String asString = String.valueOf(number);
+        StringBuilder retNum = new StringBuilder();
+        for (int i = 0; i < asString.length(); ++i) {
+            switch (asString.charAt(i)) {
+                case '0' -> retNum.append("⁰");
+                case '1' -> retNum.append("¹");
+                case '2' -> retNum.append("²");
+                case '3' -> retNum.append("³");
+                case '4' -> retNum.append("⁴");
+                case '5' -> retNum.append("⁵");
+                case '6' -> retNum.append("⁶");
+                case '7' -> retNum.append("⁷");
+                case '8' -> retNum.append("⁸");
+                case '9' -> retNum.append("⁹");
+                default -> retNum.append(asString.charAt(i)); // use original char if not a digit
+            }
+        }
+        return retNum.toString();
+    }
+
+    public static MutableComponent createDamageIndicatorNumber(int number) {
+        MutableComponent retComp = Util.textComponent("");
+        String asString = String.valueOf(number);
+        for (int i = 0; i < asString.length(); ++i) {
+            switch (asString.charAt(i)) {
+                case '0' -> retComp.append(Util.translationComponent("idf.superscript.0")); // map digit '0' to "idf.superscript.0"
+                case '1' -> retComp.append(Util.translationComponent("idf.superscript.1")); // map digit '1' to "idf.superscript.1"
+                case '2' -> retComp.append(Util.translationComponent("idf.superscript.2")); // map digit '2' to "idf.superscript.2"
+                case '3' -> retComp.append(Util.translationComponent("idf.superscript.3")); // map digit '3' to "idf.superscript.3"
+                case '4' -> retComp.append(Util.translationComponent("idf.superscript.4")); // map digit '4' to "idf.superscript.4"
+                case '5' -> retComp.append(Util.translationComponent("idf.superscript.5")); // map digit '5' to "idf.superscript.5"
+                case '6' -> retComp.append(Util.translationComponent("idf.superscript.6")); // map digit '6' to "idf.superscript.6"
+                case '7' -> retComp.append(Util.translationComponent("idf.superscript.7")); // map digit '7' to "idf.superscript.7"
+                case '8' -> retComp.append(Util.translationComponent("idf.superscript.8")); // map digit '8' to "idf.superscript.8"
+                case '9' -> retComp.append(Util.translationComponent("idf.superscript.9"));
+            }
+        }
+        return retComp;
+    }
 }

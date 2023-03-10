@@ -33,12 +33,15 @@ public class ImprovedDamageFramework {
     public static boolean IAFLoaded = false;
     public static final ResourceLocation FONT_ICONS = new ResourceLocation("idf", "icons");
     public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
+    public static final ResourceLocation FONT_REACTOR = new ResourceLocation("idf", "reactor");
+    public static final ResourceLocation FONT_DAMAGE_NUMBERS = new ResourceLocation("idf", "tooltipdamage");
+    public static final ResourceLocation FONT_ALTIMA = new ResourceLocation("idf", "altima");
 
     public ImprovedDamageFramework() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverSetup);
+        bus.addListener(this::commonSetup);
+        bus.addListener(this::clientSetup);
+        bus.addListener(this::serverSetup);
         MinecraftForge.EVENT_BUS.register(this);
 
         IDFAttributes.ATTRIBUTES.register(bus);

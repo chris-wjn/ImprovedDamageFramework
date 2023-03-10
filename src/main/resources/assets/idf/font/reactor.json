@@ -1,0 +1,14 @@
+{
+  "providers": [
+    {
+      "type": "ttf",
+      "file": "idf:reactor.ttf",
+      "shift": [
+        0.0,
+        1.75
+      ],
+      "size": 8,
+      "oversample": 3
+    }
+  ]
+}

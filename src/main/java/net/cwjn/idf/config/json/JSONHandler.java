@@ -51,6 +51,7 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
 public class JSONHandler {
     public static final Map<ResourceLocation, Multimap<Attribute, AttributeModifier>> baseModifiers = new HashMap<>();
     public static final Map<ResourceLocation, Integer> vanillaDurability = new HashMap<>();
+    private static boolean iafLoaded = false;
     public static final Gson SERIALIZER = new GsonBuilder().
             setPrettyPrinting().
             registerTypeAdapter(ArmourData.class, new ArmourData.ArmourSerializer()).
@@ -227,23 +228,12 @@ public class JSONHandler {
             LOGICAL_SOURCE_MAP = sortedSourceMap;
         }
 
-        //Now use the maps to update items and then save the physical client's mappings
-        saveVanillaStats();
-        updateItems();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientData::saveClientMappings);
-
-        //Write the maps to config json files so users can edit items
-        JSONUtil.writeFile(new File(configDir, "entity_data.json"), sortedEntityMap);
-        JSONUtil.writeFile(new File(configDir, "armour_items_flat.json"), sortedArmourOp0Map);
-        JSONUtil.writeFile(new File(configDir, "armour_items_multiply.json"), sortedArmourOp2Map);
-        JSONUtil.writeFile(new File(configDir, "weapon_items_flat.json"), sortedWeaponOp0Map);
-        JSONUtil.writeFile(new File(configDir, "weapon_items_multiply.json"), sortedWeaponOp2Map);
-
         //this is for ImprovedAdventureFramework
         if (ModList.get().isLoaded("iaf")) {
+            iafLoaded = true;
             File iafDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedAdventureFramework").toFile();
-            Map<String, RpgItemData> weapons = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/weapons.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
-            Map<String, RpgItemData> armour = new HashMap<>(); //SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/armour.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
+            Map<String, RpgItemData> weapons = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/weapons.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
+            Map<String, RpgItemData> armour = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/armour.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
             for (String s : sortedWeaponOp0Map.keySet()) {
                 weapons.putIfAbsent(s, RpgItemData.empty());
             }
@@ -255,6 +245,18 @@ public class JSONHandler {
             JSONUtil.writeFile(new File(iafDir, "weapons.json"), sortedWeapons);
             JSONUtil.writeFile(new File(iafDir, "armour.json"), sortedArmour);
         }
+
+        //Now use the maps to update items and then save the physical client's mappings
+        saveVanillaStats();
+        updateItems();
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientData::saveClientMappings);
+
+        //Write the maps to config json files so users can edit items
+        JSONUtil.writeFile(new File(configDir, "entity_data.json"), sortedEntityMap);
+        JSONUtil.writeFile(new File(configDir, "armour_items_flat.json"), sortedArmourOp0Map);
+        JSONUtil.writeFile(new File(configDir, "armour_items_multiply.json"), sortedArmourOp2Map);
+        JSONUtil.writeFile(new File(configDir, "weapon_items_flat.json"), sortedWeaponOp0Map);
+        JSONUtil.writeFile(new File(configDir, "weapon_items_multiply.json"), sortedWeaponOp2Map);
     }
 
     private static void saveVanillaStats() {
@@ -270,6 +272,8 @@ public class JSONHandler {
     }
 
     public static void updateItems() {
+        Map<String, RpgItemData> statMap;
+        if (iafLoaded) statMap = retrieveRpgItems();
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
             CompoundTag defaultTag = new CompoundTag();
@@ -323,10 +327,23 @@ public class JSONHandler {
                     });
                 }
             }
-            MinecraftForge.EVENT_BUS.post(new OnItemAttributeRework(builder, defaultTag));
+            MinecraftForge.EVENT_BUS.post(new OnItemAttributeRework(builder, defaultTag, item.toString()));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
         }
+    }
+
+    public static Map<String, RpgItemData> retrieveRpgItems() {
+        Map<String, RpgItemData> rpgArmourItems = JSONUtil.getConfigFile(Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(),
+                "ImprovedAdventureFramework").toFile(),
+                "armour.json",
+                new TypeToken<Map<String, RpgItemData>>() {}.getType());
+        Map<String, RpgItemData> rpgWeaponItems = JSONUtil.getConfigFile(Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(),
+                        "ImprovedAdventureFramework").toFile(),
+                "weapons.json",
+                new TypeToken<Map<String, RpgItemData>>() {}.getType());
+        rpgArmourItems.putAll(rpgWeaponItems);
+        return rpgArmourItems;
     }
 
 }

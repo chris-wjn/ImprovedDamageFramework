@@ -10,14 +10,20 @@ public class OnItemAttributeRework extends Event {
 
     private final ImmutableMultimap.Builder<Attribute, AttributeModifier> attributeBuilder;
     public final CompoundTag defaultTag;
+    private final String item;
 
-    public OnItemAttributeRework(ImmutableMultimap.Builder<Attribute, AttributeModifier> b, CompoundTag tag) {
+    public OnItemAttributeRework(ImmutableMultimap.Builder<Attribute, AttributeModifier> b, CompoundTag tag, String s) {
         attributeBuilder = b;
         defaultTag = tag;
+        item = s;
     }
 
     public void addAttributeModifier(Attribute a, AttributeModifier am) {
         attributeBuilder.put(a, am);
+    }
+
+    public String getItem() {
+        return item;
     }
 
     @Override
