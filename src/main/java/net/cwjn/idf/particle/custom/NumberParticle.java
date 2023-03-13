@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class NumberParticle extends Particle {
 
     private static final Minecraft client = Minecraft.getInstance();
-    private static final Style indicator = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_ALTIMA);
+    private static final Style indicator = Style.EMPTY.withFont(ImprovedDamageFramework.FONT_INDICATORS);
     private final float number;
     private final float weight;
     private final int colour;
@@ -82,7 +82,7 @@ public class NumberParticle extends Particle {
     @Override
     public void render(@NotNull VertexConsumer pBuffer, Camera pRenderInfo, float pPartialTicks) {
         PoseStack stack = new PoseStack();
-        MutableComponent component = Util.createDamageIndicatorNumber((int) number).withStyle(indicator);
+        MutableComponent component = Util.textComponent(String.valueOf((int) number)).withStyle(indicator);
         Vec3 cam = pRenderInfo.getPosition();
         double displayX = Mth.lerp(pPartialTicks, xo, x) - cam.x;
         double displayY = Mth.lerp(pPartialTicks, yo, y) - cam.y;
@@ -93,8 +93,6 @@ public class NumberParticle extends Particle {
         stack.mulPose(Vector3f.XP.rotationDegrees(pRenderInfo.getXRot()));
         stack.scale(-0.03f, -0.03f,  0.03f);
         client.font.draw(stack, component, 0, 0, colour);
-        stack.scale(1.1f, 1.1f, 1.1f);
-        client.font.draw(stack, component, 0, 0, 0x000000);
         stack.popPose();
     }
 

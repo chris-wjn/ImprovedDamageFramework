@@ -132,7 +132,7 @@ public class ClientEventsForgeBus {
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                     double finalValue = flat*mult;
-                    component.append(Util.textComponent(Util.threeDigit(hundredths.format(finalValue))).withStyle(JRPG));
+                    component.append(Util.createDamageIndicatorNumber((int) finalValue).withStyle(JRPG));
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     component.append(Util.textComponent(Util.threeDigit(hundredths.format(flat))));

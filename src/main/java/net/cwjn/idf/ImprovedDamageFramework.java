@@ -33,8 +33,8 @@ public class ImprovedDamageFramework {
     public static boolean IAFLoaded = false;
     public static final ResourceLocation FONT_ICONS = new ResourceLocation("idf", "icons");
     public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
+    public static final ResourceLocation FONT_TOOLTIPS = new ResourceLocation("idf", "tooltips");
     public static final ResourceLocation FONT_REACTOR = new ResourceLocation("idf", "reactor");
-    public static final ResourceLocation FONT_DAMAGE_NUMBERS = new ResourceLocation("idf", "tooltipdamage");
     public static final ResourceLocation FONT_ALTIMA = new ResourceLocation("idf", "altima");
 
     public ImprovedDamageFramework() {

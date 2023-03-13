@@ -358,28 +358,6 @@ public class Util {
         }
     }
 
-    public static String toSuperscript(int number) {
-        System.out.println("⁶");
-        String asString = String.valueOf(number);
-        StringBuilder retNum = new StringBuilder();
-        for (int i = 0; i < asString.length(); ++i) {
-            switch (asString.charAt(i)) {
-                case '0' -> retNum.append("⁰");
-                case '1' -> retNum.append("¹");
-                case '2' -> retNum.append("²");
-                case '3' -> retNum.append("³");
-                case '4' -> retNum.append("⁴");
-                case '5' -> retNum.append("⁵");
-                case '6' -> retNum.append("⁶");
-                case '7' -> retNum.append("⁷");
-                case '8' -> retNum.append("⁸");
-                case '9' -> retNum.append("⁹");
-                default -> retNum.append(asString.charAt(i)); // use original char if not a digit
-            }
-        }
-        return retNum.toString();
-    }
-
     public static MutableComponent createDamageIndicatorNumber(int number) {
         MutableComponent retComp = Util.textComponent("");
         String asString = String.valueOf(number);
