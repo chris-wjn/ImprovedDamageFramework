@@ -212,6 +212,9 @@
   "idf.superscript.7": "⁷",
   "idf.superscript.8": "⁸",
   "idf.superscript.9": "⁹",
+  "idf.neg_space_1": "\uF801",
+  "idf.neg_space_2": "\uF802",
+  "idf.neg_space_3": "\uF803",
 
   "//COMMANDS/MESSAGES": "USED VARIOUS PLACES",
   "idf.client.armour.map.updated": "Your armour values have been updated by the server.",

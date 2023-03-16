@@ -338,6 +338,7 @@ public class Util {
         if (c == 3 && i > 3) return "999";
         if (c == 3 && i != 3) number.append(".");
         if (i <= c) {
+            number.append("\uF803");
             number.append("0".repeat(Math.max(0, c - i)));
         } else {
             number = new StringBuilder(number.substring(0, 3));
