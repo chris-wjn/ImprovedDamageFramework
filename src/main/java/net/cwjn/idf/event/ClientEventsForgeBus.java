@@ -46,7 +46,7 @@ public class ClientEventsForgeBus {
     private static final DecimalFormat hundredths = new DecimalFormat("#.##");
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
-    private static final Style JRPG = Style.EMPTY.withFont(FONT_ALTIMA);
+    private static final Style INDICATORS = Style.EMPTY.withFont(FONT_TOOLTIPS);
 
     public static void addInspectText(ItemTooltipEvent event) {
         ItemStack hoveredItem = event.getItemStack();
@@ -132,12 +132,12 @@ public class ClientEventsForgeBus {
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
                     double finalValue = flat*mult;
-                    component.append(Util.createDamageIndicatorNumber((int) finalValue).withStyle(JRPG));
+                    component.append(Util.threeDigit((int) finalValue)).withStyle(INDICATORS);
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    component.append(Util.textComponent(Util.threeDigit(hundredths.format(flat))));
+                    component.append(Util.textComponent(Util.threeDigit((int) flat)));
                     double totalMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    if (totalMult != 1) component.append(Util.textComponent(" + " + Util.threeDigit(hundredths.format(totalMult * 100)) + "%").withStyle(JRPG));
+                    if (totalMult != 1) component.append(Util.textComponent(" + " + Util.threeDigit((int) (totalMult * 100)) + "%").withStyle(INDICATORS));
                 }
                 if (name.contains("damage")) {
                     damage.add(Util.textComponent(" ").append(component));

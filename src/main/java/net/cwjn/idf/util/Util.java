@@ -331,19 +331,18 @@ public class Util {
         }
     }
 
-    public static String threeDigit(String number) {
+    public static String threeDigit(int in) {
+        StringBuilder number = new StringBuilder(String.valueOf(in));
         int i = number.length();
-        int c = number.contains(".") ? 4 : 3;
+        int c = number.toString().contains(".") ? 4 : 3;
         if (c == 3 && i > 3) return "999";
-        if (c == 3 && i != 3) number = number + ".";
+        if (c == 3 && i != 3) number.append(".");
         if (i <= c) {
-            for (int n = 0; n < c - i; ++n) {
-                number = number + "0";
-            }
+            number.append("0".repeat(Math.max(0, c - i)));
         } else {
-            number = number.substring(0, 3);
+            number = new StringBuilder(number.substring(0, 3));
         }
-        return number;
+        return number.toString();
     }
 
     public static void addFormatedComponents(List<Component> masterList, List<Component> list, int currentRun, MutableComponent currentComp) {
