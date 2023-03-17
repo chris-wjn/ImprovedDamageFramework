@@ -67,11 +67,14 @@ public class ClientEventsForgeBus {
         EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
         LivingEntity owner = event.getEntity();
         boolean doAttributeTooltips = false;
+        boolean isMeleeWeapon = false;
         boolean isWeapon = false;
         //durability, damage class, and attack speed (if melee weapon)
         if (item.hasTag() && item.getTag().contains("idf.equipment")) {
             doAttributeTooltips = true;
             MutableComponent component = Util.textComponent("");
+
+            //DURABILITY
             component.append(Util.translationComponent("idf.icon.durability").withStyle(ICON));
             if (item.isDamageableItem()) {
                 double percentage = (double)(item.getMaxDamage()-item.getDamageValue())/(double)item.getMaxDamage();
@@ -81,12 +84,15 @@ public class ClientEventsForgeBus {
             } else {
                 component.append(Util.withColor(Util.translationComponent("idf.infinity.symbol"), Color.DARKSEAGREEN));
             }
+
+            //DAMAGE CLASS AND ATTACK SPEED, OR DEFENSE
             component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
             if (item.getTag().contains("idf.damage_class")) {
                 isWeapon = true;
                 component.append(Util.translationComponent("idf.icon.damage_class").withStyle(ICON));
                 component.append(Util.translationComponent("idf.damage_class.tooltip." + item.getTag().getString("idf.damage_class")));
                 if (!item.getTag().getBoolean("idf.ranged_weapon")) {
+                    isMeleeWeapon = true;
                     component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
                     component.append(Util.translationComponent("idf.icon.attack_speed").withStyle(ICON));
                     double atkSpd = item.getAttributeModifiers(slot).get(Attributes.ATTACK_SPEED).stream().
@@ -106,33 +112,51 @@ public class ClientEventsForgeBus {
             list.add(component);
         }
         if (doAttributeTooltips) {
-            Multimap<Attribute, AttributeModifier> multimap = item.getAttributeModifiers(slot);
+            //first get items attribute modifiers for the item's normal slot
+            //we don't display attribute modifiers in slots the item doesn't usually take
+            //modifiers in because it's too hard to fit in.
+            Multimap<Attribute, AttributeModifier> attributeMap = item.getAttributeModifiers(slot);
+
+            //we instantiate three lists, so we can take all the attribute modifiers before
+            //deciding what to do with them.
             List<Component> damage = new ArrayList<>();
             List<Component> resistance = new ArrayList<>();
             MutableComponent damageComponent = Util.textComponent("");
-            damageComponent.append(Util.translationComponent("idf.icon.damage").withStyle(ICON));
-            damageComponent.append(Util.translationComponent("idf.damage.tooltip").withStyle(ChatFormatting.BLUE));
+            //damageComponent.append(Util.translationComponent("idf.icon.damage").withStyle(ICON));
+            //damageComponent.append(Util.translationComponent("idf.damage.tooltip").withStyle(ChatFormatting.BLUE));
             damage.add(damageComponent);
             MutableComponent resistanceComponent = Util.textComponent("");
-            resistanceComponent.append(Util.translationComponent("idf.icon.resistance").withStyle(ICON));
-            resistanceComponent.append(Util.translationComponent("idf.resistance.tooltip").withStyle(ChatFormatting.BLUE));
+            //resistanceComponent.append(Util.translationComponent("idf.icon.resistance").withStyle(ICON));
+            //resistanceComponent.append(Util.translationComponent("idf.resistance.tooltip").withStyle(ChatFormatting.BLUE));
             resistance.add(resistanceComponent);
             List<Component> other = new ArrayList<>();
-            for (Attribute a : multimap.keySet()) {
-                String name = a.getDescriptionId().toLowerCase();
-                if (isWeapon) {
+
+            //The loop to grab attribute modifiers
+            for (Attribute a : attributeMap.keySet()) {
+                //we need the name here to create tooltips abstractedly
+                String name = a.getDescriptionId();
+
+                //if the item is a melee weapon, there's no need to take the attack speed attribute since we've already displayed it
+                //same thing for non-weapons and defense.
+                if (isMeleeWeapon) {
                     if (name.contains("attack_speed")) continue;
                 } else {
                     if (name.contains("armor_toughness")) continue;
                 }
+
+                //here we handle the attribute. First create a new component to display it in.
                 MutableComponent component = Util.textComponent("");
-                component.append(Util.translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
-                Collection<AttributeModifier> mods = multimap.get(a);
-                if (slot.getType() == EquipmentSlot.Type.HAND && name.contains("damage")) {
-                    final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    double finalValue = flat*mult;
-                    component.append(Util.threeDigit((int) finalValue)).withStyle(INDICATORS);
+                //use the name of the attribute to find the translation key for its icon
+                component.append(Util.translationComponent("idf.icon." + name).withStyle(ICON));
+                //grab all the modifiers attached to this attribute
+                Collection<AttributeModifier> mods = attributeMap.get(a);
+                //first we check if this item is a weapon, if it is display
+                if (isWeapon && name.contains("damage")) {
+                    final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                    double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+                    double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                    double finalValue = f1 * f2;
+                    component.append(String.valueOf((int) finalValue)).withStyle(INDICATORS);
                 } else {
                     double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     component.append(Util.textComponent(Util.threeDigit((int) flat)));

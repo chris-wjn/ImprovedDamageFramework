@@ -87,7 +87,7 @@ public class MixinLivingEntity {
     private Multimap<Attribute, AttributeModifier> changeMainhandAttributeLogic(ItemStack item, EquipmentSlot slot) {
         Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
         Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
-        if (slot.getType() == EquipmentSlot.Type.HAND) {
+        if (item.getTag().contains("idf.damage_class")) {
             if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
                 for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
@@ -114,7 +114,7 @@ public class MixinLivingEntity {
             }
             return newMap;
         }
-        if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+        else {
             for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                 if (entry.getKey().getDescriptionId().toLowerCase().contains("armor_toughness")) {
                     Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
@@ -129,7 +129,6 @@ public class MixinLivingEntity {
             }
             return newMap;
         }
-        return oldMap;
     }
 
     /*
