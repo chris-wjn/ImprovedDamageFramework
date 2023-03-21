@@ -49,6 +49,16 @@ public class ClientEventsForgeBus {
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
     public static final int ICON_PIXEL_SPACER = 2;
     private static final Predicate<AttributeModifier> isAddition = o -> o.getOperation() == ADDITION;
+    private static final Predicate<Attribute> isPercentageAttribute = a -> {
+        String name = a.getDescriptionId();
+        return (
+                name.contains("lifesteal") ||
+                name.contains("pen") ||
+                name.contains("crit") ||
+                name.contains("evasion") ||
+                name.contains("knockback_resistance")
+                );
+    };
 
     public static void addInspectText(ItemTooltipEvent event) {
         ItemStack hoveredItem = event.getItemStack();
@@ -78,6 +88,7 @@ public class ClientEventsForgeBus {
             MutableComponent line1 = Component.empty();
             MutableComponent line2 = Component.empty();
             MutableComponent mainArea = Component.empty();
+            MutableComponent otherArea = Component.empty();
             boolean isWeapon = item.getTag().contains("idf.damage_class");
             boolean isRanged = item.getTag().getBoolean("idf.ranged_weapon");
 
@@ -125,6 +136,13 @@ public class ClientEventsForgeBus {
                 if (damageComponents.size() >= 1) mainArea.append(damageComponents.get(0));
                 for (int i = 1; i < damageComponents.size(); i++) {
                     mainArea.append(", ").append(damageComponents.get(i));
+                }
+
+                //slap on the rest of the tooltips now
+                for (AttributeModifier am : map.values()) {
+                    if (am.getOperation() == ADDITION) {
+
+                    }
                 }
 
             } else {
