@@ -178,7 +178,7 @@
   "idf.total_multiplication": "(T⁎",
   "idf.ohm.symbol": "Ω",
   "idf.halfmoon.symbol":"◐",
-  "idf.infinity.symbol": ": ∞",
+  "idf.icon.infinity.symbol": ": ∞",
 
   "//TOOLTIPS": "",
   "idf.damage.tooltip": "Damage",
@@ -244,3 +244,4 @@
   "idf.stats.crit_chance": "Critical Strike Chance",
   "idf.stats.crit_chance.tooltip": "+§e%s §rCritical Strike Chance"
 }
+

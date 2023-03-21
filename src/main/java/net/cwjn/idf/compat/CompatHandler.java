@@ -11,12 +11,17 @@ import java.net.URISyntaxException;
 
 public class CompatHandler {
 
+    public static boolean tetraLoaded = false;
+    public static boolean patchouliLoaded = false;
+
     public static void init(FMLCommonSetupEvent event) {
         if (ModList.get().isLoaded("patchouli")) {
+            patchouliLoaded = true;
             PatchouliCompat.register();
             ImprovedDamageFramework.LOGGER.info("Patchouli compat loaded.");
         }
         if (ModList.get().isLoaded("tetra")) {
+            tetraLoaded = true;
             TetraCompat.register();
             ImprovedDamageFramework.LOGGER.info("Tetra compat loaded.");
         }

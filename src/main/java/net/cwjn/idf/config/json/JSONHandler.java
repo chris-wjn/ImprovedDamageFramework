@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.IDFCustomEquipment;
 import net.cwjn.idf.api.event.OnItemAttributeRework;
 import net.cwjn.idf.config.json.data.*;
@@ -51,7 +52,6 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
 public class JSONHandler {
     public static final Map<ResourceLocation, Multimap<Attribute, AttributeModifier>> baseModifiers = new HashMap<>();
     public static final Map<ResourceLocation, Integer> vanillaDurability = new HashMap<>();
-    private static boolean iafLoaded = false;
     public static final Gson SERIALIZER = new GsonBuilder().
             setPrettyPrinting().
             registerTypeAdapter(ArmourData.class, new ArmourData.ArmourSerializer()).
@@ -230,7 +230,7 @@ public class JSONHandler {
 
         //this is for ImprovedAdventureFramework
         if (ModList.get().isLoaded("iaf")) {
-            iafLoaded = true;
+            ImprovedDamageFramework.IAFLoaded = true;
             File iafDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedAdventureFramework").toFile();
             Map<String, RpgItemData> weapons = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/weapons.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
             Map<String, RpgItemData> armour = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/iaf/default/armour.json")))), new TypeToken<Map<String, RpgItemData>>() {}.getType());
@@ -273,7 +273,7 @@ public class JSONHandler {
 
     public static void updateItems() {
         Map<String, RpgItemData> statMap;
-        if (iafLoaded) statMap = retrieveRpgItems();
+        if (ImprovedDamageFramework.IAFLoaded) statMap = retrieveRpgItems();
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
             CompoundTag defaultTag = new CompoundTag();

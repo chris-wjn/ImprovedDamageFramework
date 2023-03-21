@@ -87,7 +87,7 @@ public class MixinLivingEntity {
     private Multimap<Attribute, AttributeModifier> changeMainhandAttributeLogic(ItemStack item, EquipmentSlot slot) {
         Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
         Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
-        if (item.getTag().contains("idf.damage_class")) {
+        if (item.hasTag() && item.getTag().contains("idf.damage_class")) {
             if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
                 for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
@@ -112,23 +112,10 @@ public class MixinLivingEntity {
                     }
                 }
             }
-            return newMap;
+        } else {
+            newMap = oldMap;
         }
-        else {
-            for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
-                if (entry.getKey().getDescriptionId().toLowerCase().contains("armor_toughness")) {
-                    Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
-                    final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
-                    double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    double finalValue = f1*f2;
-                    newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "armourConversion", finalValue, ADDITION));
-                } else {
-                    newMap.put(entry.getKey(), entry.getValue());
-                }
-            }
-            return newMap;
-        }
+        return newMap;
     }
 
     /*
