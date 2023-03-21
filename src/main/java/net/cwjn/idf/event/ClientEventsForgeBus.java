@@ -1,5 +1,6 @@
 package net.cwjn.idf.event;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
@@ -29,11 +30,13 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.spongepowered.asm.mixin.Mutable;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
@@ -47,18 +50,13 @@ public class ClientEventsForgeBus {
     private static final DecimalFormat hundredths = new DecimalFormat("#.##");
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
+    private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
     public static final int ICON_PIXEL_SPACER = 2;
     private static final Predicate<AttributeModifier> isAddition = o -> o.getOperation() == ADDITION;
-    private static final Predicate<Attribute> isPercentageAttribute = a -> {
-        String name = a.getDescriptionId();
-        return (
-                name.contains("lifesteal") ||
-                name.contains("pen") ||
-                name.contains("crit") ||
-                name.contains("evasion") ||
-                name.contains("knockback_resistance")
-                );
-    };
+    private static final Predicate<Attribute> isPercentageAttribute = a -> (
+            a.equals(Attributes.KNOCKBACK_RESISTANCE) ||
+            a.equals(IDFAttributes.LIFESTEAL.get())
+            );
 
     public static void addInspectText(ItemTooltipEvent event) {
         ItemStack hoveredItem = event.getItemStack();
@@ -73,32 +71,24 @@ public class ClientEventsForgeBus {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
-        //get variables from event
-        List<Component> list = event.getToolTip();
         ItemStack item = event.getItemStack();
-        EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
-        LivingEntity owner = event.getEntity();
 
         //we only need to affect equipment tagged items
         if (item.hasTag() && item.getTag().contains("idf.equipment")) {
             //first get items attribute modifiers for the item's normal slot
             //we don't display attribute modifiers in slots the item doesn't usually take
             //modifiers in because it's too hard to fit in.
-            Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(slot);
-            MutableComponent line1 = Component.empty();
-            MutableComponent line2 = Component.empty();
-            MutableComponent mainArea = Component.empty();
-            MutableComponent otherArea = Component.empty();
+            List<Component> list = event.getToolTip();
+            EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
+            Multimap<Attribute, AttributeModifier> map = HashMultimap.create(item.getAttributeModifiers(slot));
+            MutableComponent line1 = Component.empty().withStyle(Style.EMPTY);
+            MutableComponent line2 = Component.empty().withStyle(Style.EMPTY);
+            MutableComponent mainArea = Component.empty().withStyle(Style.EMPTY);
+            List<Component> other = new ArrayList<>();
             boolean isWeapon = item.getTag().contains("idf.damage_class");
             boolean isRanged = item.getTag().getBoolean("idf.ranged_weapon");
 
             if (isWeapon) {
-                //the name component of the item should be at index 0
-                list.remove(0);
-                MutableComponent nameComponent = Component.empty().append(item.getHoverName());
-                nameComponent.append(Util.writeIcon(item.getTag().getString("idf.damage_class")));
-                list.add(0, nameComponent);
-
                 //static lines for weapons. Durability, force, atkspd, crit, pen, knockback
                 if (item.isDamageableItem()) {
                     double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
@@ -122,16 +112,17 @@ public class ClientEventsForgeBus {
 
                 //dynamic damage lines for weapons
                 List<Component> damageComponents = new ArrayList<>();
-                for (Attribute a : map.keySet()) {
-                    String name = a.getDescriptionId();
+                Attribute[] keys = map.keySet().toArray(new Attribute[map.keySet().size()]);
+                for (Attribute key : keys) {
+                    String name = key.getDescriptionId();
                     if (name.contains("damage")) {
-                        Collection<AttributeModifier> mods = map.get(a);
+                        Collection<AttributeModifier> mods = map.get(key);
                         final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                         double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                        double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                        damageComponents.add((Util.writeIcon(name)).append(Util.writeTooltipInteger((int)flat)).append("+").append(Util.writeTooltipDouble(mult)));
-                        map.removeAll(a);
+                        double mult = flat * mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(0.0, (x, y) -> x * y);
+                        damageComponents.add((Util.writeIcon(name)).append(Util.writeTooltipInteger((int) flat)).append("+").append(Util.writeTooltipDouble(mult)));
                     }
+                    map.removeAll(key);
                 }
                 if (damageComponents.size() >= 1) mainArea.append(damageComponents.get(0));
                 for (int i = 1; i < damageComponents.size(); i++) {
@@ -139,13 +130,30 @@ public class ClientEventsForgeBus {
                 }
 
                 //slap on the rest of the tooltips now
-                for (AttributeModifier am : map.values()) {
-                    if (am.getOperation() == ADDITION) {
-
+                for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
+                    MutableComponent comp = Util.text(" ");
+                    if (entry.getValue().getOperation() == ADDITION) {
+                        if (isPercentageAttribute.test(entry.getKey())) {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
+                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount()*100)));
+                            comp.append("%");
+                        } else {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
+                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount())));
+                        }
+                    } else {
+                        comp.append(Util.translation("idf.right_arrow.symbol"));
+                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
+                        comp.append(tenths.format(entry.getValue().getAmount()+1));
+                        comp.append("x");
                     }
+                    other.add(comp);
                 }
 
-            } else {
+            }
+            else {
                 //If the item is tagged as equipment but doesn't have a damage class it is wearable equipment.
                 if (item.isDamageableItem()) {
                     double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
@@ -165,7 +173,7 @@ public class ClientEventsForgeBus {
                 line2.append(Util.writeStaticTooltipComponent(prc * 100, "pierce", null, true, false));
                 line2.append(Util.writeStaticTooltipComponent(sls * 100, "slash", null, true, true));
 
-                //dynamic damage lines for weapons
+                //dynamic damage lines for armour
                 for (Attribute a : map.keySet()) {
                     String name = a.getDescriptionId();
                     if (name.contains("resistance") && !name.contains("knock") || name.contains("armor")) {
@@ -177,62 +185,34 @@ public class ClientEventsForgeBus {
                     }
                 }
 
-            }
-
-            for (Attribute a : attributeMap.keySet()) {
-                //we need the name here to create tooltips abstractedly
-                String name = a.getDescriptionId();
-
-                //if the item is a melee weapon, there's no need to take the attack speed attribute since we've already displayed it
-                //same thing for non-weapons and defense.
-                if (isMeleeWeapon) {
-                    if (name.contains("attack_speed")) continue;
-                } else {
-                    if (name.contains("armor_toughness")) continue;
-                }
-
-                //here we handle the attribute. First create a new component to display it in.
-                MutableComponent component = Util.textComponent("");
-                //use the name of the attribute to find the translation key for its icon
-                component.append(Util.writeIcon(name));
-                //grab all the modifiers attached to this attribute
-                Collection<AttributeModifier> mods = attributeMap.get(a);
-                //first we check if this item is a weapon, if it is display
-                if (isWeapon && name.contains("damage")) {
-                    final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
-                    double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    double finalValue = f1 * f2;
-                    component.append(Util.writeTooltipNumber((int) finalValue));
-                } else {
-                    double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                    component.append(Util.textComponent(Util.threeDigit((int) flat)));
-                    double totalMult = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                    if (totalMult != 1) component.append(Util.textComponent(" + " + Util.threeDigit((int) (totalMult * 100)) + "%"));
-                }
-                if (name.contains("damage")) {
-                    damage.add(Util.textComponent(" ").append(component));
-                } else if (name.contains("resistance") && !name.contains("knock") || name.contains("armor")) {
-                    resistance.add(Util.textComponent(" ").append(component));
-                } else {
-                    other.add(component);
+                for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
+                    MutableComponent comp = Util.text(" ");
+                    if (entry.getValue().getOperation() == ADDITION) {
+                        if (isPercentageAttribute.test(entry.getKey())) {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
+                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount()*100)));
+                            comp.append("%");
+                        } else {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
+                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount())));
+                        }
+                    } else {
+                        comp.append(Util.translation("idf.right_arrow.symbol"));
+                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
+                        comp.append(tenths.format(entry.getValue().getAmount()+1));
+                        comp.append("x");
+                    }
+                    other.add(comp);
                 }
             }
 
             //here we add all the components we've created.
             list.add(line1);
             list.add(line2);
-            while (!other.isEmpty()) {
-                MutableComponent component = Util.textComponent("");
-                for (int i = 1; i <= 3; ++i) {
-                    component.append(other.remove(0));
-                    if (!other.isEmpty() && i < 3) component.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
-                    if (other.isEmpty()) break;
-                }
-                list.add(component);
-            }
-            if (damage.size() > 1) list.addAll(damage);
-            if (resistance.size() > 1) list.addAll(resistance);
+            list.add(mainArea);
+            list.addAll(other);
         }
     }
 

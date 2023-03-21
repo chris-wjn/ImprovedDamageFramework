@@ -39,6 +39,7 @@ public class Util {
     private static final Style INDICATOR = Style.EMPTY.withFont(FONT_INDICATORS);
     private static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
     private static final Style SPACER = Style.EMPTY.withFont(FONT_SPACER);
+    private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final DecimalFormat hundredths = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
@@ -74,13 +75,13 @@ public class Util {
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC9")};
 
     static {
-        MutableComponent damageComponent = Util.textComponent(" ");
-        damageComponent.append(Util.translationComponent("idf.icon.damage").withStyle(ICON));
-        damageComponent.append(Util.translationComponent("idf.damage.tooltip"));
+        MutableComponent damageComponent = Util.text(" ");
+        damageComponent.append(Util.translation("idf.icon.damage").withStyle(ICON));
+        damageComponent.append(Util.translation("idf.damage.tooltip"));
         damageTooltip.add(damageComponent);
-        MutableComponent resistanceComponent = Util.textComponent(" ");
-        damageComponent.append(Util.translationComponent("idf.icon.resistance").withStyle(ICON));
-        damageComponent.append(Util.translationComponent("idf.resistance.tooltip"));
+        MutableComponent resistanceComponent = Util.text(" ");
+        damageComponent.append(Util.translation("idf.icon.resistance").withStyle(ICON));
+        damageComponent.append(Util.translation("idf.resistance.tooltip"));
         resistanceTooltip.add(resistanceComponent);
     }
 
@@ -105,16 +106,16 @@ public class Util {
         return withColor(text, colorCode);
     }
 
-    public static MutableComponent translationComponent(String key) {
+    public static MutableComponent translation(String key) {
         return MutableComponent.create(new TranslatableContents(key));
     }
 
-    public static MutableComponent translationComponent(String main, Object... additions) {
-        return MutableComponent.create(new TranslatableContents(main, additions));
+    public static MutableComponent translation(String main, Object... additions) {
+        return Component.translatable(main, additions);
     }
 
-    public static MutableComponent textComponent(String text) {
-        return MutableComponent.create(new LiteralContents(text));
+    public static MutableComponent text(String text) {
+        return Component.literal(text);
     }
 
     public static MutableComponent numericalAttributeComponent(double val) {
@@ -260,7 +261,7 @@ public class Util {
         for (int i = 0; i < list.size(); ++i) {
             MutableComponent c = (MutableComponent) list.get(i);
             if (i < list.size()-1) {
-                c.append(Util.withColor(Util.textComponent(" | "), Color.LIGHTGOLDENRODYELLOW));
+                c.append(Util.withColor(Util.text(" | "), Color.LIGHTGOLDENRODYELLOW));
             }
             returnList.add(c);
         }
@@ -284,46 +285,46 @@ public class Util {
                 }
             }
         }
-        MutableComponent returnComponent = textComponent("");
+        MutableComponent returnComponent = text("");
         boolean hasAddition = addition != 0, hasBaseMult = base != 0, hasTotalMult = total != 0;
         boolean hasNothing = true;
         //if (hasAddition || hasTotalMult || hasBaseMult) returnComponent.append(translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
         if (hasAddition) {
             hasNothing = false;
             if (addition < 0) {
-                returnComponent.append(withColor(textComponent(hundredths.format(addition)), Color.RED).withStyle(INDICATOR));
+                returnComponent.append(withColor(text(hundredths.format(addition)), Color.RED).withStyle(INDICATOR));
             } else {
-                returnComponent.append(withColor(textComponent("+" + hundredths.format(addition)), Color.LIGHTGREEN).withStyle(INDICATOR));
+                returnComponent.append(withColor(text("+" + hundredths.format(addition)), Color.LIGHTGREEN).withStyle(INDICATOR));
             }
             if (hasBaseMult || hasTotalMult) returnComponent.append(", ");
         }
         if (hasBaseMult) {
             hasNothing = false;
             if (base < 0) {
-                returnComponent.append(withColor(translationComponent("idf.base_multiplication"), Color.RED));
-                returnComponent.append(withColor(textComponent(hundredths.format(base)), Color.RED).withStyle(INDICATOR));
-                returnComponent.append(withColor(textComponent(")"), Color.RED));
+                returnComponent.append(withColor(translation("idf.base_multiplication"), Color.RED));
+                returnComponent.append(withColor(text(hundredths.format(base)), Color.RED).withStyle(INDICATOR));
+                returnComponent.append(withColor(text(")"), Color.RED));
             } else {
-                returnComponent.append(withColor(translationComponent("idf.base_multiplication"), Color.LIGHTGREEN));
-                returnComponent.append(withColor(textComponent(hundredths.format(base)), Color.LIGHTGREEN).withStyle(INDICATOR));
-                returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN));
+                returnComponent.append(withColor(translation("idf.base_multiplication"), Color.LIGHTGREEN));
+                returnComponent.append(withColor(text(hundredths.format(base)), Color.LIGHTGREEN).withStyle(INDICATOR));
+                returnComponent.append(withColor(text(")"), Color.LIGHTGREEN));
             }
             if (hasTotalMult) returnComponent.append(", ");
         }
         if (hasTotalMult) {
             hasNothing = false;
             if (total < 0) {
-                returnComponent.append(withColor(translationComponent("idf.total_multiplication"), Color.RED));
-                returnComponent.append(withColor(textComponent(hundredths.format(total)), Color.RED).withStyle(INDICATOR));
-                returnComponent.append(withColor(textComponent(")"), Color.RED));
+                returnComponent.append(withColor(translation("idf.total_multiplication"), Color.RED));
+                returnComponent.append(withColor(text(hundredths.format(total)), Color.RED).withStyle(INDICATOR));
+                returnComponent.append(withColor(text(")"), Color.RED));
             } else {
-                returnComponent.append(withColor(translationComponent("idf.total_multiplication"), Color.LIGHTGREEN));
-                returnComponent.append(withColor(textComponent(hundredths.format(total)), Color.LIGHTGREEN).withStyle(INDICATOR));
-                returnComponent.append(withColor(textComponent(")"), Color.LIGHTGREEN));
+                returnComponent.append(withColor(translation("idf.total_multiplication"), Color.LIGHTGREEN));
+                returnComponent.append(withColor(text(hundredths.format(total)), Color.LIGHTGREEN).withStyle(INDICATOR));
+                returnComponent.append(withColor(text(")"), Color.LIGHTGREEN));
             }
         }
         if (hasNothing) {
-            returnComponent.append(withColor(textComponent("0"), Color.WHITESMOKE).withStyle(INDICATOR));
+            returnComponent.append(withColor(text("0"), Color.WHITESMOKE).withStyle(INDICATOR));
         }
         return returnComponent;
     }
@@ -344,24 +345,24 @@ public class Util {
     }
 
     public static MutableComponent writeTooltipInteger(int num) {
-        MutableComponent comp = Util.textComponent("").withStyle(TOOLTIP);
+        MutableComponent comp = Util.text("").withStyle(TOOLTIP);
         String s = String.valueOf(num);
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
-                comp.append(translationComponent("space.-1").withStyle(SPACER));
+                comp.append(translation("space.-1").withStyle(SPACER));
             }
         }
         return comp;
     }
 
     public static MutableComponent writeTooltipDouble(double num) {
-        MutableComponent comp = Util.textComponent("(").withStyle(TOOLTIP);
+        MutableComponent comp = Util.text("(").withStyle(TOOLTIP);
         String s = tenths.format(num);
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
-                comp.append(translationComponent("space.-1").withStyle(SPACER));
+                comp.append(translation("space.-1").withStyle(SPACER));
             }
         }
         return comp.append(")");
@@ -369,21 +370,23 @@ public class Util {
 
     public static MutableComponent writeStaticTooltipComponent(double n, String name, @Nullable Color colour, boolean isPercentage, boolean drawBorders) {
         String num = String.valueOf(n);
-        MutableComponent comp = textComponent(drawBorders? "|" : "").append(writeIcon(name));
+        MutableComponent comp = text(drawBorders? "|" : "").withStyle(DEFAULT).append(writeIcon(name));
         if (colour == null) {
-            comp.append(textComponent(num) + (isPercentage? "%" : ""));
+            comp.append(text(num));
+            if (isPercentage) comp.append("%");
         }
         else {
-            comp.append(withColor(textComponent(num), colour) + (isPercentage ? "%" : ""));
+            comp.append(withColor(text(num), colour));
+            if (isPercentage) comp.append("%");
         }
-        for (int i = 1; i <= ((drawBorders? 6 : 5)-num.length()); ++i) {
+        for (int i = 1; i <= ((drawBorders? 6 : 5 + (isPercentage? 0 : 1))-num.length()); ++i) {
             comp.append(" ");
         }
         return drawBorders? comp.append("|") : comp;
     }
 
     public static MutableComponent writeStaticInfinityComponent(Color colour, boolean drawBorders) {
-        MutableComponent comp = textComponent(drawBorders? "|" : "").append(withColor(writeIcon("infinity.symbol"), colour));
+        MutableComponent comp = text(drawBorders? "|" : "").append(withColor(writeIcon("infinity.symbol"), colour));
         for (int i = 1; i <= ((drawBorders? 6 : 5)-1); ++i) {
             comp.append(" ");
         }
@@ -391,10 +394,9 @@ public class Util {
     }
 
     public static MutableComponent writeIcon(String name) {
-        MutableComponent ret = textComponent("");
-        MutableComponent comp = translationComponent("space." + ICON_PIXEL_SPACER).withStyle(SPACER);
-        MutableComponent comp1 = translationComponent("idf.icon." + name).withStyle(ICON);
-        return ret.append(comp).append(comp1);
+        MutableComponent comp = translation("space." + ICON_PIXEL_SPACER).withStyle(SPACER);
+        MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
+        return comp.append(comp1);
     }
 
 }

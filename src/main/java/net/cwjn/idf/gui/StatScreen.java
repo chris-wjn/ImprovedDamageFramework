@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.gui.buttons.CategoryButton;
-import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
 import net.minecraft.ChatFormatting;
@@ -30,7 +29,7 @@ import static net.cwjn.idf.attribute.IDFElement.*;
 import static net.cwjn.idf.gui.StatScreen.Icon.*;
 import static net.cwjn.idf.util.Color.INDIANRED;
 import static net.cwjn.idf.util.Util.numericalAttributeComponent;
-import static net.cwjn.idf.util.Util.translationComponent;
+import static net.cwjn.idf.util.Util.translation;
 
 @OnlyIn(Dist.CLIENT)
 public class StatScreen extends Screen {
@@ -47,7 +46,7 @@ public class StatScreen extends Screen {
     private Icon currentScreen = DAMAGE;
 
     public StatScreen() {
-        super(translationComponent("idf.stats_screen"));
+        super(Util.translation("idf.stats_screen"));
     }
 
     @Override
@@ -88,7 +87,7 @@ public class StatScreen extends Screen {
             case PLAYER:
                 font.draw(matrix, drawIconAndString("health", "max_health"), left+16, top+40, 0xffffff);
                 drawbar(matrix, left+16, top+40);
-                Util.drawCenteredString(font, matrix, Util.textComponent(df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth())), left + 70, top + 40, INDIANRED.getColor());
+                Util.drawCenteredString(font, matrix, Util.text(df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth())), left + 70, top + 40, INDIANRED.getColor());
                 font.draw(matrix, drawIconAndString("movespeed", "movespeed"), left+16, top+56, 0xffffff);
                 drawbar(matrix, left+16, top+56);
                 drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(Attributes.MOVEMENT_SPEED)), left+70, top+56, 0x111111);

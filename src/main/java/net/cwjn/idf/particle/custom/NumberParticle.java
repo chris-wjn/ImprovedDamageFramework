@@ -82,7 +82,7 @@ public class NumberParticle extends Particle {
     @Override
     public void render(@NotNull VertexConsumer pBuffer, Camera pRenderInfo, float pPartialTicks) {
         PoseStack stack = new PoseStack();
-        MutableComponent component = Util.textComponent(String.valueOf((int) number)).withStyle(indicator);
+        MutableComponent component = Util.text(String.valueOf((int) number)).withStyle(indicator);
         Vec3 cam = pRenderInfo.getPosition();
         double displayX = Mth.lerp(pPartialTicks, xo, x) - cam.x;
         double displayY = Mth.lerp(pPartialTicks, yo, y) - cam.y;

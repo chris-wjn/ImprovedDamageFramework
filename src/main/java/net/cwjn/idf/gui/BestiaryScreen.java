@@ -16,7 +16,7 @@ public class BestiaryScreen extends Screen {
     private static final List<EntityType<? extends LivingEntity>> unlockedEntities = new ArrayList<>();
 
     public BestiaryScreen() {
-        super(Util.translationComponent("idf.bestiary_screen"));
+        super(Util.translation("idf.bestiary_screen"));
     }
 
     public static void addEntity(EntityType<? extends LivingEntity> entityType) {

@@ -3,9 +3,11 @@ package net.cwjn.idf.compat;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.compat.patchouli.PatchouliCompat;
 import net.cwjn.idf.compat.tetra.TetraCompat;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.net.URISyntaxException;
 
