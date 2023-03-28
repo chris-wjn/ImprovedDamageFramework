@@ -43,11 +43,18 @@ public record RpgItemData(StatObject CONSTITUTION, StatObject STRENGTH, StatObje
     }
 
     public static class StatObject {
-        public int req;
-        public double scl;
+        int req;
+        double scl;
         public StatObject(int i, double d) {
             req = i;
             scl = d;
+        }
+        public double getScl() {
+            return scl;
+        }
+
+        public int getReq() {
+            return req;
         }
     }
     
