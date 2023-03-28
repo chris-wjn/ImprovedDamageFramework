@@ -6,13 +6,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.eventbus.api.Event;
 
-public class OnItemAttributeRework extends Event {
+public class ItemAttributeReworkEvent extends Event {
 
     private final ImmutableMultimap.Builder<Attribute, AttributeModifier> attributeBuilder;
     public final CompoundTag defaultTag;
     private final String item;
 
-    public OnItemAttributeRework(ImmutableMultimap.Builder<Attribute, AttributeModifier> b, CompoundTag tag, String s) {
+    public ItemAttributeReworkEvent(ImmutableMultimap.Builder<Attribute, AttributeModifier> b, CompoundTag tag, String s) {
         attributeBuilder = b;
         defaultTag = tag;
         item = s;

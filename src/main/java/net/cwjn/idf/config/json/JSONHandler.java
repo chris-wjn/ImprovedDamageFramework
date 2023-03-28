@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.IDFCustomEquipment;
-import net.cwjn.idf.api.event.OnItemAttributeRework;
+import net.cwjn.idf.api.event.ItemAttributeReworkEvent;
 import net.cwjn.idf.config.json.data.*;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
@@ -41,7 +41,6 @@ import java.util.*;
 import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.config.json.data.EntityDataTemplate.NONE;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
-import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_BASE;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.ARMOR;
@@ -327,7 +326,7 @@ public class JSONHandler {
                     });
                 }
             }
-            MinecraftForge.EVENT_BUS.post(new OnItemAttributeRework(builder, defaultTag, item.toString()));
+            MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, item.toString()));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
         }
