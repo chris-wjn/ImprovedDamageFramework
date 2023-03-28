@@ -246,7 +246,8 @@ public class ClientEventsForgeBus {
 
     private static double getAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a) {
         double val = 0;
-        for (AttributeModifier m : map.get(a)) {
+        AttributeModifier[] modifiers = map.get(a).toArray(new AttributeModifier[map.get(a).size()]);
+        for (AttributeModifier m : modifiers) {
             if (m.getOperation() == ADDITION) {
                 val += m.getAmount();
                 map.remove(a, m);
