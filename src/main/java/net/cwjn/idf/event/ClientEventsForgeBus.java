@@ -93,7 +93,7 @@ public class ClientEventsForgeBus {
                 if (item.isDamageableItem()) {
                     double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
                     Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
-                    line1.append(Util.writeStaticTooltipComponent((int) percentage, "durability", colour, true, true));
+                    line1.append(Util.writeStaticTooltipComponent(percentage*100, "durability", colour, true, true));
                 } else {
                     line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
                 }
@@ -158,7 +158,7 @@ public class ClientEventsForgeBus {
                 if (item.isDamageableItem()) {
                     double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
                     Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
-                    line1.append(Util.writeStaticTooltipComponent((int) percentage, "durability", colour, true, true));
+                    line1.append(Util.writeStaticTooltipComponent(percentage*100, "durability", colour, true, true));
                 } else {
                     line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
                 }
