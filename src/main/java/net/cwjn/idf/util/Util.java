@@ -256,18 +256,6 @@ public class Util {
         buffer.writeChar('\0');
     }
 
-    public static List<Component> format(List<Component> list) {
-        List<Component> returnList = new ArrayList<>();
-        for (int i = 0; i < list.size(); ++i) {
-            MutableComponent c = (MutableComponent) list.get(i);
-            if (i < list.size()-1) {
-                c.append(Util.withColor(Util.text(" | "), Color.LIGHTGOLDENRODYELLOW));
-            }
-            returnList.add(c);
-        }
-        return returnList;
-    }
-
     public static MutableComponent getComponentFromAttribute (ItemStack item, Attribute a) {
         double addition = 0;
         double base = 0;
@@ -362,15 +350,33 @@ public class Util {
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
-                comp.append(translation("space.-1").withStyle(SPACER));
+                comp.append(spacer(-1));
             }
         }
         return comp.append(")");
     }
 
     public static MutableComponent writeStaticTooltipComponent(double n, String name, @Nullable Color colour, boolean isPercentage, boolean drawBorders) {
-        String num = String.valueOf(n);
-        MutableComponent comp = text(drawBorders? "|" : "").withStyle(DEFAULT).append(writeIcon(name));
+        //first format the number so that percentages have no decimal and other numbers are rounded to the nearest tenth
+        String num;
+        if (isPercentage) num = String.valueOf((int) n);
+        else num = tenths.format(n);
+
+        //now lets check how many spaces we need to fill. Each component should have 6 characters between the dividers, so
+        //we start with 6, subtract the number of characters we already have, and then add 1 if the percentage symbol will take up a space
+        int spaces = 6 - (num.length() + (isPercentage ? 1 : 0));
+        boolean isOdd = spaces % 2 == 0;
+
+        //start our component object with a divider if this is not a middle element
+        MutableComponent comp = text(drawBorders? "|" : "");
+
+        //add left padding, plus a half if the total spaces is odd
+        for (int i = 1; i <= spaces/2; i++) {
+            comp.append(spacer(4));
+        }
+        if (isOdd) comp.append(spacer(2));
+
+        //add the number to the component. Also add a percent if needed
         if (colour == null) {
             comp.append(text(num));
             if (isPercentage) comp.append("%");
@@ -379,9 +385,14 @@ public class Util {
             comp.append(withColor(text(num), colour));
             if (isPercentage) comp.append("%");
         }
-        for (int i = 1; i <= ((drawBorders? 6 : 5 + (isPercentage? 0 : 1))-num.length()); ++i) {
-            comp.append(" ");
+
+        //add a half spacer if total spaces is odd, then add the rest of the right padding
+        if (isOdd) comp.append(spacer(2));
+        for (int i = 1; i <= spaces/2; i++) {
+            comp.append(spacer(4));
         }
+
+        //finish up with an ending divider if needed
         return drawBorders? comp.append("|") : comp;
     }
 
@@ -394,9 +405,13 @@ public class Util {
     }
 
     public static MutableComponent writeIcon(String name) {
-        MutableComponent comp = translation("space." + ICON_PIXEL_SPACER).withStyle(SPACER);
+        MutableComponent comp = spacer(ICON_PIXEL_SPACER);
         MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
         return comp.append(comp1);
+    }
+
+    public static MutableComponent spacer(int i) {
+        return translation("space." + i).withStyle(SPACER);
     }
 
 }

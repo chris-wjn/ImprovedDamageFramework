@@ -13,6 +13,7 @@ import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
 import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.data.ClientData;
+import net.cwjn.idf.iaf.RpgItemData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -60,7 +61,8 @@ public class JSONHandler {
             registerTypeAdapter(OffensiveData.class, new OffensiveData.OffensiveDataSerializer()).
             registerTypeAdapter(DefensiveData.class, new DefensiveData.DefensiveDataSerializer()).
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
-            registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObjectSerializer()).
+            registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObject.StatObjectSerializer()).
+            registerTypeAdapter(RpgItemData.class, new RpgItemData.RpgItemSerializer()).
             create();
 
     public static void init(File configDir) {
@@ -241,8 +243,8 @@ public class JSONHandler {
             }
             Map<String, RpgItemData> sortedWeapons = new TreeMap<>(weapons);
             Map<String, RpgItemData> sortedArmour = new TreeMap<>(armour);
-            JSONUtil.writeFile(new File(iafDir, "weapons.json"), sortedWeapons);
-            JSONUtil.writeFile(new File(iafDir, "armour.json"), sortedArmour);
+            JSONUtil.getOrCreateConfigFile(iafDir, "weapons.json", sortedWeapons, new TypeToken<Map<String, RpgItemData>>() {}.getType());
+            JSONUtil.getOrCreateConfigFile(iafDir, "armour.json", sortedArmour, new TypeToken<Map<String, RpgItemData>>() {}.getType());
         }
 
         //Now use the maps to update items and then save the physical client's mappings
@@ -271,8 +273,6 @@ public class JSONHandler {
     }
 
     public static void updateItems() {
-        Map<String, RpgItemData> statMap;
-        if (ImprovedDamageFramework.IAFLoaded) statMap = retrieveRpgItems();
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
             CompoundTag defaultTag = new CompoundTag();

@@ -6,6 +6,7 @@ import net.cwjn.idf.config.json.data.*;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
 import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.iaf.RpgItemData;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -22,7 +23,8 @@ public class JSONUtil {
             registerTypeAdapter(OffensiveData.class, new OffensiveData.OffensiveDataSerializer()).
             registerTypeAdapter(DefensiveData.class, new DefensiveData.DefensiveDataSerializer()).
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
-            registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObjectSerializer()).
+            registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObject.StatObjectSerializer()).
+            registerTypeAdapter(RpgItemData.class, new RpgItemData.RpgItemSerializer()).
             create();
 
     public static <T> T getOrCreateConfigFile(File configDir, String configName, T defaults, Type type) {
