@@ -124,10 +124,9 @@ public class MixinPlayer {
                     float knockback = (float)thisPlayer.getAttributeValue(Attributes.ATTACK_KNOCKBACK); // Forge: Initialize player value to the attack knockback attribute of the player, which is by default 0
                     knockback += EnchantmentHelper.getKnockbackBonus(thisPlayer);
                     if (fullStrength) {
-                        knockback += 0.4f;
                         if (thisPlayer.isSprinting()) {
                             thisPlayer.level.playSound((Player) null, thisPlayer.getX(), thisPlayer.getY(), thisPlayer.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, thisPlayer.getSoundSource(), 1.0F, 1.0F);
-                            knockback += 0.4f;
+                            knockback += DamageHandler.DEFAULT_KNOCKBACK;
                             sprintAttack = true;
                         }
                     }

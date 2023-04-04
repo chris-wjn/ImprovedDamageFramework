@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.damage.DamageHandler;
 import net.cwjn.idf.gui.EquipmentInspectScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
@@ -30,8 +31,9 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.spongepowered.asm.mixin.Mutable;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,8 +42,11 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
+import static net.cwjn.idf.damage.DamageHandler.DEFAULT_ATTACK_SPEED;
+import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
+import static net.cwjn.idf.util.Util.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -51,11 +56,14 @@ public class ClientEventsForgeBus {
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
     private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
+    private static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
     public static final int ICON_PIXEL_SPACER = 2;
     private static final Predicate<AttributeModifier> isAddition = o -> o.getOperation() == ADDITION;
     private static final Predicate<Attribute> isPercentageAttribute = a -> (
-            a.equals(Attributes.KNOCKBACK_RESISTANCE) ||
-            a.equals(IDFAttributes.LIFESTEAL.get())
+            a.equals(IDFAttributes.EVASION.get()) ||
+            a.equals(IDFAttributes.LIFESTEAL.get()) ||
+            a.equals(IDFAttributes.CRIT_CHANCE.get()) ||
+            a.equals(IDFAttributes.PENETRATING.get())
             );
 
     public static void addInspectText(ItemTooltipEvent event) {
@@ -100,15 +108,16 @@ public class ClientEventsForgeBus {
                 double force = getAndRemoveAttribute(map, IDFAttributes.FORCE.get());
                 line1.append(Util.writeStaticTooltipComponent(force, "force", null, false, false));
                 if (!isRanged) {
-                    double atkSpd = getAndRemoveAttribute(map, Attributes.ATTACK_SPEED);
+                    double atkSpd = (DEFAULT_ATTACK_SPEED + getAndRemoveAttribute(map, Attributes.ATTACK_SPEED));
                     line1.append(Util.writeStaticTooltipComponent(atkSpd, "attack_speed", null, false, true));
                 }
                 double crit = getAndRemoveAttribute(map, IDFAttributes.CRIT_CHANCE.get());
                 double pen = getAndRemoveAttribute(map, IDFAttributes.PENETRATING.get());
-                double knockback = getAndRemoveAttribute(map, Attributes.ATTACK_KNOCKBACK);
+                BigDecimal numerator = BigDecimal.valueOf(getAndRemoveAttribute(map, Attributes.ATTACK_KNOCKBACK)), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
+                double knockback = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
                 line2.append(Util.writeStaticTooltipComponent(crit, "critical_chance", null, true, true));
                 line2.append(Util.writeStaticTooltipComponent(pen, "armour_penetration", null, true, false));
-                line2.append(Util.writeStaticTooltipComponent(knockback * 100, "knockback", null, true, true));
+                line2.append(Util.writeStaticTooltipComponent(knockback*100, "knockback", null, true, true));
 
                 //dynamic damage lines for weapons
                 List<Component> damageComponents = new ArrayList<>();
@@ -119,8 +128,9 @@ public class ClientEventsForgeBus {
                         Collection<AttributeModifier> mods = map.get(key);
                         final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                         double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                        double mult = flat * mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(0.0, (x, y) -> x * y);
-                        damageComponents.add((Util.writeIcon(name)).append(Util.writeTooltipInteger((int) flat)).append("+").append(Util.writeTooltipDouble(mult)));
+                        double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                        if (mult != 1) damageComponents.add((Util.writeIcon(name)).append(writeTooltipDouble(flat)).append(Util.writeScalingTooltip(mult*flat)));
+                        else damageComponents.add((Util.writeIcon(name)).append(writeTooltipDouble(flat)));
                     }
                     map.removeAll(key);
                 }
@@ -136,12 +146,12 @@ public class ClientEventsForgeBus {
                         if (isPercentageAttribute.test(entry.getKey())) {
                             comp.append(Util.translation("idf.right_arrow.symbol"));
                             comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount()*100)));
+                            comp.append(writeTooltipInteger((int) (entry.getValue().getAmount())));
                             comp.append("%");
                         } else {
                             comp.append(Util.translation("idf.right_arrow.symbol"));
                             comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount())));
+                            comp.append(writeTooltipInteger((int) (entry.getValue().getAmount())));
                         }
                     } else {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
@@ -180,8 +190,8 @@ public class ClientEventsForgeBus {
                         Collection<AttributeModifier> mods = map.get(a);
                         final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                         double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                        double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                        mainArea.append(Util.writeIcon(name)).append(Util.writeTooltipInteger((int)flat)).append("+").append(Util.writeTooltipDouble(mult)).append(", ");
+                        double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).sum();
+                        mainArea.append(Util.writeIcon(name)).append(writeTooltipInteger((int)flat)).append("+").append(writeTooltipDouble(mult)).append(", ");
                     }
                 }
 
@@ -191,12 +201,12 @@ public class ClientEventsForgeBus {
                         if (isPercentageAttribute.test(entry.getKey())) {
                             comp.append(Util.translation("idf.right_arrow.symbol"));
                             comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount()*100)));
+                            comp.append(writeTooltipInteger((int) (entry.getValue().getAmount())));
                             comp.append("%");
                         } else {
                             comp.append(Util.translation("idf.right_arrow.symbol"));
                             comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                            comp.append(Util.writeTooltipInteger((int) (entry.getValue().getAmount())));
+                            comp.append(writeTooltipInteger((int) (entry.getValue().getAmount())));
                         }
                     } else {
                         comp.append(Util.translation("idf.right_arrow.symbol"));

@@ -338,22 +338,39 @@ public class Util {
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
-                comp.append(translation("space.-1").withStyle(SPACER));
+                comp.append(spacer(-1));
             }
         }
         return comp;
     }
 
     public static MutableComponent writeTooltipDouble(double num) {
-        MutableComponent comp = Util.text("(").withStyle(TOOLTIP);
+        MutableComponent comp = Component.empty().withStyle(TOOLTIP);
         String s = tenths.format(num);
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
+                if (s.charAt(i+1) == '.') {
+                    comp.append(spacer(-2));
+                }
                 comp.append(spacer(-1));
             }
         }
-        return comp.append(")");
+        return comp;
+    }
+
+    public static MutableComponent writeTooltipString(String s) {
+        MutableComponent comp = Util.text("").withStyle(TOOLTIP);
+        for(int i = 0; i < s.length() ; i++) {
+            comp.append(String.valueOf(s.charAt(i)));
+            if (i != s.length()-1) {
+                if (s.charAt(i+1) == '.') {
+                    comp.append(spacer(-2));
+                }
+                comp.append(spacer(-1));
+            }
+        }
+        return comp;
     }
 
     public static MutableComponent writeStaticTooltipComponent(double n, String name, @Nullable Color colour, boolean isPercentage, boolean drawBorders) {
@@ -361,39 +378,38 @@ public class Util {
         String num;
         if (isPercentage) num = String.valueOf((int) n);
         else num = tenths.format(n);
+        int ones = 0;
+        int dots = 0;
+        for (char c : num.toCharArray()) {
+            if (c == '1') ones++;
+            if (c == '.') dots++;
+        }
 
         //now lets check how many spaces we need to fill. Each component should have 6 characters between the dividers, so
         //we start with 6, subtract the number of characters we already have, and then add 1 if the percentage symbol will take up a space
-        int spaces = 6 - (num.length() + (isPercentage ? 1 : 0));
-        boolean isOdd = spaces % 2 == 0;
+        double spaces = 6 - (num.length() + (isPercentage ? 1 : 0));
 
         //start our component object with a divider if this is not a middle element
-        MutableComponent comp = text(drawBorders? "|" : "");
+        MutableComponent comp = text(drawBorders? "|" : "").withStyle(DEFAULT);
 
         //add left padding, plus a half if the total spaces is odd
-        for (int i = 1; i <= spaces/2; i++) {
-            comp.append(spacer(4));
-        }
-        if (isOdd) comp.append(spacer(2));
+        comp.append(spacer((int) (8*(spaces/2)) + dots*2));
 
         //add the number to the component. Also add a percent if needed
+        comp.append(writeIcon(name)).append(spacer(-1));
         if (colour == null) {
-            comp.append(text(num));
-            if (isPercentage) comp.append("%");
+            comp.append(writeTooltipString(num+(isPercentage ? "%" : "")));
         }
         else {
-            comp.append(withColor(text(num), colour));
-            if (isPercentage) comp.append("%");
+            comp.append(withColor(writeTooltipString(num+(isPercentage ? "%" : "")), colour));
         }
 
         //add a half spacer if total spaces is odd, then add the rest of the right padding
-        if (isOdd) comp.append(spacer(2));
-        for (int i = 1; i <= spaces/2; i++) {
-            comp.append(spacer(4));
-        }
+        comp.append(spacer((int) (8*(spaces/2)) + dots*2));
+        if (ones == 1) comp.append(spacer(1));
 
         //finish up with an ending divider if needed
-        return drawBorders? comp.append("|") : comp;
+        return drawBorders? comp.append("|").withStyle(DEFAULT) : comp;
     }
 
     public static MutableComponent writeStaticInfinityComponent(Color colour, boolean drawBorders) {
@@ -404,10 +420,19 @@ public class Util {
         return drawBorders? comp.append("|") : comp;
     }
 
+    public static Component writeScalingTooltip(double mult) {
+        MutableComponent comp = Component.empty().withStyle(TOOLTIP);
+        comp.append("+(");
+        comp.append(writeTooltipDouble(mult));
+        comp.append(")");
+        return comp;
+    }
+
+
     public static MutableComponent writeIcon(String name) {
-        MutableComponent comp = spacer(ICON_PIXEL_SPACER);
+        //MutableComponent comp = spacer(ICON_PIXEL_SPACER);
         MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
-        return comp.append(comp1);
+        return text("").append(comp1);
     }
 
     public static MutableComponent spacer(int i) {

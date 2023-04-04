@@ -26,6 +26,9 @@ import static net.cwjn.idf.attribute.IDFElement.*;
 
 public class DamageHandler {
 
+    public static final float DEFAULT_KNOCKBACK = 0.4f;
+    public static final float DEFAULT_ATTACK_SPEED = 4f;
+
     public static float handleDamage(LivingEntity target, DamageSource source, float amount) {
 
         //Integrate the source to an IDFSource
