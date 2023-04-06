@@ -396,7 +396,7 @@ public class Util {
         comp.append(spacer((int) (8*(spaces/2)) + dots*2));
 
         //add the number to the component. Also add a percent if needed
-        comp.append(writeIcon(name)).append(spacer(-1));
+        comp.append(translation("idf.icon." + name).withStyle(ICON)).append(spacer(-1));
         if (colour == null) {
             comp.append(writeTooltipString(num+(isPercentage ? "%" : "")));
         }
@@ -430,9 +430,9 @@ public class Util {
 
 
     public static MutableComponent writeIcon(String name) {
-        //MutableComponent comp = spacer(ICON_PIXEL_SPACER);
+        MutableComponent comp = spacer(ICON_PIXEL_SPACER);
         MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
-        return text("").append(comp1);
+        return comp.append(comp1);
     }
 
     public static MutableComponent spacer(int i) {

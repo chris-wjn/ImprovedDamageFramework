@@ -176,23 +176,31 @@ public class ClientEventsForgeBus {
                 double kbr = getAndRemoveAttribute(map, Attributes.KNOCKBACK_RESISTANCE);
                 line1.append(Util.writeStaticTooltipComponent(def, "defense", null, false, false));
                 line1.append(Util.writeStaticTooltipComponent(kbr * 100, "knockback_resistance", null, true, true));
-                double str = getAndRemoveAttribute(map, IDFAttributes.STRIKE_MULT.get());
-                double prc = getAndRemoveAttribute(map, IDFAttributes.PIERCE_MULT.get());
-                double sls = getAndRemoveAttribute(map, IDFAttributes.SLASH_MULT.get());
-                line2.append(Util.writeStaticTooltipComponent(str * 100, "strike", null, true, true));
-                line2.append(Util.writeStaticTooltipComponent(prc * 100, "pierce", null, true, false));
-                line2.append(Util.writeStaticTooltipComponent(sls * 100, "slash", null, true, true));
+                double str = getAndRemoveAttribute(map, IDFAttributes.STRIKE_MULT.get())*100;
+                double prc = getAndRemoveAttribute(map, IDFAttributes.PIERCE_MULT.get())*100;
+                double sls = getAndRemoveAttribute(map, IDFAttributes.SLASH_MULT.get())*100;
+                line2.append(Util.writeStaticTooltipComponent(str, "strike", str > 0 ? Color.DARKRED : Color.GREEN, true, true));
+                line2.append(Util.writeStaticTooltipComponent(prc, "pierce", prc > 0 ? Color.DARKRED : Color.GREEN, true, false));
+                line2.append(Util.writeStaticTooltipComponent(sls, "slash", sls > 0 ? Color.DARKRED : Color.GREEN, true, true));
 
                 //dynamic damage lines for armour
-                for (Attribute a : map.keySet()) {
-                    String name = a.getDescriptionId();
+                List<Component> armourComponents = new ArrayList<>();
+                Attribute[] keys = map.keySet().toArray(new Attribute[map.keySet().size()]);
+                for (Attribute key : keys) {
+                    String name = key.getDescriptionId();
                     if (name.contains("resistance") && !name.contains("knock") || name.contains("armor")) {
-                        Collection<AttributeModifier> mods = map.get(a);
+                        Collection<AttributeModifier> mods = map.get(key);
                         final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                         double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                        double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).sum();
-                        mainArea.append(Util.writeIcon(name)).append(writeTooltipInteger((int)flat)).append("+").append(writeTooltipDouble(mult)).append(", ");
+                        double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                        if (mult != 1) armourComponents.add((Util.writeIcon(name)).append(writeTooltipDouble(flat)).append(Util.writeScalingTooltip(mult*flat)));
+                        else armourComponents.add((Util.writeIcon(name)).append(writeTooltipDouble(flat)));
                     }
+                    map.removeAll(key);
+                }
+                if (armourComponents.size() >= 1) mainArea.append(armourComponents.get(0));
+                for (int i = 1; i < armourComponents.size(); i++) {
+                    mainArea.append(", ").append(armourComponents.get(i));
                 }
 
                 for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
