@@ -1,5 +1,5 @@
 {
-  "processor": "net.cwjn.idf.compat.PatchouliCompat",
+  "processor": "net.cwjn.idf.compat.patchouli.PatchouliCompat",
   "components": [
     {
       "type": "patchouli:header",

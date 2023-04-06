@@ -1,0 +1,16 @@
+{
+  "name": "Zombie",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:zombie",
+      "text": "A common undead hostile mob that can spawn in groups of up to 4."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:zombie"
+    }
+  ]
+}

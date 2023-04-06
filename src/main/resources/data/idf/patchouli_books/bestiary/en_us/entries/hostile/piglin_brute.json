@@ -1,0 +1,16 @@
+{
+  "name": "Piglin Brute",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:piglin_brute",
+      "text": "A stronger and hostile version of the piglin. Will always attack the player."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:piglin_brute"
+    }
+  ]
+}

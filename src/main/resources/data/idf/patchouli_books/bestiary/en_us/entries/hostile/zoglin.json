@@ -1,0 +1,17 @@
+{
+    "name": "Zoglin",
+    "icon": "",
+    "category": "idf:hostile",
+    "pages": [
+      {
+        "type": "patchouli:entity",
+        "entity": "minecraft:zoglin",
+        "scale": 0.8,
+        "text": "An undead hostile mob created when a hoglin enters the Overworld or End"
+      },
+      {
+        "type": "idf:hostile_entity",
+        "entity": "minecraft:zoglin"
+      }
+    ]
+  }

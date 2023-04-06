@@ -1,0 +1,16 @@
+{
+  "name": "Husk",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:husk",
+      "text": "Zombie variant that does not burn in sunlight and spawns in deserts."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:husk"
+    }
+  ]
+}

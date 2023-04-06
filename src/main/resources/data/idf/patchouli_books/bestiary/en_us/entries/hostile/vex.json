@@ -1,0 +1,16 @@
+{
+  "name": "Vex",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:vex",
+      "text": "Flying hostile mob summoned by the Evoker."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:vex"
+    }
+  ]
+}

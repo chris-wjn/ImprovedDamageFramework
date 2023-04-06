@@ -1,0 +1,16 @@
+{
+  "name": "Phantom",
+  "icon": "",
+  "category": "idf:hostile",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:phantom",
+      "text": "Flying undead hostile mob that spawns when the player has not slept or died for three or more days."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:phantom"
+    }
+  ]
+}
