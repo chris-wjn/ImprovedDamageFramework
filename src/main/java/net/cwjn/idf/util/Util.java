@@ -13,11 +13,9 @@ import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -43,8 +41,6 @@ public class Util {
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final DecimalFormat hundredths = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
-    public static final List<Component> damageTooltip = new ArrayList<>();
-    public static final List<Component> resistanceTooltip = new ArrayList<>();
     public static final UUID[] UUID_BASE_STAT_ADDITION = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F7"),
             UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F0"),
@@ -73,25 +69,6 @@ public class Util {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FB"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C63"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC9")};
-
-    static {
-        MutableComponent damageComponent = Util.text(" ");
-        damageComponent.append(Util.translation("idf.icon.damage").withStyle(ICON));
-        damageComponent.append(Util.translation("idf.damage.tooltip"));
-        damageTooltip.add(damageComponent);
-        MutableComponent resistanceComponent = Util.text(" ");
-        damageComponent.append(Util.translation("idf.icon.resistance").withStyle(ICON));
-        damageComponent.append(Util.translation("idf.resistance.tooltip"));
-        resistanceTooltip.add(resistanceComponent);
-    }
-
-    public static List<Component> getNewDamageTooltip() {
-        return List.copyOf(damageTooltip);
-    }
-
-    public static List<Component> getNewResistanceTooltip() {
-        return List.copyOf(resistanceTooltip);
-    }
 
     public static MutableComponent withColor(MutableComponent text, int color) {
         return text.withStyle(text.getStyle().withColor(net.minecraft.network.chat.TextColor.fromRgb(color & 0xFFFFFF)));
@@ -130,12 +107,6 @@ public class Util {
         font.draw(matrix, component, (x - (float) font.width(component) / 2), y, colour);
     }
 
-    public static void drawCenteredPercentageString(Font font, PoseStack matrix, MutableComponent component, float x, float y, int colour) {
-        float textX = (x - (float) font.width(component) / 2);
-        MutableComponent newComp = component.append("%");
-        font.draw(matrix, newComp, textX, y, colour);
-    }
-
     public static ResourceLocation getEntityRegistryName(EntityType<?> type) {
         return ForgeRegistries.ENTITY_TYPES.getKey(type);
     }
@@ -158,6 +129,10 @@ public class Util {
         BigDecimal x = new BigDecimal(attribute * 9.60845544);
         x = x.setScale(1, RoundingMode.HALF_UP);
         return x.floatValue();
+    }
+
+    public static double fastSqrt(double d) {
+        return Double.longBitsToDouble(((Double.doubleToRawLongBits(d) >> 32) + 1072632448 ) << 31);
     }
 
     public static int getItemBorderType(String dc, Multimap<Attribute, AttributeModifier> map) {
@@ -222,18 +197,6 @@ public class Util {
         }
     }
 
-    public static int findHighest(float[] arr) {
-        int index = 0;
-        float highest = arr[0];
-        for (int i = 0; i < arr.length; ++i) {
-            if (arr[i] > highest) {
-                index = i;
-                highest = arr[i];
-            }
-        }
-        return index;
-    }
-
     /*
         Following 2 methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
      */
@@ -254,82 +217,6 @@ public class Util {
             buffer.writeChar(string.charAt(i));
         }
         buffer.writeChar('\0');
-    }
-
-    public static MutableComponent getComponentFromAttribute (ItemStack item, Attribute a) {
-        double addition = 0;
-        double base = 0;
-        double total = 0;
-        for (Map.Entry<Attribute, AttributeModifier> entry : item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item)).entries()) {
-            if (entry.getKey() == a) {
-                double val = entry.getValue().getAmount();
-                AttributeModifier.Operation op = entry.getValue().getOperation();
-                if (op == ADDITION) {
-                    addition += val;
-                } else if (op == MULTIPLY_BASE) {
-                    base += val;
-                } else {
-                    total += val;
-                }
-            }
-        }
-        MutableComponent returnComponent = text("");
-        boolean hasAddition = addition != 0, hasBaseMult = base != 0, hasTotalMult = total != 0;
-        boolean hasNothing = true;
-        //if (hasAddition || hasTotalMult || hasBaseMult) returnComponent.append(translationComponent("idf.icon." + a.getDescriptionId()).withStyle(ICON));
-        if (hasAddition) {
-            hasNothing = false;
-            if (addition < 0) {
-                returnComponent.append(withColor(text(hundredths.format(addition)), Color.RED).withStyle(INDICATOR));
-            } else {
-                returnComponent.append(withColor(text("+" + hundredths.format(addition)), Color.LIGHTGREEN).withStyle(INDICATOR));
-            }
-            if (hasBaseMult || hasTotalMult) returnComponent.append(", ");
-        }
-        if (hasBaseMult) {
-            hasNothing = false;
-            if (base < 0) {
-                returnComponent.append(withColor(translation("idf.base_multiplication"), Color.RED));
-                returnComponent.append(withColor(text(hundredths.format(base)), Color.RED).withStyle(INDICATOR));
-                returnComponent.append(withColor(text(")"), Color.RED));
-            } else {
-                returnComponent.append(withColor(translation("idf.base_multiplication"), Color.LIGHTGREEN));
-                returnComponent.append(withColor(text(hundredths.format(base)), Color.LIGHTGREEN).withStyle(INDICATOR));
-                returnComponent.append(withColor(text(")"), Color.LIGHTGREEN));
-            }
-            if (hasTotalMult) returnComponent.append(", ");
-        }
-        if (hasTotalMult) {
-            hasNothing = false;
-            if (total < 0) {
-                returnComponent.append(withColor(translation("idf.total_multiplication"), Color.RED));
-                returnComponent.append(withColor(text(hundredths.format(total)), Color.RED).withStyle(INDICATOR));
-                returnComponent.append(withColor(text(")"), Color.RED));
-            } else {
-                returnComponent.append(withColor(translation("idf.total_multiplication"), Color.LIGHTGREEN));
-                returnComponent.append(withColor(text(hundredths.format(total)), Color.LIGHTGREEN).withStyle(INDICATOR));
-                returnComponent.append(withColor(text(")"), Color.LIGHTGREEN));
-            }
-        }
-        if (hasNothing) {
-            returnComponent.append(withColor(text("0"), Color.WHITESMOKE).withStyle(INDICATOR));
-        }
-        return returnComponent;
-    }
-
-    public static String threeDigit(int in) {
-        StringBuilder number = new StringBuilder(String.valueOf(in));
-        int i = number.length();
-        int c = number.toString().contains(".") ? 4 : 3;
-        if (c == 3 && i > 3) return "999";
-        if (c == 3 && i != 3) number.append(".");
-        if (i <= c) {
-            number.append("\uF803");
-            number.append("0".repeat(Math.max(0, c - i)));
-        } else {
-            number = new StringBuilder(number.substring(0, 3));
-        }
-        return number.toString();
     }
 
     public static MutableComponent writeTooltipInteger(int num) {
@@ -427,7 +314,6 @@ public class Util {
         comp.append(")");
         return comp;
     }
-
 
     public static MutableComponent writeIcon(String name) {
         MutableComponent comp = spacer(ICON_PIXEL_SPACER);

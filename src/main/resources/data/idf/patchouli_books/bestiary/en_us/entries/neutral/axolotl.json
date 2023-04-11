@@ -1,0 +1,16 @@
+{
+  "name": "Axolotl",
+  "icon": "",
+  "category": "idf:neutral",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "minecraft:axolotl",
+      "text": "An axolotl is a passive aquatic mob endemic to the lush caves biome that hunts most other aquatic mobs."
+    },
+    {
+      "type": "idf:hostile_entity",
+      "entity": "minecraft:axolotl"
+    }
+  ]
+}

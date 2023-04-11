@@ -4,17 +4,18 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.damage.DamageHandler;
-import net.cwjn.idf.gui.EquipmentInspectScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
+import net.cwjn.idf.hud.MobHealthbar;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -26,6 +27,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -66,16 +69,6 @@ public class ClientEventsForgeBus {
             a.equals(IDFAttributes.PENETRATING.get())
             );
 
-    public static void addInspectText(ItemTooltipEvent event) {
-        ItemStack hoveredItem = event.getItemStack();
-        if (hoveredItem.hasTag() && hoveredItem.getTag().contains("idf.equipment") && Minecraft.getInstance().player != null) {
-            event.getToolTip().add(Component.translatable("idf.press_to_inspect"));
-            if (Keybinds.inspectItem.isDown() && !(Minecraft.getInstance().screen instanceof EquipmentInspectScreen)) {
-                Minecraft.getInstance().pushGuiLayer(new EquipmentInspectScreen(hoveredItem));
-                Keybinds.inspectItem.setDown(false);
-            }
-        }
-    }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
@@ -234,6 +227,18 @@ public class ClientEventsForgeBus {
         }
     }
 
+    private static double getAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a) {
+        double val = 0;
+        AttributeModifier[] modifiers = map.get(a).toArray(new AttributeModifier[map.get(a).size()]);
+        for (AttributeModifier m : modifiers) {
+            if (m.getOperation() == ADDITION) {
+                val += m.getAmount();
+                map.remove(a, m);
+            }
+        }
+        return val;
+    }
+
     @SubscribeEvent
     public static void onInitGui(ScreenEvent.Init event) {
         Screen screen = event.getScreen();
@@ -262,16 +267,19 @@ public class ClientEventsForgeBus {
         return Screen.hasShiftDown();
     }
 
-    private static double getAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a) {
-        double val = 0;
-        AttributeModifier[] modifiers = map.get(a).toArray(new AttributeModifier[map.get(a).size()]);
-        for (AttributeModifier m : modifiers) {
-            if (m.getOperation() == ADDITION) {
-                val += m.getAmount();
-                map.remove(a, m);
-            }
+    @SubscribeEvent
+    public static void prepareHealthbar(RenderLivingEvent.Post<? extends LivingEntity, ? extends EntityModel<?>> event) {
+        if (event.getEntity() != Minecraft.getInstance().player) {
+            MobHealthbar.prepare(event.getEntity());
         }
-        return val;
+    }
+
+    @SubscribeEvent
+    public static void renderHealthbar(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            Camera c = Minecraft.getInstance().gameRenderer.getMainCamera();
+            MobHealthbar.renderBars(event.getPartialTick(), event.getPoseStack(), c);
+        }
     }
 
 }

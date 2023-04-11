@@ -14,19 +14,11 @@ import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.fml.common.Mod;
 
-import java.text.DecimalFormat;
-
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class PlayerHealthBar {
 
     private static final ResourceLocation HEALTH_GUI = new ResourceLocation(
-            ImprovedDamageFramework.MOD_ID + ":textures/gui/healthgui.png");
-    private static DecimalFormat healthFormat = new DecimalFormat();
-    static {
-        healthFormat.setMinimumFractionDigits(1);
-        healthFormat.setMaximumFractionDigits(1);
-        healthFormat.setMinimumIntegerDigits(1);
-    }
+            ImprovedDamageFramework.MOD_ID, "textures/gui/healthgui.png");
 
     private static final Minecraft client = Minecraft.getInstance();
     public static void replaceWithBar(RenderGuiOverlayEvent event) {

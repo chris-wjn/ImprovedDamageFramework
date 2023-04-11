@@ -6,6 +6,7 @@ import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.config.CommonConfig;
+import net.cwjn.idf.hud.MobHealthbar;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
 import net.cwjn.idf.util.Color;
@@ -32,10 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber
 public class LogicalEvents {
@@ -159,10 +157,6 @@ public class LogicalEvents {
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         new ChangeDebugStatusCommand(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
-    }
-
-    public static void onAttributeCalculation(ItemAttributeModifierEvent event) {
-
     }
 
 }

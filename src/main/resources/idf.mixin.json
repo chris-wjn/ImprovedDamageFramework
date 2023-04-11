@@ -45,6 +45,7 @@
   },
   "refmap": "idf.mixin-refmap.json",
   "client": [
-    "MixinClientTextTooltip"
+    "MixinClientTextTooltip",
+    "MixinEntityRenderer"
   ]
 }
