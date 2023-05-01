@@ -4,6 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.config.ClientConfig;
+import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
 import net.cwjn.idf.hud.MobHealthbar;
@@ -16,6 +18,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -24,7 +29,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.LightLayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -269,8 +277,13 @@ public class ClientEventsForgeBus {
 
     @SubscribeEvent
     public static void prepareHealthbar(RenderLivingEvent.Post<? extends LivingEntity, ? extends EntityModel<?>> event) {
-        if (event.getEntity() != Minecraft.getInstance().player) {
-            MobHealthbar.prepare(event.getEntity());
+        LivingEntity entity = event.getEntity();
+        BlockPos entityPos = entity.getOnPos().above();
+        if (entity != Minecraft.getInstance().player) {
+            if (entity.getLevel().getRawBrightness(entityPos, ClientData.skyDarken) >= ClientConfig.MOB_HEALTH_BAR_LIGHT_LEVEL.get()
+            || entity.distanceTo(Minecraft.getInstance().player) <= 5) {
+                MobHealthbar.prepare(event.getEntity());
+            }
         }
     }
 

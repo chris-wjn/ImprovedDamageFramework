@@ -27,6 +27,7 @@ public class ClientData {
     public static Map<ResourceLocation, ItemData> CLIENT_ARMOUR_MAP_MULT;
     public static Map<ResourceLocation, WeaponData> CLIENT_WEAPON_MAP_FLAT;
     public static Map<ResourceLocation, ItemData> CLIENT_WEAPON_MAP_MULT;
+    public static int skyDarken = 0;
 
     public static void register(IEventBus bus) {
         bus.addListener(ClientData::onPlayerLoginEventClient);

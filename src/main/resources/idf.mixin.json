@@ -6,15 +6,16 @@
   "mixins": [
     "AccessRangedAttribute",
     "MixinAbstractArrow",
-    "MixinCreeper",
     "MixinEnchantment",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinPlayer",
+    "MixinProjectile",
     "damage.MixinAxolotl",
     "damage.MixinBaseFireBlock",
     "damage.MixinCactus",
     "damage.MixinCampfireBlock",
+    "damage.MixinCreeper",
     "damage.MixinDamageSource",
     "damage.MixinDolphin",
     "damage.MixinEntity",
@@ -45,7 +46,6 @@
   },
   "refmap": "idf.mixin-refmap.json",
   "client": [
-    "MixinClientTextTooltip",
-    "MixinEntityRenderer"
+    "MixinClientTextTooltip"
   ]
 }

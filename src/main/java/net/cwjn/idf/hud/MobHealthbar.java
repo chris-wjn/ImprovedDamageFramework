@@ -69,7 +69,7 @@ public class MobHealthbar {
             matrix.mulPose(Vector3f.XP.rotationDegrees(cam.getXRot()));
             matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-            renderBar(matrix, entity, 0, 0, 40);
+            renderBar(matrix, entity);
 
             matrix.popPose();
         }
@@ -78,17 +78,11 @@ public class MobHealthbar {
         renderables.clear();
     }
 
-    private static void renderBar(PoseStack matrix, LivingEntity entity, double x, double y,
-                                  float width) {
-
+    private static void renderBar(PoseStack matrix, LivingEntity entity) {
         float percent = Math.min(1, Math.min(entity.getHealth(), entity.getMaxHealth()) / entity.getMaxHealth());
-        int zOffset = 0;
-
         Matrix4f m4f = matrix.last().pose();
-        drawBar(m4f, x, y, width, 1, zOffset, true);
-        zOffset++;
-        drawBar(m4f, x, y, width, percent, zOffset, false);
-
+        drawBar(m4f, 0, 0, (float) 40, 1, 0, true);
+        drawBar(m4f, 0, 0, (float) 40, percent, 1, false);
     }
 
     private static void drawBar(Matrix4f matrix, double x, double y, float width, float percent, int zOffset, boolean background) {

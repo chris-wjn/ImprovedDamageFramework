@@ -227,7 +227,7 @@ public class MixinPlayer {
                             }
                         }
 
-                        //if there is was a damage bonus from enchantments, use the magic crit effects
+                        //if there was a damage bonus from enchantments, use the magic crit effects
                         if (damageBonus > 0.0F) {
                             thisPlayer.magicCrit(target);
                         }

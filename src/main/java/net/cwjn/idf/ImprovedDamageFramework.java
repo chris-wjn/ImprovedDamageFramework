@@ -72,7 +72,7 @@ public class ImprovedDamageFramework {
         MinecraftForge.EVENT_BUS.register(StatScreen.class);
         MinecraftForge.EVENT_BUS.register(BestiaryScreen.class);
         ClientData.register(MinecraftForge.EVENT_BUS);
-        if (ClientConfig.CHANGE_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
+        if (ClientConfig.CHANGE_PLAYER_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::deleteArmorHud);
         CompatHandler.initClient(event);
     }

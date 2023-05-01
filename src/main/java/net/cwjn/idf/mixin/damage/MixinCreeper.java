@@ -1,4 +1,4 @@
-package net.cwjn.idf.mixin;
+package net.cwjn.idf.mixin.damage;
 
 import net.cwjn.idf.damage.IDFInterface;
 import net.minecraft.world.damagesource.DamageSource;

@@ -136,15 +136,4 @@ public class PatchouliCompat implements IComponentProcessor {
         };
     }
 
-    public static void createPages() throws URISyntaxException {
-        ResourceGrabber grabber = new ResourceGrabber();
-        for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
-            String name = entityType.toString();
-            String category = entityType.getCategory() == MobCategory.MONSTER ? "idf:hostile" : "idf:nonhostile";
-            Path path = Path.of(grabber.getClass().getClassLoader().getResource("/data/idf/patchouli_books/bestiary/en_us/entries/" +
-                    category.substring(4) + "/" + name + ".json").getPath());
-            JSONUtil.writeFile(path.toFile(), new PageObject(name, category, name));
-        }
-    }
-
 }

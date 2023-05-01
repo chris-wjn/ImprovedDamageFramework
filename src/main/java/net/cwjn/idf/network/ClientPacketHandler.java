@@ -2,6 +2,7 @@ package net.cwjn.idf.network;
 
 import com.mojang.math.Vector3f;
 import net.cwjn.idf.config.json.JSONHandler;
+import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.particle.IDFParticles;
 import net.minecraft.client.Minecraft;
@@ -34,6 +35,10 @@ public class ClientPacketHandler {
         if (world != null) {
             world.addParticle(IDFParticles.NUMBER_PARTICLE.get().setNumber(f).setColour(col), x, y, z, (newX*horizontalOffset)/10, yOffset/3, (newZ*horizontalOffset)/10);
         }
+    }
+
+    public static void updateSkyDarken(int i) {
+        ClientData.skyDarken = i;
     }
 
 }
