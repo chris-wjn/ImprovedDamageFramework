@@ -6,13 +6,13 @@ import net.minecraftforge.eventbus.api.Event;
 public class PreMitigationDamageEvent extends Event {
 
     private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, holyDmg, physicalDmg, pen, lifesteal;
-    private float fireRes, waterRes, lightningRes, magicRes, darkRes, holyRes, physicalRes;
+    private float fireDef, waterDef, lightningDef, magicDef, darkDef, holyDef, physicalDef;
     private final LivingEntity target;
 
     public PreMitigationDamageEvent(LivingEntity target,
                                     float fireDmg, float waterDmg, float lightningDmg, float magicDmg, float darkDmg, float holyDmg, float physicalDmg,
                                     float pen, float lifesteal,
-                                    float fireRes, float waterRes, float lightningRes, float magicRes, float darkRes, float holyRes, float physicalRes) {
+                                    float fireDef, float waterDef, float lightningDef, float magicDef, float darkDef, float holyDef, float physicalDef) {
         this.fireDmg = fireDmg;
         this.waterDmg = waterDmg;
         this.lightningDmg = lightningDmg;
@@ -22,13 +22,13 @@ public class PreMitigationDamageEvent extends Event {
         this.holyDmg = holyDmg;
         this.pen = pen;
         this.lifesteal = lifesteal;
-        this.fireRes = fireRes;
-        this.waterRes = waterRes;
-        this.lightningRes = lightningRes;
-        this.magicRes = magicRes;
-        this.darkRes = darkRes;
-        this.holyRes = holyRes;
-        this.physicalRes = physicalRes;
+        this.fireDef = fireDef;
+        this.waterDef = waterDef;
+        this.lightningDef = lightningDef;
+        this.magicDef = magicDef;
+        this.darkDef = darkDef;
+        this.holyDef = holyDef;
+        this.physicalDef = physicalDef;
         this.target = target;
     }
 
@@ -100,52 +100,52 @@ public class PreMitigationDamageEvent extends Event {
         return target;
     }
 
-    public float getFireRes() {
-        return fireRes;
+    public float getFireDef() {
+        return fireDef;
     }
 
-    public void setFireRes(float fireRes) {
-        this.fireRes = fireRes;
+    public void setFireDef(float fireDef) {
+        this.fireDef = fireDef;
     }
 
-    public float getWaterRes() {
-        return waterRes;
+    public float getWaterDef() {
+        return waterDef;
     }
 
-    public void setWaterRes(float waterRes) {
-        this.waterRes = waterRes;
+    public void setWaterDef(float waterDef) {
+        this.waterDef = waterDef;
     }
 
-    public float getLightningRes() {
-        return lightningRes;
+    public float getLightningDef() {
+        return lightningDef;
     }
 
-    public void setLightningRes(float lightningRes) {
-        this.lightningRes = lightningRes;
+    public void setLightningDef(float lightningDef) {
+        this.lightningDef = lightningDef;
     }
 
-    public float getMagicRes() {
-        return magicRes;
+    public float getMagicDef() {
+        return magicDef;
     }
 
-    public void setMagicRes(float magicRes) {
-        this.magicRes = magicRes;
+    public void setMagicDef(float magicDef) {
+        this.magicDef = magicDef;
     }
 
-    public float getDarkRes() {
-        return darkRes;
+    public float getDarkDef() {
+        return darkDef;
     }
 
-    public void setDarkRes(float darkRes) {
-        this.darkRes = darkRes;
+    public void setDarkDef(float darkDef) {
+        this.darkDef = darkDef;
     }
 
-    public float getPhysicalRes() {
-        return physicalRes;
+    public float getPhysicalDef() {
+        return physicalDef;
     }
 
-    public void setPhysicalRes(float physicalRes) {
-        this.physicalRes = physicalRes;
+    public void setPhysicalDef(float physicalDef) {
+        this.physicalDef = physicalDef;
     }
 
     public float getHolyDmg() {
@@ -156,12 +156,12 @@ public class PreMitigationDamageEvent extends Event {
         this.holyDmg = holyDmg;
     }
 
-    public float getHolyRes() {
-        return holyRes;
+    public float getHolyDef() {
+        return holyDef;
     }
 
-    public void setHolyRes(float holyRes) {
-        this.holyRes = holyRes;
+    public void setHolyDef(float holyDef) {
+        this.holyDef = holyDef;
     }
 
     @Override

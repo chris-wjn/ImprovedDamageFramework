@@ -111,6 +111,9 @@ public class ClientEventsForgeBus {
                 if (!isRanged) {
                     double atkSpd = (DEFAULT_ATTACK_SPEED + getAndRemoveAttribute(map, Attributes.ATTACK_SPEED));
                     line1.append(Util.writeStaticTooltipComponent(atkSpd, "attack_speed", null, false, true));
+                } else {
+                    double accuracy = (1.0 + getAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()));
+                    line1.append(Util.writeStaticTooltipComponent(accuracy, "accuracy", null, true, true));
                 }
                 double crit = getAndRemoveAttribute(map, IDFAttributes.CRIT_CHANCE.get());
                 double pen = getAndRemoveAttribute(map, IDFAttributes.PENETRATING.get());

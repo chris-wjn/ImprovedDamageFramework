@@ -6,20 +6,20 @@ import net.minecraft.network.FriendlyByteBuf;
 import java.lang.reflect.Type;
 
 public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, double mDmg, double dDmg, double hDmg,
-                            double ls, double pen, double crit, double force, double kb, double atkSpd) {
+                            double ls, double pen, double crit, double force, double accuracy, double kb, double atkSpd) {
 
     public static OffensiveData entityStandard() {
         return new OffensiveData(0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0.4, 0);
+                0, 0, 0, 0, 0.4,  0);
     }
 
     public static OffensiveData damage(double p, double f, double w, double l, double m, double d, double h) {
-        return new OffensiveData(p, f, w, l, m, d, h, 0, 0, 0, 0, 0.4, 0);
+        return new OffensiveData(p, f, w, l, m, d, h, 0, 0, 0, 0, 0, 0.4, 0);
     }
 
     public static OffensiveData empty() {
         return new OffensiveData(0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0.0, 0);
+                0, 0, 0, 0, 0.0, 0);
     }
 
     public static OffensiveData combine (OffensiveData data1, OffensiveData data2) {
@@ -35,6 +35,7 @@ public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, 
                 data1.pen + data2.pen,
                 data1.crit + data2.crit,
                 data1.force + data2.force,
+                data1.accuracy + data2.accuracy,
                 data1.kb + data2.kb, 
                 data1.atkSpd + data2.atkSpd);
     }
@@ -43,7 +44,7 @@ public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, 
         return new OffensiveData(
                 buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),
                 buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),
-                buffer.readDouble(),buffer.readDouble(),buffer.readDouble()
+                buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble()
         );
     }
 
@@ -59,6 +60,7 @@ public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, 
         buffer.writeDouble(pen);
         buffer.writeDouble(crit);
         buffer.writeDouble(force);
+        buffer.writeDouble(accuracy);
         buffer.writeDouble(kb);
         buffer.writeDouble(atkSpd);
     }
@@ -82,6 +84,7 @@ public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, 
                     obj.get("Armour Penetration").getAsDouble(),
                     obj.get("Critical Chance").getAsDouble(),
                     obj.get("Force").getAsDouble(),
+                    obj.get("Accuracy").getAsDouble(),
                     obj.get("Knockback").getAsDouble(),
                     obj.get("Attack Speed").getAsDouble());
         }
@@ -100,6 +103,7 @@ public record OffensiveData(double pDmg, double fDmg, double wDmg, double lDmg, 
             obj.addProperty("Armour Penetration", src.pen);
             obj.addProperty("Critical Chance", src.crit);
             obj.addProperty("Force", src.force);
+            obj.addProperty("Accuracy", src.accuracy);
             obj.addProperty("Knockback", src.kb);
             obj.addProperty("Attack Speed", src.atkSpd);
             return obj;

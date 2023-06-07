@@ -1,13 +1,10 @@
 package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
-import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.data.ArmourData;
-import net.cwjn.idf.config.json.data.ItemData;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
 import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
-import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -21,14 +18,14 @@ import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operati
 
 public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
-    private final double armour, defense, fireRes, waterRes, lightningRes, magicRes, darkRes, holyRes;
+    private final double armour, weight, fireDef, waterDef, lightningDef, magicDef, darkDef, holyDef;
 
     public IDFArmourItem(ArmorMaterial material, EquipmentSlot slot, Properties p, int durability, double physicalDamage, double fireDamage,
                          double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
-                         double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
-                         double attackSpeed, double defense, double physicalResistance, double fireResistance,
-                         double waterResistance, double lightningResistance, double magicResistance,
-                         double darkResistance, double holyResistance, double evasion, double maxHP, double movespeed,
+                         double lifesteal, double armourPenetration, double criticalChance, double force, double accuracy, double knockback,
+                         double attackSpeed, double weight, double physicalDefence, double fireDefence,
+                         double waterDefence, double lightningDefence, double magicDefence,
+                         double darkDefence, double holyDefence, double evasion, double maxHP, double movespeed,
                          double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
                          double slashMultiplier,
                          Map<Attribute, AttributeModifier> bonusAttributes) {
@@ -36,9 +33,9 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         ArmourData data = new ArmourData(durability,
                 new OffensiveData(physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
-                        lifesteal, armourPenetration, criticalChance, force, knockback, attackSpeed),
-                new DefensiveData(defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance,
-                        darkResistance, holyResistance, evasion, knockbackResistance, strikeMultiplier, pierceMultiplier, slashMultiplier),
+                        lifesteal, armourPenetration, criticalChance, force, accuracy, knockback, attackSpeed),
+                new DefensiveData(weight, physicalDefence, fireDefence, waterDefence, lightningDefence, magicDefence,
+                        darkDefence, holyDefence, evasion, knockbackResistance, strikeMultiplier, pierceMultiplier, slashMultiplier),
                 new AuxiliaryData(maxHP, movespeed, luck)
                 );
         if (material instanceof IDFArmourMaterial idfMaterial) {
@@ -46,7 +43,7 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
                     new ArmourData(0, new OffensiveData(idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
                             idfMaterial.getLightningDamage(slot), idfMaterial.getMagicDamage(slot), idfMaterial.getDarkDamage(slot), idfMaterial.getHolyDamage(slot),
                             idfMaterial.getLifesteal(slot), idfMaterial.getArmourPenetration(slot), idfMaterial.getCriticalChance(slot),
-                            idfMaterial.getForce(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot)),
+                            idfMaterial.getForce(slot), idfMaterial.getAccuracy(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot)),
                             new DefensiveData(idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot), idfMaterial.getFireResForSlot(slot),
                                     idfMaterial.getWaterResForSlot(slot), idfMaterial.getLightningResForSlot(slot), idfMaterial.getMagicResForSlot(slot),
                                     idfMaterial.getDarkResForSlot(slot), idfMaterial.getHolyResistance(slot), idfMaterial.getEvasionForSlot(slot),
@@ -56,13 +53,13 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
             bonusAttributes.putAll(idfMaterial.getBonusAttributes());
         }
         armour = data.dData().pRes();
-        this.defense = data.dData().defense();
-        fireRes = data.dData().fRes();
-        waterRes = data.dData().wRes();
-        lightningRes = data.dData().lRes();
-        magicRes = data.dData().mRes();
-        darkRes = data.dData().dRes();
-        holyRes = data.dData().hRes();
+        this.weight = data.dData().defense();
+        fireDef = data.dData().fRes();
+        waterDef = data.dData().wRes();
+        lightningDef = data.dData().lRes();
+        magicDef = data.dData().mRes();
+        darkDef = data.dData().dRes();
+        holyDef = data.dData().hRes();
         data.forEach(pair -> {
             if (pair.getB() != 0) {
                 builder.put(pair.getA(), new AttributeModifier(Util.UUID_BASE_STAT_ADDITION[this.getSlot().getFilterFlag()], "data0", pair.getB(), ADDITION));
@@ -76,12 +73,12 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
     @Override
     public int getDefense() {
-        return (int) (armour + fireRes + waterRes + lightningRes + magicRes + darkRes + holyRes);
+        return (int) (armour + fireDef + waterDef + lightningDef + magicDef + darkDef + holyDef);
     }
 
     @Override
     public float getToughness() {
-        return (float) defense;
+        return (float) weight;
     }
 
 }

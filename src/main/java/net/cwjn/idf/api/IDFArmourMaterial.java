@@ -17,8 +17,8 @@ public class IDFArmourMaterial implements ArmorMaterial {
     private final String name;
     private final int durabilityMultiplier;
     private final double[] physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, lifesteal,
-            armourPenetration, knockback, criticalChance, force, attackSpeed, defense,
-            physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance, holyResistance,
+            armourPenetration, knockback, criticalChance, force, accuracy, attackSpeed, weight,
+            physicalDefence, fireDefence, waterDefence, lightningDefence, magicDefence, darkDefence, holyDefence,
             maxHP, movespeed, luck, evasion,
             strike, pierce, slash;
     private final Map<Attribute, AttributeModifier> bonusAttributes;
@@ -29,7 +29,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
 
     public IDFArmourMaterial(String name, int durabilityMult, double[] physicalDamage, double[] fireDamage, double[] waterDamage, double[] lightningDamage,
                              double[] magicDamage, double[] darkDamage, double[] holyDamage, double[] lifesteal, double[] armourPenetration, double[] knockback, double[] criticalChance,
-                             double[] force, double[] attackSpeed, double[] defense, double[] physicalResistance,
+                             double[] force, double[] accuracy, double[] attackSpeed, double[] weight, double[] physicalDefence,
                              double[] f, double[] w, double[] l, double[] m, double[] d, double[] h,
                              double[] hp, double[] ms, double[] luck, double[] evasion,
                              double[] str, double[] prc, double[] sls,
@@ -47,21 +47,22 @@ public class IDFArmourMaterial implements ArmorMaterial {
         this.armourPenetration = armourPenetration;
         this.knockback = knockback;
         this.criticalChance = criticalChance;
+        this.accuracy = accuracy;
         this.force = force;
         this.attackSpeed = attackSpeed;
-        this.defense = defense;
-        this.physicalResistance = physicalResistance;
+        this.weight = weight;
+        this.physicalDefence = physicalDefence;
         this.bonusAttributes = bonusAttributes;
         this.enchantmentValue = enchantability;
         this.sound = equipSound;
         this.knockbackResistance = KBR;
         this.repairIngredient = new LazyLoadedValue<>(repairIngredient);
-        fireResistance = f;
-        waterResistance = w;
-        lightningResistance = l;
-        magicResistance = m;
-        darkResistance = d;
-        holyResistance = h;
+        fireDefence = f;
+        waterDefence = w;
+        lightningDefence = l;
+        magicDefence = m;
+        darkDefence = d;
+        holyDefence = h;
         maxHP = hp;
         movespeed = ms;
         this.luck = luck;
@@ -79,15 +80,15 @@ public class IDFArmourMaterial implements ArmorMaterial {
      * use getPhysicalResistanceForSlot and getRealDefenseForSlot*/
     @Deprecated
     public int getDefenseForSlot(EquipmentSlot slot) {
-        return (int)this.physicalResistance[slot.getIndex()];
+        return (int)this.physicalDefence[slot.getIndex()];
     }
 
     public double getPhysicalResistanceForSlot(EquipmentSlot slot) {
-        return this.physicalResistance[slot.getIndex()];
+        return this.physicalDefence[slot.getIndex()];
     }
 
     public double getRealDefenseForSlot(EquipmentSlot slot) {
-        return this.defense[slot.getIndex()];
+        return this.weight[slot.getIndex()];
     }
 
     public double getPhysicalDamage(EquipmentSlot slot) {
@@ -138,6 +139,10 @@ public class IDFArmourMaterial implements ArmorMaterial {
         return force[slot.getIndex()];
     }
 
+    public double getAccuracy(EquipmentSlot slot) {
+        return accuracy[slot.getIndex()];
+    }
+
     public double getAttackSpeed(EquipmentSlot slot) {
         return attackSpeed[slot.getIndex()];
     }
@@ -159,7 +164,7 @@ public class IDFArmourMaterial implements ArmorMaterial {
     }
 
     public float getToughness() {
-        return (float) defense[0];
+        return (float) weight[0];
     }
 
     public float getKnockbackResistance() {
@@ -167,27 +172,27 @@ public class IDFArmourMaterial implements ArmorMaterial {
     }
 
     public double getFireResForSlot(EquipmentSlot slot) {
-        return this.fireResistance[slot.getIndex()];
+        return this.fireDefence[slot.getIndex()];
     }
 
     public double getWaterResForSlot(EquipmentSlot slot) {
-        return this.waterResistance[slot.getIndex()];
+        return this.waterDefence[slot.getIndex()];
     }
 
     public double getLightningResForSlot(EquipmentSlot slot) {
-        return this.lightningResistance[slot.getIndex()];
+        return this.lightningDefence[slot.getIndex()];
     }
 
     public double getMagicResForSlot(EquipmentSlot slot) {
-        return this.magicResistance[slot.getIndex()];
+        return this.magicDefence[slot.getIndex()];
     }
 
     public double getDarkResForSlot(EquipmentSlot slot) {
-        return this.darkResistance[slot.getIndex()];
+        return this.darkDefence[slot.getIndex()];
     }
 
     public double getHolyResistance(EquipmentSlot slot) {
-        return holyResistance[slot.getIndex()];
+        return holyDefence[slot.getIndex()];
     }
 
     public double getMaxHPForSlot(EquipmentSlot slot) {

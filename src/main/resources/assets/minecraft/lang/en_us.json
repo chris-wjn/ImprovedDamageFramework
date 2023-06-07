@@ -1,7 +1,7 @@
 {
   "attribute.name.generic.attack_damage": "Physical Damage",
-  "attribute.name.generic.armor": "Physical Resistance",
-  "attribute.name.generic.armor_toughness": "Defense",
+  "attribute.name.generic.armor": "Physical Defence",
+  "attribute.name.generic.armor_toughness": "Weight",
   "effect.minecraft.fire_resistance": "Flame Immunity",
   "item.minecraft.tipped_arrow.effect.fire_resistance": "Arrow of Flame Immunity",
   "item.minecraft.potion.effect.fire_resistance": "Potion of Flame Immunity",

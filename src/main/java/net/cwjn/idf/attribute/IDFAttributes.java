@@ -16,31 +16,31 @@ public class IDFAttributes {
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, ImprovedDamageFramework.MOD_ID);
 
     //elemental damage types
-    public static final RegistryObject<Attribute> FIRE_DAMAGE = register("idf.fire_damage", () -> new RangedAttribute("fire_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> WATER_DAMAGE = register("idf.water_damage", () -> new RangedAttribute("water_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> LIGHTNING_DAMAGE = register("idf.lightning_damage", () -> new RangedAttribute("lightning_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> MAGIC_DAMAGE = register("idf.magic_damage", () -> new RangedAttribute("magic_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> DARK_DAMAGE = register("idf.dark_damage", () -> new RangedAttribute("dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> HOLY_DAMAGE = register("idf.holy_damage", () -> new RangedAttribute("holy_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> FIRE_DAMAGE = register("fire_damage", () -> new RangedAttribute("fire_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> WATER_DAMAGE = register("water_damage", () -> new RangedAttribute("water_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> LIGHTNING_DAMAGE = register("lightning_damage", () -> new RangedAttribute("lightning_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> MAGIC_DAMAGE = register("magic_damage", () -> new RangedAttribute("magic_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> DARK_DAMAGE = register("dark_damage", () -> new RangedAttribute("dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> HOLY_DAMAGE = register("holy_damage", () -> new RangedAttribute("holy_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary offensive attributes
-    public static final RegistryObject<Attribute> FORCE = register("idf.force", () -> new RangedAttribute("force", 1.0D, -1.0D, 40).setSyncable(true));
-    public static final RegistryObject<Attribute> LIFESTEAL = register("idf.lifesteal", () -> new RangedAttribute("lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
-    public static final RegistryObject<Attribute> PENETRATING = register("idf.penetrating", () -> new RangedAttribute("armour_penetration", 0.0D, 0.0D, 100.0D).setSyncable(true));
-    public static final RegistryObject<Attribute> CRIT_CHANCE = register("idf.crit_chance", () -> new RangedAttribute("crit_chance", 0.0D, 0.0D, 100.0D).setSyncable(true));
-    public static final RegistryObject<Attribute> ACCURACY = register("idf.accuracy", () -> new RangedAttribute("accuracy", 1.0D, 1.0D, 100.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> FORCE = register("force", () -> new RangedAttribute("force", 1.0D, -1.0D, 40).setSyncable(true));
+    public static final RegistryObject<Attribute> LIFESTEAL = register("lifesteal", () -> new RangedAttribute("lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
+    public static final RegistryObject<Attribute> PENETRATING = register("penetrating", () -> new RangedAttribute("armour_penetration", 0.0D, 0.0D, 100.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> CRIT_CHANCE = register("crit_chance", () -> new RangedAttribute("crit_chance", 0.0D, 0.0D, 100.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> ACCURACY = register("accuracy", () -> new RangedAttribute("accuracy", 1.0D, 1.0D, 100.0D).setSyncable(true));
     //elemental resistance types
-    public static final RegistryObject<Attribute> FIRE_RESISTANCE = register("idf.fire_resistance", () -> new RangedAttribute("fire_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> WATER_RESISTANCE = register("idf.water_resistance", () -> new RangedAttribute("water_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> LIGHTNING_RESISTANCE = register("idf.lightning_resistance", () -> new RangedAttribute("lightning_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> MAGIC_RESISTANCE = register("idf.magic_resistance", () -> new RangedAttribute("magic_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> DARK_RESISTANCE = register("idf.dark_resistance", () -> new RangedAttribute("dark_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> HOLY_RESISTANCE = register("idf.holy_resistance", () -> new RangedAttribute("holy_resistance", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> FIRE_DEFENCE = register("fire_defence", () -> new RangedAttribute("fire_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> WATER_DEFENCE = register("water_defence", () -> new RangedAttribute("water_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> LIGHTNING_DEFENCE = register("lightning_defence", () -> new RangedAttribute("lightning_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> MAGIC_DEFENCE = register("magic_defence", () -> new RangedAttribute("magic_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> DARK_DEFENCE = register("dark_defence", () -> new RangedAttribute("dark_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> HOLY_DEFENCE = register("holy_defence", () -> new RangedAttribute("holy_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));
     //damage class multipliers
-    public static final RegistryObject<Attribute> STRIKE_MULT = register("idf.strike_mult", () -> new RangedAttribute("strike_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> PIERCE_MULT = register("idf.pierce_mult", () -> new RangedAttribute("pierce_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
-    public static final RegistryObject<Attribute> SLASH_MULT = register("idf.slash_mult", () -> new RangedAttribute("slash_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> STRIKE_MULT = register("strike_mult", () -> new RangedAttribute("strike_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> PIERCE_MULT = register("pierce_mult", () -> new RangedAttribute("pierce_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> SLASH_MULT = register("slash_mult", () -> new RangedAttribute("slash_mult", 1.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary defensive attributes
-    public static final RegistryObject<Attribute> EVASION = register("idf.evasion", () -> new RangedAttribute("evasion", 0.0D, 0.0D, 100.0D).setSyncable(true));
+    public static final RegistryObject<Attribute> EVASION = register("evasion", () -> new RangedAttribute("evasion", 0.0D, 0.0D, 100.0D).setSyncable(true));
 
     private static <T extends Attribute> RegistryObject<T> register(final String name, final Supplier<T> attribute) {
         return ATTRIBUTES.register(name, attribute);

@@ -1,21 +1,20 @@
 package net.cwjn.idf.api.event;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 public class PreDamageMultipliersEvent extends Event {
 
-    private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, holyDmg, physicalDmg, pen, lifesteal, weight, knockback;
-    private float fireRes, waterRes, lightningRes, magicRes, darkRes, holyRes, physicalRes, def;
+    private float fireDmg, waterDmg, lightningDmg, magicDmg, darkDmg, holyDmg, physicalDmg, pen, lifesteal, force, knockback;
+    private float fireDef, waterDef, lightningDef, magicDef, darkDef, holyDef, physicalDef, weight;
     private String damageClass;
     private final LivingEntity target;
 
     public PreDamageMultipliersEvent(LivingEntity target,
                                      float fireDmg, float waterDmg, float lightningDmg, float magicDmg, float darkDmg, float holyDmg, float physicalDmg,
-                                     float pen, float lifesteal, float knockback, float weight,
-                                     float fireRes, float waterRes, float lightningRes, float magicRes, float darkRes, float holyRes, float physicalRes,
-                                     float def, String damageClass) {
+                                     float pen, float lifesteal, float knockback, float force,
+                                     float fireDef, float waterDef, float lightningDef, float magicDef, float darkDef, float holyDef, float physicalDef,
+                                     float weight, String damageClass) {
         this.fireDmg = fireDmg;
         this.waterDmg = waterDmg;
         this.lightningDmg = lightningDmg;
@@ -26,15 +25,15 @@ public class PreDamageMultipliersEvent extends Event {
         this.pen = pen;
         this.lifesteal = lifesteal;
         this.knockback = knockback;
+        this.force = force;
+        this.fireDef = fireDef;
+        this.waterDef = waterDef;
+        this.lightningDef = lightningDef;
+        this.magicDef = magicDef;
+        this.darkDef = darkDef;
+        this.holyDef = holyDef;
+        this.physicalDef = physicalDef;
         this.weight = weight;
-        this.fireRes = fireRes;
-        this.waterRes = waterRes;
-        this.lightningRes = lightningRes;
-        this.magicRes = magicRes;
-        this.darkRes = darkRes;
-        this.holyRes = holyRes;
-        this.physicalRes = physicalRes;
-        this.def = def;
         this.damageClass = damageClass;
         this.target = target;
     }
@@ -119,80 +118,80 @@ public class PreDamageMultipliersEvent extends Event {
         this.damageClass = damageClass;
     }
 
-    public float getWeight() {
-        return weight;
+    public float getForce() {
+        return force;
     }
 
-    public void setWeight(float weight) {
-        this.weight = weight;
+    public void setForce(float force) {
+        this.force = force;
     }
 
     public LivingEntity getTarget() {
         return target;
     }
 
-    public float getFireRes() {
-        return fireRes;
+    public float getFireDef() {
+        return fireDef;
     }
 
-    public void setFireRes(float fireRes) {
-        this.fireRes = fireRes;
+    public void setFireDef(float fireDef) {
+        this.fireDef = fireDef;
     }
 
-    public float getWaterRes() {
-        return waterRes;
+    public float getWaterDef() {
+        return waterDef;
     }
 
-    public void setWaterRes(float waterRes) {
-        this.waterRes = waterRes;
+    public void setWaterDef(float waterDef) {
+        this.waterDef = waterDef;
     }
 
-    public float getLightningRes() {
-        return lightningRes;
+    public float getLightningDef() {
+        return lightningDef;
     }
 
-    public void setLightningRes(float lightningRes) {
-        this.lightningRes = lightningRes;
+    public void setLightningDef(float lightningDef) {
+        this.lightningDef = lightningDef;
     }
 
-    public float getMagicRes() {
-        return magicRes;
+    public float getMagicDef() {
+        return magicDef;
     }
 
-    public void setMagicRes(float magicRes) {
-        this.magicRes = magicRes;
+    public void setMagicDef(float magicDef) {
+        this.magicDef = magicDef;
     }
 
-    public float getDarkRes() {
-        return darkRes;
+    public float getDarkDef() {
+        return darkDef;
     }
 
-    public void setDarkRes(float darkRes) {
-        this.darkRes = darkRes;
+    public void setDarkDef(float darkDef) {
+        this.darkDef = darkDef;
     }
 
-    public float getHolyRes() {
-        return holyRes;
+    public float getHolyDef() {
+        return holyDef;
     }
 
-    public void setHolyRes(float holyRes) {
-        this.holyRes = holyRes;
+    public void setHolyDef(float holyDef) {
+        this.holyDef = holyDef;
     }
 
-    public float getPhysicalRes() {
-        return physicalRes;
+    public float getPhysicalDef() {
+        return physicalDef;
     }
 
-    public void setPhysicalRes(float physicalRes) {
-        this.physicalRes = physicalRes;
+    public void setPhysicalDef(float physicalDef) {
+        this.physicalDef = physicalDef;
     }
 
-    public float getDef() {
-        return def;
+    public float getWeight() {
+        return weight;
     }
 
-    public void setDef(float def) {
-        this.def = def;
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     @Override

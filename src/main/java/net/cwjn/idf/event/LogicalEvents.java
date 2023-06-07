@@ -6,37 +6,29 @@ import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.config.CommonConfig;
-import net.cwjn.idf.hud.MobHealthbar;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
 import net.cwjn.idf.network.packets.SyncSkyDarkenPacket;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.server.command.ConfigCommand;
 
 import java.util.*;
@@ -77,7 +69,7 @@ public class LogicalEvents {
     }
 
     @SubscribeEvent
-    public static void rollEvasion(LivingAttackEvent event) {
+    public static void checkEvasion(LivingAttackEvent event) {
         LivingEntity target = event.getEntity();
         if (target.getLevel() instanceof ServerLevel level) {
             if (target.getAttributeValue(IDFAttributes.EVASION.get())/100 >= Math.random()) {

@@ -253,6 +253,8 @@ public class Util {
             if (i != s.length()-1) {
                 if (s.charAt(i+1) == '.') {
                     comp.append(spacer(-2));
+                } else if (s.charAt(i+1) == '1') {
+                    comp.append(spacer(-1));
                 }
                 comp.append(spacer(-1));
             }
@@ -267,9 +269,14 @@ public class Util {
         else num = tenths.format(n);
         int ones = 0;
         int dots = 0;
-        for (char c : num.toCharArray()) {
+        for (char c : num.substring(1).toCharArray()) {
             if (c == '1') ones++;
             if (c == '.') dots++;
+        }
+        int leftOnes = 0;
+        int rightOnes = 0;
+        while (ones != 0) {
+
         }
 
         //now lets check how many spaces we need to fill. Each component should have 6 characters between the dividers, so
@@ -280,7 +287,7 @@ public class Util {
         MutableComponent comp = text(drawBorders? "|" : "").withStyle(DEFAULT);
 
         //add left padding, plus a half if the total spaces is odd
-        comp.append(spacer((int) (8*(spaces/2)) + dots*2));
+        comp.append(spacer((int) (8*(spaces/2)) + dots*2 + ones));
 
         //add the number to the component. Also add a percent if needed
         comp.append(translation("idf.icon." + name).withStyle(ICON)).append(spacer(-1));
@@ -292,7 +299,7 @@ public class Util {
         }
 
         //add a half spacer if total spaces is odd, then add the rest of the right padding
-        comp.append(spacer((int) (8*(spaces/2)) + dots*2));
+        comp.append(spacer((int) (8*(spaces/2)) + dots*2 + ones/2));
         if (ones == 1) comp.append(spacer(1));
 
         //finish up with an ending divider if needed

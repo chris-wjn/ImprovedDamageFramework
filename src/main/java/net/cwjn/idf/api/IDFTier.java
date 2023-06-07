@@ -19,8 +19,8 @@ public class IDFTier implements Tier {
     private final float speed;
     private final double
             physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
-            lifesteal, armourPenetration, criticalChance, force, knockback,
-            defense, physicalResistance, fireResistance, waterResistance, lightningResistance, magicResistance, darkResistance, holyResistance,
+            lifesteal, armourPenetration, criticalChance, force, accuracy, knockback,
+            weight, physicalDefence, fireDefence, waterDefence, lightningDefence, magicDefence, darkDefence, holyDefence,
             evasion, maxHP, movespeed, knockbackResistance, luck,
             strikeMultiplier, pierceMultiplier, slashMultiplier;
     private final Map<Attribute, AttributeModifier> bonusAttributes;
@@ -28,8 +28,8 @@ public class IDFTier implements Tier {
 
     public IDFTier(int level, int durability, float speed, int enchantability, Supplier<Ingredient> item,
                    double physicalDamage, double fireDamage, double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
-                   double lifesteal, double armourPenetration, double criticalChance, double force, double knockback,
-                   double defense, double physicalResistance, double fireResistance, double waterResistance, double lightningResistance, double magicResistance, double darkResistance, double holyResistance,
+                   double lifesteal, double armourPenetration, double criticalChance, double force, double accuracy, double knockback,
+                   double weight, double physicalDefence, double fireDefence, double waterDefence, double lightningDefence, double magicDefence, double darkDefence, double holyDefence,
                    double evasion, double maxHP, double movespeed, double knockbackResistance, double luck,
                    double strikeMultiplier, double pierceMultiplier, double slashMultiplier,
                    Map<Attribute, AttributeModifier> bonusAttributes, @NotNull TagKey<Block> tag) {
@@ -49,15 +49,16 @@ public class IDFTier implements Tier {
         this.armourPenetration = armourPenetration;
         this.criticalChance = criticalChance;
         this.force = force;
+        this.accuracy = accuracy;
         this.knockback = knockback;
-        this.defense = defense;
-        this.physicalResistance = physicalResistance;
-        this.fireResistance = fireResistance;
-        this.waterResistance = waterResistance;
-        this.lightningResistance = lightningResistance;
-        this.magicResistance = magicResistance;
-        this.darkResistance = darkResistance;
-        this.holyResistance = holyResistance;
+        this.weight = weight;
+        this.physicalDefence = physicalDefence;
+        this.fireDefence = fireDefence;
+        this.waterDefence = waterDefence;
+        this.lightningDefence = lightningDefence;
+        this.magicDefence = magicDefence;
+        this.darkDefence = darkDefence;
+        this.holyDefence = holyDefence;
         this.evasion = evasion;
         this.maxHP = maxHP;
         this.movespeed = movespeed;
@@ -141,36 +142,40 @@ public class IDFTier implements Tier {
         return force;
     }
 
+    public double getAccuracy() {
+        return accuracy;
+    }
+
     public double getKnockback() {
         return knockback;
     }
 
-    public double getDefense() {
-        return defense;
+    public double getWeight() {
+        return weight;
     }
 
-    public double getPhysicalResistance() {
-        return physicalResistance;
+    public double getPhysicalDefence() {
+        return physicalDefence;
     }
 
-    public double getFireResistance() {
-        return fireResistance;
+    public double getFireDefence() {
+        return fireDefence;
     }
 
-    public double getWaterResistance() {
-        return waterResistance;
+    public double getWaterDefence() {
+        return waterDefence;
     }
 
-    public double getLightningResistance() {
-        return lightningResistance;
+    public double getLightningDefence() {
+        return lightningDefence;
     }
 
-    public double getMagicResistance() {
-        return magicResistance;
+    public double getMagicDefence() {
+        return magicDefence;
     }
 
-    public double getDarkResistance() {
-        return darkResistance;
+    public double getDarkDefence() {
+        return darkDefence;
     }
 
     public double getEvasion() {
@@ -209,8 +214,8 @@ public class IDFTier implements Tier {
         return bonusAttributes;
     }
 
-    public double getHolyResistance() {
-        return holyResistance;
+    public double getHolyDefence() {
+        return holyDefence;
     }
 
     public double getHolyDamage() {

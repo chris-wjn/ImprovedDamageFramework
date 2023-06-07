@@ -75,14 +75,14 @@ public record DefensiveData (double defense, double pRes, double fRes, double wR
         public DefensiveData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             final JsonObject obj = json.getAsJsonObject();
             return new DefensiveData(
-                    obj.get("Defense").getAsDouble(),
-                    obj.get("Resistance - PHYSICAL").getAsDouble(),
-                    obj.get("Resistance - FIRE").getAsDouble(),
-                    obj.get("Resistance - WATER").getAsDouble(),
-                    obj.get("Resistance - LIGHTNING").getAsDouble(),
-                    obj.get("Resistance - MAGIC").getAsDouble(),
-                    obj.get("Resistance - DARK").getAsDouble(),
-                    obj.get("Resistance - HOLY").getAsDouble(),
+                    obj.get("Weight").getAsDouble(),
+                    obj.get("Defence - PHYSICAL").getAsDouble(),
+                    obj.get("Defence - FIRE").getAsDouble(),
+                    obj.get("Defence - WATER").getAsDouble(),
+                    obj.get("Defence - LIGHTNING").getAsDouble(),
+                    obj.get("Defence - MAGIC").getAsDouble(),
+                    obj.get("Defence - DARK").getAsDouble(),
+                    obj.get("Defence - HOLY").getAsDouble(),
                     obj.get("Evasion").getAsDouble(),
                     obj.get("Knockback Resistance").getAsDouble(),
                     obj.get("Damage Class - STRIKE").getAsDouble(),
@@ -93,17 +93,17 @@ public record DefensiveData (double defense, double pRes, double fRes, double wR
         @Override
         public JsonElement serialize(DefensiveData src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject obj = new JsonObject();
-            obj.addProperty("Resistance - PHYSICAL", src.pRes);
-            obj.addProperty("Resistance - FIRE", src.fRes);
-            obj.addProperty("Resistance - WATER", src.wRes);
-            obj.addProperty("Resistance - LIGHTNING", src.lRes);
-            obj.addProperty("Resistance - MAGIC", src.mRes);
-            obj.addProperty("Resistance - DARK", src.dRes);
-            obj.addProperty("Resistance - HOLY", src.hRes);
+            obj.addProperty("Defence - PHYSICAL", src.pRes);
+            obj.addProperty("Defence - FIRE", src.fRes);
+            obj.addProperty("Defence - WATER", src.wRes);
+            obj.addProperty("Defence - LIGHTNING", src.lRes);
+            obj.addProperty("Defence - MAGIC", src.mRes);
+            obj.addProperty("Defence - DARK", src.dRes);
+            obj.addProperty("Defence - HOLY", src.hRes);
             obj.addProperty("Damage Class - STRIKE", src.str);
             obj.addProperty("Damage Class - PIERCE", src.prc);
             obj.addProperty("Damage Class - SLASH", src.sls);
-            obj.addProperty("Defense", src.defense);
+            obj.addProperty("Weight", src.defense);
             obj.addProperty("Evasion", src.eva);
             obj.addProperty("Knockback Resistance", src.kbr);
             return obj;

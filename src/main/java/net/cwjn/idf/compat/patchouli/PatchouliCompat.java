@@ -1,7 +1,6 @@
 package net.cwjn.idf.compat.patchouli;
 
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.json.JSONUtil;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
@@ -11,7 +10,6 @@ import net.cwjn.idf.data.CommonData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,8 +17,6 @@ import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.text.DecimalFormat;
 
 import static net.cwjn.idf.util.Util.mBPS;
@@ -84,15 +80,15 @@ public class PatchouliCompat implements IComponentProcessor {
             case "physicalResistance" ->
                     IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.dData().pRes())));
             case "fireResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_RESISTANCE.get()))));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_DEFENCE.get()))));
             case "waterResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.WATER_RESISTANCE.get()))));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.WATER_DEFENCE.get()))));
             case "lightningResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.LIGHTNING_RESISTANCE.get()))));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.LIGHTNING_DEFENCE.get()))));
             case "magicResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.MAGIC_RESISTANCE.get()))));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.MAGIC_DEFENCE.get()))));
             case "darkResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.DARK_RESISTANCE.get()))));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.DARK_DEFENCE.get()))));
             case "strike" ->
                     DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.STRIKE_MULT.get()) == 1.0 ? null :
                             DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.STRIKE_MULT.get()) > 1.0 ?

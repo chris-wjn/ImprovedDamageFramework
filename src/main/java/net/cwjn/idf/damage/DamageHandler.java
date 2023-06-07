@@ -63,9 +63,9 @@ public class DamageHandler {
         //run our numbers through the pre-multiplier event. Use the armour formula to convert elemental armour values to resistances.
         PreDamageMultipliersEvent event = new PreDamageMultipliersEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage,
                 convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getWeight(),
-                (float) armourFormula(target.getAttributeValue(FIRE.resistance)), (float) armourFormula(target.getAttributeValue(WATER.resistance)),
-                (float) armourFormula(target.getAttributeValue(LIGHTNING.resistance)), (float) armourFormula(target.getAttributeValue(MAGIC.resistance)),
-                (float) armourFormula(target.getAttributeValue(DARK.resistance)), (float) armourFormula(target.getAttributeValue(HOLY.resistance)),
+                (float) armourFormula(target.getAttributeValue(FIRE.defence)), (float) armourFormula(target.getAttributeValue(WATER.defence)),
+                (float) armourFormula(target.getAttributeValue(LIGHTNING.defence)), (float) armourFormula(target.getAttributeValue(MAGIC.defence)),
+                (float) armourFormula(target.getAttributeValue(DARK.defence)), (float) armourFormula(target.getAttributeValue(HOLY.defence)),
                 (float) armourFormula(target.getAttributeValue(Attributes.ARMOR)),
                 (float) target.getAttributeValue(Attributes.ARMOR_TOUGHNESS), convertedSource.getDamageClass());
         MinecraftForge.EVENT_BUS.post(event);
@@ -76,9 +76,9 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getWeight() <= 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getWeight())/Util.fastSqrt(event.getDef() <= 0 ? 1 : event.getDef()), 0.5, 2);
+        double weightMultiplier = event.getForce() <= 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
         knockback = event.getKnockback();
-        float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getHolyRes(), event.getPhysicalRes()};
+        float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
         //now we can knockback the target based on the weightMultiplier. The first code is copied from the
         //vanilla knockback handler to get the direction of the knockback. We add the bonus knockback value from
@@ -117,7 +117,7 @@ public class DamageHandler {
         dv = new float[]{event2.getFireDmg(), event2.getWaterDmg(), event2.getLightningDmg(), event2.getMagicDmg(), event2.getDarkDmg(), event2.getHolyDmg(), event2.getPhysicalDmg()};
         pen = event2.getPen();
         lifesteal = event2.getLifesteal();
-        rv = new float[]{event2.getFireRes(), event2.getWaterRes(), event2.getLightningRes(), event2.getMagicRes(), event2.getDarkRes(), event2.getHolyRes(), event2.getPhysicalRes()};
+        rv = new float[]{event2.getFireDef(), event2.getWaterDef(), event2.getLightningDef(), event2.getMagicDef(), event2.getDarkDef(), event2.getHolyDef(), event2.getPhysicalDef()};
 
         //now we can factor in fall protection, blast protection, fire protection and projectile protection. Reduce each damage type by 6.25% per
         //level of blast and projectile. Assuming the highest any player could get is 16 (prot 4 on each armour piece),
@@ -280,9 +280,9 @@ public class DamageHandler {
         //run our numbers through the pre-multiplier event. Use the armour formula to convert elemental armour values to resistances.
         PreDamageMultipliersEvent event = new PreDamageMultipliersEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage,
                 convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getWeight(),
-                (float) armourFormula(target.getAttributeValue(FIRE.resistance)), (float) armourFormula(target.getAttributeValue(WATER.resistance)),
-                (float) armourFormula(target.getAttributeValue(LIGHTNING.resistance)), (float) armourFormula(target.getAttributeValue(MAGIC.resistance)),
-                (float) armourFormula(target.getAttributeValue(DARK.resistance)), (float) armourFormula(target.getAttributeValue(HOLY.resistance)),
+                (float) armourFormula(target.getAttributeValue(FIRE.defence)), (float) armourFormula(target.getAttributeValue(WATER.defence)),
+                (float) armourFormula(target.getAttributeValue(LIGHTNING.defence)), (float) armourFormula(target.getAttributeValue(MAGIC.defence)),
+                (float) armourFormula(target.getAttributeValue(DARK.defence)), (float) armourFormula(target.getAttributeValue(HOLY.defence)),
                 (float) armourFormula(target.getAttributeValue(Attributes.ARMOR)),
                 (float) target.getAttributeValue(Attributes.ARMOR_TOUGHNESS), convertedSource.getDamageClass());
         MinecraftForge.EVENT_BUS.post(event);
@@ -293,9 +293,9 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getWeight() <= 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getWeight())/Util.fastSqrt(event.getDef() <= 0 ? 1 : event.getDef()), 0.5, 2);
+        double weightMultiplier = event.getForce() <= 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
         knockback = event.getKnockback();
-        float[] rv = {event.getFireRes(), event.getWaterRes(), event.getLightningRes(), event.getMagicRes(), event.getDarkRes(), event.getHolyRes(), event.getPhysicalRes()};
+        float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
         log.debug("");
         log.debug("-> Pre Damage Multipliers:");
@@ -317,8 +317,8 @@ public class DamageHandler {
         log.debug("---> Physical: " + rv[6]);
         log.debug("--> Auxiliary Information:");
         log.debug("---> Damage Class: " + damageClass);
-        log.debug("---> Force: " + event.getWeight());
-        log.debug("---> Defense: " + event.getDef());
+        log.debug("---> Force: " + event.getForce());
+        log.debug("---> Defense: " + event.getWeight());
         log.debug("---> Force/Defense: " + weightMultiplier);
         log.debug("---> Pen: " + pen);
         log.debug("---> Lifesteal: " + lifesteal);
@@ -383,7 +383,7 @@ public class DamageHandler {
         dv = new float[]{event2.getFireDmg(), event2.getWaterDmg(), event2.getLightningDmg(), event2.getMagicDmg(), event2.getDarkDmg(), event2.getHolyDmg(), event2.getPhysicalDmg()};
         pen = event2.getPen();
         lifesteal = event2.getLifesteal();
-        rv = new float[]{event2.getFireRes(), event2.getWaterRes(), event2.getLightningRes(), event2.getMagicRes(), event2.getDarkRes(), event2.getHolyRes(), event2.getPhysicalRes()};
+        rv = new float[]{event2.getFireDef(), event2.getWaterDef(), event2.getLightningDef(), event2.getMagicDef(), event2.getDarkDef(), event2.getHolyDef(), event2.getPhysicalDef()};
 
         log.debug("");
         log.debug("-> Pre Enchantments");

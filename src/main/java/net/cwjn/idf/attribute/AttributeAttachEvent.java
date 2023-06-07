@@ -27,12 +27,12 @@ public class AttributeAttachEvent {
                 event.add(entityType, DARK.damage, data.oData().dDmg());
                 event.add(entityType, HOLY.damage, data.oData().hDmg());
                 //resistances
-                event.add(entityType, FIRE.resistance, data.dData().fRes());
-                event.add(entityType, WATER.resistance, data.dData().wRes());
-                event.add(entityType, LIGHTNING.resistance, data.dData().lRes());
-                event.add(entityType, MAGIC.resistance, data.dData().mRes());
-                event.add(entityType, DARK.resistance, data.dData().dRes());
-                event.add(entityType, HOLY.resistance, data.dData().hRes());
+                event.add(entityType, FIRE.defence, data.dData().fRes());
+                event.add(entityType, WATER.defence, data.dData().wRes());
+                event.add(entityType, LIGHTNING.defence, data.dData().lRes());
+                event.add(entityType, MAGIC.defence, data.dData().mRes());
+                event.add(entityType, DARK.defence, data.dData().dRes());
+                event.add(entityType, HOLY.defence, data.dData().hRes());
                 //DAMAGE CLASS MULTIPLIERS
                 event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.dData().str());
                 event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.dData().prc());
@@ -42,6 +42,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.oData().ls());
                 event.add(entityType, IDFAttributes.PENETRATING.get(), data.oData().pen());
                 event.add(entityType, IDFAttributes.FORCE.get(), data.oData().force());
+                event.add(entityType, IDFAttributes.ACCURACY.get(), data.oData().accuracy());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get(), data.oData().crit());
             } else {
                 //damage types
@@ -52,12 +53,12 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.DARK_DAMAGE.get());
                 event.add(entityType, HOLY.damage);
                 //resistances
-                event.add(entityType, IDFAttributes.FIRE_RESISTANCE.get());
-                event.add(entityType, IDFAttributes.WATER_RESISTANCE.get());
-                event.add(entityType, IDFAttributes.LIGHTNING_RESISTANCE.get());
-                event.add(entityType, IDFAttributes.MAGIC_RESISTANCE.get());
-                event.add(entityType, IDFAttributes.DARK_RESISTANCE.get());
-                event.add(entityType, HOLY.resistance);
+                event.add(entityType, IDFAttributes.FIRE_DEFENCE.get());
+                event.add(entityType, IDFAttributes.WATER_DEFENCE.get());
+                event.add(entityType, IDFAttributes.LIGHTNING_DEFENCE.get());
+                event.add(entityType, IDFAttributes.MAGIC_DEFENCE.get());
+                event.add(entityType, IDFAttributes.DARK_DEFENCE.get());
+                event.add(entityType, HOLY.defence);
                 //DAMAGE CLASS MULTIPLIERS
                 event.add(entityType, IDFAttributes.STRIKE_MULT.get());
                 event.add(entityType, IDFAttributes.PIERCE_MULT.get());
@@ -67,6 +68,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.LIFESTEAL.get());
                 event.add(entityType, IDFAttributes.PENETRATING.get());
                 event.add(entityType, IDFAttributes.FORCE.get());
+                event.add(entityType, IDFAttributes.ACCURACY.get());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
             }
         }
