@@ -269,14 +269,20 @@ public class Util {
         else num = tenths.format(n);
         int ones = 0;
         int dots = 0;
-        for (char c : num.substring(1).toCharArray()) {
+        for (char c : num.toCharArray()) {
             if (c == '1') ones++;
             if (c == '.') dots++;
         }
         int leftOnes = 0;
         int rightOnes = 0;
         while (ones != 0) {
-
+            if (leftOnes == 0) {
+                leftOnes++;
+            } else {
+                if (leftOnes % 2 == 0) leftOnes += 2;
+                else rightOnes += 2;
+            }
+            ones--;
         }
 
         //now lets check how many spaces we need to fill. Each component should have 6 characters between the dividers, so
@@ -287,7 +293,7 @@ public class Util {
         MutableComponent comp = text(drawBorders? "|" : "").withStyle(DEFAULT);
 
         //add left padding, plus a half if the total spaces is odd
-        comp.append(spacer((int) (8*(spaces/2)) + dots*2 + ones));
+        comp.append(spacer((int) (8*(spaces/2)) + dots*2 + leftOnes));
 
         //add the number to the component. Also add a percent if needed
         comp.append(translation("idf.icon." + name).withStyle(ICON)).append(spacer(-1));
@@ -299,8 +305,7 @@ public class Util {
         }
 
         //add a half spacer if total spaces is odd, then add the rest of the right padding
-        comp.append(spacer((int) (8*(spaces/2)) + dots*2 + ones/2));
-        if (ones == 1) comp.append(spacer(1));
+        comp.append(spacer((int) (8*(spaces/2)) + dots*2 + rightOnes));
 
         //finish up with an ending divider if needed
         return drawBorders? comp.append("|").withStyle(DEFAULT) : comp;

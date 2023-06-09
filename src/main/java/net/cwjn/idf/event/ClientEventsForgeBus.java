@@ -18,8 +18,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,10 +27,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.LightLayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -52,13 +47,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static net.cwjn.idf.ImprovedDamageFramework.*;
+import static net.cwjn.idf.ImprovedDamageFramework.FONT_ICONS;
+import static net.cwjn.idf.ImprovedDamageFramework.FONT_TOOLTIPS;
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_ATTACK_SPEED;
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
-import static net.cwjn.idf.util.Util.*;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
+import static net.cwjn.idf.util.Util.writeTooltipDouble;
+import static net.cwjn.idf.util.Util.writeTooltipInteger;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventsForgeBus {
@@ -112,7 +109,7 @@ public class ClientEventsForgeBus {
                     double atkSpd = (DEFAULT_ATTACK_SPEED + getAndRemoveAttribute(map, Attributes.ATTACK_SPEED));
                     line1.append(Util.writeStaticTooltipComponent(atkSpd, "attack_speed", null, false, true));
                 } else {
-                    double accuracy = (1.0 + getAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()));
+                    double accuracy = (getAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()));
                     line1.append(Util.writeStaticTooltipComponent(accuracy, "accuracy", null, true, true));
                 }
                 double crit = getAndRemoveAttribute(map, IDFAttributes.CRIT_CHANCE.get());
