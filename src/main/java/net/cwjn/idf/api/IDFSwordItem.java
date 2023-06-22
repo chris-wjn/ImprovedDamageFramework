@@ -1,15 +1,15 @@
 package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
-import net.cwjn.idf.config.json.data.WeaponData;
-import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
-import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
-import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.util.ItemInterface;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
+import oshi.util.tuples.Pair;
 
 import java.util.Map;
 
@@ -18,92 +18,36 @@ import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operati
 
 public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
 
-    private final double physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage;
-
-    public IDFSwordItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage, double waterDamage, double lightningDamage,
-                        double magicDamage, double darkDamage, double holyDamage, double lifesteal, double pen, double crit, double force, double knockback, double speed, Properties p, Map<Attribute, AttributeModifier> bonusAttributes) {
-        this(tier, durability, damageClass, physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
-                lifesteal, pen, crit, force, 0, knockback, speed, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p, bonusAttributes);
-    }
-
-    public IDFSwordItem(Tier tier, int durability, String damageClass, double physicalDamage, double fireDamage,
-                        double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
-                        double lifesteal, double armourPenetration, double criticalChance, double force, double accuracy, double knockback,
-                        double attackSpeed, double weight, double physicalDefence, double fireDefence,
-                        double waterDefence, double lightningDefence, double magicDefence,
-                        double darkDefence, double holyDefence, double evasion, double maxHP, double movespeed,
-                        double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
-                        double slashMultiplier,
-                        Properties p, Map<Attribute, AttributeModifier> bonusAttributes) {
-        super(tier, (int) physicalDamage, (float) attackSpeed, p);
-        ((ItemInterface) this).setDamageClass(damageClass);
+    @SafeVarargs
+    public IDFSwordItem(Tier tier, String damageClass, double physicalDamage, double force, double speed, Properties p, Pair<Attribute, AttributeModifier>... bonusAttributes) {
+        super(tier, (int) physicalDamage, (float) speed, p);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        WeaponData data = new WeaponData(durability, damageClass, false,
-                new OffensiveData(physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
-                        lifesteal, armourPenetration, criticalChance, force, accuracy, knockback, attackSpeed),
-                new DefensiveData(weight, physicalDefence, fireDefence, waterDefence, lightningDefence, magicDefence,
-                        darkDefence, holyDefence, evasion, knockbackResistance, strikeMultiplier, pierceMultiplier, slashMultiplier),
-                new AuxiliaryData(maxHP, movespeed, luck)
-        );
-        if (tier instanceof IDFTier modTier) {
-            data = WeaponData.combine(data,
-                    new WeaponData(0, "", false, new OffensiveData(modTier.getAttackDamageBonus(), modTier.getFireDamage(), modTier.getWaterDamage(),
-                            modTier.getLightningDamage(), modTier.getMagicDamage(), modTier.getDarkDamage(), modTier.getHolyDamage(),
-                            modTier.getLifesteal(), modTier.getArmourPenetration(), modTier.getCriticalChance(),
-                            modTier.getForce(), modTier.getAccuracy(), modTier.getKnockback(), modTier.getSpeed()),
-                            new DefensiveData(modTier.getWeight(), modTier.getPhysicalDefence(), modTier.getFireDefence(),
-                                    modTier.getWaterDefence(), modTier.getLightningDefence(), modTier.getMagicDefence(),
-                                    modTier.getDarkDefence(), modTier.getHolyDefence(), modTier.getEvasion(),
-                                    modTier.getKnockbackResistance(), modTier.getStrikeMultiplier(), modTier.getPierceMultiplier(),
-                                    modTier.getSlashMultiplier()),
-                            new AuxiliaryData(modTier.getMaxHP(), modTier.getMovespeed(), modTier.getLuck())));
-            bonusAttributes.putAll(modTier.getBonusAttributes());
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "base_physical_damage", physicalDamage+tier.getAttackDamageBonus(), ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "base_attack_speed", speed+tier.getSpeed(), ADDITION));
+        builder.put(IDFAttributes.FORCE.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "base_force", force, ADDITION));
+        ((ItemInterface) this).setDamageClass(damageClass);
+        for (Pair<Attribute, AttributeModifier> pair : bonusAttributes) {
+            builder.put(pair.getA(), pair.getB());
         }
-        this.physicalDamage = physicalDamage;
-        this.fireDamage = fireDamage;
-        this.waterDamage = waterDamage;
-        this.lightningDamage = lightningDamage;
-        this.magicDamage = magicDamage;
-        this.darkDamage = darkDamage;
-        this.holyDamage = holyDamage;
-        data.forEach(pair -> {
-            if (pair.getB() != 0) {
-                builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "data0", pair.getB(), ADDITION));
+        if (tier instanceof IDFTier idfTier) {
+            for (Map.Entry<Attribute, AttributeModifier> entry : idfTier.getBonusAttributes().entrySet()) {
+                builder.put(entry.getKey(), entry.getValue());
             }
-        });
-        for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
-            builder.put(entry.getKey(), entry.getValue());
         }
         this.defaultModifiers = builder.build();
     }
 
     @Override
     public float getDamage() {
-        return (float) (physicalDamage + fireDamage + waterDamage + lightningDamage + magicDamage + darkDamage);
-    }
-
-    public double getFireDamage() {
-        return fireDamage;
-    }
-
-    public double getWaterDamage() {
-        return waterDamage;
-    }
-
-    public double getLightningDamage() {
-        return lightningDamage;
-    }
-
-    public double getMagicDamage() {
-        return magicDamage;
-    }
-
-    public double getDarkDamage() {
-        return darkDamage;
-    }
-
-    public double getHolyDamage() {
-        return holyDamage;
+        float returnDamage = 0;
+        returnDamage += this.defaultModifiers.get(Attributes.ATTACK_DAMAGE).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDamage += this.defaultModifiers.get(IDFElement.FIRE.damage).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDamage += this.defaultModifiers.get(IDFElement.WATER.damage).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDamage += this.defaultModifiers.get(IDFElement.LIGHTNING.damage).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDamage += this.defaultModifiers.get(IDFElement.MAGIC.damage).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDamage += this.defaultModifiers.get(IDFElement.DARK.damage).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDamage += this.defaultModifiers.get(IDFElement.HOLY.damage).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        return returnDamage;
     }
 
 }

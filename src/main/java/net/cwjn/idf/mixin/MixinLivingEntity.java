@@ -16,6 +16,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
@@ -103,7 +104,7 @@ public class MixinLivingEntity {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
                     if (offensiveAttribute.test(name)) {
                         if (isRanged) continue;
-                        if (entry.getKey() == Attributes.ATTACK_SPEED) {
+                        if (entry.getKey() == Attributes.ATTACK_SPEED && thisLivingEntity instanceof Player) {
                             Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
                             final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                             double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();

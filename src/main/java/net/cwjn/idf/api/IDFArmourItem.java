@@ -1,71 +1,40 @@
 package net.cwjn.idf.api;
 
 import com.google.common.collect.ImmutableMultimap;
-import net.cwjn.idf.config.json.data.ArmourData;
-import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
-import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
-import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
-import net.cwjn.idf.util.Util;
+import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.attribute.IDFElement;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import oshi.util.tuples.Pair;
 
 import java.util.Map;
 
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
 
 public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
-    private final double armour, weight, fireDef, waterDef, lightningDef, magicDef, darkDef, holyDef;
-
-    public IDFArmourItem(ArmorMaterial material, EquipmentSlot slot, Properties p, int durability, double physicalDamage, double fireDamage,
-                         double waterDamage, double lightningDamage, double magicDamage, double darkDamage, double holyDamage,
-                         double lifesteal, double armourPenetration, double criticalChance, double force, double accuracy, double knockback,
-                         double attackSpeed, double weight, double physicalDefence, double fireDefence,
-                         double waterDefence, double lightningDefence, double magicDefence,
-                         double darkDefence, double holyDefence, double evasion, double maxHP, double movespeed,
-                         double knockbackResistance, double luck, double strikeMultiplier, double pierceMultiplier,
-                         double slashMultiplier,
-                         Map<Attribute, AttributeModifier> bonusAttributes) {
-        super(material, slot, p);
+    @SafeVarargs
+    public IDFArmourItem(IDFArmourMaterial material, EquipmentSlot slot,
+                         double physicalDefence, double weight, double KBR,
+                         double strike, double pierce, double slash,
+                         Properties properties, Pair<Attribute, AttributeModifier>... bonusAttributes) {
+        super(material, slot, properties);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        ArmourData data = new ArmourData(durability,
-                new OffensiveData(physicalDamage, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage,
-                        lifesteal, armourPenetration, criticalChance, force, accuracy, knockback, attackSpeed),
-                new DefensiveData(weight, physicalDefence, fireDefence, waterDefence, lightningDefence, magicDefence,
-                        darkDefence, holyDefence, evasion, knockbackResistance, strikeMultiplier, pierceMultiplier, slashMultiplier),
-                new AuxiliaryData(maxHP, movespeed, luck)
-                );
-        if (material instanceof IDFArmourMaterial idfMaterial) {
-            data = ArmourData.combine(data,
-                    new ArmourData(0, new OffensiveData(idfMaterial.getPhysicalDamage(slot), idfMaterial.getFireDamage(slot), idfMaterial.getWaterDamage(slot),
-                            idfMaterial.getLightningDamage(slot), idfMaterial.getMagicDamage(slot), idfMaterial.getDarkDamage(slot), idfMaterial.getHolyDamage(slot),
-                            idfMaterial.getLifesteal(slot), idfMaterial.getArmourPenetration(slot), idfMaterial.getCriticalChance(slot),
-                            idfMaterial.getForce(slot), idfMaterial.getAccuracy(slot), idfMaterial.getKnockback(slot), idfMaterial.getAttackSpeed(slot)),
-                            new DefensiveData(idfMaterial.getRealDefenseForSlot(slot), idfMaterial.getPhysicalResistanceForSlot(slot), idfMaterial.getFireResForSlot(slot),
-                                    idfMaterial.getWaterResForSlot(slot), idfMaterial.getLightningResForSlot(slot), idfMaterial.getMagicResForSlot(slot),
-                                    idfMaterial.getDarkResForSlot(slot), idfMaterial.getHolyResistance(slot), idfMaterial.getEvasionForSlot(slot),
-                                    idfMaterial.getKnockbackResistance(), idfMaterial.getStrikeForSlot(slot), idfMaterial.getPierceForSlot(slot),
-                                    idfMaterial.getSlashForSlot(slot)),
-                            new AuxiliaryData(idfMaterial.getMaxHPForSlot(slot), idfMaterial.getMovespeedForSlot(slot), idfMaterial.getLuckForSlot(slot))));
-            bonusAttributes.putAll(idfMaterial.getBonusAttributes());
+        builder.put(Attributes.ARMOR, new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_physical_defence", physicalDefence+material.getPhysicalDefenceForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_weight", weight+material.getWeightForSlot(slot), AttributeModifier.Operation.ADDITION));
+        if (this.knockbackResistance > 0) {
+            builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_knockback_resistance", KBR+material.getKnockbackResistance(), AttributeModifier.Operation.ADDITION));
         }
-        armour = data.dData().pRes();
-        this.weight = data.dData().defense();
-        fireDef = data.dData().fRes();
-        waterDef = data.dData().wRes();
-        lightningDef = data.dData().lRes();
-        magicDef = data.dData().mRes();
-        darkDef = data.dData().dRes();
-        holyDef = data.dData().hRes();
-        data.forEach(pair -> {
-            if (pair.getB() != 0) {
-                builder.put(pair.getA(), new AttributeModifier(Util.UUID_BASE_STAT_ADDITION[this.getSlot().getFilterFlag()], "data0", pair.getB(), ADDITION));
-            }
-        });
-        for (Map.Entry<Attribute, AttributeModifier> entry : bonusAttributes.entrySet()) {
+        builder.put(IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_strike", strike+material.getStrikeForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_pierce", pierce+material.getPierceForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(IDFAttributes.SLASH_MULT.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_slash", slash+material.getSlashForSlot(slot), AttributeModifier.Operation.ADDITION));
+        for (Pair<Attribute, AttributeModifier> pair : bonusAttributes) {
+            builder.put(pair.getA(), pair.getB());
+        }
+        for (Map.Entry<Attribute, AttributeModifier> entry : material.getBonusAttributes().entrySet()) {
             builder.put(entry.getKey(), entry.getValue());
         }
         this.defaultModifiers = builder.build();
@@ -73,12 +42,28 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
     @Override
     public int getDefense() {
-        return (int) (armour + fireDef + waterDef + lightningDef + magicDef + darkDef + holyDef);
+        float returnDefence = 0;
+        returnDefence += this.defaultModifiers.get(Attributes.ARMOR).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDefence += this.defaultModifiers.get(IDFElement.FIRE.defence).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDefence += this.defaultModifiers.get(IDFElement.WATER.defence).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDefence += this.defaultModifiers.get(IDFElement.LIGHTNING.defence).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDefence += this.defaultModifiers.get(IDFElement.MAGIC.defence).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDefence += this.defaultModifiers.get(IDFElement.DARK.defence).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        returnDefence += this.defaultModifiers.get(IDFElement.HOLY.defence).stream().mapToDouble(AttributeModifier::getAmount).sum();
+        return (int) returnDefence;
     }
 
+    @Deprecated
+    /*
+    Use getWeight instead.
+     */
     @Override
     public float getToughness() {
-        return (float) weight;
+        return 0f;
+    }
+
+    public double getWeight() {
+        return this.defaultModifiers.get(Attributes.ARMOR_TOUGHNESS).stream().mapToDouble(AttributeModifier::getAmount).sum();
     }
 
 }
