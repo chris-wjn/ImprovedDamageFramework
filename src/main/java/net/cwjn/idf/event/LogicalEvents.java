@@ -1,6 +1,7 @@
 package net.cwjn.idf.event;
 
 import net.cwjn.idf.api.event.LivingLifestealEvent;
+import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
@@ -8,6 +9,7 @@ import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
+import net.cwjn.idf.network.packets.DisplayMissPacket;
 import net.cwjn.idf.network.packets.SyncSkyDarkenPacket;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.ItemInterface;
@@ -15,23 +17,28 @@ import net.cwjn.idf.util.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.level.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class LogicalEvents {
@@ -73,15 +80,7 @@ public class LogicalEvents {
         LivingEntity target = event.getEntity();
         if (target.getLevel() instanceof ServerLevel level) {
             if (target.getAttributeValue(IDFAttributes.EVASION.get())/100 >= Math.random()) {
-                for (int i = 0; i < 360; i++) {
-                    if (i % 20 == 0) {
-                        level.sendParticles(ParticleTypes.EXPLOSION, target.getX(), target.getY() + 1.5, target.getZ(), 3, Math.cos(i) * 0.25, 0, Math.sin(i) * 0.25, 0.25);
-                        level.sendParticles(ParticleTypes.EXPLOSION, target.getX(), target.getY() + 1.25, target.getZ(), 3, Math.cos(i) * 0.25, 0, Math.sin(i) * 0.25, 0.25);
-                        level.sendParticles(ParticleTypes.EXPLOSION, target.getX(), target.getY() + 1, target.getZ(), 3, Math.cos(i) * 0.25, 0, Math.sin(i) * 0.25, 0.25);
-                        level.sendParticles(ParticleTypes.EXPLOSION, target.getX(), target.getY() + 0.75, target.getZ(), 3, Math.cos(i) * 0.25, 0, Math.sin(i) * 0.25, 0.25);
-                        level.sendParticles(ParticleTypes.EXPLOSION, target.getX(), target.getY() + 0.5, target.getZ(), 3, Math.cos(i) * 0.25, 0, Math.sin(i) * 0.25, 0.25);
-                    }
-                }
+                PacketHandler.serverToNearPoint(new DisplayMissPacket(target.getX(), target.getY(), target.getZ(), 0, target.getUUID()), target.getX(), target.getY(), target.getZ(), 15, target.getCommandSenderWorld().dimension());
                 event.setCanceled(true);
             }
         }
@@ -146,7 +145,7 @@ public class LogicalEvents {
         if (event.getEntity() instanceof Player player) {
             LivingEntity target = event.getTarget();
             if (target.getLevel() instanceof ServerLevel level) {
-                level.sendParticles(ParticleTypes.CRIMSON_SPORE, target.getX(), target.getEyeY(), target.getZ(), 3, player.getX() - target.getX(), player.getY() - target.getY(), player.getZ() - target.getZ(), 1);
+                level.sendParticles(ParticleTypes.SPLASH, target.getX(), target.getEyeY(), target.getZ(), 30, player.getX() - target.getX(), player.getY() - target.getY(), player.getZ() - target.getZ(), 1);
             }
         }
     }
@@ -158,10 +157,19 @@ public class LogicalEvents {
     }
 
     @SubscribeEvent
-    public static void onChunkWatch(ChunkWatchEvent event) {
-        if (event.getLevel() == event.getPlayer().getLevel()) {
-            PacketHandler.serverToPlayer(new SyncSkyDarkenPacket(event.getLevel().getSkyDarken()), event.getPlayer());
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.haveTime()) {
+            for (ServerPlayer player : event.getServer().getPlayerList().getPlayers()) {
+                PacketHandler.serverToPlayer(new SyncSkyDarkenPacket(player.getLevel().getSkyDarken()), player);
+            }
         }
+    }
+
+    @SubscribeEvent
+    public static void addWeightToFoodExhaustion(OnFoodExhaustionEvent event) {
+        LivingEntity entity = event.getEntity();
+        double weight = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+        event.setExhaustionAmount((float) (event.getExhaustionAmount() * (weight*0.01 + 1)));
     }
 
 }

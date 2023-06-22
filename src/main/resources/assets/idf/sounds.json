@@ -1,0 +1,14 @@
+{
+  "crit_sound": {
+    "subtitle": "idf.sounds.crit",
+    "sounds": [
+      "idf:crit_sound"
+    ]
+  },
+  "evade_sound": {
+    "subtitle": "idf.sounds.evade",
+    "sounds": [
+      "idf:evade_sound"
+    ]
+  }
+}

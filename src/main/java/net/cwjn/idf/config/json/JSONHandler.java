@@ -13,6 +13,7 @@ import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
 import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
 import net.cwjn.idf.data.ClientData;
+import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.iaf.RpgItemData;
 import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.config.json.data.EntityDataTemplate.NONE;
@@ -51,6 +53,7 @@ import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
 @Mod.EventBusSubscriber
 public class JSONHandler {
     public static final Map<ResourceLocation, Multimap<Attribute, AttributeModifier>> baseModifiers = new HashMap<>();
+    private static final Predicate<Item> isKnownWeapon = (item) -> item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem;
     public static final Map<ResourceLocation, Integer> vanillaDurability = new HashMap<>();
     public static final Gson SERIALIZER = new GsonBuilder().
             setPrettyPrinting().
@@ -75,32 +78,34 @@ public class JSONHandler {
         Map<String, EntityData> DEFAULT_ENTITY = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
         Map<String, SourceCatcherData> DEFAULT_SOURCE = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
 
-        //add any extra mobs and items to them from other mods
+        //ENTITIES
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
             if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
                 DEFAULT_ENTITY.putIfAbsent(Util.getEntityRegistryName(entityType).toString(), new EntityData(NONE,
                         "strike", OffensiveData.entityStandard(), DefensiveData.entityStandard(), AuxiliaryData.empty()));
             }
         }
+
+        //ITEMS
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
-            if (item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem) {
-                boolean r = item instanceof BowItem || item instanceof CrossbowItem;
+            if (isKnownWeapon.test(item)) {
+                boolean ranged = item instanceof BowItem || item instanceof CrossbowItem;
                 if (item instanceof IDFCustomEquipment modItem) {
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), r,
+                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), ranged,
                                     OffensiveData.empty(),
                                     DefensiveData.empty(),
                                     AuxiliaryData.empty()));
                 } else {
-                    String dc = "strike";
+                    String damageClass = "strike";
                     if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
-                        dc = "slash";
+                        damageClass = "slash";
                     }
                     if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
-                        dc = "pierce";
+                        damageClass = "pierce";
                     }
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, dc, r,
+                            new WeaponData(0, damageClass, ranged,
                                     OffensiveData.empty(),
                                     DefensiveData.empty(),
                                     AuxiliaryData.empty()));
@@ -108,14 +113,15 @@ public class JSONHandler {
                 DEFAULT_WEAPON_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
                         OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()
                 ));
-            }
+            } //In the case the item is a sword, tool, bow, crossbow, or trident, the case is trivial, and we know it's a weapon.
             else {
                 if (item instanceof IDFCustomEquipment) {
                     DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
                             OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
                     DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
                             OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
-                } else {
+                } //If the item is an instance of IDF equipment that isn't a weapon, it is guaranteed to be armour.
+                else {
                     Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
                     double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum();
                     if (damageVal != 0) {
@@ -134,23 +140,25 @@ public class JSONHandler {
                         DEFAULT_WEAPON_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
                                 OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()
                         ));
-                    }
-                    Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
-                    Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
-                    Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
-                    Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
-                    double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                            armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                            armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                            armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                    if (armorVal != 0) {
-                        DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
-                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
-                        DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
-                                OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
-                    }
+                    } //Now that we know it isn't an instance of IDF equipment, we can check for custom items meant to act as weapons.
+                    else {
+                        Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
+                        Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
+                        Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
+                        Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
+                        double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                                armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                                armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
+                                armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
+                        if (armorVal != 0) {
+                            DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
+                                    OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                            DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
+                                    OffensiveData.empty(), DefensiveData.empty(), AuxiliaryData.empty()));
+                        }
+                    } //The only other case is if it is armour, so check that now.
                 }
-            }
+            } //If it isn't one of the former item classes, then it could either be an armour item or a custom item that is meant to act as a weapon.
         }
 
         //ensure we're starting with clean maps
@@ -284,47 +292,38 @@ public class JSONHandler {
                     builder.put(entry.getKey(), entry.getValue());
                 }
             }
-            if (LOGICAL_WEAPON_MAP_FLAT.containsKey(loc) || LOGICAL_WEAPON_MAP_MULT.containsKey(loc)) {
-                defaultTag.putBoolean("idf.equipment", true);
+            if (LOGICAL_WEAPON_MAP_FLAT.containsKey(loc)) {
+                defaultTag.putBoolean(CommonData.EQUIPMENT_TAG, true);
                 WeaponData data0 = LOGICAL_WEAPON_MAP_FLAT.get(loc);
-                defaultTag.putBoolean("idf.ranged_weapon", data0.ranged());
+                defaultTag.putBoolean(RANGED_TAG, data0.ranged());
                 ItemData data2 = LOGICAL_WEAPON_MAP_MULT.get(loc);
-                if (data0 != null) {
-                    data0.forEach(pair -> {
-                        if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
-                        }
-                    });
-                    defaultTag.putString("idf.damage_class", data0.damageClass());
-                    idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
-                }
-                if (data2 != null) {
-                    data2.forEach(pair -> {
-                        if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"json_mult", pair.getB(), MULTIPLY_TOTAL));
-                        }
-                    });
-                }
-            }
-            else if (LOGICAL_ARMOUR_MAP_FLAT.containsKey(loc) || LOGICAL_ARMOUR_MAP_MULT.containsKey(loc)) {
-                defaultTag.putBoolean("idf.equipment", true);
+                data0.forEach(pair -> {
+                    if (pair.getB() != 0) {
+                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                    }
+                });
+                data2.forEach(pair -> {
+                    if (pair.getB() != 0) {
+                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"json_mult", pair.getB(), MULTIPLY_TOTAL));
+                    }
+                });
+                defaultTag.putString(WEAPON_TAG, data0.damageClass());
+                idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
+            } else if (LOGICAL_ARMOUR_MAP_FLAT.containsKey(loc)) {
+                defaultTag.putBoolean(CommonData.EQUIPMENT_TAG, true);
                 ArmourData data0 = LOGICAL_ARMOUR_MAP_FLAT.get(loc);
                 ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
-                if (data0 != null) {
-                    data0.forEach(pair -> {
-                        if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot],"json_flat", pair.getB(), ADDITION));
-                        }
-                    });
-                    idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
-                }
-                if (data2 != null) {
-                    data2.forEach(pair -> {
-                        if (pair.getB() != 0) {
-                            builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"json_mult", pair.getB(), MULTIPLY_TOTAL));
-                        }
-                    });
-                }
+                data0.forEach(pair -> {
+                    if (pair.getB() != 0) {
+                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                    }
+                });
+                data2.forEach(pair -> {
+                    if (pair.getB() != 0) {
+                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                    }
+                });
+                idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
             }
             MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, item.toString()));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);

@@ -11,7 +11,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CommonData {
@@ -24,6 +26,12 @@ public class CommonData {
     public static Map<String, SourceCatcherData> LOGICAL_SOURCE_MAP = new HashMap<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
     public static final  Map<String, Attribute> ATTRIBUTES = new HashMap<>();
+    public static final List<Attribute> OFFENSIVE_ATTRIBUTES = new ArrayList<>(8);
+    public static final List<Attribute> DEFENSIVE_ATTRIBUTES = new ArrayList<>(8);
+    public static final List<Attribute> AUXILIARY_ATTRIBUTES = new ArrayList<>(8);
+    public static final String EQUIPMENT_TAG = "idf.equipment";
+    public static final String RANGED_TAG = "idf.ranged_weapon";
+    public static final String WEAPON_TAG = "idf.damage_class";
 
     public static EntityData getEntityData(ResourceLocation key) {
         EntityData data = LOGICAL_ENTITY_MAP.getOrDefault(key, null);
@@ -38,22 +46,60 @@ public class CommonData {
         for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {
             ATTRIBUTES.put(a.getDescriptionId(), a);
         }
-        SCALABLE_ATTRIBUTES.put("FORCE", IDFAttributes.FORCE.get());
-        SCALABLE_ATTRIBUTES.put("WEIGHT", Attributes.ARMOR_TOUGHNESS);
-        SCALABLE_ATTRIBUTES.put("PHYSICAL_DAMAGE", Attributes.ATTACK_DAMAGE);
-        SCALABLE_ATTRIBUTES.put("PHYSICAL_DEFENCE", Attributes.ARMOR);
-        SCALABLE_ATTRIBUTES.put("FIRE_DAMAGE", IDFElement.FIRE.damage);
-        SCALABLE_ATTRIBUTES.put("FIRE_DEFENCE", IDFElement.FIRE.defence);
-        SCALABLE_ATTRIBUTES.put("WATER_DAMAGE", IDFElement.WATER.damage);
-        SCALABLE_ATTRIBUTES.put("WATER_DEFENCE", IDFElement.WATER.defence);
-        SCALABLE_ATTRIBUTES.put("LIGHTNING_DAMAGE", IDFElement.LIGHTNING.damage);
-        SCALABLE_ATTRIBUTES.put("LIGHTNING_DEFENCE", IDFElement.LIGHTNING.defence);
-        SCALABLE_ATTRIBUTES.put("MAGIC_DAMAGE", IDFElement.MAGIC.damage);
-        SCALABLE_ATTRIBUTES.put("MAGIC_DEFENCE", IDFElement.MAGIC.defence);
-        SCALABLE_ATTRIBUTES.put("DARK_DAMAGE", IDFElement.DARK.damage);
-        SCALABLE_ATTRIBUTES.put("DARK_DEFENCE", IDFElement.DARK.defence);
-        SCALABLE_ATTRIBUTES.put("HOLY_DAMAGE", IDFElement.HOLY.damage);
-        SCALABLE_ATTRIBUTES.put("HOLY_DEFENCE", IDFElement.HOLY.defence);
+        {
+            SCALABLE_ATTRIBUTES.put("FORCE", IDFAttributes.FORCE.get());
+            SCALABLE_ATTRIBUTES.put("WEIGHT", Attributes.ARMOR_TOUGHNESS);
+            SCALABLE_ATTRIBUTES.put("PHYSICAL_DAMAGE", Attributes.ATTACK_DAMAGE);
+            SCALABLE_ATTRIBUTES.put("PHYSICAL_DEFENCE", Attributes.ARMOR);
+            SCALABLE_ATTRIBUTES.put("FIRE_DAMAGE", IDFElement.FIRE.damage);
+            SCALABLE_ATTRIBUTES.put("FIRE_DEFENCE", IDFElement.FIRE.defence);
+            SCALABLE_ATTRIBUTES.put("WATER_DAMAGE", IDFElement.WATER.damage);
+            SCALABLE_ATTRIBUTES.put("WATER_DEFENCE", IDFElement.WATER.defence);
+            SCALABLE_ATTRIBUTES.put("LIGHTNING_DAMAGE", IDFElement.LIGHTNING.damage);
+            SCALABLE_ATTRIBUTES.put("LIGHTNING_DEFENCE", IDFElement.LIGHTNING.defence);
+            SCALABLE_ATTRIBUTES.put("MAGIC_DAMAGE", IDFElement.MAGIC.damage);
+            SCALABLE_ATTRIBUTES.put("MAGIC_DEFENCE", IDFElement.MAGIC.defence);
+            SCALABLE_ATTRIBUTES.put("DARK_DAMAGE", IDFElement.DARK.damage);
+            SCALABLE_ATTRIBUTES.put("DARK_DEFENCE", IDFElement.DARK.defence);
+            SCALABLE_ATTRIBUTES.put("HOLY_DAMAGE", IDFElement.HOLY.damage);
+            SCALABLE_ATTRIBUTES.put("HOLY_DEFENCE", IDFElement.HOLY.defence);
+        } //scalables
+        {
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.FORCE.get());
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.LIFESTEAL.get());
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.CRIT_CHANCE.get());
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.PENETRATING.get());
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.ACCURACY.get());
+            OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_SPEED);
+            OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_KNOCKBACK);
+            OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_DAMAGE);
+            OFFENSIVE_ATTRIBUTES.add(IDFElement.FIRE.damage);
+            OFFENSIVE_ATTRIBUTES.add(IDFElement.WATER.damage);
+            OFFENSIVE_ATTRIBUTES.add(IDFElement.LIGHTNING.damage);
+            OFFENSIVE_ATTRIBUTES.add(IDFElement.MAGIC.damage);
+            OFFENSIVE_ATTRIBUTES.add(IDFElement.DARK.damage);
+            OFFENSIVE_ATTRIBUTES.add(IDFElement.HOLY.damage);
+        } //offensive
+        {
+            DEFENSIVE_ATTRIBUTES.add(Attributes.ARMOR);
+            DEFENSIVE_ATTRIBUTES.add(Attributes.ARMOR_TOUGHNESS);
+            DEFENSIVE_ATTRIBUTES.add(Attributes.KNOCKBACK_RESISTANCE);
+            DEFENSIVE_ATTRIBUTES.add(IDFElement.FIRE.defence);
+            DEFENSIVE_ATTRIBUTES.add(IDFElement.WATER.defence);
+            DEFENSIVE_ATTRIBUTES.add(IDFElement.LIGHTNING.defence);
+            DEFENSIVE_ATTRIBUTES.add(IDFElement.MAGIC.defence);
+            DEFENSIVE_ATTRIBUTES.add(IDFElement.DARK.defence);
+            DEFENSIVE_ATTRIBUTES.add(IDFElement.HOLY.defence);
+            DEFENSIVE_ATTRIBUTES.add(IDFAttributes.STRIKE_MULT.get());
+            DEFENSIVE_ATTRIBUTES.add(IDFAttributes.PIERCE_MULT.get());
+            DEFENSIVE_ATTRIBUTES.add(IDFAttributes.SLASH_MULT.get());
+            DEFENSIVE_ATTRIBUTES.add(IDFAttributes.EVASION.get());
+        } //defensive
+        {
+            AUXILIARY_ATTRIBUTES.add(Attributes.MAX_HEALTH);
+            AUXILIARY_ATTRIBUTES.add(Attributes.MOVEMENT_SPEED);
+            AUXILIARY_ATTRIBUTES.add(Attributes.LUCK);
+        } //auxiliary
     }
 
 }

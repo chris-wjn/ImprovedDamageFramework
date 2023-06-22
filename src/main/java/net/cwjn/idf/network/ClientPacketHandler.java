@@ -37,6 +37,18 @@ public class ClientPacketHandler {
         }
     }
 
+    public static void addMissParticle(double x, double y, double z, float horizontalOffset, double yOffset, UUID id) {
+        if (Minecraft.getInstance().player == null) return;
+        if (id.equals(Minecraft.getInstance().player.getUUID())) return;
+        Level world = Minecraft.getInstance().level;
+        Vector3f lookVector = Minecraft.getInstance().gameRenderer.getMainCamera().getLookVector();
+        float newZ = -1*lookVector.x();
+        float newX = lookVector.z();
+        if (world != null) {
+            world.addParticle(IDFParticles.MISS_PARTICLE.get(), x, y, z, (newX*horizontalOffset)/10, yOffset/3, (newZ*horizontalOffset)/10);
+        }
+    }
+
     public static void updateSkyDarken(int i) {
         ClientData.skyDarken = i;
     }

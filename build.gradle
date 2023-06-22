@@ -111,6 +111,10 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76")
 
+    //rubidium and oculus
+    implementation fg.deobf("curse.maven:oculus-581495:4578731")
+    implementation fg.deobf("curse.maven:rubidium-574856:4568727")
+
     //LEGENDARY TOOLTIPS + DEPENDENCIES + EQUIPMENT COMPARE
     //implementation fg.deobf("curse.maven:iceberg-520110:4300529")
     //implementation fg.deobf("curse.maven:itemframes-532127:4278509")

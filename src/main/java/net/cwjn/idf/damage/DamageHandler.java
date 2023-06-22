@@ -206,7 +206,8 @@ public class DamageHandler {
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 if (lifesteal != 0) {
-                    LivingLifestealEvent lsEvent = new LivingLifestealEvent(livingEntity, target, returnValue * (lifesteal/100));
+                    float percent = lifesteal/100;
+                    LivingLifestealEvent lsEvent = new LivingLifestealEvent(livingEntity, target, returnValue * percent, returnValue, percent);
                     MinecraftForge.EVENT_BUS.post(lsEvent);
                     livingEntity.heal(lsEvent.getHealAmount());
                 }
@@ -531,7 +532,8 @@ public class DamageHandler {
             Entity sourceEntity = ((EntityDamageSource) convertedSource).getEntity();
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 if (lifesteal != 0) {
-                    LivingLifestealEvent lsEvent = new LivingLifestealEvent(livingEntity, target, returnValue * (lifesteal/100));
+                    float percent = lifesteal/100;
+                    LivingLifestealEvent lsEvent = new LivingLifestealEvent(livingEntity, target, returnValue * percent, returnValue, percent);
                     MinecraftForge.EVENT_BUS.post(lsEvent);
                     livingEntity.heal(lsEvent.getHealAmount());
                     log.debug("");

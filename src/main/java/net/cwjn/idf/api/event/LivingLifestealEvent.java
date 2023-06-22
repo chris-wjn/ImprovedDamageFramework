@@ -5,13 +5,15 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 
 public class LivingLifestealEvent extends LivingEvent {
 
-    private float healAmount;
+    private float healAmount, damageAmount, lifestealPercent;
     private final LivingEntity target;
 
-    public LivingLifestealEvent(LivingEntity entity, LivingEntity target, float healAmount) {
+    public LivingLifestealEvent(LivingEntity entity, LivingEntity target, float healAmount, float damageAmount, float lifestealPercent) {
         super(entity);
         this.target = target;
         this.healAmount = healAmount;
+        this.damageAmount = damageAmount;
+        this.lifestealPercent = lifestealPercent;
     }
 
     public float getHealAmount() {

@@ -1,48 +1,54 @@
-modLoader="javafml"
-loaderVersion="[40,)"
-license="All rights reserved"
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = "All rights reserved"
 [[mods]]
-modId="idf"
-version="${file.jarVersion}"
-displayName="Improved Damage Framework"
-logoFile="idf_logo.png"
-credits="cwjn"
-authors="cwjn"
-description='''
+modId = "idf"
+version = "${file.jarVersion}"
+displayName = "Improved Damage Framework"
+logoFile = "idf_logo.png"
+credits = "cwjn"
+authors = "cwjn"
+description = '''
 Because Minecraft's damage system is a little boring
 '''
 [[dependencies.idf]]
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[40,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
-    ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
-    side="BOTH"
+# the modid of the dependency
+modId = "forge" #mandatory
+# Does this dependency have to exist - if not, ordering below must be specified
+mandatory = true #mandatory
+# The version range of the dependency
+versionRange = "[40,)" #mandatory
+# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+ordering = "NONE"
+# Side this dependency is applied on - BOTH, CLIENT or SERVER
+side = "BOTH"
 [[dependencies.idf]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.19, 1.20)"
-    ordering="NONE"
-    side="BOTH"
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19, 1.20)"
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.idf]]
-    modId="patchouli"
-    mandatory = false
-    versionRange="[1.19-75,)"
-    ordering="AFTER"
-    side="BOTH"
+modId = "patchouli"
+mandatory = false
+versionRange = "[1.19-75,)"
+ordering = "AFTER"
+side = "BOTH"
 [[dependencies.idf]]
-    modId="legendarytooltips"
-    mandatory = false
-    versionRange="[1.3.1,)"
-    ordering="AFTER"
-    side="BOTH"
+modId = "legendarytooltips"
+mandatory = false
+versionRange = "[1.3.1,)"
+ordering = "AFTER"
+side = "BOTH"
 [[dependencies.idf]]
-modId="tetra"
-mandatory=false
-versionRange="[5,]"
-ordering="AFTER"
-side="BOTH"
+modId = "tetra"
+mandatory = false
+versionRange = "[5,]"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.idf]]
+modId = "oculus"
+mandatory = false
+versionRange = "[1.6.4,]"
+ordering = "AFTER"
+side = "BOTH"

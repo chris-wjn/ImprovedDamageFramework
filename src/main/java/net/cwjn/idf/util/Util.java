@@ -23,10 +23,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
 import static net.cwjn.idf.attribute.IDFAttributes.*;
-import static net.cwjn.idf.event.ClientEventsForgeBus.ICON_PIXEL_SPACER;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
@@ -34,12 +34,14 @@ public class Util {
 
     private Util() {throw new IllegalAccessError("Util class");}
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
-    private static final Style INDICATOR = Style.EMPTY.withFont(FONT_INDICATORS);
     private static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
     private static final Style SPACER = Style.EMPTY.withFont(FONT_SPACER);
     private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
+    public static final Predicate<String> offensiveAttribute = name -> (
+            (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))
+    );
+    private static final int ICON_PIXEL_SPACER = 2;
     private static final DecimalFormat tenths = new DecimalFormat("#.#");
-    private static final DecimalFormat hundredths = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
     public static final UUID[] UUID_BASE_STAT_ADDITION = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F7"),
@@ -48,13 +50,6 @@ public class Util {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F8"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C6F"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC6")};
-    public static final UUID[] UUID_BASE_STAT_MULTIPLY_BASE = {
-            UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F8"),
-            UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F1"),
-            UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C6F"),
-            UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F9"),
-            UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C61"),
-            UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC7")};
     public static final UUID[] UUID_BASE_STAT_MULTIPLY_TOTAL = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F9"),
             UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F2"),
@@ -197,6 +192,25 @@ public class Util {
         }
     }
 
+    public static String[] sort(Multimap<Attribute, AttributeModifier> map, boolean damage) {
+        //get all the requested elements in the list and put them in an array
+        ArrayList<String> list = new ArrayList<>();
+        for (Attribute a : map.keySet()) {
+            if (damage? a.getDescriptionId().contains("damage") : a.getDescriptionId().contains("defence") || a.getDescriptionId().contains("armor")) {
+                list.add(a.getDescriptionId());
+            }
+        }
+        list.sort(String.CASE_INSENSITIVE_ORDER);
+        return list.toArray(new String[list.size()]);
+    }
+
+    public static double getAttributeAmount(Collection<AttributeModifier> mods) {
+        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+        return f1 * f2;
+    }
+
     /*
         Following 2 methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
      */
@@ -219,12 +233,17 @@ public class Util {
         buffer.writeChar('\0');
     }
 
-    public static MutableComponent writeTooltipInteger(int num) {
+    public static MutableComponent writeTooltipInteger(int num, boolean positive) {
         MutableComponent comp = Util.text("").withStyle(TOOLTIP);
-        String s = String.valueOf(num);
+        String s = "+" + num;
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
+                if (s.charAt(i+1) == '.') {
+                    comp.append(spacer(-2));
+                } else if (s.charAt(i+1) == '1') {
+                    comp.append(spacer(-1));
+                }
                 comp.append(spacer(-1));
             }
         }
@@ -239,6 +258,8 @@ public class Util {
             if (i != s.length()-1) {
                 if (s.charAt(i+1) == '.') {
                     comp.append(spacer(-2));
+                } else if (s.charAt(i+1) == '1') {
+                    comp.append(spacer(-1));
                 }
                 comp.append(spacer(-1));
             }

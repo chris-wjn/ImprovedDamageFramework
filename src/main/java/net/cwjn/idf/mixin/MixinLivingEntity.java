@@ -15,9 +15,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
@@ -29,12 +31,14 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
+import static net.cwjn.idf.util.Util.offensiveAttribute;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
 
     @Shadow @Final public int invulnerableDuration;
+    private final LivingEntity thisLivingEntity = (LivingEntity)(Object) this;
 
     /**
      * @author cwJn
@@ -79,39 +83,46 @@ public class MixinLivingEntity {
 
     /*
     In vanilla, there are three kinds of attribute modifiers: Addition, Multiply Base, and Multiply Total.
-    Multiply Base works very strangely and doesn't really make sense in the context
+    Multiply Base works very strangely and doesn't really make sense in the context of this mod. So,
+    this method will take the damage, attackspeed, and force of me lee weapons and convert them all to an
+    addition modifier.
+    Furthermore, we do not want bows and crossbows to transfer their damage stats over to the player,
+    as they would then be able to use them as melee weapons.
      */
     @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
     private Multimap<Attribute, AttributeModifier> changeMainhandAttributeLogic(ItemStack item, EquipmentSlot slot) {
+        //first lets instantiate two maps, one to be modified and returned and one to get the original modifiers
         Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
         Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
-        if (item.hasTag() && item.getTag().contains("idf.damage_class")) {
-            if (item.getItem() instanceof BowItem || item.getItem() instanceof CrossbowItem) {
+        //weapon case
+        if (item.hasTag()) {
+            if (item.getTag().contains("idf.damage_class")) {
+                boolean isRanged = item.getTag().getBoolean("idf.ranged_weapon");
                 for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
-                    if (!(name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") ||
-                            name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))) {
-                        newMap.put(entry.getKey(), entry.getValue());
-                    }
-                }
-            } else {
-                for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
-                    if (entry.getKey().getDescriptionId().toLowerCase().contains("damage") ||
-                        entry.getKey().getDescriptionId().toLowerCase().contains("attack_speed") ||
-                        entry.getKey().getDescriptionId().toLowerCase().contains("force")) {
+                    if (offensiveAttribute.test(name)) {
+                        if (isRanged) continue;
+                        if (entry.getKey() == Attributes.ATTACK_SPEED) {
+                            Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
+                            final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                            double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+                            double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                            newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "conversion", (f2 * (f1 + thisLivingEntity.getAttributeBaseValue(Attributes.ATTACK_SPEED)))-thisLivingEntity.getAttributeBaseValue(Attributes.ATTACK_SPEED), ADDITION));
+                            continue;
+                        }
                         Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
                         final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                         double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
                         double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-                        double finalValue = f1 * f2;
-                        newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "mainhandConversion", finalValue, ADDITION));
+                        newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "conversion", f1 * f2, ADDITION));
                     } else {
                         newMap.put(entry.getKey(), entry.getValue());
                     }
                 }
             }
-        } else {
+        }
+        else {
             newMap = oldMap;
         }
         return newMap;

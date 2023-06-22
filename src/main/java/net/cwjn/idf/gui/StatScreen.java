@@ -85,18 +85,25 @@ public class StatScreen extends Screen {
                 drawResistanceGUI(matrix, player);
                 break;
             case PLAYER:
-                font.draw(matrix, drawIconAndString("health", "max_health"), left+16, top+40, 0xffffff);
-                drawbar(matrix, left+16, top+40);
-                Util.drawCenteredString(font, matrix, Util.text(df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth())), left + 70, top + 40, INDIANRED.getColor());
-                font.draw(matrix, drawIconAndString("movespeed", "movespeed"), left+16, top+56, 0xffffff);
-                drawbar(matrix, left+16, top+56);
-                drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(Attributes.MOVEMENT_SPEED)), left+70, top+56, 0x111111);
-                font.draw(matrix, drawIconAndString("luck", "luck"), left+16, top+72, 0xffffff);
-                drawbar(matrix, left+16, top+72);
-                drawCenteredString(font, matrix, player.getAttributeValue(Attributes.LUCK), left+70, top+72, 0x111111);
+                drawPlayerGUI(matrix, player);
                 break;
         }
         super.render(matrix, mouseX, mouseY, pTicks);
+    }
+
+    private void drawPlayerGUI(PoseStack matrix, Player player) {
+        font.draw(matrix, drawIconAndString("health", "max_health"), left+16, top+40, 0xffffff);
+        drawbar(matrix, left+16, top+40);
+        Util.drawCenteredString(font, matrix, Util.text(df.format(player.getHealth()) + "/" + df.format(player.getMaxHealth())), left + 70, top + 40, INDIANRED.getColor());
+        font.draw(matrix, drawIconAndString("movespeed", "movespeed"), left+16, top+56, 0xffffff);
+        drawbar(matrix, left+16, top+56);
+        drawCenteredString(font, matrix, Util.pBPS(player.getAttributeValue(Attributes.MOVEMENT_SPEED)), left+70, top+56, 0x111111);
+        font.draw(matrix, drawIconAndString("luck", "luck"), left+16, top+72, 0xffffff);
+        drawbar(matrix, left+16, top+72);
+        drawCenteredString(font, matrix, player.getAttributeValue(Attributes.LUCK), left+70, top+72, 0x111111);
+        font.draw(matrix, drawIconAndString("accuracy", "accuracy"), left+16, top+88, 0xffffff);
+        drawbar(matrix, left+16, top+88);
+        drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.ACCURACY.get()), left+70, top+88, 0x111111);
     }
 
     private void drawDamageGUI(PoseStack matrix, Player player) {
@@ -163,7 +170,7 @@ public class StatScreen extends Screen {
         font.draw(matrix, drawIconAndString("holy", "holy_resistance"), left+16, top+136, 0xffffff);
         drawbar(matrix, left+16, top+136);
         drawCenteredString(font, matrix, player.getAttributeValue(HOLY.defence), left+70, top+136, 0x111111);
-        font.draw(matrix, drawIconAndString("defense", "defense"), left+96, top+47, 0xffffff);
+        font.draw(matrix, drawIconAndString("weight", "weight"), left+96, top+47, 0xffffff);
         drawbar(matrix, left+96, top+47);
         drawCenteredString(font, matrix, player.getAttributeValue(Attributes.ARMOR_TOUGHNESS), left+149, top+47, 0x111111);
         font.draw(matrix, drawIconAndString("knockback_resistance", "knockback_resistance"), left+96, top+63, 0xffffff);

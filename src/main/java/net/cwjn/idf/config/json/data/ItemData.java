@@ -4,6 +4,7 @@ import com.google.gson.*;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
 import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.data.CommonData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import oshi.util.tuples.Pair;

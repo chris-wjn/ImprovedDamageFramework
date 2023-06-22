@@ -1,11 +1,14 @@
 package net.cwjn.idf.mixin;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
+import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.damage.*;
 import net.cwjn.idf.event.LogicalEvents;
+import net.cwjn.idf.sound.IDFSounds;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -22,9 +25,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
@@ -275,6 +281,13 @@ public class MixinPlayer {
                 }
             }
         }
+    }
+
+    @Inject(method = "causeFoodExhaustion",
+            at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/world/food/FoodData;addExhaustion(F)V"))
+    private void fireFoodExhaustionEvent(float pExhaustion, CallbackInfo callback) {
+        OnFoodExhaustionEvent event = new OnFoodExhaustionEvent((LivingEntity)(Object)this, pExhaustion);
+        MinecraftForge.EVENT_BUS.post(event);
     }
 
     @Redirect(method = "hurt",

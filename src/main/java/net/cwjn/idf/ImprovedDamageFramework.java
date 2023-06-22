@@ -12,6 +12,7 @@ import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.hud.PlayerHealthBar;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.particle.IDFParticles;
+import net.cwjn.idf.sound.IDFSounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,8 +36,6 @@ public class ImprovedDamageFramework {
     public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
     public static final ResourceLocation FONT_TOOLTIPS = new ResourceLocation("idf", "tooltips");
     public static final ResourceLocation FONT_SPACER = new ResourceLocation("idf", "space");
-    public static final ResourceLocation FONT_REACTOR = new ResourceLocation("idf", "reactor");
-    public static final ResourceLocation FONT_ALTIMA = new ResourceLocation("idf", "altima");
 
     public ImprovedDamageFramework() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -47,6 +46,8 @@ public class ImprovedDamageFramework {
 
         IDFAttributes.ATTRIBUTES.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
+        IDFSounds.SOUND_EVENTS.register(bus);
+        CompatHandler.preInit();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
@@ -60,7 +61,7 @@ public class ImprovedDamageFramework {
         PacketHandler.init();
         LOGGER.info(" Initialized server-client network.");
         CompatHandler.init(event);
-        LOGGER.info(" Finished initializing compat.");
+        LOGGER.info(" Initialized compatibility features.");
         LOGGER.info(" Done!");
     }
 

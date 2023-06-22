@@ -1,10 +1,12 @@
 package net.cwjn.idf.hud;
 
+import com.ibm.icu.impl.Pair;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.data.ClientData;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -15,7 +17,9 @@ import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MobHealthbar {
 
@@ -24,10 +28,10 @@ public class MobHealthbar {
     
     private static final Minecraft client = Minecraft.getInstance();
 
-    private static final List<LivingEntity> renderables = new ArrayList<>();
+    private static final Map<LivingEntity, Float> renderables = new HashMap<>();
 
-    public static void prepare(LivingEntity entity) {
-        renderables.add(entity);
+    public static void prepare(LivingEntity entity, float alpha) {
+        renderables.put(entity, alpha);
     }
 
     public static void renderBars(float pTick, PoseStack matrix, Camera cam) {
@@ -49,10 +53,10 @@ public class MobHealthbar {
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
                 GL11.GL_ZERO);
 
-        for (LivingEntity entity : renderables) {
+        for (LivingEntity entity : renderables.keySet()) {
             float scaleToGui = 0.025f;
             boolean sneaking = entity.isCrouching();
-            float height = entity.getBbHeight() + 0.6F - (sneaking ? 0.25F : 0.0F);
+            float height = entity.getBbHeight() + 0.73F - (sneaking ? 0.25F : 0.0F);
 
             double x = Mth.lerp(pTick, entity.xo, entity.getX());
             double y = Mth.lerp(pTick, entity.yo, entity.getY());
@@ -69,7 +73,7 @@ public class MobHealthbar {
             matrix.mulPose(Vector3f.XP.rotationDegrees(cam.getXRot()));
             matrix.scale(-scaleToGui, -scaleToGui, scaleToGui);
 
-            renderBar(matrix, entity);
+            renderBar(matrix, entity, renderables.get(entity));
 
             matrix.popPose();
         }
@@ -78,41 +82,43 @@ public class MobHealthbar {
         renderables.clear();
     }
 
-    private static void renderBar(PoseStack matrix, LivingEntity entity) {
+    private static void renderBar(PoseStack matrix, LivingEntity entity, float alpha) {
         float percent = Math.min(1, Math.min(entity.getHealth(), entity.getMaxHealth()) / entity.getMaxHealth());
         Matrix4f m4f = matrix.last().pose();
-        drawBar(m4f, 0, 0, (float) 40, 1, 0, true);
-        drawBar(m4f, 0, 0, (float) 40, percent, 1, false);
+        drawBar(m4f, 1, 0, true, alpha);
+        drawBar(m4f, percent, 1, false, alpha);
     }
 
-    private static void drawBar(Matrix4f matrix, double x, double y, float width, float percent, int zOffset, boolean background) {
+    private static void drawBar(Matrix4f matrix, float percent, int zOffset, boolean background, float alpha) {
         float c = 0.00390625F;
         int u = 0;
         int v = background ? 0 : 8;
         int uw = Mth.ceil(81 * percent);
         int vh = 6;
 
-        double size = percent * width;
+        double size = percent * (float) 40.0;
         double h = 6;
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, HEALTH_GUI);
         RenderSystem.enableBlend();
+        if (ClientData.shadersLoaded) RenderSystem.setShaderColor(0.25f, 0.25f, 0.25f, alpha);
+        else RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
 
-        float half = width / 2;
+        float half = (float) 40.0 / 2;
 
         float zOffsetAmount = -0.1F;
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder buffer = tesselator.getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(matrix, (float) (-half + x), (float) y, zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + (double) 0), (float) (double) 0, zOffset * zOffsetAmount)
                 .uv(u * c, v * c).endVertex();
-        buffer.vertex(matrix, (float) (-half + x), (float) (h + y), zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + (double) 0), (float) (h + (double) 0), zOffset * zOffsetAmount)
                 .uv(u * c, (v + vh) * c).endVertex();
-        buffer.vertex(matrix, (float) (-half + size + x), (float) (h + y), zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + size + (double) 0), (float) (h + (double) 0), zOffset * zOffsetAmount)
                 .uv((u + uw) * c, (v + vh) * c).endVertex();
-        buffer.vertex(matrix, (float) (-half + size + x), (float) y, zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + size + (double) 0), (float) (double) 0, zOffset * zOffsetAmount)
                 .uv(((u + uw) * c), v * c).endVertex();
         tesselator.end();
 
