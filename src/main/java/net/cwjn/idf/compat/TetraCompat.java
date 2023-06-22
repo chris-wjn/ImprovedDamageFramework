@@ -32,7 +32,7 @@ import java.util.Objects;
 
 import static se.mickelus.tetra.gui.stats.StatsHelper.barLength;
 
-public class TetraCompat implements CompatClass {
+public class TetraCompat {
 
     private static final Gson gson = new Gson();
     private static final ItemPredicateModular isPierce = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
@@ -48,11 +48,11 @@ public class TetraCompat implements CompatClass {
     private static final ItemPredicateModular isStrikeRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
             .getResourceAsStream("data/idf/tetra_predicates/strike_right.json")))), JsonObject.class));
 
-    public void register() {
+    public static void register() {
         MinecraftForge.EVENT_BUS.register(TetraCompat.class);
     }
 
-    public void registerClient() {
+    public static void registerClient() {
         initClient();
     }
 

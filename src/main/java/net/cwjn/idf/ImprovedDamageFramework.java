@@ -47,7 +47,6 @@ public class ImprovedDamageFramework {
         IDFAttributes.ATTRIBUTES.register(bus);
         IDFParticles.PARTICLE_TYPES.register(bus);
         IDFSounds.SOUND_EVENTS.register(bus);
-        CompatHandler.preInit();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "ImprovedDamageFramework-common.toml");
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "ImprovedDamageFramework-client.toml");
@@ -60,7 +59,7 @@ public class ImprovedDamageFramework {
         LOGGER.info(" Changed properties of vanilla attributes.");
         PacketHandler.init();
         LOGGER.info(" Initialized server-client network.");
-        CompatHandler.init(event);
+        CompatHandler.init();
         LOGGER.info(" Initialized compatibility features.");
         LOGGER.info(" Done!");
     }
@@ -75,7 +74,7 @@ public class ImprovedDamageFramework {
         ClientData.register(MinecraftForge.EVENT_BUS);
         if (ClientConfig.CHANGE_PLAYER_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::deleteArmorHud);
-        CompatHandler.initClient(event);
+        CompatHandler.initClient();
     }
 
 }

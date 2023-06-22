@@ -1,7 +1,6 @@
 package net.cwjn.idf.compat;
 
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.compat.CompatClass;
 import net.cwjn.idf.config.json.data.EntityData;
 import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
@@ -22,15 +21,9 @@ import java.text.DecimalFormat;
 
 import static net.cwjn.idf.util.Util.mBPS;
 
-public class PatchouliCompat implements IComponentProcessor, CompatClass {
+public class PatchouliCompat implements IComponentProcessor{
 
-    public void register() {
-
-    }
-
-    public void registerClient() {
-
-    }
+    public static void register() {}
 
     private static final DecimalFormat multFormat = new DecimalFormat();
     private static final DecimalFormat df = new DecimalFormat("#.##");

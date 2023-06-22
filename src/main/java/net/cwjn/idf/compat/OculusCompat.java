@@ -9,15 +9,10 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
-public class OculusCompat implements CompatClass {
+public class OculusCompat {
 
-    public void register() {
+    public static void register() {
         MinecraftForge.EVENT_BUS.register(OculusCompat.class);
-    }
-
-    @Override
-    public void registerClient() {
-
     }
 
     @SubscribeEvent
