@@ -34,14 +34,17 @@ public class Util {
 
     private Util() {throw new IllegalAccessError("Util class");}
     private static final Style ICON = Style.EMPTY.withFont(FONT_ICONS);
-    private static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
+    public static final Style ICON_2X = Style.EMPTY.withFont(FONT_ICONS_2X);
+    public static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
+    public static final Style TOOLTIP_2X = Style.EMPTY.withFont(FONT_TOOLTIPS_2X);
     private static final Style SPACER = Style.EMPTY.withFont(FONT_SPACER);
+    public static final Style VERT_SPACER = Style.EMPTY.withFont(FONT_VERTICAL_SPACER);
     private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
     public static final Predicate<String> offensiveAttribute = name -> (
             (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))
     );
-    private static final int ICON_PIXEL_SPACER = 2;
-    private static final DecimalFormat tenths = new DecimalFormat("#.#");
+    public static final int ICON_PIXEL_SPACER = 2;
+    public static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
     public static final UUID[] UUID_BASE_STAT_ADDITION = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F7"),
@@ -204,6 +207,20 @@ public class Util {
         return list.toArray(new String[list.size()]);
     }
 
+    //number 0-9, (), %, -, +
+    public static double countValidCharacters(String s) {
+        double count = 0.8;
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) count++;
+            else if (c == '.') count += 0.5;
+            else if (c == '(') count += 0.5;
+            else if (c == ')') count += 0.5;
+            else if (c == '-') count++;
+            else if (c == '+') count++;
+        }
+        return count;
+    }
+
     public static double getAttributeAmount(Collection<AttributeModifier> mods) {
         final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
         double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
@@ -233,9 +250,9 @@ public class Util {
         buffer.writeChar('\0');
     }
 
-    public static MutableComponent writeTooltipInteger(int num, boolean positive) {
+    public static MutableComponent writeTooltipInteger(int num, boolean withColour) {
         MutableComponent comp = Util.text("").withStyle(TOOLTIP);
-        String s = "+" + num;
+        String s = num > 0? "+" + num : String.valueOf(num);
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
@@ -247,12 +264,13 @@ public class Util {
                 comp.append(spacer(-1));
             }
         }
-        return comp;
+        return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : comp) : comp;
     }
 
-    public static MutableComponent writeTooltipDouble(double num) {
+    public static MutableComponent writeTooltipDouble(double num, boolean withColour) {
         MutableComponent comp = Component.empty().withStyle(TOOLTIP);
-        String s = tenths.format(num);
+        String s = num > 0?  "+" + tenths.format(num) : tenths.format(num);
+        if (s.charAt(0) == '1') comp.append(spacer(-1));
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
@@ -264,11 +282,12 @@ public class Util {
                 comp.append(spacer(-1));
             }
         }
-        return comp;
+        return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : comp) : comp;
     }
 
-    public static MutableComponent writeTooltipString(String s) {
+    public static MutableComponent writeTooltipString(String s, boolean withColour) {
         MutableComponent comp = Util.text("").withStyle(TOOLTIP);
+        if (s.charAt(0) == '1') comp.append(spacer(-1));
         for(int i = 0; i < s.length() ; i++) {
             comp.append(String.valueOf(s.charAt(i)));
             if (i != s.length()-1) {
@@ -288,27 +307,24 @@ public class Util {
         String num;
         if (isPercentage) num = String.valueOf((int) n);
         else num = tenths.format(n);
+        int FRONT_SPACER = num.charAt(0) == '1' ? -2 : -1;
         int ones = 0;
         int dots = 0;
         for (char c : num.toCharArray()) {
             if (c == '1') ones++;
-            if (c == '.') dots++;
+            else if (c == '.') dots++;
         }
         int leftOnes = 0;
         int rightOnes = 0;
         while (ones != 0) {
-            if (leftOnes == 0) {
-                leftOnes++;
-            } else {
-                if (leftOnes % 2 == 0) leftOnes += 2;
-                else rightOnes += 2;
-            }
+            leftOnes++;
+            rightOnes++;
             ones--;
         }
 
         //now lets check how many spaces we need to fill. Each component should have 6 characters between the dividers, so
         //we start with 6, subtract the number of characters we already have, and then add 1 if the percentage symbol will take up a space
-        double spaces = 6 - (num.length() + (isPercentage ? 1 : 0));
+        double spaces = 4 - (num.length() + (isPercentage ? 1 : 0));
 
         //start our component object with a divider if this is not a middle element
         MutableComponent comp = text(drawBorders? "|" : "").withStyle(DEFAULT);
@@ -319,10 +335,10 @@ public class Util {
         //add the number to the component. Also add a percent if needed
         comp.append(translation("idf.icon." + name).withStyle(ICON)).append(spacer(-1));
         if (colour == null) {
-            comp.append(writeTooltipString(num+(isPercentage ? "%" : "")));
+            comp.append(writeTooltipString(num+(isPercentage ? "%" : ""), false));
         }
         else {
-            comp.append(withColor(writeTooltipString(num+(isPercentage ? "%" : "")), colour));
+            comp.append(withColor(writeTooltipString(num+(isPercentage ? "%" : ""), false), colour));
         }
 
         //add a half spacer if total spaces is odd, then add the rest of the right padding
@@ -333,25 +349,17 @@ public class Util {
     }
 
     public static MutableComponent writeStaticInfinityComponent(Color colour, boolean drawBorders) {
-        MutableComponent comp = text(drawBorders? "|" : "").append(withColor(writeIcon("infinity.symbol"), colour));
+        MutableComponent comp = text(drawBorders? "|" : "").append(withColor(writeIcon("infinity.symbol", true), colour));
         for (int i = 1; i <= ((drawBorders? 6 : 5)-1); ++i) {
             comp.append(" ");
         }
         return drawBorders? comp.append("|") : comp;
     }
 
-    public static Component writeScalingTooltip(double mult) {
-        MutableComponent comp = Component.empty().withStyle(TOOLTIP);
-        comp.append("+(");
-        comp.append(writeTooltipDouble(mult));
-        comp.append(")");
-        return comp;
-    }
-
-    public static MutableComponent writeIcon(String name) {
+    public static MutableComponent writeIcon(String name, boolean includeSpacer) {
         MutableComponent comp = spacer(ICON_PIXEL_SPACER);
         MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
-        return comp.append(comp1);
+        return includeSpacer? comp.append(comp1) : comp1;
     }
 
     public static MutableComponent spacer(int i) {

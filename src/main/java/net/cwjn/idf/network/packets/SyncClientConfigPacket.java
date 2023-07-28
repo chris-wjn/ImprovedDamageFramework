@@ -1,8 +1,8 @@
 package net.cwjn.idf.network.packets;
 
-import net.cwjn.idf.config.json.data.ArmourData;
-import net.cwjn.idf.config.json.data.ItemData;
-import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.config.json.records.ArmourData;
+import net.cwjn.idf.config.json.records.ItemData;
+import net.cwjn.idf.config.json.records.WeaponData;
 import net.cwjn.idf.network.ClientPacketHandler;
 import net.cwjn.idf.network.IDFPacket;
 import net.minecraft.network.FriendlyByteBuf;

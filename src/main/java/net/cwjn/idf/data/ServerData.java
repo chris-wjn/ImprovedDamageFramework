@@ -2,9 +2,9 @@ package net.cwjn.idf.data;
 
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.config.json.JSONUtil;
-import net.cwjn.idf.config.json.data.ArmourData;
-import net.cwjn.idf.config.json.data.ItemData;
-import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.config.json.records.ArmourData;
+import net.cwjn.idf.config.json.records.ItemData;
+import net.cwjn.idf.config.json.records.WeaponData;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.minecraft.resources.ResourceLocation;

@@ -2,10 +2,10 @@ package net.cwjn.idf.config.json;
 
 import com.google.gson.*;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.config.json.data.*;
-import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
-import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
-import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.config.json.records.*;
+import net.cwjn.idf.config.json.records.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.records.subtypes.DefenceData;
+import net.cwjn.idf.config.json.records.subtypes.OffenseData;
 import net.cwjn.idf.iaf.RpgItemData;
 import org.apache.commons.io.FileUtils;
 
@@ -20,8 +20,8 @@ public class JSONUtil {
             registerTypeAdapter(WeaponData.class, new WeaponData.WeaponSerializer()).
             registerTypeAdapter(ItemData.class, new ItemData.ItemSerializer()).
             registerTypeAdapter(EntityData.class, new EntityData.EntityDataSerializer()).
-            registerTypeAdapter(OffensiveData.class, new OffensiveData.OffensiveDataSerializer()).
-            registerTypeAdapter(DefensiveData.class, new DefensiveData.DefensiveDataSerializer()).
+            registerTypeAdapter(OffenseData.class, new OffenseData.OffensiveDataSerializer()).
+            registerTypeAdapter(DefenceData.class, new DefenceData.DefensiveDataSerializer()).
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
             registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObject.StatObjectSerializer()).
             registerTypeAdapter(RpgItemData.class, new RpgItemData.RpgItemSerializer()).

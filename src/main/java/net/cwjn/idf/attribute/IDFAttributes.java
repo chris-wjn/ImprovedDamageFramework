@@ -23,7 +23,7 @@ public class IDFAttributes {
     public static final RegistryObject<Attribute> DARK_DAMAGE = register("dark_damage", () -> new RangedAttribute("dark_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> HOLY_DAMAGE = register("holy_damage", () -> new RangedAttribute("holy_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //auxiliary offensive attributes
-    public static final RegistryObject<Attribute> FORCE = register("force", () -> new RangedAttribute("force", 0.0D, -1.0D, 40).setSyncable(true));
+    public static final RegistryObject<Attribute> FORCE = register("force", () -> new RangedAttribute("force", 0.0D, -1.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> LIFESTEAL = register("lifesteal", () -> new RangedAttribute("lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
     public static final RegistryObject<Attribute> PENETRATING = register("penetrating", () -> new RangedAttribute("armour_penetration", 0.0D, 0.0D, 100.0D).setSyncable(true));
     public static final RegistryObject<Attribute> CRIT_CHANCE = register("crit_chance", () -> new RangedAttribute("crit_chance", 0.0D, 0.0D, 100.0D).setSyncable(true));
@@ -57,7 +57,7 @@ public class IDFAttributes {
         mixinHealth.setMax(Double.MAX_VALUE);
         mixinArmour.setMax(Double.MAX_VALUE);
         mixinArmour.setMin(-Double.MAX_VALUE);
-        mixinDefense.setMax(40D);
+        mixinDefense.setMax(Double.MAX_VALUE);
     }
 
 }

@@ -216,7 +216,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource indirectMagic(Entity source, @Nullable Entity indirectSource) {
-        return (new IDFIndirectEntityDamageSource("indirectMagic", source, indirectSource, 0, 0, 0, 1, 0, 0, 0, 0, "generic")).setIsConversion();
+        return (new IDFIndirectEntityDamageSource("indirectMagic", source, indirectSource, 0, 0, 0, 1, 0, 0, 0, 0, "none")).setIsConversion();
     }
 
     /**
@@ -234,7 +234,7 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource sonicBoom(Entity source) {
-        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 3.0f, 0, 0, 0,"generic")).setIsConversion();
+        return (new IDFEntityDamageSource("sonic_boom", source, 0, 0, 0, 0.0f, 3.0f, 0, 0, 0,"none")).setIsConversion();
     }
 
     /**

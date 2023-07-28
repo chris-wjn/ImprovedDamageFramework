@@ -4,6 +4,7 @@ import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -29,7 +30,7 @@ public abstract class MixinItemModularHandheld implements IModularItem {
     public AbilityUseResult hitEntity(ItemStack itemStack, Player player, LivingEntity target, double damageMultiplier, double damageBonus, float knockbackBase, float knockbackMultiplier) {
         ItemModularHandheld thisModularItem = (ItemModularHandheld) (Object) this;
         float targetModifier = EnchantmentHelper.getDamageBonus(itemStack, target.getMobType());
-        boolean isCrit = player.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())/100 >= Math.random();
+        boolean isCrit = player.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01 >= Math.random();
         float critMultiplier = 1.0F;
         CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(player, target, isCrit, isCrit ? 1.5F : 1.0F);
         isCrit = hitResult != null;
@@ -44,16 +45,16 @@ public abstract class MixinItemModularHandheld implements IModularItem {
         double dd = this.getAttributeValue(itemStack, IDFAttributes.DARK_DAMAGE.get()) * (double)critMultiplier * damageMultiplier;
         double hd = this.getAttributeValue(itemStack, IDFElement.HOLY.damage) * (double)critMultiplier * damageMultiplier;
         double pen = this.getAttributeValue(itemStack, IDFAttributes.PENETRATING.get());
-        double weight = this.getAttributeValue(itemStack, IDFAttributes.FORCE.get());
+        double force = this.getAttributeValue(itemStack, IDFAttributes.FORCE.get());
+        double lifesteal = this.getAttributeValue(itemStack, IDFAttributes.LIFESTEAL.get());
+        double knockback = this.getAttributeValue(itemStack, Attributes.ATTACK_KNOCKBACK);
         String damageClass = itemStack.getOrCreateTag().getString("idf.damage_class");
         if (damageClass.equals("")) damageClass = "strike";
-        boolean success = target.hurt(new IDFEntityDamageSource("player", player, (float) fd, (float) wd, (float) ld, (float) md, (float) dd, (float) hd, (float) pen, (float) weight, damageClass), (float) ad);
+        boolean success = target.hurt(new IDFEntityDamageSource("player", player, (float) fd, (float) wd, (float) ld, (float) md, (float) dd, (float) hd, (float) pen, (float) lifesteal, (float) knockback, (float) force, damageClass), (float) ad);
         if (success) {
             EnchantmentHelper.doPostHurtEffects(target, player);
             EffectHelper.applyEnchantmentHitEffects(itemStack, target, player);
             ItemEffectHandler.applyHitEffects(itemStack, target, player);
-            float knockbackFactor = knockbackBase + (float)EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack);
-            target.knockback((knockbackFactor * knockbackMultiplier), player.getX() - target.getX(), player.getZ() - target.getZ());
             if (targetModifier > 1.0F) {
                 player.magicCrit(target);
                 return AbilityUseResult.magicCrit;

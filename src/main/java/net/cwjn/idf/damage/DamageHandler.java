@@ -4,7 +4,7 @@ import net.cwjn.idf.api.event.LivingLifestealEvent;
 import net.cwjn.idf.api.event.PreDamageMultipliersEvent;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.json.data.SourceCatcherData;
+import net.cwjn.idf.config.json.records.SourceCatcherData;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.api.event.PreMitigationDamageEvent;
 import net.minecraft.util.Mth;
@@ -71,12 +71,12 @@ public class DamageHandler {
         MinecraftForge.EVENT_BUS.post(event);
 
         //grab the values from the event after it's been fired. We put the damage and resistance values into arrays, so they can be looped through.
-        //this is the only place we use force and defense, so we can just calculate the ratio here.
+        //this is the only place we use force and weight, so we can just calculate the ratio here.
         float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getHolyDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
+        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.25, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
@@ -90,11 +90,11 @@ public class DamageHandler {
                 d1 = (Math.random() - Math.random()) * 0.01D;
             }
             target.hurtDir = (float)(Mth.atan2(d0, d1) * (double)(180F / (float)Math.PI) - (double)target.getYRot());
-            target.knockback(knockback*weightMultiplier, d1, d0);
+            target.knockback(knockback*Mth.clamp(weightMultiplier, 0.5, 1.5), d1, d0);
         }
 
         //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
-        //to all the damage types. Then iterate through the damage values and apply the weight/defense multiplier followed by
+        //to all the damage types. Then iterate through the damage values and apply the weight/weight multiplier followed by
         //the damage class multiplier. Then multiply each damage value by the correct multiplier.
         Map<String, Double> mappedMultipliers = new HashMap<>(2);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
@@ -289,12 +289,12 @@ public class DamageHandler {
         MinecraftForge.EVENT_BUS.post(event);
 
         //grab the values from the event after it's been fired. We put the damage and resistance values into arrays, so they can be looped through.
-        //this is the only place we use force and defense, so we can just calculate the ratio here.
+        //this is the only place we use force and weight, so we can just calculate the ratio here.
         float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getHolyDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
+        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.25, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
@@ -339,7 +339,7 @@ public class DamageHandler {
         }
 
         //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
-        //to all the damage types. Then iterate through the damage values and apply the weight/defense multiplier followed by
+        //to all the damage types. Then iterate through the damage values and apply the weight/weight multiplier followed by
         //the damage class multiplier. Then multiply each damage value by the correct multiplier.
         Map<String, Double> mappedMultipliers = new HashMap<>(2);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));

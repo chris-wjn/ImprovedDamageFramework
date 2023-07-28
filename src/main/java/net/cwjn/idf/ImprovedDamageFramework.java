@@ -7,7 +7,6 @@ import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.ATHandler;
 import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.data.ServerData;
-import net.cwjn.idf.gui.BestiaryScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.hud.PlayerHealthBar;
 import net.cwjn.idf.network.PacketHandler;
@@ -33,9 +32,12 @@ public class ImprovedDamageFramework {
     public static final String MOD_ID = "idf";
     public static boolean IAFLoaded = false;
     public static final ResourceLocation FONT_ICONS = new ResourceLocation("idf", "icons");
+    public static final ResourceLocation FONT_ICONS_2X = new ResourceLocation("idf", "icons_2x");
     public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
     public static final ResourceLocation FONT_TOOLTIPS = new ResourceLocation("idf", "tooltips");
+    public static final ResourceLocation FONT_TOOLTIPS_2X = new ResourceLocation("idf", "tooltips_2x");
     public static final ResourceLocation FONT_SPACER = new ResourceLocation("idf", "space");
+    public static final ResourceLocation FONT_VERTICAL_SPACER = new ResourceLocation("idf", "vert_space");
 
     public ImprovedDamageFramework() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -70,7 +72,6 @@ public class ImprovedDamageFramework {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(StatScreen.class);
-        MinecraftForge.EVENT_BUS.register(BestiaryScreen.class);
         ClientData.register(MinecraftForge.EVENT_BUS);
         if (ClientConfig.CHANGE_PLAYER_HEALTH_BAR.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::replaceWithBar);
         if (ClientConfig.REMOVE_ARMOUR_DISPLAY.get()) MinecraftForge.EVENT_BUS.addListener(PlayerHealthBar::deleteArmorHud);

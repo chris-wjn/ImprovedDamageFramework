@@ -12,8 +12,10 @@ import net.cwjn.idf.hud.MobHealthbar;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -26,7 +28,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -40,26 +41,23 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static net.cwjn.idf.damage.DamageHandler.DEFAULT_ATTACK_SPEED;
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
-import static net.cwjn.idf.data.CommonData.EQUIPMENT_TAG;
+import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
-import static net.cwjn.idf.util.Util.writeTooltipDouble;
-import static net.cwjn.idf.util.Util.writeTooltipInteger;
+import static net.cwjn.idf.util.Util.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventsForgeBus {
 
-    public static float MOB_HEALTH_BAR_DISTANCE_FACTOR = 35;
+    public static float MOB_HEALTH_BAR_DISTANCE_FACTOR = 30;
     private static final Predicate<Attribute> isPercentageAttribute = a -> (
             a.equals(IDFAttributes.EVASION.get()) ||
             a.equals(IDFAttributes.LIFESTEAL.get()) ||
             a.equals(IDFAttributes.CRIT_CHANCE.get()) ||
             a.equals(IDFAttributes.PENETRATING.get())
             );
-
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
@@ -74,17 +72,17 @@ public class ClientEventsForgeBus {
             Multimap<Attribute, AttributeModifier> map = HashMultimap.create(item.getAttributeModifiers(slot));
             MutableComponent line1 = Component.empty().withStyle(Style.EMPTY);
             MutableComponent line2 = Component.empty().withStyle(Style.EMPTY);
-            MutableComponent mainArea = Component.empty().withStyle(Style.EMPTY);
+            List<Component> main = new ArrayList<>();
             List<Component> other = new ArrayList<>();
-            boolean isWeapon = item.getTag().contains("idf.damage_class");
-            boolean isRanged = item.getTag().getBoolean("idf.ranged_weapon");
+            boolean isWeapon = item.getTag().contains(WEAPON_TAG);
+            boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
 
             if (isWeapon) {
                 //static lines for weapons. Durability, force, atkspd, crit, pen, knockback
                 if (item.isDamageableItem()) {
                     double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
                     Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
-                    line1.append(Util.writeStaticTooltipComponent(percentage*100, "durability", colour, true, true));
+                    line1.append(Util.writeStaticTooltipComponent(item.getMaxDamage() - item.getDamageValue(), "durability", colour, false, true));
                 } else {
                     line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
                 }
@@ -110,7 +108,7 @@ public class ClientEventsForgeBus {
                 if (item.isDamageableItem()) {
                     double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
                     Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
-                    line1.append(Util.writeStaticTooltipComponent(percentage*100, "durability", colour, true, true));
+                    line1.append(Util.writeStaticTooltipComponent(item.getMaxDamage() - item.getDamageValue(), "durability", colour, false, true));
                 } else {
                     line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
                 }
@@ -126,7 +124,6 @@ public class ClientEventsForgeBus {
                 line2.append(Util.writeStaticTooltipComponent(sls, "slash", pickColour(sls), true, true));
             }
 
-            List<Component> firstComponents = new ArrayList<>();
             String[] keys = Util.sort(map, isWeapon);
             for (String key : keys) {
                 Attribute a = CommonData.ATTRIBUTES.get(key);
@@ -134,36 +131,47 @@ public class ClientEventsForgeBus {
                 final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                 double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
                 double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
-                if (mult != 1)
-                    firstComponents.add((Util.writeIcon(key)).append(writeTooltipDouble(flat)).append(Util.writeScalingTooltip(mult * flat)));
-                else firstComponents.add((Util.writeIcon(key)).append(writeTooltipDouble(flat)));
+                Component comp;
+                if (mult != 1) comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(scalingDoubleSize(mult * flat));
+                else comp = iconDoubleSize(key, false).append(writeDoubleSize(flat));
+                main.add(comp);
+                main.add(Component.empty());
                 map.removeAll(a);
-            }
-            if (firstComponents.size() >= 1) mainArea.append(firstComponents.get(0));
-            for (int i = 1; i < firstComponents.size(); i++) {
-                mainArea.append(", ").append(firstComponents.get(i));
             }
 
             for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
                 MutableComponent comp = Util.text(" ");
+                if (entry.getKey() == Attributes.MOVEMENT_SPEED) {
+                    double value = Util.pBPS(entry.getValue().getAmount());
+                    if (entry.getValue().getOperation() == ADDITION) {
+                        comp.append(Util.translation("idf.right_arrow.symbol"));
+                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                        comp.append(writeTooltipDouble(value, true));
+                    }
+                    else {
+                        comp.append(Util.translation("idf.right_arrow.symbol"));
+                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, true));
+                        comp.append("x");
+                    }
+                    other.add(comp);
+                    continue;
+                }
                 if (entry.getValue().getOperation() == ADDITION) {
                     if (isPercentageAttribute.test(entry.getKey())) {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
-                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                        comp.append(" ");
-                        comp.append(writeTooltipInteger((int) (entry.getValue().getAmount()), entry.getValue().getAmount() >= 0));
+                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), entry.getValue().getAmount() >= 0));
                         comp.append("%");
                     } else {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
-                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                        comp.append(" ");
-                        comp.append(writeTooltipInteger((int) (entry.getValue().getAmount()), entry.getValue().getAmount() >= 0));
+                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), entry.getValue().getAmount() >= 0));
                     }
                 } else {
                     comp.append(Util.translation("idf.right_arrow.symbol"));
-                    comp.append(Util.writeIcon(entry.getKey().getDescriptionId()));
-                    comp.append(" ");
-                    comp.append(writeTooltipInteger((int) entry.getValue().getAmount()+1, entry.getValue().getAmount() >= 0));
+                    comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                    comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, entry.getValue().getAmount() >= 0));
                     comp.append("x");
                 }
                 other.add(comp);
@@ -172,14 +180,14 @@ public class ClientEventsForgeBus {
             //here we add all the components we've created.
             list.add(line1);
             list.add(line2);
-            list.add(mainArea);
+            list.addAll(main);
             list.addAll(other);
         }
     }
 
     private static Color pickColour(double n) {
         if (n == 0) return null;
-        return n > 0? Color.GREEN : Color.DARKRED;
+        return n < 0? Color.GREEN : Color.DARKRED;
     }
 
     private static double getAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a) {
@@ -202,6 +210,44 @@ public class ClientEventsForgeBus {
             return f1;
         }
     }
+
+    public static MutableComponent writeDoubleSize(double num) {
+        MutableComponent comp = Component.empty().withStyle(TOOLTIP_2X);
+        String s = tenths.format(num);
+        if (s.charAt(0) == '1') comp.append(spacer(-1));
+        for(int i = 0; i < s.length() ; i++) {
+            comp.append(String.valueOf(s.charAt(i)));
+            if (i != s.length()-1) {
+                if (s.charAt(i+1) == '.') {
+                    comp.append(spacer(-2));
+                } else if (s.charAt(i+1) == '1') {
+                    comp.append(spacer(-1));
+                }
+                comp.append(spacer(-1));
+            }
+        }
+        return num < 0 ? comp.withStyle(ChatFormatting.RED) : comp;
+    }
+
+    public static MutableComponent iconDoubleSize(String name, boolean includeSpacer) {
+        MutableComponent comp = spacer(ICON_PIXEL_SPACER);
+        MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON_2X);
+        return includeSpacer? comp.append(comp1) : comp1;
+    }
+
+    public static Component scalingDoubleSize(double mult) {
+        MutableComponent comp = Component.empty().withStyle(TOOLTIP_2X);
+        comp.append(spacer(-1));
+        comp.append("+");
+        comp.append(spacer(-1));
+        comp.append("(");
+        comp.append(spacer(-1));
+        comp.append(writeDoubleSize(mult));
+        comp.append(spacer(-1));
+        comp.append(")");
+        return mult < 0 ? comp.withStyle(ChatFormatting.RED) : comp;
+    }
+
 
     @SubscribeEvent
     public static void onInitGui(ScreenEvent.Init event) {
@@ -233,17 +279,9 @@ public class ClientEventsForgeBus {
             if (entity != Minecraft.getInstance().player) {
                 int unpackedLight = Math.max(LightTexture.sky(event.getPackedLight()) - ClientData.skyDarken, LightTexture.block(event.getPackedLight()));
                 float distance = entity.distanceTo(Minecraft.getInstance().player) - unpackedLight + 15;
-                float alpha = 1 - distanceFunction(distance/MOB_HEALTH_BAR_DISTANCE_FACTOR);
+                float alpha = distance < MOB_HEALTH_BAR_DISTANCE_FACTOR*0.5 ? 1 : (1 - (distance/MOB_HEALTH_BAR_DISTANCE_FACTOR));
                 MobHealthbar.prepare(entity, alpha);
             }
-        }
-    }
-
-    private static float distanceFunction(float distance) {
-        if (distance < 0.75) {
-            return 0.5f*distance;
-        } else {
-            return 2.5f*distance - 1f;
         }
     }
 

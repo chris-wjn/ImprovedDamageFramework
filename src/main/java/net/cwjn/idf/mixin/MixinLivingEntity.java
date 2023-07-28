@@ -11,7 +11,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,11 +29,14 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
+import static net.cwjn.idf.data.CommonData.RANGED_TAG;
+import static net.cwjn.idf.data.CommonData.WEAPON_TAG;
 import static net.cwjn.idf.util.Util.offensiveAttribute;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 
@@ -85,7 +90,7 @@ public class MixinLivingEntity {
     /*
     In vanilla, there are three kinds of attribute modifiers: Addition, Multiply Base, and Multiply Total.
     Multiply Base works very strangely and doesn't really make sense in the context of this mod. So,
-    this method will take the damage, attackspeed, and force of me lee weapons and convert them all to an
+    this method will take the damage, attackspeed, and force of melee weapons and convert them all to an
     addition modifier.
     Furthermore, we do not want bows and crossbows to transfer their damage stats over to the player,
     as they would then be able to use them as melee weapons.
@@ -98,8 +103,8 @@ public class MixinLivingEntity {
         Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
         //weapon case
         if (item.hasTag()) {
-            if (item.getTag().contains("idf.damage_class")) {
-                boolean isRanged = item.getTag().getBoolean("idf.ranged_weapon");
+            if (item.getTag().contains(WEAPON_TAG)) {
+                boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
                 for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                     String name = entry.getKey().getDescriptionId().toLowerCase();
                     if (offensiveAttribute.test(name)) {
@@ -121,15 +126,17 @@ public class MixinLivingEntity {
                         newMap.put(entry.getKey(), entry.getValue());
                     }
                 }
+            } else {
+                return oldMap;
             }
         }
         else {
-            newMap = oldMap;
+            return oldMap;
         }
         return newMap;
     }
 
-    /*
+    /**
     All the following methods were written by me to change the vanilla way iFrames and knockback is handled.
     By default, any instance of damage will knockback the entity slightly. This is fkn stupid, and makes no sense.
     Knockback is now handled in idf.damage.DamageHandler. For iFrames, it will no longer hurt the entity with the difference
@@ -139,7 +146,7 @@ public class MixinLivingEntity {
 
     @ModifyConstant(method = "hurt", constant = @Constant(floatValue = 10.0F, ordinal = 0))
     private float inject(float constant) {
-        return 0.0F;
+        return -1F;
     }
 
     @Redirect(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 0))
@@ -155,27 +162,59 @@ public class MixinLivingEntity {
     private void voidLastHurt(LivingEntity instance, float value) {
     }
 
-    @Inject(method = "hurt", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 0), cancellable = true)
-    private void injectOverrideLogic(DamageSource source, float val, CallbackInfoReturnable<Boolean> callback) {
+    @Redirect(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
+    private void voidKnockback(LivingEntity instance, double strength, double x, double z) {
+    }
+
+    @Inject(method = "hurt", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", ordinal = 0), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
+    private void injectOverrideLogic(DamageSource source, float val, CallbackInfoReturnable<Boolean> callback, float f, boolean flag, float f1, boolean flag1) {
         String msgID = source.getMsgId();
-        if (CommonConfig.WHITELISTED_SOURCES_NO_INVULN.get().contains(msgID) ||
-                (this.invulnerableDuration <= 10 && CommonConfig.WHITELISTED_SOURCES_REDUCED_INVULN.get().contains(msgID))) {
-            if (source.getEntity() == null) {
+        boolean hasDamage = source instanceof IDFInterface? ((IDFInterface) source).hasDamage() || val > 0 : val > 0;
+        if (source.getEntity() instanceof Player) {
+            this.actuallyHurt(source, val);
+            gotHit(source, hasDamage, flag);
+        }
+        else if (thisLivingEntity.invulnerableTime > 0) {
+            if (CommonConfig.WHITELISTED_SOURCES_NO_INVULN.get().contains(msgID) || (thisLivingEntity.invulnerableTime < 11 && CommonConfig.WHITELISTED_SOURCES_REDUCED_INVULN.get().contains(msgID))) {
                 this.actuallyHurt(source, val);
-            } else {
-                if (CommonConfig.BLACKLISTED_ENTITIES.get().contains(Util.getEntityRegistryName(source.getEntity().getType()).toString())) {
-                    ImprovedDamageFramework.LOGGER.debug("MOB IS BLACKLISTED");
-                } else {
-                    this.actuallyHurt(source, val);
-                }
+                gotHit(source, hasDamage, flag);
             }
-        } else {
-            callback.setReturnValue(false);
+            else {
+                callback.setReturnValue(false);
+            }
+        }
+        else {
+            thisLivingEntity.invulnerableTime = 20;
+            this.actuallyHurt(source, val);
+            gotHit(source, hasDamage, flag);
+            thisLivingEntity.hurtDuration = 10;
+            thisLivingEntity.hurtTime = thisLivingEntity.hurtDuration;
         }
     }
 
-    @Redirect(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void redirectKnockback(LivingEntity instance, double strength, double x, double z) {
+    private void gotHit(DamageSource source, boolean hasDamage, boolean flag) {
+        if (flag) {
+            thisLivingEntity.level.broadcastEntityEvent(thisLivingEntity, (byte)29);
+        } else if (source instanceof EntityDamageSource && ((EntityDamageSource)source).isThorns()) {
+            thisLivingEntity.level.broadcastEntityEvent(thisLivingEntity, (byte)33);
+        } else {
+            byte b0;
+            if (source == DamageSource.DROWN) {
+                b0 = 36;
+            } else if (source.isFire()) {
+                b0 = 37;
+            } else if (source == DamageSource.SWEET_BERRY_BUSH) {
+                b0 = 44;
+            } else if (source == DamageSource.FREEZE) {
+                b0 = 57;
+            } else {
+                b0 = 2;
+            }
+            thisLivingEntity.level.broadcastEntityEvent(thisLivingEntity, b0);
+        }
+        if (source != DamageSource.DROWN && (!flag || hasDamage)) {
+            thisLivingEntity.markHurt();
+        }
     }
 
     /**

@@ -129,7 +129,12 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         return this.msgId;
     }
 
+    public boolean hasDamage() {
+        return fire > 0 || water > 0 || lightning > 0 || magic > 0 || dark > 0 || holy > 0;
+    }
+
     public float getKnockback() {
         return knockback;
     }
+
 }

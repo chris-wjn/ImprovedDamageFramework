@@ -1,9 +1,9 @@
 package net.cwjn.idf.data;
 
 import net.cwjn.idf.config.json.JSONUtil;
-import net.cwjn.idf.config.json.data.ArmourData;
-import net.cwjn.idf.config.json.data.ItemData;
-import net.cwjn.idf.config.json.data.WeaponData;
+import net.cwjn.idf.config.json.records.ArmourData;
+import net.cwjn.idf.config.json.records.ItemData;
+import net.cwjn.idf.config.json.records.WeaponData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

@@ -36,8 +36,8 @@ public abstract class MixinAbstractArrow {
         if (thisArrow.getOwner() instanceof LivingEntity livingEntity) {
             ProjectileHelper helper = livingEntity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
             double arrowVel = thisArrow.getDeltaMovement().length();
-            helper.setWeight((float) (helper.getWeight() * arrowVel));
-            return (int) helper.getPhys();
+            helper.setWeight((float) (helper.getWeight() * arrowVel * 0.67));
+            return (int) (helper.getPhys() + this.getBaseDamage());
         } else {
             return (int) this.getBaseDamage();
         }

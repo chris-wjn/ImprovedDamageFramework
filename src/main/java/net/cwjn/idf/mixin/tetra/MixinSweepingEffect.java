@@ -34,6 +34,7 @@ public class MixinSweepingEffect {
 
     /**
      * @author cwJn
+     * @reason make tetra sweeping work with new attributes
      */
     @Overwrite(remap = false)
     public static void sweepAttack(ItemStack itemStack, LivingEntity target, LivingEntity attacker, int sweepingLevel) {
@@ -46,22 +47,14 @@ public class MixinSweepingEffect {
         float dd = (float) (attacker.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float hd = (float) (attacker.getAttributeValue(IDFAttributes.HOLY_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float pen = (float) attacker.getAttributeValue(IDFAttributes.PENETRATING.get());
+        float lifesteal = (float) attacker.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         float force = (float) attacker.getAttributeValue(IDFAttributes.FORCE.get());
         float knockback = trueSweep ? (float)(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) + 1) * 0.5F : 0.5F;
         double range = 1.0 + EffectHelper.getEffectEfficiency(itemStack, ItemEffect.sweeping);
         double reach = attacker.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
-        attacker.level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(range, 0.25, range)).stream().filter((entity) -> {
-            return entity != attacker;
-        }).filter((entity) -> {
-            return entity != target;
-        }).filter((entity) -> {
-            return !attacker.isAlliedTo(entity);
-        }).filter((entity) -> {
-            return attacker.distanceToSqr(entity) < (range + reach) * (range + reach);
-        }).forEach((entity) -> {
-            entity.knockback((double)knockback, (double) Mth.sin(attacker.getYRot() * 3.1415927F / 180.0F), (double)(-Mth.cos(attacker.getYRot() * 3.1415927F / 180.0F)));
+        attacker.level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(range, 0.25, range)).stream().filter((entity) -> entity != attacker).filter((entity) -> entity != target).filter((entity) -> !attacker.isAlliedTo(entity)).filter((entity) -> attacker.distanceToSqr(entity) < (range + reach) * (range + reach)).forEach((entity) -> {
             DamageSource damageSource = attacker instanceof Player ?
-                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, force,
+                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
                     attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                     :
                     new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, force,
@@ -95,20 +88,16 @@ public class MixinSweepingEffect {
         float hd = (float) (attacker.getAttributeValue(IDFAttributes.HOLY_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
         float pen = (float) attacker.getAttributeValue(IDFAttributes.PENETRATING.get());
         float force = (float) attacker.getAttributeValue(IDFAttributes.FORCE.get());
+        float lifesteal = (float) attacker.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         float knockback = 0.5F + (float)EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) * 0.5F;
         double range = 2.0 + EffectHelper.getEffectEfficiency(itemStack, ItemEffect.sweeping);
         Vec3 target = Vec3.directionFromRotation(attacker.getXRot(), attacker.getYRot()).normalize().scale(range).add(attacker.getEyePosition(0.0F));
         AABB aoe = new AABB(target, target);
-        attacker.level.getEntitiesOfClass(LivingEntity.class, aoe.inflate(range, 1.0, range)).stream().filter((entity) -> {
-            return entity != attacker;
-        }).filter((entity) -> {
-            return !attacker.isAlliedTo(entity);
-        }).forEach((entity) -> {
-            entity.knockback((double)knockback, (double)Mth.sin(attacker.getYRot() * 3.1415927F / 180.0F), (double)(-Mth.cos(attacker.getXRot() * 3.1415927F / 180.0F)));
+        attacker.level.getEntitiesOfClass(LivingEntity.class, aoe.inflate(range, 1.0, range)).stream().filter((entity) -> entity != attacker).filter((entity) -> !attacker.isAlliedTo(entity)).forEach((entity) -> {
             ItemEffectHandler.applyHitEffects(itemStack, entity, attacker);
             EffectHelper.applyEnchantmentHitEffects(itemStack, entity, attacker);
             DamageSource damageSource = attacker instanceof Player ?
-                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, force,
+                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                     :
                     new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, force,
@@ -126,7 +115,7 @@ public class MixinSweepingEffect {
     @Overwrite(remap = false)
     private static void causeTruesweepDamage(DamageSource damageSource, float baseDamage, ItemStack itemStack, LivingEntity attacker, LivingEntity target)  {
         float targetModifier = EnchantmentHelper.getDamageBonus(itemStack, target.getMobType());
-        boolean isCrit = attacker.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())/100 >= Math.random();
+        boolean isCrit = attacker.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01 >= attacker.getRandom().nextDouble();
         float critMultiplier = 1.0F;
         CriticalHitEvent hitResult = ForgeHooks.getCriticalHit((Player)attacker, target, isCrit, isCrit ? 1.5F : 1.0F);
         isCrit = hitResult != null;

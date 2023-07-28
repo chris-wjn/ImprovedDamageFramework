@@ -1,0 +1,3286 @@
+{
+  "minecraft:allay": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "MAGICAL"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:axolotl": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "SMALL",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:bat": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:bee": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "TINY"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:blaze": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "NETHER",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 4.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:cat": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "SMALL"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:cave_spider": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "SMALL",
+      "SHELLED",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:chicken": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:cod": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "AQUATIC",
+      "EVASIVE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:cow": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:creeper": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:dolphin": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:donkey": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:drowned": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:elder_guardian": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "AQUATIC",
+      "SHELLED",
+      "IMPENETRABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.4,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:ender_dragon": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "GIANT",
+      "END",
+      "SHELLED",
+      "STURDY"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:enderman": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "END",
+      "LARGE",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:endermite": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "TINY",
+      "END"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:evoker": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "LIVING",
+      "MEDIUM",
+      "MAGICAL"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:fox": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "SMALL",
+      "FLAMMABLE",
+      "EVASIVE",
+      "EVASIVE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:frog": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:ghast": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "NETHER",
+      "GIANT",
+      "EVASIVE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:giant": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "GIANT",
+      "GIANT",
+      "UNDEAD"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:glow_squid": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "SMALL",
+      "AQUATIC",
+      "AETHER"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:goat": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:guardian": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "AQUATIC",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:hoglin": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "NETHER",
+      "STURDY",
+      "SOFT"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.5,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:horse": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:husk": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD",
+      "NETHER"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:illusioner": {
+    "Damage Class": "strike",
+    "Modifier Tags": [],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:iron_golem": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "GIANT",
+      "STURDY",
+      "STURDY",
+      "IMPENETRABLE",
+      "IMPENETRABLE",
+      "SHELLED",
+      "SHELLED"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.7,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.5
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:llama": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:magma_cube": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "NETHER"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.5,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.25,
+      "Damage Class - SLASH": 1.75,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:mooshroom": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:mule": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:ocelot": {
+    "Damage Class": "slash",
+    "Modifier Tags": [
+      "SMALL",
+      "EVASIVE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:panda": {
+    "Damage Class": "slash",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.5,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:parrot": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:phantom": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD",
+      "SOFT"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:pig": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "SOFT",
+      "PENETRABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:piglin": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "NETHER",
+      "SOFT",
+      "LIVING"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:piglin_brute": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "NETHER",
+      "LIVING"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:pillager": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "LIVING"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:polar_bear": {
+    "Damage Class": "slash",
+    "Modifier Tags": [
+      "GIANT",
+      "AQUATIC",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.5,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:pufferfish": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "TINY",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:rabbit": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:ravager": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "STURDY",
+      "SHELLED"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.4,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.3
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:salmon": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:sheep": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:shulker": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "SHELLED",
+      "IMPENETRABLE",
+      "STURDY",
+      "SMALL",
+      "END"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:silverfish": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:skeleton": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD",
+      "IMPENETRABLE",
+      "IMPENETRABLE",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:skeleton_horse": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "IMPENETRABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:slime": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.5,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.25,
+      "Damage Class - SLASH": 1.75,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:spider": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "MEDIUM",
+      "SHELLED",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:squid": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "SMALL",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:stray": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "AQUATIC",
+      "UNDEAD",
+      "IMPENETRABLE",
+      "IMPENETRABLE",
+      "IMPENETRABLE",
+      "FRAGILE",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:strider": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "NETHER"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:tadpole": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:trader_llama": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:tropical_fish": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:turtle": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "SHELLED",
+      "AQUATIC"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:vex": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "TINY",
+      "MAGICAL"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:vindicator": {
+    "Damage Class": "slash",
+    "Modifier Tags": [
+      "LARGE",
+      "LIVING"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.4,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.2
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wandering_trader": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "LIVING"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:warden": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "GIANT",
+      "GIANT",
+      "UNDEAD",
+      "STURDY",
+      "STURDY",
+      "SHELLED"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": -6.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 10.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.8,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.6
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:witch": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "LIVING",
+      "MAGICAL"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wither": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "GIANT",
+      "GIANT",
+      "UNDEAD",
+      "UNDEAD",
+      "IMPENETRABLE",
+      "IMPENETRABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": -16.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 20.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wither_skeleton": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD",
+      "UNDEAD",
+      "IMPENETRABLE",
+      "IMPENETRABLE",
+      "FRAGILE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 5.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:wolf": {
+    "Damage Class": "pierce",
+    "Modifier Tags": [
+      "MEDIUM",
+      "EVASIVE",
+      "FLAMMABLE"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:zoglin": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "NETHER",
+      "UNDEAD",
+      "STURDY",
+      "SOFT"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:zombie": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:zombie_horse": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "LARGE",
+      "FLAMMABLE",
+      "UNDEAD"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:zombie_villager": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "UNDEAD"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  },
+  "minecraft:zombified_piglin": {
+    "Damage Class": "strike",
+    "Modifier Tags": [
+      "MEDIUM",
+      "NETHER",
+      "SOFT",
+      "UNDEAD"
+    ],
+    "Offense Stats": {
+      "Damage - PHYSICAL": 0.0,
+      "Damage - FIRE": 0.0,
+      "Damage - WATER": 0.0,
+      "Damage - LIGHTNING": 0.0,
+      "Damage - MAGIC": 0.0,
+      "Damage - DARK": 0.0,
+      "Damage - HOLY": 0.0,
+      "Lifesteal": 0.0,
+      "Armour Penetration": 0.0,
+      "Critical Chance": 0.0,
+      "Force": 0.0,
+      "Accuracy": 0.0,
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
+    },
+    "Defense Stats": {
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
+      "Defence - WATER": 0.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
+      "Defence - HOLY": 0.0,
+      "Damage Class - STRIKE": 1.0,
+      "Damage Class - PIERCE": 1.0,
+      "Damage Class - SLASH": 1.0,
+      "Weight": 0.0,
+      "Evasion": 0.0,
+      "Knockback Resistance": 0.0
+    },
+    "Auxiliary Stats": {
+      "Max Health": 0.0,
+      "Movement Speed": 1.0,
+      "Luck": 0.0
+    }
+  }
+}

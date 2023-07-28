@@ -38,8 +38,10 @@
     "equipment.MixinDiggerItem",
     "equipment.MixinItem",
     "equipment.MixinSwordItem",
+    "equipment.MixinTridentItem",
     "tetra.MixinItemModularHandheld",
-    "tetra.MixinSweepingEffect"
+    "tetra.MixinSweepingEffect",
+    "tetra.MixinWorkbenchTile"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -18,5 +18,6 @@ public interface IDFInterface {
     IDFInterface setIsConversion();
     IDFInterface setTrue();
     String getName();
+    boolean hasDamage();
 
 }

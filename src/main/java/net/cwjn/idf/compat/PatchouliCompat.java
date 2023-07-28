@@ -1,10 +1,10 @@
 package net.cwjn.idf.compat;
 
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.config.json.data.EntityData;
-import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
-import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
-import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.config.json.records.EntityData;
+import net.cwjn.idf.config.json.records.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.records.subtypes.DefenceData;
+import net.cwjn.idf.config.json.records.subtypes.OffenseData;
 import net.cwjn.idf.damage.DamageHandler;
 import net.cwjn.idf.data.CommonData;
 import net.minecraft.resources.ResourceLocation;
@@ -37,10 +37,10 @@ public class PatchouliCompat implements IComponentProcessor{
     @Override
     public void setup(IVariableProvider variables) {
         String name = variables.get("entity").asString();
-        data = CommonData.getEntityData(new ResourceLocation(name));
+        data = CommonData.LOGICAL_ENTITY_MAP.get(new ResourceLocation(name));
         type = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(name));
-        if (data == null) data = new EntityData(null, "MOB NOT IN JSON FILE!", OffensiveData.entityStandard(),
-                DefensiveData.entityStandard(), AuxiliaryData.empty());
+        if (data == null) data = new EntityData(null, "MOB NOT IN JSON FILE!", OffenseData.empty(),
+                DefenceData.entityStandard(), AuxiliaryData.empty());
     }
 
     @Override
@@ -76,10 +76,10 @@ public class PatchouliCompat implements IComponentProcessor{
                     IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MAX_HEALTH) * 5) + data.aData().hp()));
             case "movespeed" ->
                     IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.aData().ms()));
-            case "defense" ->
-                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.dData().defense()));
+            case "weight" ->
+                    IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.dData().weight()));
             case "physicalResistance" ->
-                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.dData().pRes())));
+                    IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.dData().pDef())));
             case "fireResistance" ->
                     IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(IDFAttributes.FIRE_DEFENCE.get()))));
             case "waterResistance" ->

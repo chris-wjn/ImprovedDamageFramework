@@ -3,7 +3,7 @@ package net.cwjn.idf.attribute;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.Config;
-import net.cwjn.idf.config.json.data.EntityData;
+import net.cwjn.idf.config.json.records.EntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
@@ -18,7 +18,7 @@ public class AttributeAttachEvent {
     public static void attachAttributes(EntityAttributeModificationEvent event) {
         Config.init();
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
-            EntityData data = CommonData.getEntityData(Util.getEntityRegistryName(entityType));
+            EntityData data = CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(entityType));
             if (data != null) {
                 event.add(entityType, FIRE.damage, data.oData().fDmg());
                 event.add(entityType, WATER.damage, data.oData().wDmg());
@@ -27,12 +27,12 @@ public class AttributeAttachEvent {
                 event.add(entityType, DARK.damage, data.oData().dDmg());
                 event.add(entityType, HOLY.damage, data.oData().hDmg());
                 //resistances
-                event.add(entityType, FIRE.defence, data.dData().fRes());
-                event.add(entityType, WATER.defence, data.dData().wRes());
-                event.add(entityType, LIGHTNING.defence, data.dData().lRes());
-                event.add(entityType, MAGIC.defence, data.dData().mRes());
-                event.add(entityType, DARK.defence, data.dData().dRes());
-                event.add(entityType, HOLY.defence, data.dData().hRes());
+                event.add(entityType, FIRE.defence, data.dData().fDef());
+                event.add(entityType, WATER.defence, data.dData().wDef());
+                event.add(entityType, LIGHTNING.defence, data.dData().lDef());
+                event.add(entityType, MAGIC.defence, data.dData().mDef());
+                event.add(entityType, DARK.defence, data.dData().dDef());
+                event.add(entityType, HOLY.defence, data.dData().hDef());
                 //DAMAGE CLASS MULTIPLIERS
                 event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.dData().str());
                 event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.dData().prc());

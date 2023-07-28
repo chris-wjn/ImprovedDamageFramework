@@ -1,4 +1,4 @@
-package net.cwjn.idf.config.json.data;
+package net.cwjn.idf.config.json.records;
 
 import net.cwjn.idf.damage.IDFDamageSource;
 import net.cwjn.idf.damage.IDFEntityDamageSource;

@@ -130,6 +130,10 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         return this.msgId;
     }
 
+    public boolean hasDamage() {
+        return fire > 0 || water > 0 || lightning > 0 || magic > 0 || dark > 0 || holy > 0;
+    }
+
     @Override
     public float getKnockback() {
         return knockback;

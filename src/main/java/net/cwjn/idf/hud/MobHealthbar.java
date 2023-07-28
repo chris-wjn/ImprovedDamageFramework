@@ -98,12 +98,15 @@ public class MobHealthbar {
 
         double size = percent * (float) 40.0;
         double h = 6;
-
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, HEALTH_GUI);
         RenderSystem.enableBlend();
-        if (ClientData.shadersLoaded) RenderSystem.setShaderColor(0.25f, 0.25f, 0.25f, alpha);
-        else RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+        if (ClientData.shadersLoaded) {
+            RenderSystem.setShaderColor(0.4f, 0.4f, 0.4f, alpha);
+        }
+        else {
+            RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+        }
 
         float half = (float) 40.0 / 2;
 

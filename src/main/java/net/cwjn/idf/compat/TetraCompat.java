@@ -2,34 +2,33 @@ package net.cwjn.idf.compat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.capability.provider.ArrowHelperProvider;
-import net.cwjn.idf.capability.provider.TridentHelperProvider;
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.data.CommonData;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.eventbus.EventBus;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import se.mickelus.tetra.aspect.ItemAspect;
 import se.mickelus.tetra.blocks.workbench.gui.WorkbenchStatsGui;
 import se.mickelus.tetra.gui.stats.bar.GuiStatBar;
 import se.mickelus.tetra.gui.stats.getter.*;
-import se.mickelus.tetra.items.modular.ItemModularHandheld;
+import se.mickelus.tetra.items.modular.IModularItem;
 import se.mickelus.tetra.items.modular.ItemPredicateModular;
 import se.mickelus.tetra.items.modular.ModularItem;
 import se.mickelus.tetra.items.modular.impl.bow.ModularBowItem;
 import se.mickelus.tetra.items.modular.impl.crossbow.ModularCrossbowItem;
+import se.mickelus.tetra.module.ItemModule;
+import se.mickelus.tetra.module.ItemUpgradeRegistry;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Objects;
 
+import static net.cwjn.idf.data.CommonData.WEAPON_TAG;
 import static se.mickelus.tetra.gui.stats.StatsHelper.barLength;
 
 public class TetraCompat {
@@ -52,67 +51,39 @@ public class TetraCompat {
         MinecraftForge.EVENT_BUS.register(TetraCompat.class);
     }
 
+    @SubscribeEvent
+    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+        if (event.getCrafting().getItem() instanceof ModularItem) {
+            ItemStack replacement = event.getCrafting();
+            CompoundTag tag = event.getCrafting().getTag();
+            if (tag == null) return;
+            tag.putBoolean(CommonData.EQUIPMENT_TAG, true);
+            IModularItem item = (IModularItem) replacement.getItem();
+            ItemModule[] modules = item.getMajorModules(replacement);
+            String dc = "strike";
+            if (replacement.getItem() instanceof ModularBowItem || replacement.getItem() instanceof ModularCrossbowItem) {
+                tag.putBoolean(CommonData.RANGED_TAG, true);
+                dc = "pierce";
+            } else {
+                int sls = 0;
+                int prc = 0;
+                int str = 0;
+                for (ItemModule module : modules) {
+                    sls += module.getAspects(replacement).getLevel(ItemAspect.edgedWeapon);
+                    str += module.getAspects(replacement).getLevel(ItemAspect.bluntWeapon);
+                    prc += module.getAspects(replacement).getLevel(ItemAspect.pointyWeapon);
+                }
+                System.out.println("Item: " + replacement.getDescriptionId() + " sls: " + sls + " prc: " + prc + " str: " + str);
+                int highest = Math.max(sls, Math.max(prc, str));
+                if (highest == sls) dc = "slash";
+                else if (highest == prc) dc = "pierce";
+            }
+            tag.putString(WEAPON_TAG, dc);
+        }
+    }
+
     public static void registerClient() {
         initClient();
-    }
-
-    @SubscribeEvent
-    public static void onLivingUseItemEvent(LivingEntityUseItemEvent.Start event) {
-        ItemStack itemStack = event.getItem();
-        Item item = itemStack.getItem();
-        LivingEntity entity = event.getEntity();
-        if (item instanceof ModularBowItem || item instanceof ModularCrossbowItem) {
-            entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
-                h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
-                h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
-                h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
-                h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
-                h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
-                h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
-                h.setDamageClass(itemStack.hasTag() ?
-                        itemStack.getTag().contains("idf.damage_class") ? itemStack.getTag().getString("idf.damage_class") : "pierce" : "pierce");
-            });
-        } else if (item instanceof ItemModularHandheld && Arrays.asList(((ItemModularHandheld) item).getMajorModuleKeys()).contains("trident/trident")) {
-            entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
-                h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
-                h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
-                h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
-                h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
-                h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
-                h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
-                h.setDamageClass(itemStack.hasTag() ?
-                        itemStack.getTag().contains("idf.damage_class") ? itemStack.getTag().getString("idf.damage_class") : "pierce" : "pierce");
-            });
-        }
-    }
-
-    @SubscribeEvent
-    public static void ItemModifierEvent(OnItemStackCreatedEvent event) {
-        ItemStack item = event.getItemStack();
-        if (item.getItem() instanceof ModularItem) {
-            item.getOrCreateTag().putBoolean(CommonData.EQUIPMENT_TAG, true);
-            if (isSlash.matches(item)) {
-                item.getOrCreateTag().putString("idf.damage_class", "slash");
-            } else if (isPierce.matches(item)) {
-                item.getOrCreateTag().putString("idf.damage_class", "pierce");
-            } else if (isStrike.matches(item)) {
-                item.getOrCreateTag().putString("idf.damage_class", "strike");
-            } else if (isSlashRight.matches(item)) {
-                item.getOrCreateTag().putString("idf.damage_class", "slash");
-            } else if (isPierceRight.matches(item)) {
-                item.getOrCreateTag().putString("idf.damage_class", "pierce");
-            } else if (isStrikeRight.matches(item)) {
-                item.getOrCreateTag().putString("idf.damage_class", "strike");
-            }
-        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -122,6 +93,9 @@ public class TetraCompat {
         IStatGetter lightningDamageGetter = new StatGetterAttribute(IDFAttributes.LIGHTNING_DAMAGE.get());
         IStatGetter magicDamageGetter = new StatGetterAttribute(IDFAttributes.MAGIC_DAMAGE.get());
         IStatGetter darkDamageGetter = new StatGetterAttribute(IDFAttributes.DARK_DAMAGE.get());
+        IStatGetter holyDamageGetter = new StatGetterAttribute(IDFElement.HOLY.damage);
+        IStatGetter accuracyGetter = new StatGetterAttribute(IDFAttributes.ACCURACY.get());
+        IStatGetter forceGetter = new StatGetterAttribute(IDFAttributes.FORCE.get());
         IStatGetter penGetter = new StatGetterAttribute(IDFAttributes.PENETRATING.get());
         IStatGetter critChanceGetter = new StatGetterAttribute(IDFAttributes.CRIT_CHANCE.get());
         IStatGetter lifestealGetter = new StatGetterAttribute(IDFAttributes.LIFESTEAL.get());
@@ -139,7 +113,16 @@ public class TetraCompat {
                 new TooltipGetterDecimal("idf.stats.magic_damage.tooltip", magicDamageGetter));
         GuiStatBar darkDamage = new GuiStatBar(0, 0, barLength, "idf.stats.dark_damage",
                 0, 40, false, darkDamageGetter, LabelGetterBasic.decimalLabel,
-                new TooltipGetterDecimal("idf.stats.dark_damage.tooltip", darkDamageGetter));
+                new TooltipGetterDecimal("idf.stats.holy_damage.tooltip", darkDamageGetter));
+        GuiStatBar holyDamage = new GuiStatBar(0, 0, barLength, "idf.stats.dark_damage",
+                0, 40, false, holyDamageGetter, LabelGetterBasic.decimalLabel,
+                new TooltipGetterDecimal("idf.stats.holy_damage.tooltip", holyDamageGetter));
+        GuiStatBar accuracy = new GuiStatBar(0, 0, barLength, "idf.stats.accuracy",
+                0, 100, false, accuracyGetter, LabelGetterBasic.decimalLabel,
+                new TooltipGetterDecimal("idf.stats.accuracy.tooltip", accuracyGetter));
+        GuiStatBar force = new GuiStatBar(0, 0, barLength, "idf.stats.force",
+                0, 40, false, forceGetter, LabelGetterBasic.decimalLabel,
+                new TooltipGetterDecimal("idf.stats.force.tooltip", forceGetter));
         GuiStatBar pen = new GuiStatBar(0, 0, barLength, "idf.stats.pen",
                 0, 100, false, penGetter, LabelGetterBasic.percentageLabel,
                 new TooltipGetterPercentage("idf.stats.pen.tooltip", penGetter));
@@ -154,6 +137,9 @@ public class TetraCompat {
         WorkbenchStatsGui.addBar(lightningDamage);
         WorkbenchStatsGui.addBar(magicDamage);
         WorkbenchStatsGui.addBar(darkDamage);
+        WorkbenchStatsGui.addBar(holyDamage);
+        WorkbenchStatsGui.addBar(accuracy);
+        WorkbenchStatsGui.addBar(force);
         WorkbenchStatsGui.addBar(pen);
         WorkbenchStatsGui.addBar(critChance);
         WorkbenchStatsGui.addBar(lifesteal);

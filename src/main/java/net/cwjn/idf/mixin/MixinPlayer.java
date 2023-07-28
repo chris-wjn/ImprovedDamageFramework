@@ -100,7 +100,7 @@ public class MixinPlayer {
                 float dd = (float)thisPlayer.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
                 float hd = (float)thisPlayer.getAttributeValue(HOLY.damage);
                 float pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
-                float weight = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
+                float force = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
                 float damageBonus;
                 if (target instanceof LivingEntity) {
                     damageBonus = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), ((LivingEntity)target).getMobType());
@@ -117,7 +117,7 @@ public class MixinPlayer {
                 md *= 0.2F + scalar * scalar * 0.8F;
                 dd *= 0.2F + scalar * scalar * 0.8F;
                 hd *= 0.2F + scalar * scalar * 0.8F;
-                weight *= 0.2F + scalar * scalar * 0.8F;
+                force *= 0.2F + scalar * scalar * 0.8F;
                 damageBonus *= scalar;
                 float lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
                 thisPlayer.resetAttackStrengthTicker();
@@ -137,7 +137,7 @@ public class MixinPlayer {
                         }
                     }
 
-                    boolean isCrit = (thisPlayer.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())/100) >= Math.random() && target instanceof LivingEntity;
+                    boolean isCrit = (thisPlayer.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01) >= thisPlayer.getRandom().nextDouble() && target instanceof LivingEntity;
                     net.minecraftforge.event.entity.player.CriticalHitEvent hitResult = net.minecraftforge.common.ForgeHooks.getCriticalHit(thisPlayer, target, isCrit, isCrit ? 1.5F : 1.0F);
                     isCrit = hitResult != null;
                     if (isCrit) {
@@ -176,7 +176,7 @@ public class MixinPlayer {
                     //this is where we actually set the target to be hurt, and check to see if the hurt event went through
                     Vec3 direction = target.getDeltaMovement();
                     String damageClass = thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
-                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, weight, damageClass), ad);
+                    boolean targetWasHurt = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force, damageClass), ad);
 
                     if (targetWasHurt) {
                         //knockback the target and if the player was sprinting, stop their sprint
@@ -190,8 +190,8 @@ public class MixinPlayer {
 
                         //if the attack was sweeping, check for entities near the target and attack them
                         if (isSweepAttack) {
-                            float ratio = EnchantmentHelper.getSweepingDamageRatio(thisPlayer);
-                            float sweepingAD = 1.0F + ratio * ad;
+                            float ratio = 0.25f + EnchantmentHelper.getSweepingDamageRatio(thisPlayer);
+                            float sweepingAD = ratio * ad;
                             float sweepingFD = ratio * fd;
                             float sweepingWD = ratio * wd;
                             float sweepingLD = ratio * ld;
@@ -201,8 +201,7 @@ public class MixinPlayer {
 
                             for(LivingEntity livingentity : thisPlayer.level.getEntitiesOfClass(LivingEntity.class, thisPlayer.getItemInHand(InteractionHand.MAIN_HAND).getSweepHitBox(thisPlayer, target))) {
                                 if (livingentity != thisPlayer && livingentity != target && !thisPlayer.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStand) || !((ArmorStand)livingentity).isMarker()) && thisPlayer.distanceToSqr(livingentity) < 9.0D) {
-                                    livingentity.knockback((double)0.4F, (double)Mth.sin(thisPlayer.getYRot() * ((float)Math.PI / 180F)), (double)(-Mth.cos(thisPlayer.getYRot() * ((float)Math.PI / 180F))));
-                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, sweepingHD, pen, 0, weight,
+                                    livingentity.hurt(new IDFEntityDamageSource("player", thisPlayer, sweepingFD, sweepingWD, sweepingLD, sweepingMD, sweepingDD, sweepingHD, pen, lifesteal, knockback, force,
                                             thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass()), sweepingAD);
                                 }
                             }

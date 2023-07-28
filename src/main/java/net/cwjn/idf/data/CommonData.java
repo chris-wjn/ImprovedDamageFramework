@@ -2,10 +2,7 @@ package net.cwjn.idf.data;
 
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
-import net.cwjn.idf.config.json.data.*;
-import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
-import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
-import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.config.json.records.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -32,15 +29,7 @@ public class CommonData {
     public static final String EQUIPMENT_TAG = "idf.equipment";
     public static final String RANGED_TAG = "idf.ranged_weapon";
     public static final String WEAPON_TAG = "idf.damage_class";
-
-    public static EntityData getEntityData(ResourceLocation key) {
-        EntityData data = LOGICAL_ENTITY_MAP.getOrDefault(key, null);
-        if (data == null) return null;
-        return new EntityData(null, data.damageClass(),
-                OffensiveData.combine(data.oData(), data.template().getOffensiveData()),
-                DefensiveData.combine(data.dData(), data.template().getDefensiveData()),
-                AuxiliaryData.combine(data.aData(), data.template().getAuxiliaryData()));
-    }
+    public static final String ENTITY_BONUS = "idf.base_bonus";
 
     static {
         for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {

@@ -29,6 +29,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -59,6 +60,7 @@ public class LogicalEvents {
         }
     }
 
+    //prevents entity NAN error
     @SubscribeEvent
     public static void assertMaxHP(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
@@ -78,7 +80,7 @@ public class LogicalEvents {
     @SubscribeEvent
     public static void checkEvasion(LivingAttackEvent event) {
         LivingEntity target = event.getEntity();
-        if (target.getLevel() instanceof ServerLevel level) {
+        if (target.getLevel() instanceof ServerLevel) {
             if (target.getAttributeValue(IDFAttributes.EVASION.get())/100 >= Math.random()) {
                 PacketHandler.serverToNearPoint(new DisplayMissPacket(target.getX(), target.getY(), target.getZ(), 0, target.getUUID()), target.getX(), target.getY(), target.getZ(), 15, target.getCommandSenderWorld().dimension());
                 event.setCanceled(true);
@@ -145,7 +147,7 @@ public class LogicalEvents {
         if (event.getEntity() instanceof Player player) {
             LivingEntity target = event.getTarget();
             if (target.getLevel() instanceof ServerLevel level) {
-                level.sendParticles(ParticleTypes.SPLASH, target.getX(), target.getEyeY(), target.getZ(), 30, player.getX() - target.getX(), player.getY() - target.getY(), player.getZ() - target.getZ(), 1);
+                level.sendParticles(ParticleTypes.CRIMSON_SPORE, target.getX(), target.getEyeY(), target.getZ(), 50, player.getX() - target.getX(), player.getY() - target.getY(), player.getZ() - target.getZ(), 1);
             }
         }
     }

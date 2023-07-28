@@ -1,9 +1,9 @@
-package net.cwjn.idf.config.json.data;
+package net.cwjn.idf.config.json.records;
 
 import com.google.gson.*;
-import net.cwjn.idf.config.json.data.subtypes.AuxiliaryData;
-import net.cwjn.idf.config.json.data.subtypes.DefensiveData;
-import net.cwjn.idf.config.json.data.subtypes.OffensiveData;
+import net.cwjn.idf.config.json.records.subtypes.AuxiliaryData;
+import net.cwjn.idf.config.json.records.subtypes.DefenceData;
+import net.cwjn.idf.config.json.records.subtypes.OffenseData;
 import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -20,7 +20,7 @@ import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 //used to hold data for weapons in the json config files
-public record WeaponData(int durability, String damageClass, boolean ranged, OffensiveData oData, DefensiveData dData, AuxiliaryData aData)
+public record WeaponData(int durability, String damageClass, boolean ranged, OffenseData oData, DefenceData dData, AuxiliaryData aData)
         implements Iterable<Pair<Attribute, Double>> {
 
     //iterate through pairs of attribute instances and their values from this data object. Used
@@ -35,14 +35,14 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
         values.add(new Pair<>(MAGIC_DAMAGE.get(), oData.mDmg()));
         values.add(new Pair<>(DARK_DAMAGE.get(), oData.dDmg()));
         values.add(new Pair<>(HOLY_DAMAGE.get(), oData.hDmg()));
-        values.add(new Pair<>(ARMOR_TOUGHNESS, dData.defense()));
-        values.add(new Pair<>(ARMOR, dData.pRes()));
-        values.add(new Pair<>(FIRE_DEFENCE.get(), dData.fRes()));
-        values.add(new Pair<>(WATER_DEFENCE.get(), dData.wRes()));
-        values.add(new Pair<>(LIGHTNING_DEFENCE.get(), dData.lRes()));
-        values.add(new Pair<>(MAGIC_DEFENCE.get(), dData.mRes()));
-        values.add(new Pair<>(DARK_DEFENCE.get(), dData.dRes()));
-        values.add(new Pair<>(HOLY_DEFENCE.get(), dData.hRes()));
+        values.add(new Pair<>(ARMOR_TOUGHNESS, dData.weight()));
+        values.add(new Pair<>(ARMOR, dData.pDef()));
+        values.add(new Pair<>(FIRE_DEFENCE.get(), dData.fDef()));
+        values.add(new Pair<>(WATER_DEFENCE.get(), dData.wDef()));
+        values.add(new Pair<>(LIGHTNING_DEFENCE.get(), dData.lDef()));
+        values.add(new Pair<>(MAGIC_DEFENCE.get(), dData.mDef()));
+        values.add(new Pair<>(DARK_DEFENCE.get(), dData.dDef()));
+        values.add(new Pair<>(HOLY_DEFENCE.get(), dData.hDef()));
         values.add(new Pair<>(LIFESTEAL.get(), oData.ls()));
         values.add(new Pair<>(PENETRATING.get(), oData.pen()));
         values.add(new Pair<>(CRIT_CHANCE.get(), oData.crit()));
@@ -74,8 +74,8 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
     //combines two WeaponData objects. data1's damage class will be kept.
     public static WeaponData combine(WeaponData data1, WeaponData data2) {
         return new WeaponData(data1.durability + data2.durability, data1.damageClass, data1.ranged,
-                OffensiveData.combine(data1.oData, data2.oData),
-                DefensiveData.combine(data1.dData, data2.dData),
+                OffenseData.combine(data1.oData, data2.oData),
+                DefenceData.combine(data1.dData, data2.dData),
                 AuxiliaryData.combine(data1.aData, data2.aData));
     }
 
@@ -84,8 +84,8 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
         int d = buffer.readInt();
         String dc = Util.readString(buffer);
         boolean r = buffer.readBoolean();
-        OffensiveData newOData = OffensiveData.read(buffer);
-        DefensiveData newDData = DefensiveData.read(buffer);
+        OffenseData newOData = OffenseData.read(buffer);
+        DefenceData newDData = DefenceData.read(buffer);
         AuxiliaryData newAData = AuxiliaryData.read(buffer);
         return new WeaponData(d, dc, r, newOData, newDData, newAData);
     }
@@ -112,8 +112,8 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
                     obj.get("Bonus Durability").getAsInt(),
                     obj.get("Damage Class").getAsString(),
                     obj.get("Ranged?").getAsBoolean(),
-                    ctx.deserialize(obj.get("Offense Stats"), OffensiveData.class),
-                    ctx.deserialize(obj.get("Defense Stats"), DefensiveData.class),
+                    ctx.deserialize(obj.get("Offense Stats"), OffenseData.class),
+                    ctx.deserialize(obj.get("Defense Stats"), DefenceData.class),
                     ctx.deserialize(obj.get("Auxiliary Stats"), AuxiliaryData.class)
             );
         }
@@ -124,8 +124,8 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
             obj.addProperty("Bonus Durability", data.durability);
             obj.addProperty("Damage Class", data.damageClass);
             obj.addProperty("Ranged?", data.ranged);
-            obj.add("Offense Stats", ctx.serialize(data.oData, OffensiveData.class));
-            obj.add("Defense Stats", ctx.serialize(data.dData, DefensiveData.class));
+            obj.add("Offense Stats", ctx.serialize(data.oData, OffenseData.class));
+            obj.add("Defense Stats", ctx.serialize(data.dData, DefenceData.class));
             obj.add("Auxiliary Stats", ctx.serialize(data.aData, AuxiliaryData.class));
             return obj;
         }
