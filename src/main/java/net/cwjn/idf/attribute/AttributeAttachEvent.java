@@ -20,30 +20,31 @@ public class AttributeAttachEvent {
         for (EntityType<? extends LivingEntity> entityType : event.getTypes()) {
             EntityData data = CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(entityType));
             if (data != null) {
-                event.add(entityType, FIRE.damage, data.oData().fDmg());
-                event.add(entityType, WATER.damage, data.oData().wDmg());
-                event.add(entityType, LIGHTNING.damage, data.oData().lDmg());
-                event.add(entityType, MAGIC.damage, data.oData().mDmg());
-                event.add(entityType, DARK.damage, data.oData().dDmg());
-                event.add(entityType, HOLY.damage, data.oData().hDmg());
+                if (!event.has(entityType, FIRE.damage)) event.add(entityType, FIRE.damage, data.oData().fDmg());
+                if (!event.has(entityType, WATER.damage)) event.add(entityType, WATER.damage, data.oData().wDmg());
+                if (!event.has(entityType, LIGHTNING.damage)) event.add(entityType, LIGHTNING.damage, data.oData().lDmg());
+                if (!event.has(entityType, MAGIC.damage)) event.add(entityType, MAGIC.damage, data.oData().mDmg());
+                if (!event.has(entityType, DARK.damage)) event.add(entityType, DARK.damage, data.oData().dDmg());
+                if (!event.has(entityType, HOLY.damage)) event.add(entityType, HOLY.damage, data.oData().hDmg());
                 //resistances
-                event.add(entityType, FIRE.defence, data.dData().fDef());
-                event.add(entityType, WATER.defence, data.dData().wDef());
-                event.add(entityType, LIGHTNING.defence, data.dData().lDef());
-                event.add(entityType, MAGIC.defence, data.dData().mDef());
-                event.add(entityType, DARK.defence, data.dData().dDef());
-                event.add(entityType, HOLY.defence, data.dData().hDef());
+                if (!event.has(entityType, FIRE.defence)) event.add(entityType, FIRE.defence, data.dData().fDef());
+                if (!event.has(entityType, WATER.defence)) event.add(entityType, WATER.defence, data.dData().wDef());
+                if (!event.has(entityType, LIGHTNING.defence)) event.add(entityType, LIGHTNING.defence, data.dData().lDef());
+                if (!event.has(entityType, MAGIC.defence)) event.add(entityType, MAGIC.defence, data.dData().mDef());
+                if (!event.has(entityType, DARK.defence)) event.add(entityType, DARK.defence, data.dData().dDef());
+                if (!event.has(entityType, HOLY.defence)) event.add(entityType, HOLY.defence, data.dData().hDef());
                 //DAMAGE CLASS MULTIPLIERS
-                event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.dData().str());
-                event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.dData().prc());
-                event.add(entityType, IDFAttributes.SLASH_MULT.get(), data.dData().sls());
+                if (!event.has(entityType, IDFAttributes.STRIKE_MULT.get())) event.add(entityType, IDFAttributes.STRIKE_MULT.get(), data.dData().str());
+                if (!event.has(entityType, IDFAttributes.PIERCE_MULT.get())) event.add(entityType, IDFAttributes.PIERCE_MULT.get(), data.dData().prc());
+                if (!event.has(entityType, IDFAttributes.SLASH_MULT.get())) event.add(entityType, IDFAttributes.SLASH_MULT.get(), data.dData().sls());
                 //AUXILIARY
-                event.add(entityType, IDFAttributes.EVASION.get(), data.dData().eva());
-                event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.oData().ls());
-                event.add(entityType, IDFAttributes.PENETRATING.get(), data.oData().pen());
-                event.add(entityType, IDFAttributes.FORCE.get(), data.oData().force());
-                event.add(entityType, IDFAttributes.ACCURACY.get(), data.oData().accuracy());
-                event.add(entityType, IDFAttributes.CRIT_CHANCE.get(), data.oData().crit());
+                if (!event.has(entityType, IDFAttributes.EVASION.get())) event.add(entityType, IDFAttributes.EVASION.get(), data.dData().eva());
+                if (!event.has(entityType, IDFAttributes.LIFESTEAL.get())) event.add(entityType, IDFAttributes.LIFESTEAL.get(), data.oData().ls());
+                if (!event.has(entityType, IDFAttributes.PENETRATING.get())) event.add(entityType, IDFAttributes.PENETRATING.get(), data.oData().pen());
+                if (!event.has(entityType, IDFAttributes.FORCE.get())) event.add(entityType, IDFAttributes.FORCE.get(), data.oData().force());
+                if (!event.has(entityType, IDFAttributes.ACCURACY.get())) event.add(entityType, IDFAttributes.ACCURACY.get(), data.oData().accuracy());
+                if (!event.has(entityType, IDFAttributes.CRIT_CHANCE.get())) event.add(entityType, IDFAttributes.CRIT_CHANCE.get(), data.oData().crit());
+                if (!event.has(entityType, IDFAttributes.CRIT_DAMAGE.get())) event.add(entityType, IDFAttributes.CRIT_DAMAGE.get());
             } else {
                 //damage types
                 event.add(entityType, IDFAttributes.FIRE_DAMAGE.get());
@@ -70,6 +71,7 @@ public class AttributeAttachEvent {
                 event.add(entityType, IDFAttributes.FORCE.get());
                 event.add(entityType, IDFAttributes.ACCURACY.get());
                 event.add(entityType, IDFAttributes.CRIT_CHANCE.get());
+                event.add(entityType, IDFAttributes.CRIT_DAMAGE.get());
             }
         }
     }

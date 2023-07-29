@@ -74,7 +74,7 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUseItem(LivingEntityUseItemEvent.Stop event) {
+    public static void onLivingUseItem(LivingEntityUseItemEvent.Start event) {
         ItemStack item = event.getItem();
         LivingEntity entity = event.getEntity();
         if (item.hasTag() && item.getTag().contains(CommonData.RANGED_TAG)) {
