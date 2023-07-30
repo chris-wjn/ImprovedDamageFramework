@@ -89,9 +89,10 @@ public class JSONHandler {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             if (isKnownWeapon.test(item)) {
                 boolean ranged = item instanceof BowItem || item instanceof CrossbowItem;
+                boolean thrown = item instanceof TridentItem;
                 if (item instanceof IDFCustomEquipment modItem) {
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), ranged,
+                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), ranged, thrown,
                                     OffenseData.empty(),
                                     DefenceData.empty(),
                                     AuxiliaryData.empty()));
@@ -104,7 +105,7 @@ public class JSONHandler {
                         damageClass = "pierce";
                     }
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, damageClass, ranged,
+                            new WeaponData(0, damageClass, ranged, thrown,
                                     OffenseData.empty(),
                                     DefenceData.empty(),
                                     AuxiliaryData.empty()));
@@ -132,7 +133,7 @@ public class JSONHandler {
                             dc = "pierce";
                         }
                         DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                                new WeaponData(0, dc, false,
+                                new WeaponData(0, dc, false, false,
                                         OffenseData.empty(),
                                         DefenceData.empty(),
                                         AuxiliaryData.empty()));
@@ -295,6 +296,7 @@ public class JSONHandler {
                 defaultTag.putBoolean(CommonData.EQUIPMENT_TAG, true);
                 WeaponData data0 = LOGICAL_WEAPON_MAP_FLAT.get(loc);
                 defaultTag.putBoolean(RANGED_TAG, data0.ranged());
+                defaultTag.putBoolean(THROWN_TAG, data0.thrown());
                 ItemData data2 = LOGICAL_WEAPON_MAP_MULT.get(loc);
                 data0.forEach(pair -> {
                     if (pair.getB() != 0) {

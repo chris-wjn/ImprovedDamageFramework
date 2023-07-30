@@ -74,7 +74,7 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUseItem(LivingEntityUseItemEvent.Start event) {
+    public static void onLivingUseItem(LivingEntityUseItemEvent.Finish event) {
         ItemStack item = event.getItem();
         LivingEntity entity = event.getEntity();
         if (item.hasTag() && item.getTag().contains(CommonData.RANGED_TAG)) {
@@ -94,7 +94,7 @@ public class CapabilityEvents {
                 h.setDamageClass(item.hasTag() ?
                         item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
             });
-        } else if (item.getItem() instanceof TridentItem) {
+        } else if (item.hasTag() && item.getTag().contains(CommonData.THROWN_TAG)) {
             entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
                 h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
                 h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));

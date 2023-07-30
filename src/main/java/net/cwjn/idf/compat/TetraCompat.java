@@ -69,11 +69,11 @@ public class TetraCompat {
                 int prc = 0;
                 int str = 0;
                 for (ItemModule module : modules) {
+                    if (module.getAspects(replacement).getLevel(ItemAspect.throwable) > 0) tag.putBoolean(CommonData.THROWN_TAG, true);
                     sls += module.getAspects(replacement).getLevel(ItemAspect.edgedWeapon);
                     str += module.getAspects(replacement).getLevel(ItemAspect.bluntWeapon);
                     prc += module.getAspects(replacement).getLevel(ItemAspect.pointyWeapon);
                 }
-                System.out.println("Item: " + replacement.getDescriptionId() + " sls: " + sls + " prc: " + prc + " str: " + str);
                 int highest = Math.max(sls, Math.max(prc, str));
                 if (highest == sls) dc = "slash";
                 else if (highest == prc) dc = "pierce";

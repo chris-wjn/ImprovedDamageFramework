@@ -56,7 +56,7 @@
       "Armour Penetration": 20.0,
       "Critical Chance": 0.0,
       "Force": 4.0,
-      "Accuracy": 0.0,
+      "Accuracy": 12.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
@@ -1110,6 +1110,7 @@
     "Bonus Durability": 750,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": true,
     "Offense Stats": {
       "Damage - PHYSICAL": -4.0,
       "Damage - FIRE": 0.0,

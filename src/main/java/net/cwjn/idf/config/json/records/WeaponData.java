@@ -20,7 +20,7 @@ import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 //used to hold data for weapons in the json config files
-public record WeaponData(int durability, String damageClass, boolean ranged, OffenseData oData, DefenceData dData, AuxiliaryData aData)
+public record WeaponData(int durability, String damageClass, boolean ranged, boolean thrown, OffenseData oData, DefenceData dData, AuxiliaryData aData)
         implements Iterable<Pair<Attribute, Double>> {
 
     //iterate through pairs of attribute instances and their values from this data object. Used
@@ -73,7 +73,7 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
 
     //combines two WeaponData objects. data1's damage class will be kept.
     public static WeaponData combine(WeaponData data1, WeaponData data2) {
-        return new WeaponData(data1.durability + data2.durability, data1.damageClass, data1.ranged,
+        return new WeaponData(data1.durability + data2.durability, data1.damageClass, data1.ranged, data1.thrown,
                 OffenseData.combine(data1.oData, data2.oData),
                 DefenceData.combine(data1.dData, data2.dData),
                 AuxiliaryData.combine(data1.aData, data2.aData));
@@ -84,10 +84,11 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
         int d = buffer.readInt();
         String dc = Util.readString(buffer);
         boolean r = buffer.readBoolean();
+        boolean t = buffer.readBoolean();
         OffenseData newOData = OffenseData.read(buffer);
         DefenceData newDData = DefenceData.read(buffer);
         AuxiliaryData newAData = AuxiliaryData.read(buffer);
-        return new WeaponData(d, dc, r, newOData, newDData, newAData);
+        return new WeaponData(d, dc, r, t, newOData, newDData, newAData);
     }
 
     //used to write a WeaponData object to a packet
@@ -95,6 +96,7 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
         buffer.writeInt(durability);
         Util.writeString(damageClass, buffer);
         buffer.writeBoolean(ranged);
+        buffer.writeBoolean(thrown);
         oData.write(buffer);
         dData.write(buffer);
         aData.write(buffer);
@@ -112,6 +114,7 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
                     obj.get("Bonus Durability").getAsInt(),
                     obj.get("Damage Class").getAsString(),
                     obj.get("Ranged?").getAsBoolean(),
+                    obj.has("Thrown?")? obj.get("Thrown?").getAsBoolean() : false,
                     ctx.deserialize(obj.get("Offense Stats"), OffenseData.class),
                     ctx.deserialize(obj.get("Defense Stats"), DefenceData.class),
                     ctx.deserialize(obj.get("Auxiliary Stats"), AuxiliaryData.class)
@@ -124,6 +127,7 @@ public record WeaponData(int durability, String damageClass, boolean ranged, Off
             obj.addProperty("Bonus Durability", data.durability);
             obj.addProperty("Damage Class", data.damageClass);
             obj.addProperty("Ranged?", data.ranged);
+            obj.addProperty("Thrown?", data.thrown);
             obj.add("Offense Stats", ctx.serialize(data.oData, OffenseData.class));
             obj.add("Defense Stats", ctx.serialize(data.dData, DefenceData.class));
             obj.add("Auxiliary Stats", ctx.serialize(data.aData, AuxiliaryData.class));
