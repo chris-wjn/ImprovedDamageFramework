@@ -13,6 +13,8 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import se.mickelus.tetra.effect.AbilityUseResult;
 import se.mickelus.tetra.effect.EffectHelper;
 import se.mickelus.tetra.effect.ItemEffectHandler;
@@ -68,5 +70,11 @@ public abstract class MixinItemModularHandheld implements IModularItem {
             return AbilityUseResult.fail;
         }
     }
+
+    @ModifyConstant(method = "getAbilityBaseDamage", constant = @Constant(doubleValue = 1.0), remap = false)
+    private double updatedBaseDamage(double constant) {
+        return 2.0;
+    }
+
 
 }

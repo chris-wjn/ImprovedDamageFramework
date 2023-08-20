@@ -1,85 +1,28 @@
 package net.cwjn.idf.compat;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.data.CommonData;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import se.mickelus.tetra.aspect.ItemAspect;
 import se.mickelus.tetra.blocks.workbench.gui.WorkbenchStatsGui;
+import se.mickelus.tetra.effect.ItemEffect;
 import se.mickelus.tetra.gui.stats.bar.GuiStatBar;
 import se.mickelus.tetra.gui.stats.getter.*;
 import se.mickelus.tetra.items.modular.IModularItem;
-import se.mickelus.tetra.items.modular.ItemPredicateModular;
 import se.mickelus.tetra.items.modular.ModularItem;
-import se.mickelus.tetra.items.modular.impl.bow.ModularBowItem;
-import se.mickelus.tetra.items.modular.impl.crossbow.ModularCrossbowItem;
-import se.mickelus.tetra.module.ItemModule;
-import se.mickelus.tetra.module.ItemUpgradeRegistry;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Objects;
-
-import static net.cwjn.idf.data.CommonData.WEAPON_TAG;
 import static se.mickelus.tetra.gui.stats.StatsHelper.barLength;
 
 public class TetraCompat {
 
-    private static final Gson gson = new Gson();
-    private static final ItemPredicateModular isPierce = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/tetra_predicates/pierce.json")))), JsonObject.class));
-    private static final ItemPredicateModular isSlash = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/tetra_predicates/slash.json")))), JsonObject.class));
-    private static final ItemPredicateModular isStrike = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/tetra_predicates/strike.json")))), JsonObject.class));
-    private static final ItemPredicateModular isPierceRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/tetra_predicates/pierce_right.json")))), JsonObject.class));
-    private static final ItemPredicateModular isSlashRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/tetra_predicates/slash_right.json")))), JsonObject.class));
-    private static final ItemPredicateModular isStrikeRight = new ItemPredicateModular(gson.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(TetraCompat.class.getClassLoader()
-            .getResourceAsStream("data/idf/tetra_predicates/strike_right.json")))), JsonObject.class));
-
     public static void register() {
         MinecraftForge.EVENT_BUS.register(TetraCompat.class);
-    }
-
-    @SubscribeEvent
-    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        if (event.getCrafting().getItem() instanceof ModularItem) {
-            ItemStack replacement = event.getCrafting();
-            CompoundTag tag = event.getCrafting().getTag();
-            if (tag == null) return;
-            tag.putBoolean(CommonData.EQUIPMENT_TAG, true);
-            IModularItem item = (IModularItem) replacement.getItem();
-            ItemModule[] modules = item.getMajorModules(replacement);
-            String dc = "strike";
-            if (replacement.getItem() instanceof ModularBowItem || replacement.getItem() instanceof ModularCrossbowItem) {
-                tag.putBoolean(CommonData.RANGED_TAG, true);
-                dc = "pierce";
-            } else {
-                int sls = 0;
-                int prc = 0;
-                int str = 0;
-                for (ItemModule module : modules) {
-                    if (module.getAspects(replacement).getLevel(ItemAspect.throwable) > 0) tag.putBoolean(CommonData.THROWN_TAG, true);
-                    sls += module.getAspects(replacement).getLevel(ItemAspect.edgedWeapon);
-                    str += module.getAspects(replacement).getLevel(ItemAspect.bluntWeapon);
-                    prc += module.getAspects(replacement).getLevel(ItemAspect.pointyWeapon);
-                }
-                int highest = Math.max(sls, Math.max(prc, str));
-                if (highest == sls) dc = "slash";
-                else if (highest == prc) dc = "pierce";
-            }
-            tag.putString(WEAPON_TAG, dc);
-        }
     }
 
     public static void registerClient() {
@@ -143,6 +86,19 @@ public class TetraCompat {
         WorkbenchStatsGui.addBar(pen);
         WorkbenchStatsGui.addBar(critChance);
         WorkbenchStatsGui.addBar(lifesteal);
+    }
+
+    @SubscribeEvent
+    public static void onAttributeEvent(ItemAttributeModifierEvent event) {
+        ItemStack itemStack = event.getItemStack();
+        if (itemStack.getItem() instanceof IModularItem) {
+            if (itemStack.getTag().getBoolean(CommonData.RANGED_TAG)) return;
+            IModularItem item = (IModularItem) itemStack.getItem();
+            int critChance = item.getEffectLevel(itemStack, ItemEffect.criticalStrike);
+            float critDmg = item.getEffectEfficiency(itemStack, ItemEffect.criticalStrike)*100 - 150;
+            if (critChance > 0) event.addModifier(IDFAttributes.CRIT_CHANCE.get(), new AttributeModifier("tetra_crit_chance", critChance, AttributeModifier.Operation.ADDITION));
+            if (critDmg > 0) event.addModifier(IDFAttributes.CRIT_DAMAGE.get(), new AttributeModifier("tetra_crit_damage", critDmg, AttributeModifier.Operation.ADDITION));
+        }
     }
 
 }

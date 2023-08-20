@@ -1,6 +1,8 @@
 {
   "replace": true,
-  "slots": [ "sword/blade" ],
+  "slots": [
+    "sword/blade"
+  ],
   "type": "tetra:basic_major_module",
   "improvements": [
     "tetra:sword/machete/",
@@ -10,7 +12,13 @@
   ],
   "variants": [
     {
-      "materials": [ "tetra:wood/", "tetra:stone/", "tetra:metal/", "tetra:gem/", "tetra:bone/" ],
+      "materials": [
+        "tetra:wood/",
+        "tetra:stone/",
+        "tetra:metal/",
+        "tetra:gem/",
+        "tetra:bone/"
+      ],
       "key": "machete/",
       "attributes": {
         "generic.attack_speed": -1.8,
@@ -22,12 +30,18 @@
         "breakable": 2
       },
       "effects": {
-        "sweeping": [ 1, 0.5 ],
+        "sweeping": [
+          1,
+          0.5
+        ],
         "strikingCut": 1,
         "sweepingStrike": 1
       },
       "tools": {
-        "cut": [ 1, 2 ]
+        "cut": [
+          1,
+          2
+        ]
       },
       "durability": -20,
       "extract": {
@@ -36,11 +50,13 @@
         },
         "secondaryAttributes": {
           "generic.attack_speed": -0.1,
-          "idf:force": 1,
-          "generic.attack_knockback": 0.01
+          "idf:force": 1
         },
         "tools": {
-          "cut": [ 0, 1.2 ]
+          "cut": [
+            0,
+            1.2
+          ]
         },
         "durability": 0.9,
         "integrity": -1,
@@ -49,8 +65,17 @@
           "textureY": 32,
           "textureX": 48
         },
-        "availableTextures": [ "metal", "shiny", "grainy", "crude" ],
-        "models": [ { "location": "tetra:items/module/sword/blade/machete/" } ]
+        "availableTextures": [
+          "metal",
+          "shiny",
+          "grainy",
+          "crude"
+        ],
+        "models": [
+          {
+            "location": "tetra:items/module/sword/blade/machete/"
+          }
+        ]
       }
     }
   ]

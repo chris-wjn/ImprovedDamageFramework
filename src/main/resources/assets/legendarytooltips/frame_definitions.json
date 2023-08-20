@@ -9,6 +9,7 @@
       "selectors": ["&idf.tooltip_border=0"]
     },
     {
+      
       "index": 1,
       "startColor": "#3C79E5",
       "endColor": "#D5EAF8",
@@ -17,6 +18,7 @@
       "selectors": ["&idf.tooltip_border=1"]
     },
     {
+      
       "index": 2,
       "startColor": "#FFCB3B",
       "endColor": "#FFF2AC",
@@ -25,6 +27,7 @@
       "selectors": ["&idf.tooltip_border=2"]
     },
     {
+      
       "index": 3,
       "startColor": "#5CDBEE",
       "endColor": "#66FFE3",
@@ -33,6 +36,7 @@
       "selectors": ["&idf.tooltip_border=3"]
     },
     {
+      
       "index": 4,
       "startColor": "#5CDBEE",
       "endColor": "#66FFE3",
@@ -41,6 +45,7 @@
       "selectors": ["&idf.tooltip_border=4"]
     },
     {
+      
       "index": 5,
       "startColor": "#7e7e8f",
       "endColor": "#7e7e8f",
@@ -49,6 +54,7 @@
       "selectors": ["&idf.tooltip_border=5"]
     },
     {
+      
       "index": 6,
       "startColor": "#7e7e8f",
       "endColor": "#7e7e8f",
@@ -57,6 +63,7 @@
       "selectors": ["&idf.tooltip_border=6"]
     },
     {
+      
       "index": 7,
       "startColor": "#7e7e8f",
       "endColor": "#7e7e8f",
@@ -65,6 +72,7 @@
       "selectors": ["&idf.tooltip_border=7"]
     },
     {
+      
       "index": 8,
       "startColor": "#7e7e8f",
       "endColor": "#7e7e8f",
@@ -73,6 +81,7 @@
       "selectors": ["&idf.tooltip_border=8"]
     },
     {
+      
       "index": 9,
       "startColor": "#7e7e8f",
       "endColor": "#7e7e8f",
@@ -81,6 +90,7 @@
       "selectors": ["&idf.tooltip_border=9"]
     },
     {
+      
       "index": 10,
       "startColor": "#ffffff",
       "endColor": "#ffffff",

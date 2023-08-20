@@ -31,6 +31,7 @@
   "idf.stat_screen_lifesteal": "L.Stl",
   "idf.stat_screen_armour_penetration": "A.Pen",
   "idf.stat_screen_critical_chance": "Crit",
+  "idf.stat_screen_critical_damage": "C.Dmg",
   "idf.stat_screen_force": "Force",
   "idf.stat_screen_accuracy": "Acc.",
   "idf.stat_screen_knockback": "Knb.",
@@ -77,11 +78,10 @@
   "idf.icon.lifesteal": "\u002A",
   "idf.icon.armour_penetration": "\u002B",
   "idf.icon.crit_chance": "\u002C",
-  "idf.icon.critical_chance": "\u002C",
   "idf.icon.knockback": "\u002D",
   "idf.icon.attribute.name.generic.attack_knockback": "\u002D",
   "idf.icon.accuracy": "\u002E",
-  "idf.icon.1x15": "\u002F",
+  "idf.icon.crit_damage": "\u002F",
   "idf.icon.attribute.name.generic.armor": "\u0030",
   "idf.icon.water_defence": "\u0031",
   "idf.icon.lightning_defence": "\u0032",
@@ -228,6 +228,7 @@
   "idf.stats.lifesteal.tooltip": "+§e%s §rLifesteal",
   "idf.stats.crit_chance": "Critical Strike Chance",
   "idf.stats.crit_chance.tooltip": "+§e%s §rCritical Strike Chance",
-  "idf.newline": "\n"
+  "idf.newline": "\n",
+  "tetra.stats.criticalStrike.tooltip": "Has a chance to critically hit when hitting entities or breaking blocks.\n§e+%s§7 critical strike chance, §e+%s §7critical strike damage\n§e%s§7 chance to instantly break blocks"
 }
 

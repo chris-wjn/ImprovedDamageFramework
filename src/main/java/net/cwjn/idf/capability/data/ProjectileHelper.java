@@ -12,7 +12,8 @@ public class ProjectileHelper {
     private float holy = 0;
     private float phys = 0;
     private float pen = 0;
-    private float crit = 0;
+    private boolean crit = false;
+    private float critDmg = 0;
     private float lifesteal = 0;
     private float knockback = 0;
     private float weight = -1;
@@ -46,7 +47,7 @@ public class ProjectileHelper {
         this.pen = pen;
     }
 
-    public void setCrit(float crit) {
+    public void setCrit(boolean crit) {
         this.crit = crit;
     }
 
@@ -98,7 +99,7 @@ public class ProjectileHelper {
         return pen;
     }
 
-    public float getCrit() {
+    public boolean getCrit() {
         return crit;
     }
 
@@ -115,7 +116,8 @@ public class ProjectileHelper {
         tag.putFloat("holy", holy);
         tag.putFloat("physical", phys);
         tag.putFloat("pen", pen);
-        tag.putFloat("crit", crit);
+        tag.putBoolean("crit", crit);
+        tag.putFloat("crit_dmg", critDmg);
         tag.putFloat("lifesteal", lifesteal);
         tag.putFloat("weight", weight);
     }
@@ -129,7 +131,8 @@ public class ProjectileHelper {
         holy = tag.getFloat("holy");
         phys = tag.getFloat("physical");
         pen = tag.getFloat("pen");
-        crit = tag.getFloat("crit");
+        crit = tag.getBoolean("crit");
+        critDmg = tag.getFloat("critDmg");
         lifesteal = tag.getFloat("lifesteal");
         weight = tag.getFloat("weight");
     }
@@ -148,5 +151,13 @@ public class ProjectileHelper {
 
     public void setKnockback(float knockback) {
         this.knockback = knockback;
+    }
+
+    public float getCritDmg() {
+        return critDmg;
+    }
+
+    public void setCritDmg(float critDmg) {
+        this.critDmg = critDmg;
     }
 }

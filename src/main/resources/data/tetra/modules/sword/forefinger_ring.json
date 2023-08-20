@@ -1,11 +1,15 @@
 {
   "replace": true,
-  "slots": [ "sword/guard" ],
+  "slots": [
+    "sword/guard"
+  ],
   "type": "tetra:basic_module",
   "renderLayer": "higher",
   "variants": [
     {
-      "materials": [ "tetra:wood/" ],
+      "materials": [
+        "tetra:wood/"
+      ],
       "key": "forefinger_ring/",
       "attributes": {
         "generic.attack_speed": 0.1
@@ -18,15 +22,23 @@
           "textureX": 48,
           "textureY": 16
         },
-        "availableTextures": [ "default" ],
-        "models": [ { "location": "tetra:items/module/sword/guard/forefinger_ring/" } ]
+        "availableTextures": [
+          "default"
+        ],
+        "models": [
+          {
+            "location": "tetra:items/module/sword/guard/forefinger_ring/"
+          }
+        ]
       }
     },
     {
-      "materials": [ "tetra:bone/" ],
+      "materials": [
+        "tetra:bone/"
+      ],
       "key": "forefinger_ring/",
       "attributes": {
-        "generic.attack_speed": 0.15
+        "generic.attack_speed": 0.2
       },
       "durability": 15,
       "integrity": -1,
@@ -36,12 +48,20 @@
           "textureX": 48,
           "textureY": 16
         },
-        "availableTextures": [ "default" ],
-        "models": [ { "location": "tetra:items/module/sword/guard/forefinger_ring/" } ]
+        "availableTextures": [
+          "default"
+        ],
+        "models": [
+          {
+            "location": "tetra:items/module/sword/guard/forefinger_ring/"
+          }
+        ]
       }
     },
     {
-      "materials": [ "tetra:metal/" ],
+      "materials": [
+        "tetra:metal/"
+      ],
       "key": "forefinger_ring/",
       "attributes": {
         "generic.attack_speed": 0.3
@@ -54,8 +74,14 @@
           "textureX": 48,
           "textureY": 16
         },
-        "availableTextures": [ "default" ],
-        "models": [ { "location": "tetra:items/module/sword/guard/forefinger_ring/" } ]
+        "availableTextures": [
+          "default"
+        ],
+        "models": [
+          {
+            "location": "tetra:items/module/sword/guard/forefinger_ring/"
+          }
+        ]
       }
     }
   ]

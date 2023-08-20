@@ -37,7 +37,7 @@ public abstract class MixinAbstractArrow {
             ProjectileHelper helper = livingEntity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
             double arrowVel = thisArrow.getDeltaMovement().length();
             helper.setWeight((float) (helper.getWeight() * arrowVel * 0.67));
-            return (int) (helper.getPhys() + this.getBaseDamage());
+            return (int) (helper.getPhys() + this.getBaseDamage() * (isCrit? helper.getCritDmg()*0.01 : 1));
         } else {
             return (int) this.getBaseDamage();
         }
@@ -48,7 +48,7 @@ public abstract class MixinAbstractArrow {
     private void changeCritMechanic(EntityType arrowEntity, LivingEntity owner, Level level, CallbackInfo ci) {
         if (owner instanceof Player) {
             ProjectileHelper helper = owner.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
-            this.isCrit = (helper.getCrit()/100) > Math.random();
+            this.isCrit = helper.getCrit();
         } else {
             this.isCrit = false;
         }

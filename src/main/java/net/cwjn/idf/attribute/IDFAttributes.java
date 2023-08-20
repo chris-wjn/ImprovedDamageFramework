@@ -27,7 +27,7 @@ public class IDFAttributes {
     public static final RegistryObject<Attribute> LIFESTEAL = register("lifesteal", () -> new RangedAttribute("lifesteal", 0.0D, 0.0D, 100.D).setSyncable(true));
     public static final RegistryObject<Attribute> PENETRATING = register("penetrating", () -> new RangedAttribute("armour_penetration", 0.0D, 0.0D, 100.0D).setSyncable(true));
     public static final RegistryObject<Attribute> CRIT_CHANCE = register("crit_chance", () -> new RangedAttribute("crit_chance", 0.0D, 0.0D, 100.0D).setSyncable(true));
-    public static final RegistryObject<Attribute> CRIT_DAMAGE = register("crit_damage", () -> new RangedAttribute("crit_damage", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
+    public static final RegistryObject<Attribute> CRIT_DAMAGE = register("crit_damage", () -> new RangedAttribute("crit_damage", 150.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     public static final RegistryObject<Attribute> ACCURACY = register("accuracy", () -> new RangedAttribute("accuracy", 0.0D, 0.0D, Double.MAX_VALUE).setSyncable(true));
     //elemental resistance types
     public static final RegistryObject<Attribute> FIRE_DEFENCE = register("fire_defence", () -> new RangedAttribute("fire_defence", 0.0D, -Double.MAX_VALUE, Double.MAX_VALUE).setSyncable(true));

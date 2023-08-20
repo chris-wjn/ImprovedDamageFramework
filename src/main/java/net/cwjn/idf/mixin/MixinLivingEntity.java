@@ -284,7 +284,7 @@ public class MixinLivingEntity {
         throw new IllegalStateException("failed to shadow getHealth()");
     }
     @Shadow
-    public void setHealth(float newHealth) {
-        throw new IllegalStateException("failed to shadow setHealth()");
+    public void setHealth(float newHealth){
+            throw new IllegalStateException("failed to shadow setHealth()");
     }
 }

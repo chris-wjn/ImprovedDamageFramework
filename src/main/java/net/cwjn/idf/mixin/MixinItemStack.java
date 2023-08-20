@@ -3,6 +3,7 @@ package net.cwjn.idf.mixin;
 import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.ClientConfig;
+import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.util.Util;
 import com.google.common.collect.Multimap;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +35,7 @@ public abstract class MixinItemStack {
     @Redirect(method = "getTooltipLines", at=@At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Ljava/util/function/UnaryOperator;)Lnet/minecraft/network/chat/MutableComponent;"))
     private MutableComponent removeRarityStyler(MutableComponent instance, UnaryOperator<Style> p_130939_) {
         if (this.hasTag() && this.getTag().contains(WEAPON_TAG)) {
-            if (ClientConfig.DISPLAY_DAMAGE_CLASS_ICON.get()) instance.append(Util.writeIcon(this.getTag().getString(WEAPON_TAG), true));
+            if (!CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get()) instance.append(Util.writeIcon(this.getTag().getString(WEAPON_TAG), true));
             instance.append(Component.translatable("idf." + this.getTag().getString(WEAPON_TAG) + "_tooltip"));
         }
         return instance;

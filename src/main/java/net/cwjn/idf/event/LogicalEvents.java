@@ -7,6 +7,7 @@ import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.config.CommonConfig;
+import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
 import net.cwjn.idf.network.packets.DisplayMissPacket;
@@ -31,6 +32,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -55,7 +57,7 @@ public class LogicalEvents {
         if (defaultTag != null) {
             item.getOrCreateTag().merge(defaultTag);
             if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains("idf.tooltip_border")) {
-                item.getTag().putInt("idf.tooltip_border", Util.getItemBorderType(item.getTag().getString("idf.damage_class"), item.getAttributeModifiers(EquipmentSlot.MAINHAND)));
+                item.getTag().putInt("idf.tooltip_border", Util.getItemBorderType(item.getTag().getString(CommonData.WEAPON_TAG), item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item))));
             }
         }
     }
@@ -77,7 +79,7 @@ public class LogicalEvents {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void checkEvasion(LivingAttackEvent event) {
         LivingEntity target = event.getEntity();
         if (target.getLevel() instanceof ServerLevel) {

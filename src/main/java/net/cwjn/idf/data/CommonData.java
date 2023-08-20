@@ -31,6 +31,8 @@ public class CommonData {
     public static final String THROWN_TAG = "idf.thrown_weapon";
     public static final String WEAPON_TAG = "idf.damage_class";
     public static final String ENTITY_BONUS = "idf.base_bonus";
+    public static final String TETRA_CRIT_LEVEL = "idf.tetra_crit_level";
+    public static final String TETRA_CRIT_EFFICIENCY = "idf.tetra_crit_efficiency";
 
     static {
         for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {

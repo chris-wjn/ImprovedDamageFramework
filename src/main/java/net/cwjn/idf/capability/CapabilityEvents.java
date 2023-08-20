@@ -74,10 +74,10 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUseItem(LivingEntityUseItemEvent.Finish event) {
+    public static void onLivingUseItem(LivingEntityUseItemEvent.Stop event) {
         ItemStack item = event.getItem();
         LivingEntity entity = event.getEntity();
-        if (item.hasTag() && item.getTag().contains(CommonData.RANGED_TAG)) {
+        if (item.hasTag() && item.getTag().getBoolean(CommonData.RANGED_TAG)) {
             Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item));
             entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
                 h.setFire((float) (getAttributeAmount(map.get(FIRE.damage)) + entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get())));
@@ -88,13 +88,14 @@ public class CapabilityEvents {
                 h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + entity.getAttributeValue(HOLY.damage)));
                 h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + entity.getAttributeValue(Attributes.ATTACK_DAMAGE)));
                 h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + entity.getAttributeValue(IDFAttributes.PENETRATING.get())));
-                h.setCrit((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_CHANCE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())));
+                h.setCrit(((getAttributeAmount(map.get(IDFAttributes.CRIT_CHANCE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble()));
+                h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
                 h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + entity.getAttributeValue(IDFAttributes.LIFESTEAL.get())));
                 h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + entity.getAttributeValue(IDFAttributes.FORCE.get())));
                 h.setDamageClass(item.hasTag() ?
                         item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
             });
-        } else if (item.hasTag() && item.getTag().contains(CommonData.THROWN_TAG)) {
+        } else if (item.hasTag() && item.getTag().getBoolean(CommonData.THROWN_TAG)) {
             entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
                 h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
                 h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
@@ -104,7 +105,8 @@ public class CapabilityEvents {
                 h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
                 h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                h.setCrit((float) entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()));
+                h.setCrit((entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble());
+                h.setCritDmg((float) (entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
                 h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
                 h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
                 h.setDamageClass(item.hasTag() ?

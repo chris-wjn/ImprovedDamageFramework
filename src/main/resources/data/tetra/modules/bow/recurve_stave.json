@@ -1,0 +1,78 @@
+{
+  "replace": true,
+  "slots": [
+    "bow/stave"
+  ],
+  "type": "tetra:basic_major_module",
+  "improvements": [
+    "tetra:bow/straight_stave/",
+    "tetra:bow/shared_stave/",
+    "tetra:bow/shared/",
+    "tetra:shared/"
+  ],
+  "variants": [
+    {
+      "materials": [
+        "tetra:wood/",
+        "tetra:rod/stick",
+        "tetra:metal/"
+      ],
+      "key": "recurve_stave/",
+      "attributes": {
+        "tetra:draw_speed": 0.95
+      },
+      "aspects": {
+        "bow": 2,
+        "breakable": 2
+      },
+      "effects": {
+        "spread": [
+          0,
+          95
+        ]
+      },
+      "durability": 200,
+      "integrity": -1,
+      "extract": {
+        "primaryAttributes": {
+          "tetra:draw_speed": 0.14,
+          "tetra:draw_strength": 0.95,
+          "idf:force": 0.4,
+          "idf:accuracy": 1.5
+        },
+        "tertiaryAttributes": {
+          "tetra:draw_speed": -0.09,
+          "tetra:draw_strength": 0.5,
+          "idf:force": 0.1
+        },
+        "durability": 0.6,
+        "integrity": -1,
+        "magicCapacity": 1,
+        "glyph": {
+          "textureX": 160,
+          "textureY": 32
+        },
+        "availableTextures": [
+          "crude"
+        ],
+        "models": [
+          {
+            "location": "tetra:items/module/bow/stave/recurve/"
+          },
+          {
+            "type": "draw_0",
+            "location": "tetra:items/module/bow/stave/recurve/"
+          },
+          {
+            "type": "draw_1",
+            "location": "tetra:items/module/bow/stave/recurve/1_"
+          },
+          {
+            "type": "draw_2",
+            "location": "tetra:items/module/bow/stave/recurve/1_"
+          }
+        ]
+      }
+    }
+  ]
+}

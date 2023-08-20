@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -358,8 +359,13 @@ public class Util {
 
     public static MutableComponent writeIcon(String name, boolean includeSpacer) {
         MutableComponent comp = spacer(ICON_PIXEL_SPACER);
-        MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
-        return includeSpacer? comp.append(comp1) : comp1;
+        if (I18n.exists("idf.icon." + name)) {
+            MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
+            return includeSpacer? comp.append(comp1) : comp1;
+        }
+        else {
+            return translation(name);
+        }
     }
 
     public static MutableComponent spacer(int i) {

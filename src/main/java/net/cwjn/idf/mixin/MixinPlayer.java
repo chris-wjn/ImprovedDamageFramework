@@ -137,8 +137,8 @@ public class MixinPlayer {
                         }
                     }
 
-                    boolean isCrit = (thisPlayer.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01) >= thisPlayer.getRandom().nextDouble() && target instanceof LivingEntity;
-                    net.minecraftforge.event.entity.player.CriticalHitEvent hitResult = net.minecraftforge.common.ForgeHooks.getCriticalHit(thisPlayer, target, isCrit, isCrit ? 1.5F : 1.0F);
+                    boolean isCrit = (thisPlayer.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01) > thisPlayer.getRandom().nextDouble() && target instanceof LivingEntity;
+                    net.minecraftforge.event.entity.player.CriticalHitEvent hitResult = net.minecraftforge.common.ForgeHooks.getCriticalHit(thisPlayer, target, isCrit, isCrit ? (float) (thisPlayer.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()) * 0.01) : 1.0F);
                     isCrit = hitResult != null;
                     if (isCrit) {
                         ad *= hitResult.getDamageModifier();

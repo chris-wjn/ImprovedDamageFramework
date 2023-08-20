@@ -3,22 +3,21 @@ package net.cwjn.idf.gui.buttons;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.gui.StatScreen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class CategoryButton extends Button {
+public class ArrowButton extends Button {
 
     private static final ResourceLocation STAT_GUI =
             new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/inventorytabs.png");
 
-    StatScreen.Icon type;
+    boolean rightArrow = false;
 
-    public CategoryButton(int x, int y, Component component, OnPress onPress, StatScreen.Icon iconType) {
-        super(x, y, 22, 22, component, onPress);
-        type = iconType;
+    public ArrowButton(int x, int y, Component component, OnPress onPress, boolean rightArrow) {
+        super(x, y, 14, 14, component, onPress);
+        this.rightArrow = rightArrow;
     }
 
     @Override
@@ -26,8 +25,8 @@ public class CategoryButton extends Button {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, STAT_GUI);
-        blit(matrix, x, y, this.isHoveredOrFocused() ? 31 : 2, 196, 22, 22);
-        blit(matrix, x+3, y+3, type.locX, type.locY, 16, 16);
+        blit(matrix, x, y, this.isHoveredOrFocused()? 31 : 2, 196, 14, 14);
+        blit(matrix, x, y, this.rightArrow? 31 : 2, 210, 14, 14);
     }
 
 }

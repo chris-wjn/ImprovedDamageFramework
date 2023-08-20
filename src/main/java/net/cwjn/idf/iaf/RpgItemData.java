@@ -12,14 +12,14 @@ public record RpgItemData(StatObject CONSTITUTION, StatObject STRENGTH, StatObje
 
     public static RpgItemData empty() {
         return new RpgItemData(
-                new StatObject(0, null),
-                new StatObject(0, null),
-                new StatObject(0, null),
-                new StatObject(0, null),
-                new StatObject(0, null),
-                new StatObject(0, null),
-                new StatObject(0, null),
-                new StatObject(0, null)
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null),
+                new StatObject(0, (StatObject.ScalingPair) null)
         );
     }
 

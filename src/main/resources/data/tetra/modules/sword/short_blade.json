@@ -1,6 +1,8 @@
 {
   "replace": true,
-  "slots": [ "sword/blade" ],
+  "slots": [
+    "sword/blade"
+  ],
   "type": "tetra:basic_major_module",
   "improvements": [
     "tetra:sword/short_blade/",
@@ -10,7 +12,13 @@
   ],
   "variants": [
     {
-      "materials": [ "tetra:wood/", "tetra:stone/", "tetra:metal/", "tetra:gem/", "tetra:bone/" ],
+      "materials": [
+        "tetra:wood/",
+        "tetra:stone/",
+        "tetra:metal/",
+        "tetra:gem/",
+        "tetra:bone/"
+      ],
       "key": "short_blade/",
       "attributes": {
         "generic.attack_speed": -1,
@@ -36,7 +44,10 @@
           "jab": -8
         },
         "tools": {
-          "cut": [ 0.7, 1 ]
+          "cut": [
+            0.7,
+            1
+          ]
         },
         "durability": 0.8,
         "integrity": -1,
@@ -44,8 +55,17 @@
         "glyph": {
           "textureX": 32
         },
-        "availableTextures": [ "metal", "shiny", "grainy", "crude" ],
-        "models": [ { "location": "tetra:items/module/sword/blade/short/" } ]
+        "availableTextures": [
+          "metal",
+          "shiny",
+          "grainy",
+          "crude"
+        ],
+        "models": [
+          {
+            "location": "tetra:items/module/sword/blade/short/"
+          }
+        ]
       }
     },
     {
@@ -55,15 +75,18 @@
       "magicCapacity": 102,
       "attributes": {
         "generic.attack_damage": 5,
-        "idf:force": 4,
-        "generic.attack_speed": 1.5
+        "generic.attack_speed": 1.5,
+        "idf:force": 4
       },
       "glyph": {
         "tint": "prismarine_glyph",
         "textureX": 32
       },
       "tools": {
-        "cut": [ 2, 0.7 ]
+        "cut": [
+          2,
+          0.7
+        ]
       },
       "models": [
         {

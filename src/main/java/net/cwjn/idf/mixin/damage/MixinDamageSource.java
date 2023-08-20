@@ -121,17 +121,31 @@ public class MixinDamageSource {
         String damageClass = "pierce";
         if (indirectSource instanceof LivingEntity livingSource) {
             ProjectileHelper helper = livingSource.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
-            fire = helper.getFire();
-            water = helper.getWater();
-            lightning = helper.getLightning();
-            magic = helper.getMagic();
-            dark = helper.getDark();
-            holy = helper.getHoly();
-            pen = helper.getPen();
-            lifesteal = helper.getLifesteal();
-            knockback = helper.getKnockback();
-            weight = helper.getWeight();
-            damageClass = helper.getDamageClass();
+            if (helper.getCrit()) {
+                fire = (float) (helper.getFire()*helper.getCritDmg()*0.01);
+                water = (float) (helper.getWater()*helper.getCritDmg()*0.01);
+                lightning = (float) (helper.getLightning()*helper.getCritDmg()*0.01);
+                magic = (float) (helper.getMagic()*helper.getCritDmg()*0.01);
+                dark = (float) (helper.getDark()*helper.getCritDmg()*0.01);
+                holy = (float) (helper.getHoly()*helper.getCritDmg()*0.01);
+                pen = helper.getPen();
+                lifesteal = helper.getLifesteal();
+                knockback = helper.getKnockback();
+                weight = helper.getWeight();
+                damageClass = helper.getDamageClass();
+            } else {
+                fire = helper.getFire();
+                water = helper.getWater();
+                lightning = helper.getLightning();
+                magic = helper.getMagic();
+                dark = helper.getDark();
+                holy = helper.getHoly();
+                pen = helper.getPen();
+                lifesteal = helper.getLifesteal();
+                knockback = helper.getKnockback();
+                weight = helper.getWeight();
+                damageClass = helper.getDamageClass();
+            }
         }
         return (new IDFIndirectEntityDamageSource("arrow", arrow, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, damageClass)).setProjectile();
     }
@@ -155,17 +169,31 @@ public class MixinDamageSource {
         String damageClass = "pierce";
         if (indirectSource instanceof LivingEntity livingSource) {
             ProjectileHelper helper = livingSource.getCapability(TridentHelperProvider.PROJECTILE_HELPER).orElseGet(ProjectileHelper::new);
-            fire = helper.getFire();
-            water = helper.getWater();
-            lightning = helper.getLightning();
-            magic = helper.getMagic();
-            dark = helper.getDark();
-            holy = helper.getHoly();
-            pen = helper.getPen();
-            lifesteal = helper.getLifesteal();
-            knockback = helper.getKnockback();
-            weight = helper.getWeight();
-            damageClass = helper.getDamageClass();
+            if (helper.getCrit()) {
+                fire = (float) (helper.getFire()*helper.getCritDmg()*0.01);
+                water = (float) (helper.getWater()*helper.getCritDmg()*0.01);
+                lightning = (float) (helper.getLightning()*helper.getCritDmg()*0.01);
+                magic = (float) (helper.getMagic()*helper.getCritDmg()*0.01);
+                dark = (float) (helper.getDark()*helper.getCritDmg()*0.01);
+                holy = (float) (helper.getHoly()*helper.getCritDmg()*0.01);
+                pen = helper.getPen();
+                lifesteal = helper.getLifesteal();
+                knockback = helper.getKnockback();
+                weight = helper.getWeight();
+                damageClass = helper.getDamageClass();
+            } else {
+                fire = helper.getFire();
+                water = helper.getWater();
+                lightning = helper.getLightning();
+                magic = helper.getMagic();
+                dark = helper.getDark();
+                holy = helper.getHoly();
+                pen = helper.getPen();
+                lifesteal = helper.getLifesteal();
+                knockback = helper.getKnockback();
+                weight = helper.getWeight();
+                damageClass = helper.getDamageClass();
+            }
         }
         return (new IDFIndirectEntityDamageSource("trident", source, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, damageClass)).setProjectile();
     }
