@@ -60,7 +60,7 @@ public class MixinWorkbenchTile {
         }
         tag.putString(WEAPON_TAG, dc);
         if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get()) {
-            tag.putInt("idf.tooltip_border", Util.getItemBorderType(tag.getString(WEAPON_TAG), upgradedStack.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(upgradedStack))));
+            tag.putInt("idf.tooltip_border", Util.getItemBorderType(dc, upgradedStack.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(upgradedStack))));
         }
     }
 

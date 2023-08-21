@@ -43,6 +43,9 @@
         "primaryAttributes": {
           "generic.attack_damage": 1
         },
+        "secondaryAttributes": {
+          "idf:force": 1
+        },
         "tools": {
           "hoe_dig": [
             0.74,

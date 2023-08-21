@@ -40,7 +40,6 @@ public class TetraCompat {
         IStatGetter accuracyGetter = new StatGetterAttribute(IDFAttributes.ACCURACY.get());
         IStatGetter forceGetter = new StatGetterAttribute(IDFAttributes.FORCE.get());
         IStatGetter penGetter = new StatGetterAttribute(IDFAttributes.PENETRATING.get());
-        IStatGetter critChanceGetter = new StatGetterAttribute(IDFAttributes.CRIT_CHANCE.get());
         IStatGetter lifestealGetter = new StatGetterAttribute(IDFAttributes.LIFESTEAL.get());
         GuiStatBar fireDamage = new GuiStatBar(0, 0, barLength, "idf.stats.fire_damage",
                 0, 40, false, fireDamageGetter, LabelGetterBasic.decimalLabel,
@@ -69,9 +68,6 @@ public class TetraCompat {
         GuiStatBar pen = new GuiStatBar(0, 0, barLength, "idf.stats.pen",
                 0, 100, false, penGetter, LabelGetterBasic.percentageLabel,
                 new TooltipGetterPercentage("idf.stats.pen.tooltip", penGetter));
-        GuiStatBar critChance = new GuiStatBar(0, 0, barLength, "idf.stats.crit_chance",
-                0, 100, false, critChanceGetter, LabelGetterBasic.percentageLabel,
-                new TooltipGetterPercentage("idf.stats.crit_chance.tooltip", critChanceGetter));
         GuiStatBar lifesteal = new GuiStatBar(0, 0, barLength, "idf.stats.lifesteal",
                 0, 100, false, lifestealGetter, LabelGetterBasic.percentageLabel,
                 new TooltipGetterPercentage("idf.stats.lifesteal.tooltip", lifestealGetter));
@@ -84,7 +80,6 @@ public class TetraCompat {
         WorkbenchStatsGui.addBar(accuracy);
         WorkbenchStatsGui.addBar(force);
         WorkbenchStatsGui.addBar(pen);
-        WorkbenchStatsGui.addBar(critChance);
         WorkbenchStatsGui.addBar(lifesteal);
     }
 

@@ -49,21 +49,31 @@ public class MixinSweepingEffect {
         float pen = (float) attacker.getAttributeValue(IDFAttributes.PENETRATING.get());
         float lifesteal = (float) attacker.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         float force = (float) attacker.getAttributeValue(IDFAttributes.FORCE.get());
-        float knockback = trueSweep ? (float)(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) + 1) * 0.5F : 0.5F;
+        float knockback = (float) (trueSweep ? (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) + 1) * attacker.getAttributeValue(Attributes.ATTACK_KNOCKBACK) : attacker.getAttributeValue(Attributes.ATTACK_KNOCKBACK));
         double range = 1.0 + EffectHelper.getEffectEfficiency(itemStack, ItemEffect.sweeping);
         double reach = attacker.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
         attacker.level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(range, 0.25, range)).stream().filter((entity) -> entity != attacker).filter((entity) -> entity != target).filter((entity) -> !attacker.isAlliedTo(entity)).filter((entity) -> attacker.distanceToSqr(entity) < (range + reach) * (range + reach)).forEach((entity) -> {
-            DamageSource damageSource = attacker instanceof Player ?
-                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
-                    attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
-                    :
-                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, force,
-                            attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
             if (trueSweep) {
+                boolean isCrit = attacker.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01 >= attacker.getRandom().nextDouble();
+                float critMultiplier = 1.0F;
+                CriticalHitEvent hitResult = ForgeHooks.getCriticalHit((Player)attacker, target, isCrit, isCrit ? (float)(attacker.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()) * 0.01) : 1.0F);
+                if (hitResult != null) critMultiplier = hitResult.getDamageModifier();
+                if (critMultiplier > 1.0F) {
+                    attacker.getCommandSenderWorld().playSound((Player)null, target.blockPosition(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                    ((Player)attacker).crit(target);
+                }
+                DamageSource damageSource = new IDFEntityDamageSource("player", attacker, fd*critMultiplier, wd*critMultiplier, ld*critMultiplier, md*critMultiplier, dd*critMultiplier, hd*critMultiplier, pen, lifesteal, knockback, force,
+                        attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass());
                 ItemEffectHandler.applyHitEffects(itemStack, entity, attacker);
                 EffectHelper.applyEnchantmentHitEffects(itemStack, entity, attacker);
-                causeTruesweepDamage(damageSource, damage, itemStack, attacker, entity);
+                causeTruesweepDamage(damageSource, damage*critMultiplier, itemStack, attacker, entity);
             } else {
+                DamageSource damageSource = attacker instanceof Player ?
+                        new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
+                                attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
+                        :
+                        new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
+                                attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
                 entity.hurt(damageSource, damage);
             }
 
@@ -89,20 +99,28 @@ public class MixinSweepingEffect {
         float pen = (float) attacker.getAttributeValue(IDFAttributes.PENETRATING.get());
         float force = (float) attacker.getAttributeValue(IDFAttributes.FORCE.get());
         float lifesteal = (float) attacker.getAttributeValue(IDFAttributes.LIFESTEAL.get());
-        float knockback = 0.5F + (float)EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) * 0.5F;
+        float knockback = (float) (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemStack) * attacker.getAttributeValue(Attributes.ATTACK_KNOCKBACK));
         double range = 2.0 + EffectHelper.getEffectEfficiency(itemStack, ItemEffect.sweeping);
+        boolean isCrit = attacker.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01 >= attacker.getRandom().nextDouble();
         Vec3 target = Vec3.directionFromRotation(attacker.getXRot(), attacker.getYRot()).normalize().scale(range).add(attacker.getEyePosition(0.0F));
         AABB aoe = new AABB(target, target);
         attacker.level.getEntitiesOfClass(LivingEntity.class, aoe.inflate(range, 1.0, range)).stream().filter((entity) -> entity != attacker).filter((entity) -> !attacker.isAlliedTo(entity)).forEach((entity) -> {
+            float critMultiplier = 1.0F;
+            CriticalHitEvent hitResult = ForgeHooks.getCriticalHit((Player)attacker, entity, isCrit, isCrit ? (float)(attacker.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()) * 0.01) : 1.0F);
+            if (hitResult != null) critMultiplier = hitResult.getDamageModifier();
+            if (critMultiplier > 1.0F) {
+                attacker.getCommandSenderWorld().playSound((Player)null, entity.blockPosition(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 1.3F);
+                ((Player)attacker).crit(entity);
+            }
             ItemEffectHandler.applyHitEffects(itemStack, entity, attacker);
             EffectHelper.applyEnchantmentHitEffects(itemStack, entity, attacker);
             DamageSource damageSource = attacker instanceof Player ?
-                    new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
+                    new IDFEntityDamageSource("player", attacker, fd*critMultiplier, wd*critMultiplier, ld*critMultiplier, md*critMultiplier, dd*critMultiplier, hd*critMultiplier, pen, lifesteal, knockback, force,
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                     :
-                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, force,
+                    new IDFIndirectEntityDamageSource("mob", attacker, entity, fd*critMultiplier, wd*critMultiplier, ld*critMultiplier, md*critMultiplier, dd*critMultiplier, hd*critMultiplier, pen, lifesteal, knockback, force,
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
-            causeTruesweepDamage(damageSource, damage, itemStack, attacker, entity);
+            causeTruesweepDamage(damageSource, damage*critMultiplier, itemStack, attacker, entity);
         });
         attacker.level.playSound((Player)null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
         CastOptional.cast(attacker, Player.class).ifPresent(Player::sweepAttack);
@@ -115,22 +133,11 @@ public class MixinSweepingEffect {
     @Overwrite(remap = false)
     private static void causeTruesweepDamage(DamageSource damageSource, float baseDamage, ItemStack itemStack, LivingEntity attacker, LivingEntity target)  {
         float targetModifier = EnchantmentHelper.getDamageBonus(itemStack, target.getMobType());
-        boolean isCrit = attacker.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01 >= attacker.getRandom().nextDouble();
-        float critMultiplier = 1.0F;
-        CriticalHitEvent hitResult = ForgeHooks.getCriticalHit((Player)attacker, target, isCrit, isCrit ? 1.5F : 1.0F);
-        isCrit = hitResult != null;
-        if (isCrit) {
-            critMultiplier = hitResult.getDamageModifier();
-        }
-        target.hurt(damageSource, (baseDamage + targetModifier) * critMultiplier);
+        target.hurt(damageSource, (baseDamage + targetModifier));
         if (targetModifier > 0.0F) {
             CastOptional.cast(attacker, Player.class).ifPresent((player) -> {
                 player.magicCrit(target);
             });
-        }
-        if (critMultiplier > 1.0F) {
-            attacker.getCommandSenderWorld().playSound((Player)null, target.blockPosition(), SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 1.3F);
-            ((Player)attacker).crit(target);
         }
     }
 
