@@ -46,6 +46,7 @@ public record WeaponData(int durability, String damageClass, boolean ranged, boo
         values.add(new Pair<>(LIFESTEAL.get(), oData.ls()));
         values.add(new Pair<>(PENETRATING.get(), oData.pen()));
         values.add(new Pair<>(CRIT_CHANCE.get(), oData.crit()));
+        values.add(new Pair<>(CRIT_DAMAGE.get(), oData.critDmg()));
         values.add(new Pair<>(FORCE.get(), oData.force()));
         values.add(new Pair<>(ACCURACY.get(), oData.accuracy()));
         values.add(new Pair<>(ATTACK_KNOCKBACK, oData.kb()));

@@ -1,23 +1,17 @@
 package net.cwjn.idf.mixin.tetra;
 
-import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.Event;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import se.mickelus.tetra.effect.ArmorPenetrationEffect;
 import se.mickelus.tetra.effect.ItemEffect;
 import se.mickelus.tetra.effect.ItemEffectHandler;
 import se.mickelus.tetra.items.modular.IModularItem;
-import se.mickelus.tetra.items.modular.ItemModularHandheld;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Mixin(ItemEffectHandler.class)
 public class MixinItemEffectHandler {

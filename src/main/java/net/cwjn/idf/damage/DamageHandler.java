@@ -179,7 +179,7 @@ public class DamageHandler {
         }
         //now we factor in the resistance effect. Increases all resistances by 20% per level.
         if (target.hasEffect(MobEffects.DAMAGE_RESISTANCE)) {
-            double resistanceLevel = ((double)target.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() + 1)/5;
+            double resistanceLevel = ((double)target.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() + 1)*0.2;
             for (int i = 0; i < 7; i++) {
                 rv[i] *= (1 + resistanceLevel);
             }

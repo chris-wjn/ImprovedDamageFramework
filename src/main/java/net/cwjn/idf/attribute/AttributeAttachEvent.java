@@ -44,7 +44,7 @@ public class AttributeAttachEvent {
                 if (!event.has(entityType, IDFAttributes.FORCE.get())) event.add(entityType, IDFAttributes.FORCE.get(), data.oData().force());
                 if (!event.has(entityType, IDFAttributes.ACCURACY.get())) event.add(entityType, IDFAttributes.ACCURACY.get(), data.oData().accuracy());
                 if (!event.has(entityType, IDFAttributes.CRIT_CHANCE.get())) event.add(entityType, IDFAttributes.CRIT_CHANCE.get(), data.oData().crit());
-                if (!event.has(entityType, IDFAttributes.CRIT_DAMAGE.get())) event.add(entityType, IDFAttributes.CRIT_DAMAGE.get());
+                if (!event.has(entityType, IDFAttributes.CRIT_DAMAGE.get())) event.add(entityType, IDFAttributes.CRIT_DAMAGE.get(), data.oData().critDmg());
             } else {
                 //damage types
                 event.add(entityType, IDFAttributes.FIRE_DAMAGE.get());

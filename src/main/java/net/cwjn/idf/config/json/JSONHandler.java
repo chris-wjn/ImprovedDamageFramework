@@ -122,9 +122,8 @@ public class JSONHandler {
                             OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
                 } //If the item is an instance of IDF equipment that isn't a weapon, it is guaranteed to be armour.
                 else {
-                    Collection<AttributeModifier> weapon0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(ATTACK_DAMAGE);
-                    double damageVal = weapon0.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                    if (damageVal != 0) {
+                    boolean isWeapon = !item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).isEmpty();
+                    if (isWeapon) {
                         String dc = "strike";
                         if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
                             dc = "slash";
@@ -142,15 +141,11 @@ public class JSONHandler {
                         ));
                     } //Now that we know it isn't an instance of IDF equipment, we can check for custom items meant to act as weapons.
                     else {
-                        Collection<AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD).get(ARMOR);
-                        Collection<AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET).get(ARMOR);
-                        Collection<AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS).get(ARMOR);
-                        Collection<AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST).get(ARMOR);
-                        double armorVal = armour0.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                                armour1.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                                armour2.stream().mapToDouble(AttributeModifier::getAmount).sum() +
-                                armour3.stream().mapToDouble(AttributeModifier::getAmount).sum();
-                        if (armorVal != 0) {
+                        Multimap<Attribute, AttributeModifier> armour0 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.HEAD);
+                        Multimap<Attribute, AttributeModifier> armour1 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.FEET);
+                        Multimap<Attribute, AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS);
+                        Multimap<Attribute, AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST);
+                        if (!armour0.isEmpty() || !armour1.isEmpty() || !armour2.isEmpty() || !armour3.isEmpty()) {
                             DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
                                     OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
                             DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(

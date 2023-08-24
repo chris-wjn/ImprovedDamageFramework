@@ -14,8 +14,8 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_SOURCES_NO_INVULN;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ENTITIES;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LEGENDARY_TOOLTIPS_COMPAT_MODE;
-    private static final String[] defaultNoInvulnList = {"player", "sting", "fall"};
-    private static final String[] defaultReducedList = {"mob"};
+    private static final String[] defaultNoInvulnList = {"player", "fall"};
+    private static final String[] defaultReducedList = {"mob", "sting"};
     private static final String[] defaultBlacklist = {"minecraft:slime", "minecraft:magma_cube"};
 
     static {

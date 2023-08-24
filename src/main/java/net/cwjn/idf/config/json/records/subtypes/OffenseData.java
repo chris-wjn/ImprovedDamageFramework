@@ -15,25 +15,25 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, double mDmg, double dDmg, double hDmg,
-                          double ls, double pen, double crit, double force, double accuracy, double kb, double atkSpd) {
+                          double ls, double pen, double crit, double critDmg, double force, double accuracy, double kb, double atkSpd) {
 
     public static OffenseData entityStandard() {
         return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0.4,  0);
+                0, 0, 0, 0, 0, 0.4,  0);
     }
 
     public static OffenseData setForce(double force) {
         return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, force, 0, 0.4,  0);
+                0, 0, 0, force, 0, 0.4,  0);
     }
 
     public static OffenseData damage(double p, double f, double w, double l, double m, double d, double h) {
-        return new OffenseData(p, f, w, l, m, d, h, 0, 0, 0, 0, 0, 0.0, 0);
+        return new OffenseData(p, f, w, l, m, d, h, 0, 0, 0, 0, 0, 0, 0.0, 0);
     }
 
     public static OffenseData empty() {
         return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0.0, 0);
+                0, 0, 0, 0, 0, 0.0, 0);
     }
 
     public Iterator<Pair<Attribute, Double>> getAttributesWithModifier() {
@@ -48,6 +48,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
         if (ls != 0) list.add(new Pair<>(IDFAttributes.LIFESTEAL.get(), ls));
         if (pen != 0) list.add(new Pair<>(IDFAttributes.PENETRATING.get(), pen));
         if (crit != 0) list.add(new Pair<>(IDFAttributes.CRIT_CHANCE.get(), crit));
+        if (critDmg != 0) list.add(new Pair<>(IDFAttributes.CRIT_DAMAGE.get(), critDmg));
         if (force != 0) list.add(new Pair<>(IDFAttributes.FORCE.get(), force));
         if (accuracy != 0) list.add(new Pair<>(IDFAttributes.ACCURACY.get(), accuracy));
         if (kb != 0) list.add(new Pair<>(Attributes.ATTACK_KNOCKBACK, kb));
@@ -67,6 +68,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
                 data.ls + Arrays.stream(otherData).mapToDouble(OffenseData::ls).sum(),
                 data.pen + Arrays.stream(otherData).mapToDouble(OffenseData::pen).sum(),
                 data.crit + Arrays.stream(otherData).mapToDouble(OffenseData::crit).sum(),
+                data.critDmg + Arrays.stream(otherData).mapToDouble(OffenseData::critDmg).sum(),
                 data.force + Arrays.stream(otherData).mapToDouble(OffenseData::force).sum(),
                 data.accuracy + Arrays.stream(otherData).mapToDouble(OffenseData::accuracy).sum(),
                 data.kb + Arrays.stream(otherData).mapToDouble(OffenseData::kb).sum(),
@@ -77,7 +79,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
         return new OffenseData(
                 buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),
                 buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),
-                buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble()
+                buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble(),buffer.readDouble()
         );
     }
 
@@ -92,6 +94,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
         buffer.writeDouble(ls);
         buffer.writeDouble(pen);
         buffer.writeDouble(crit);
+        buffer.writeDouble(critDmg);
         buffer.writeDouble(force);
         buffer.writeDouble(accuracy);
         buffer.writeDouble(kb);
@@ -116,6 +119,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
                     obj.get("Lifesteal").getAsDouble(),
                     obj.get("Armour Penetration").getAsDouble(),
                     obj.get("Critical Chance").getAsDouble(),
+                    obj.has("Critical Damage")? obj.get("Critical Damage").getAsDouble() : 0,
                     obj.get("Force").getAsDouble(),
                     obj.get("Accuracy").getAsDouble(),
                     obj.get("Knockback").getAsDouble(),
@@ -135,6 +139,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
             obj.addProperty("Lifesteal", src.ls);
             obj.addProperty("Armour Penetration", src.pen);
             obj.addProperty("Critical Chance", src.crit);
+            obj.addProperty("Critical Damage", src.critDmg);
             obj.addProperty("Force", src.force);
             obj.addProperty("Accuracy", src.accuracy);
             obj.addProperty("Knockback", src.kb);

@@ -88,7 +88,7 @@ public class CapabilityEvents {
                 h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + entity.getAttributeValue(HOLY.damage)));
                 h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + entity.getAttributeValue(Attributes.ATTACK_DAMAGE)));
                 h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + entity.getAttributeValue(IDFAttributes.PENETRATING.get())));
-                h.setCrit(((getAttributeAmount(map.get(IDFAttributes.CRIT_CHANCE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble()));
+                h.setCrit(((getAttributeAmount(map.get(IDFAttributes.CRIT_CHANCE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble()) && entity instanceof Player);
                 h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
                 h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + entity.getAttributeValue(IDFAttributes.LIFESTEAL.get())));
                 h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + entity.getAttributeValue(IDFAttributes.FORCE.get())));
@@ -105,7 +105,7 @@ public class CapabilityEvents {
                 h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
                 h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                h.setCrit((entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble());
+                h.setCrit((entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble() && entity instanceof Player);
                 h.setCritDmg((float) (entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
                 h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
                 h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
