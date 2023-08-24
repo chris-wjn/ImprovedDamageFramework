@@ -1,1 +1,15 @@
-{}
+{
+  "bullet": {
+    "Fire": 0.0,
+    "Water": 0.0,
+    "Lightning": 0.0,
+    "Magic": 0.0,
+    "Dark": 0.0,
+    "Holy": 0.0,
+    "Armour Pen": 25,
+    "Lifesteal": 0.0,
+    "Force": 1.0,
+    "Damage Class": "pierce",
+    "isTrueDamage?": false
+  }
+}

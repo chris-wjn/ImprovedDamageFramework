@@ -114,7 +114,7 @@ public class ClientEventsForgeBus {
                 }
                 double wgt = getAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS);
                 double kbr = getAndRemoveAttribute(map, Attributes.KNOCKBACK_RESISTANCE);
-                line1.append(Util.writeStaticTooltipComponent(wgt, "weight", null, false, false));
+                line1.append(Util.writeStaticTooltipComponent(wgt, "force", null, false, false));
                 line1.append(Util.writeStaticTooltipComponent(kbr * 100, "knockback_resistance", null, true, true));
                 double str = getAndRemoveAttribute(map, IDFAttributes.STRIKE_MULT.get())*100;
                 double prc = getAndRemoveAttribute(map, IDFAttributes.PIERCE_MULT.get())*100;

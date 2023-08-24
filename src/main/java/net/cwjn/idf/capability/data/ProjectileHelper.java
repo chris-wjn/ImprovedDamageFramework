@@ -119,7 +119,7 @@ public class ProjectileHelper {
         tag.putBoolean("crit", crit);
         tag.putFloat("crit_dmg", critDmg);
         tag.putFloat("lifesteal", lifesteal);
-        tag.putFloat("weight", weight);
+        tag.putFloat("force", weight);
     }
 
     public void loadNBTData(CompoundTag tag) {
@@ -134,7 +134,7 @@ public class ProjectileHelper {
         crit = tag.getBoolean("crit");
         critDmg = tag.getFloat("critDmg");
         lifesteal = tag.getFloat("lifesteal");
-        weight = tag.getFloat("weight");
+        weight = tag.getFloat("force");
     }
 
     public String getDamageClass() {

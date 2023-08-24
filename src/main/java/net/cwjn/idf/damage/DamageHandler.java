@@ -71,7 +71,7 @@ public class DamageHandler {
         MinecraftForge.EVENT_BUS.post(event);
 
         //grab the values from the event after it's been fired. We put the damage and resistance values into arrays, so they can be looped through.
-        //this is the only place we use force and weight, so we can just calculate the ratio here.
+        //this is the only place we use force and force, so we can just calculate the ratio here.
         float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getHolyDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
@@ -94,7 +94,7 @@ public class DamageHandler {
         }
 
         //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
-        //to all the damage types. Then iterate through the damage values and apply the weight/weight multiplier followed by
+        //to all the damage types. Then iterate through the damage values and apply the force/force multiplier followed by
         //the damage class multiplier. Then multiply each damage value by the correct multiplier.
         Map<String, Double> mappedMultipliers = new HashMap<>(2);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));
@@ -289,7 +289,7 @@ public class DamageHandler {
         MinecraftForge.EVENT_BUS.post(event);
 
         //grab the values from the event after it's been fired. We put the damage and resistance values into arrays, so they can be looped through.
-        //this is the only place we use force and weight, so we can just calculate the ratio here.
+        //this is the only place we use force and force, so we can just calculate the ratio here.
         float[] dv = {event.getFireDmg(), event.getWaterDmg(), event.getLightningDmg(), event.getMagicDmg(), event.getDarkDmg(), event.getHolyDmg(), event.getPhysicalDmg()};
         pen = event.getPen();
         lifesteal = event.getLifesteal();
@@ -339,7 +339,7 @@ public class DamageHandler {
         }
 
         //we put the damage class multipliers into a map with the strings as keys. This is to easily apply the correct multiplier
-        //to all the damage types. Then iterate through the damage values and apply the weight/weight multiplier followed by
+        //to all the damage types. Then iterate through the damage values and apply the force/force multiplier followed by
         //the damage class multiplier. Then multiply each damage value by the correct multiplier.
         Map<String, Double> mappedMultipliers = new HashMap<>(2);
         mappedMultipliers.put("strike", target.getAttributeValue(IDFAttributes.STRIKE_MULT.get()));

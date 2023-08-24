@@ -20,6 +20,7 @@ public class JSONUtil {
             registerTypeAdapter(WeaponData.class, new WeaponData.WeaponSerializer()).
             registerTypeAdapter(ItemData.class, new ItemData.ItemSerializer()).
             registerTypeAdapter(EntityData.class, new EntityData.EntityDataSerializer()).
+            registerTypeAdapter(SourceCatcherData.class, new SourceCatcherData.SourceCatcherDataSerializer()).
             registerTypeAdapter(OffenseData.class, new OffenseData.OffensiveDataSerializer()).
             registerTypeAdapter(DefenceData.class, new DefenceData.DefensiveDataSerializer()).
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).

@@ -178,7 +178,7 @@ public class StatScreen extends Screen {
         font.draw(matrix, drawIconAndString("holy", "holy_resistance"), left+16, y+=16, 0xffffff);
         drawbar(matrix, left+16, y);
         drawCenteredString(font, matrix, player.getAttributeValue(HOLY.defence), left+70, y, 0x111111);
-        font.draw(matrix, drawIconAndString("weight", "weight"), left+96, y=top+16, 0xffffff);
+        font.draw(matrix, drawIconAndString("force", "force"), left+96, y=top+16, 0xffffff);
         drawbar(matrix, left+96, y);
         drawCenteredString(font, matrix, player.getAttributeValue(Attributes.ARMOR_TOUGHNESS), left+149, y, 0x111111);
         font.draw(matrix, drawIconAndString("knockback_resistance", "knockback_resistance"), left+96, y+=16, 0xffffff);

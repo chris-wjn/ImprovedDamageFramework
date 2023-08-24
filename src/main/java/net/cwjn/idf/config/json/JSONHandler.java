@@ -60,6 +60,7 @@ public class JSONHandler {
             registerTypeAdapter(WeaponData.class, new WeaponData.WeaponSerializer()).
             registerTypeAdapter(ItemData.class, new ItemData.ItemSerializer()).
             registerTypeAdapter(EntityData.class, new EntityData.EntityDataSerializer()).
+            registerTypeAdapter(SourceCatcherData.class, new SourceCatcherData.SourceCatcherDataSerializer()).
             registerTypeAdapter(OffenseData.class, new OffenseData.OffensiveDataSerializer()).
             registerTypeAdapter(DefenceData.class, new DefenceData.DefensiveDataSerializer()).
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
@@ -261,6 +262,7 @@ public class JSONHandler {
         JSONUtil.writeFile(new File(configDir, "armour_items_multiply.json"), sortedArmourOp2Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_flat.json"), sortedWeaponOp0Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_multiply.json"), sortedWeaponOp2Map);
+        JSONUtil.writeFile(new File(configDir, "source_catcher.json"), sortedSourceMap);
     }
 
     private static void saveVanillaStats() {

@@ -76,7 +76,7 @@ public class PatchouliCompat implements IComponentProcessor{
                     IVariable.wrap(df.format((DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MAX_HEALTH) * 5) + data.aData().hp()));
             case "movespeed" ->
                     IVariable.wrap(mBPS(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.MOVEMENT_SPEED) + data.aData().ms()));
-            case "weight" ->
+            case "force" ->
                     IVariable.wrap(df.format(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR_TOUGHNESS) + data.dData().weight()));
             case "physicalResistance" ->
                     IVariable.wrap(df.format(DamageHandler.armourFormula(DefaultAttributes.getSupplier(type).getBaseValue(Attributes.ARMOR) + data.dData().pDef())));
