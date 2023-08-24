@@ -96,7 +96,7 @@ public class ClientEventsForgeBus {
                     line1.append(Util.writeStaticTooltipComponent(accuracy, "accuracy", null, false, true));
                 }
                 double crit = convertAndRemoveAttribute(map, IDFAttributes.CRIT_CHANCE.get());
-                double critDmg = convertAndRemoveAttribute(map, IDFAttributes.CRIT_DAMAGE.get());
+                double critDmg = convertAndRemoveAttribute(map, IDFAttributes.CRIT_DAMAGE.get())+150;
                 BigDecimal numerator = BigDecimal.valueOf(convertAndRemoveAttribute(map, Attributes.ATTACK_KNOCKBACK)), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
                 double knockback = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
                 line2.append(Util.writeStaticTooltipComponent(crit, "crit_chance", null, true, true));
