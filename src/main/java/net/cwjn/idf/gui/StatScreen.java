@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -149,7 +150,7 @@ public class StatScreen extends Screen {
         drawbar(matrix, left+96, y);
         BigDecimal numerator = BigDecimal.valueOf(player.getAttributeValue(Attributes.ATTACK_KNOCKBACK)), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
         double knockback = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
-        drawCenteredPercentage(font, matrix, knockback*100, left+149, y, getColourGreaterThan(knockback, 100));
+        drawCenteredPercentage(font, matrix, knockback*100, left+149, y, getColourGreaterThan(knockback, 1));
         font.draw(matrix, drawIconAndString("attack_speed", "attack_speed"), left+96, y+=16, 0xffffff);
         drawbar(matrix, left+96, y);
         drawCenteredString(font, matrix, player.getAttributeValue(Attributes.ATTACK_SPEED), left+149, y, 0x111111);
@@ -178,7 +179,7 @@ public class StatScreen extends Screen {
         font.draw(matrix, drawIconAndString("holy", "holy_resistance"), left+16, y+=16, 0xffffff);
         drawbar(matrix, left+16, y);
         drawCenteredString(font, matrix, player.getAttributeValue(HOLY.defence), left+70, y, 0x111111);
-        font.draw(matrix, drawIconAndString("force", "force"), left+96, y=top+16, 0xffffff);
+        font.draw(matrix, drawIconAndString("weight", "weight"), left+96, y=top+16, 0xffffff);
         drawbar(matrix, left+96, y);
         drawCenteredString(font, matrix, player.getAttributeValue(Attributes.ARMOR_TOUGHNESS), left+149, y, 0x111111);
         font.draw(matrix, drawIconAndString("knockback_resistance", "knockback_resistance"), left+96, y+=16, 0xffffff);

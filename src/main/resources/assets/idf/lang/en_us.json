@@ -13,8 +13,10 @@
   "evasion": "Evasion",
   "lifesteal": "Lifesteal",
   "armour_penetration": "Armour Penetration",
+  "accuracy": "Accuracy",
   "force": "Force",
   "crit_chance": "Critical Chance",
+  "crit_damage": "Critical Damage",
   "strike_mult": "Strike Multiplier",
   "pierce_mult": "Pierce Multiplier",
   "slash_mult": "Slash Multiplier",
@@ -227,6 +229,7 @@
   "idf.stats.lifesteal": "Lifesteal",
   "idf.stats.lifesteal.tooltip": "+§e%s §rLifesteal. Heals user for a percentage of total damage dealt when attacking with a full-strength attack.",
   "idf.newline": "\n",
-  "tetra.stats.criticalStrike.tooltip": "Has a chance to critically hit when hitting entities or breaking blocks.\n§e+%s§7 critical strike chance, §e+%s §7critical strike damage\n§e%s§7 chance to instantly break blocks"
+  "tetra.stats.criticalStrike.tooltip": "Has a chance to critically hit when hitting entities or breaking blocks.\n§e+%s§7 critical strike chance, §e+%s §7critical strike damage\n§e%s§7 chance to instantly break blocks",
+  "idf.info_screen": "Info Screen"
 }
 

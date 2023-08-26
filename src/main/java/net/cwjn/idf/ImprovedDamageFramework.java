@@ -36,6 +36,8 @@ public class ImprovedDamageFramework {
     public static final ResourceLocation FONT_INDICATORS = new ResourceLocation("idf", "indicators");
     public static final ResourceLocation FONT_TOOLTIPS = new ResourceLocation("idf", "tooltips");
     public static final ResourceLocation FONT_TOOLTIPS_2X = new ResourceLocation("idf", "tooltips_2x");
+    public static final ResourceLocation FONT_ALTIMA = new ResourceLocation("idf", "altima");
+    public static final ResourceLocation FONT_ALTIMA_2X = new ResourceLocation("idf", "altima_big");
     public static final ResourceLocation FONT_SPACER = new ResourceLocation("idf", "space");
     public static final ResourceLocation FONT_VERTICAL_SPACER = new ResourceLocation("idf", "vert_space");
 

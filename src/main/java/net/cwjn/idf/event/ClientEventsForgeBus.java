@@ -6,6 +6,7 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.data.CommonData;
+import net.cwjn.idf.gui.InfoScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
 import net.cwjn.idf.hud.MobHealthbar;
@@ -15,7 +16,6 @@ import net.cwjn.idf.util.Util;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -32,6 +32,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,8 +44,7 @@ import java.util.function.Predicate;
 
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.data.CommonData.*;
-import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
-import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
+import static net.cwjn.idf.gui.buttons.TabButton.TabType.*;
 import static net.cwjn.idf.util.Util.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
@@ -133,26 +133,26 @@ public class ClientEventsForgeBus {
                 double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
                 Component comp;
                 if (mult != 1) comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(scalingDoubleSize(mult * flat));
-                else comp = iconDoubleSize(key, false).append(writeDoubleSize(flat));
+                else comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(spacer(2));
                 main.add(comp);
                 main.add(Component.empty());
                 map.removeAll(a);
             }
 
             for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
+                Attribute a = entry.getKey();
                 MutableComponent comp = Util.text(" ");
                 if (entry.getKey() == Attributes.MOVEMENT_SPEED) {
                     double value = Util.pBPS(entry.getValue().getAmount());
                     if (entry.getValue().getOperation() == ADDITION) {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
                         comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(value, true));
+                        comp.append(writeTooltipDouble(value, a.getDescriptionId(), true, false, false));
                     }
                     else {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
                         comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, true));
-                        comp.append("x");
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, a.getDescriptionId(), true, true, false));
                     }
                     other.add(comp);
                     continue;
@@ -161,18 +161,16 @@ public class ClientEventsForgeBus {
                     if (isPercentageAttribute.test(entry.getKey())) {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
                         comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), entry.getValue().getAmount() >= 0));
-                        comp.append("%");
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), a.getDescriptionId(), entry.getValue().getAmount() >= 0, false, true));
                     } else {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
                         comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), entry.getValue().getAmount() >= 0));
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), a.getDescriptionId(), entry.getValue().getAmount() >= 0, false, false));
                     }
                 } else {
                     comp.append(Util.translation("idf.right_arrow.symbol"));
                     comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                    comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, entry.getValue().getAmount() >= 0));
-                    comp.append("x");
+                    comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, a.getDescriptionId(), entry.getValue().getAmount() >= 0, true, false));
                 }
                 other.add(comp);
             }
@@ -246,6 +244,10 @@ public class ClientEventsForgeBus {
         comp.append(spacer(-1));
         comp.append(")");
         return mult < 0 ? comp.withStyle(ChatFormatting.RED) : comp;
+    }
+
+    public static MutableComponent writeAltima(String s) {
+        return Component.translatable(s).withStyle(ALTIMA_2X);
     }
 
 

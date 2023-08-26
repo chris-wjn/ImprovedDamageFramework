@@ -38,6 +38,8 @@ public class Util {
     public static final Style ICON_2X = Style.EMPTY.withFont(FONT_ICONS_2X);
     public static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
     public static final Style TOOLTIP_2X = Style.EMPTY.withFont(FONT_TOOLTIPS_2X);
+    public static final Style ALTIMA = Style.EMPTY.withFont(FONT_ALTIMA);
+    public static final Style ALTIMA_2X = Style.EMPTY.withFont(FONT_ALTIMA_2X);
     private static final Style SPACER = Style.EMPTY.withFont(FONT_SPACER);
     public static final Style VERT_SPACER = Style.EMPTY.withFont(FONT_VERTICAL_SPACER);
     private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
@@ -268,21 +270,30 @@ public class Util {
         return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : comp) : comp;
     }
 
-    public static MutableComponent writeTooltipDouble(double num, boolean withColour) {
+    public static MutableComponent writeTooltipDouble(double num, String name, boolean withColour, boolean appendX, boolean appendPercentage) {
         MutableComponent comp = Component.empty().withStyle(TOOLTIP);
-        String s = num > 0?  "+" + tenths.format(num) : tenths.format(num);
-        if (s.charAt(0) == '1') comp.append(spacer(-1));
-        for(int i = 0; i < s.length() ; i++) {
-            comp.append(String.valueOf(s.charAt(i)));
-            if (i != s.length()-1) {
-                if (s.charAt(i+1) == '.') {
+        String number = num > 0?  "+" + tenths.format(num) : tenths.format(num);
+        if (number.charAt(0) == '1') comp.append(spacer(-1));
+        for(int i = 0; i < number.length() ; i++) {
+            comp.append(String.valueOf(number.charAt(i)));
+            if (i != number.length()-1) {
+                if (number.charAt(i+1) == '.') {
                     comp.append(spacer(-2));
-                } else if (s.charAt(i+1) == '1') {
+                } else if (number.charAt(i+1) == '1') {
                     comp.append(spacer(-1));
                 }
                 comp.append(spacer(-1));
             }
         }
+        if (appendX) {
+            comp.append(spacer(-1));
+            comp.append("x");
+        }
+        else if (appendPercentage) {
+            comp.append(spacer(-1));
+            comp.append("%");
+        }
+        comp.append(spacer(1));
         return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : comp) : comp;
     }
 
@@ -358,14 +369,12 @@ public class Util {
     }
 
     public static MutableComponent writeIcon(String name, boolean includeSpacer) {
-        MutableComponent comp = spacer(ICON_PIXEL_SPACER);
         if (I18n.exists("idf.icon." + name)) {
+            MutableComponent comp = spacer(ICON_PIXEL_SPACER);
             MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
             return includeSpacer? comp.append(comp1) : comp1;
         }
-        else {
-            return translation(name);
-        }
+        else return Component.empty();
     }
 
     public static MutableComponent spacer(int i) {

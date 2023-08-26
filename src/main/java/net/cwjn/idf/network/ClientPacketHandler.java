@@ -3,6 +3,7 @@ package net.cwjn.idf.network;
 import com.mojang.math.Vector3f;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.data.ClientData;
+import net.cwjn.idf.gui.InfoScreen;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.particle.IDFParticles;
 import net.minecraft.client.Minecraft;
@@ -51,6 +52,10 @@ public class ClientPacketHandler {
 
     public static void updateSkyDarken(int i) {
         ClientData.skyDarken = i;
+    }
+
+    public static void openInfoScreen() {
+        Minecraft.getInstance().setScreen(new InfoScreen());
     }
 
 }

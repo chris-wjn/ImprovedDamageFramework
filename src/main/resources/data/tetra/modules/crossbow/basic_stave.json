@@ -19,7 +19,8 @@
       "key": "basic_stave/",
       "attributes": {
         "tetra:draw_speed": 1,
-        "tetra:draw_strength": 0.5
+        "tetra:draw_strength": 0.5,
+        "idf:accuracy": 10
       },
       "aspects": {
         "crossbow": 2,

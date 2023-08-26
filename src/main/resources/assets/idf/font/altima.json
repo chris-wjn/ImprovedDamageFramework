@@ -5,10 +5,10 @@
       "file": "idf:altima.ttf",
       "shift": [
         0.0,
-        0.0
+        0.5
       ],
       "oversample": 8,
-      "size": 16
+      "size": 10
     }
   ]
 }

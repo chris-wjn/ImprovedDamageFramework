@@ -1,10 +1,7 @@
 package net.cwjn.idf.network;
 
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
-import net.cwjn.idf.network.packets.DisplayMissPacket;
-import net.cwjn.idf.network.packets.SyncClientConfigPacket;
-import net.cwjn.idf.network.packets.SyncSkyDarkenPacket;
+import net.cwjn.idf.network.packets.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +25,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(1, DisplayDamageIndicatorPacket.class, DisplayDamageIndicatorPacket::encode, DisplayDamageIndicatorPacket::decode, DisplayDamageIndicatorPacket::handle);
         INSTANCE.registerMessage(2, SyncSkyDarkenPacket.class, SyncSkyDarkenPacket::encode, SyncSkyDarkenPacket::decode, SyncSkyDarkenPacket::handle);
         INSTANCE.registerMessage(3, DisplayMissPacket.class, DisplayMissPacket::encode, DisplayMissPacket::decode, DisplayMissPacket::handle);
+        INSTANCE.registerMessage(4, OpenInfoScreenPacket.class, OpenInfoScreenPacket::encode, OpenInfoScreenPacket::decode, OpenInfoScreenPacket::handle);
     }
 
     public static void serverToPlayer(IDFPacket packet, ServerPlayer player) {

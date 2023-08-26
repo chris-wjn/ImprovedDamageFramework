@@ -20,7 +20,8 @@
       "key": "throwing_knife/",
       "attributes": {
         "generic.attack_speed": -1.3,
-        "generic.attack_damage": -1
+        "generic.attack_damage": -1,
+        "idf:accuracy": 10
       },
       "aspects": {
         "edgedWeapon": 2,
@@ -43,7 +44,8 @@
       "integrity": -1,
       "extract": {
         "primaryAttributes": {
-          "generic.attack_damage": 1
+          "generic.attack_damage": 1,
+          "idf:accuracy": 0.5
         },
         "secondaryAttributes": {
           "idf:force": 1

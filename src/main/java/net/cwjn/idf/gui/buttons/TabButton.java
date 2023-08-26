@@ -39,6 +39,11 @@ public class TabButton extends AbstractButton {
     }
 
     @Override
+    public void renderToolTip(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+        super.renderToolTip(pPoseStack, pMouseX, pMouseY);
+    }
+
+    @Override
     public void onPress() {
         Minecraft minecraft = Minecraft.getInstance();
         switch (type) {
@@ -49,12 +54,12 @@ public class TabButton extends AbstractButton {
 
     @Override
     public void updateNarration(@NotNull NarrationElementOutput p_169152_) {
-
     }
 
     public enum TabType {
         INVENTORY(0),
-        STATS(1);
+        STATS(1),
+        INFO(2);
         public final int iconIndex;
         TabType(int index) {
             iconIndex = index;

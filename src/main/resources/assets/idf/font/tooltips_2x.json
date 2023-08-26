@@ -3,8 +3,8 @@
     {
       "type": "bitmap",
       "file": "idf:font/idf_tooltips.png",
-      "ascent": 6,
-      "height": 16,
+      "ascent": 5.5,
+      "height": 14,
       "chars": [
         "\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u0000",
         "\u0030\u0031\u0032\u0033\u0034\u0035\u0036\u0037\u0038\u0000\u0000\u0000\u0000\u0000\u0000\u0000",

@@ -11,6 +11,7 @@ import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
 import net.cwjn.idf.network.packets.DisplayMissPacket;
+import net.cwjn.idf.network.packets.OpenInfoScreenPacket;
 import net.cwjn.idf.network.packets.SyncSkyDarkenPacket;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.ItemInterface;
@@ -33,6 +34,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -174,6 +176,13 @@ public class LogicalEvents {
         LivingEntity entity = event.getEntity();
         double weight = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
         event.setExhaustionAmount((float) (event.getExhaustionAmount() * (weight*0.01 + 1)));
+    }
+
+    @SubscribeEvent
+    public static void onPlayerFirstJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.getEntity().getPersistentData().getBoolean("idf.first_join")) {
+            PacketHandler.serverToPlayer(new OpenInfoScreenPacket(), (ServerPlayer) event.getEntity());
+        }
     }
 
 }
