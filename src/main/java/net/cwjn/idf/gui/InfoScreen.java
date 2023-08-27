@@ -1,13 +1,16 @@
 package net.cwjn.idf.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import org.lwjgl.opengl.GL11;
 
 public class InfoScreen extends Screen {
 
@@ -22,8 +25,9 @@ public class InfoScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        left = (width - 1280) / 2;
-        top = (height - 908) / 2;
+        Window window = Minecraft.getInstance().getWindow();
+        left = (window.getGuiScaledWidth() - 1280) / 2;
+        top = (window.getGuiScaledHeight() - 908) / 2;
     }
 
     @Override
