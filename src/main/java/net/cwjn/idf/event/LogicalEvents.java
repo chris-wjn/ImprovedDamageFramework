@@ -6,6 +6,7 @@ import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
+import net.cwjn.idf.command.InfoPageCommand;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.network.PacketHandler;
@@ -159,6 +160,7 @@ public class LogicalEvents {
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         new ChangeDebugStatusCommand(event.getDispatcher());
+        new InfoPageCommand(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
     }
 
@@ -182,6 +184,7 @@ public class LogicalEvents {
     public static void onPlayerFirstJoin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().getPersistentData().getBoolean("idf.first_join")) {
             PacketHandler.serverToPlayer(new OpenInfoScreenPacket(), (ServerPlayer) event.getEntity());
+            event.getEntity().getPersistentData().putBoolean("idf.first_join", true);
         }
     }
 
