@@ -5,6 +5,8 @@ import net.cwjn.idf.config.json.records.ArmourData;
 import net.cwjn.idf.config.json.records.ItemData;
 import net.cwjn.idf.config.json.records.WeaponData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -14,9 +16,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import static net.cwjn.idf.config.json.JSONHandler.updateItems;
 import static net.cwjn.idf.data.CommonData.*;
@@ -27,6 +27,7 @@ public class ClientData {
     public static Map<ResourceLocation, ItemData> CLIENT_ARMOUR_MAP_MULT;
     public static Map<ResourceLocation, WeaponData> CLIENT_WEAPON_MAP_FLAT;
     public static Map<ResourceLocation, ItemData> CLIENT_WEAPON_MAP_MULT;
+    public static TreeSet<ResourceLocation> BESTIARY_ENTRIES;
     public static int skyDarken = 0;
     public static boolean shadersLoaded = false;
 

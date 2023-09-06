@@ -6,10 +6,13 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.data.CommonData;
+import net.cwjn.idf.gui.BestiaryScreen;
 import net.cwjn.idf.gui.InfoScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
 import net.cwjn.idf.hud.MobHealthbar;
+import net.cwjn.idf.network.PacketHandler;
+import net.cwjn.idf.network.packets.RequestBestiaryEntriesPacket;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
@@ -250,7 +253,6 @@ public class ClientEventsForgeBus {
         return Component.translatable(s).withStyle(ALTIMA_2X);
     }
 
-
     @SubscribeEvent
     public static void onInitGui(ScreenEvent.Init event) {
         Screen screen = event.getScreen();
@@ -272,6 +274,9 @@ public class ClientEventsForgeBus {
     private static void onInput(Minecraft minecraft, int key, int action) {
         if (Keybinds.openStats.isDown() && minecraft.screen == null) {
             minecraft.setScreen(new StatScreen());
+        }
+        else if (Keybinds.openBestiary.isDown() && minecraft.screen == null) {
+            minecraft.setScreen(new BestiaryScreen(minecraft.getWindow().getGuiScale()));
         }
     }
 

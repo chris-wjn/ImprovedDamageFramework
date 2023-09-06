@@ -14,10 +14,12 @@ import java.awt.event.KeyEvent;
 public class Keybinds {
 
     public static KeyMapping openStats;
+    public static KeyMapping openBestiary;
 
     @SubscribeEvent
     public static void registerKeyBinding(final RegisterKeyMappingsEvent event) {
         openStats = create("open_stats", KeyEvent.VK_O);
+        openBestiary = create("open_bestiary", KeyEvent.VK_B);
         event.register(openStats);
     }
 

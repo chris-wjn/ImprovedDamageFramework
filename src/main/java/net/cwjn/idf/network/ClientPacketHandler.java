@@ -3,15 +3,25 @@ package net.cwjn.idf.network;
 import com.mojang.math.Vector3f;
 import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.data.ClientData;
+import net.cwjn.idf.gui.BestiaryScreen;
 import net.cwjn.idf.gui.InfoScreen;
+import net.cwjn.idf.gui.buttons.OpenBestiaryEntryButton;
 import net.cwjn.idf.network.packets.SyncClientConfigPacket;
 import net.cwjn.idf.particle.IDFParticles;
+import net.cwjn.idf.util.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static net.cwjn.idf.data.CommonData.*;
 
@@ -56,6 +66,11 @@ public class ClientPacketHandler {
 
     public static void openInfoScreen() {
         Minecraft.getInstance().setScreen(new InfoScreen());
+    }
+
+    public static void UpdateBestiaryEntries(Collection<ResourceLocation> entityTypes) {
+        TreeSet<ResourceLocation> rls = new TreeSet<>(entityTypes);
+        ClientData.BESTIARY_ENTRIES = rls;
     }
 
 }

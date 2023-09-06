@@ -2,6 +2,7 @@ package net.cwjn.idf.util;
 
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
@@ -110,6 +112,10 @@ public class Util {
 
     public static ResourceLocation getEntityRegistryName(EntityType<?> type) {
         return ForgeRegistries.ENTITY_TYPES.getKey(type);
+    }
+
+    public static EntityType<? extends LivingEntity> getEntityTypeFromRegistryName(ResourceLocation name) {
+        return (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(name);
     }
 
     public static ResourceLocation getItemRegistryName(Item item) {
@@ -379,6 +385,50 @@ public class Util {
 
     public static MutableComponent spacer(int i) {
         return translation("space." + i).withStyle(SPACER);
+    }
+
+    public static ResourceLocation[] flipLeftAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[8];
+        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/1.png");
+        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/2.png");
+        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/3.png");
+        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/4.png");
+        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/5.png");
+        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/6.png");
+        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/7.png");
+        returnRL[7] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_left/8.png");
+        return returnRL;
+    }
+
+    public static ResourceLocation[] flipRightAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[8];
+        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/1.png");
+        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/2.png");
+        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/3.png");
+        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/4.png");
+        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/5.png");
+        returnRL[5] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/6.png");
+        returnRL[6] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/7.png");
+        returnRL[7] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_flip_right/8.png");
+        return returnRL;
+    }
+
+    public static ResourceLocation[] openAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[5];
+        returnRL[0] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/1.png");
+        returnRL[1] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/2.png");
+        returnRL[2] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/3.png");
+        returnRL[3] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/4.png");
+        returnRL[4] = new ResourceLocation(ImprovedDamageFramework.MOD_ID, "textures/gui/book_open/5.png");
+        return returnRL;
+    }
+
+    public static ResourceLocation[] contentAppearAnim() {
+        ResourceLocation[] returnRL = new ResourceLocation[36];
+        for (int i = 1; i <= 36; i++) {
+            returnRL[i-1] = new ResourceLocation(MOD_ID, "textures/gui/book_content_appear/" + i + ".png");
+        }
+        return returnRL;
     }
 
 }

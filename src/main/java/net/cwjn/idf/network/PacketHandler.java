@@ -26,6 +26,8 @@ public class PacketHandler {
         INSTANCE.registerMessage(2, SyncSkyDarkenPacket.class, SyncSkyDarkenPacket::encode, SyncSkyDarkenPacket::decode, SyncSkyDarkenPacket::handle);
         INSTANCE.registerMessage(3, DisplayMissPacket.class, DisplayMissPacket::encode, DisplayMissPacket::decode, DisplayMissPacket::handle);
         INSTANCE.registerMessage(4, OpenInfoScreenPacket.class, OpenInfoScreenPacket::encode, OpenInfoScreenPacket::decode, OpenInfoScreenPacket::handle);
+        INSTANCE.registerMessage(5, RequestBestiaryEntriesPacket.class, RequestBestiaryEntriesPacket::encode, RequestBestiaryEntriesPacket::decode, RequestBestiaryEntriesPacket::handle);
+        INSTANCE.registerMessage(6, SendBestiaryEntriesPacket.class, SendBestiaryEntriesPacket::encode, SendBestiaryEntriesPacket::decode, SendBestiaryEntriesPacket::handle);
     }
 
     public static void serverToPlayer(IDFPacket packet, ServerPlayer player) {

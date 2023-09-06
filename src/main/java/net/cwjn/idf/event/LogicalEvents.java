@@ -7,7 +7,9 @@ import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.InfoPageCommand;
+import net.cwjn.idf.command.UnlockBestiaryCommand;
 import net.cwjn.idf.config.CommonConfig;
+import net.cwjn.idf.data.BestiaryData;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.network.packets.DisplayDamageIndicatorPacket;
@@ -21,6 +23,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,11 +35,16 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -87,6 +96,7 @@ public class LogicalEvents {
         LivingEntity target = event.getEntity();
         if (target.getLevel() instanceof ServerLevel) {
             if (target.getAttributeValue(IDFAttributes.EVASION.get())/100 >= Math.random()) {
+                if (CommonConfig.UNDODGABLE_SOURCES.get().contains(event.getSource().msgId)) return;
                 PacketHandler.serverToNearPoint(new DisplayMissPacket(target.getX(), target.getY(), target.getZ(), 0, target.getUUID()), target.getX(), target.getY(), target.getZ(), 15, target.getCommandSenderWorld().dimension());
                 event.setCanceled(true);
             }
@@ -161,6 +171,7 @@ public class LogicalEvents {
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         new ChangeDebugStatusCommand(event.getDispatcher());
         new InfoPageCommand(event.getDispatcher());
+        new UnlockBestiaryCommand(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
     }
 
@@ -185,6 +196,23 @@ public class LogicalEvents {
         if (!event.getEntity().getPersistentData().getBoolean("idf.first_join")) {
             PacketHandler.serverToPlayer(new OpenInfoScreenPacket(), (ServerPlayer) event.getEntity());
             event.getEntity().getPersistentData().putBoolean("idf.first_join", true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onWorldBoot(ServerStartedEvent event) {
+        BestiaryData.loadBestiaryData(event.getServer());
+    }
+
+    @SubscribeEvent
+    public static void onWorldShutdown(ServerStoppingEvent event) {
+        BestiaryData.saveBestiaryData(event.getServer());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerKillMob(LivingDeathEvent event) {
+        if (event.getEntity().getKillCredit() instanceof Player player) {
+            CommonData.BESTIARY_MAP.put(player.getUUID(), Util.getEntityRegistryName(event.getEntity().getType()));
         }
     }
 

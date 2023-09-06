@@ -945,7 +945,7 @@
       "Damage Class - STRIKE": 1.0,
       "Damage Class - PIERCE": 1.0,
       "Damage Class - SLASH": 1.0,
-      "Weight": 0.0,
+      "Weight": -4.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },

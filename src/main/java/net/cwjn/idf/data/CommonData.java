@@ -1,17 +1,18 @@
 package net.cwjn.idf.data;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.config.json.records.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommonData {
 
@@ -22,7 +23,8 @@ public class CommonData {
     public static Map<ResourceLocation, EntityData> LOGICAL_ENTITY_MAP = new HashMap<>();
     public static Map<String, SourceCatcherData> LOGICAL_SOURCE_MAP = new HashMap<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
-    public static final  Map<String, Attribute> ATTRIBUTES = new HashMap<>();
+    public static Multimap<UUID, ResourceLocation> BESTIARY_MAP;
+    public static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();
     public static final List<Attribute> OFFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> DEFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> AUXILIARY_ATTRIBUTES = new ArrayList<>(8);
@@ -60,8 +62,8 @@ public class CommonData {
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.FORCE.get());
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.LIFESTEAL.get());
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.CRIT_CHANCE.get());
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.CRIT_DAMAGE.get());
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.PENETRATING.get());
-            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.ACCURACY.get());
             OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_SPEED);
             OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_KNOCKBACK);
             OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_DAMAGE);
@@ -74,7 +76,6 @@ public class CommonData {
         } //offensive
         {
             DEFENSIVE_ATTRIBUTES.add(Attributes.ARMOR);
-            DEFENSIVE_ATTRIBUTES.add(Attributes.ARMOR_TOUGHNESS);
             DEFENSIVE_ATTRIBUTES.add(Attributes.KNOCKBACK_RESISTANCE);
             DEFENSIVE_ATTRIBUTES.add(IDFElement.FIRE.defence);
             DEFENSIVE_ATTRIBUTES.add(IDFElement.WATER.defence);
@@ -88,9 +89,8 @@ public class CommonData {
             DEFENSIVE_ATTRIBUTES.add(IDFAttributes.EVASION.get());
         } //defensive
         {
-            AUXILIARY_ATTRIBUTES.add(Attributes.MAX_HEALTH);
-            AUXILIARY_ATTRIBUTES.add(Attributes.MOVEMENT_SPEED);
             AUXILIARY_ATTRIBUTES.add(Attributes.LUCK);
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.ACCURACY.get());
         } //auxiliary
     }
 
