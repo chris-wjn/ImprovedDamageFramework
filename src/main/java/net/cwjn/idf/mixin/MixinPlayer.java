@@ -26,15 +26,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.UUID;
 
 import static net.cwjn.idf.attribute.IDFElement.HOLY;
+import static net.minecraftforge.common.ForgeHooks.getCriticalHit;
 
 @Mixin(Player.class)
 public class MixinPlayer {
@@ -84,7 +85,7 @@ public class MixinPlayer {
      * Implement new attributes and features. Too much to change here to reasonably do it without overwrite.
      * Anything that is made incompatible by this should probably stay incompatible.
      */
-    @Overwrite
+    //@Overwrite
     public void attack(Entity target) {
         Player thisPlayer = (Player)((Object)this);
         if (!net.minecraftforge.common.ForgeHooks.onPlayerAttackTarget(thisPlayer, target)) return;
@@ -280,6 +281,116 @@ public class MixinPlayer {
                 }
             }
         }
+    }
+
+    private boolean storeHurtVar;
+    private float ad, bAd, fd, wd, ld, md, dd, hd, pen, force, scalar, knockback, lifesteal;
+    private String damageClass;
+
+    /**
+     * Ensure the check for damage by vanilla goes through so that we can check ourselves
+     */
+    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 0.0f, ordinal = 1))
+    private float ifStatementRedirect(float constant) {
+        return -Float.MAX_VALUE;
+    }
+
+    /**
+     * Check for damage using all new damage types
+     */
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getKnockbackBonus(Lnet/minecraft/world/entity/LivingEntity;)I"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
+    private void checkForDamage(Entity pTarget, CallbackInfo ci, float f, float f1, float f2, boolean flag, boolean flag1, float i) {
+        Player thisPlayer = (Player)((Object)this);
+        this.scalar = f2;
+        this.ad = f;
+        this.fd = (float)thisPlayer.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get());
+        this.wd = (float)thisPlayer.getAttributeValue(IDFAttributes.WATER_DAMAGE.get());
+        this.ld = (float)thisPlayer.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
+        this.md = (float)thisPlayer.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
+        this.dd = (float)thisPlayer.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
+        this.hd = (float)thisPlayer.getAttributeValue(HOLY.damage);
+        this.bAd = f1;
+        this.pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
+        this.force = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
+        this.lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
+        this.damageClass = thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
+        ad *= 0.2F + scalar * scalar * 0.8F;
+        fd *= 0.2F + scalar * scalar * 0.8F;
+        wd *= 0.2F + scalar * scalar * 0.8F;
+        ld *= 0.2F + scalar * scalar * 0.8F;
+        md *= 0.2F + scalar * scalar * 0.8F;
+        dd *= 0.2F + scalar * scalar * 0.8F;
+        hd *= 0.2F + scalar * scalar * 0.8F;
+        force *= 0.2F + scalar * scalar * 0.8F;
+        bAd *= scalar;
+        if (!(f > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || hd > 0.0F || bAd > 0.0F)) {
+            ci.cancel();
+        }
+    }
+
+    /**
+     * Change the default knockback sprint bonus from 1.0 to 0.4
+     */
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", ordinal = 0, shift = At.Shift.AFTER),
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    private void fixKnockback(Entity target, CallbackInfo callback, float f, float f1, float f2, boolean flag, boolean flag1, float i) {
+        i -= 0.6;
+        this.knockback = i;
+    }
+
+    /**
+     * Remove default crit check and implement crit chance
+     */
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/common/ForgeHooks;getCriticalHit(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;ZF)Lnet/minecraftforge/event/entity/player/CriticalHitEvent;"))
+    private CriticalHitEvent reworkCriticalHit(Player player, Entity target, boolean vanillaCritical, float damageModifier) {
+        boolean isCrit = (player.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01) > player.getRandom().nextDouble() && target instanceof LivingEntity;
+        float critMod = isCrit? (float) (player.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())*0.01) : 1.0F;
+        CriticalHitEvent hitResult = getCriticalHit(player, target, isCrit, critMod);
+        isCrit = hitResult != null;
+        if (isCrit) {
+            ad *= hitResult.getDamageModifier();
+            fd *= hitResult.getDamageModifier();
+            wd *= hitResult.getDamageModifier();
+            ld *= hitResult.getDamageModifier();
+            md *= hitResult.getDamageModifier();
+            dd *= hitResult.getDamageModifier();
+            hd *= hitResult.getDamageModifier();
+        }
+        ad += bAd;
+        return hitResult;
+    }
+
+    /**
+     * Make a DamageSource with new system
+     */
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;", shift = At.Shift.AFTER, ordinal = 0))
+    private void reworkHurt(Entity target, CallbackInfo callback) {
+        Player thisPlayer = (Player)((Object)this);
+        storeHurtVar = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force, damageClass), ad);
+    }
+
+    /**
+     * Use the new DamageSource
+     */
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", ordinal = 0))
+    private boolean useNewHurt(Entity instance, DamageSource pSource, float pAmount) {
+        return storeHurtVar;
+    }
+
+    /**
+     * void knockback in normal and sweep attacks because it gets handled in DamageHandler
+     */
+    //@Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
+    private void voidKnockback(double d, double d1, double d2) {
+
+    }
+
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V", shift = At.Shift.AFTER, ordinal = 1))
+    private void reworkSweepHurt(Entity target, CallbackInfo callback) {
+        Player thisPlayer = (Player)((Object)this);
+        float ratio = 0.25f + EnchantmentHelper.getSweepingDamageRatio(thisPlayer);
+        target.hurt(new IDFEntityDamageSource("player", thisPlayer, ratio*fd, ratio*wd, ratio*ld, ratio*md, ratio*dd, ratio*hd, pen, lifesteal, knockback, force,
+                damageClass), ratio*ad);
     }
 
     @Inject(method = "causeFoodExhaustion",
