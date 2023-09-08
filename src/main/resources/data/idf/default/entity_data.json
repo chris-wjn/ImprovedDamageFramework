@@ -389,8 +389,7 @@
   "minecraft:cow": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -517,8 +516,7 @@
   "minecraft:donkey": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -827,7 +825,6 @@
     "Damage Class": "pierce",
     "Modifier Tags": [
       "SMALL",
-      "FLAMMABLE",
       "EVASIVE",
       "EVASIVE"
     ],
@@ -1047,8 +1044,7 @@
   "minecraft:goat": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "MEDIUM",
-      "FLAMMABLE"
+      "MEDIUM"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1179,8 +1175,7 @@
   "minecraft:horse": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1355,8 +1350,7 @@
   "minecraft:llama": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1441,8 +1435,7 @@
   "minecraft:mooshroom": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1484,8 +1477,7 @@
   "minecraft:mule": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1570,8 +1562,7 @@
   "minecraft:panda": {
     "Damage Class": "slash",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1876,8 +1867,7 @@
     "Damage Class": "slash",
     "Modifier Tags": [
       "GIANT",
-      "AQUATIC",
-      "FLAMMABLE"
+      "AQUATIC"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -1962,8 +1952,7 @@
   "minecraft:rabbit": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "TINY",
-      "FLAMMABLE"
+      "TINY"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -2576,8 +2565,7 @@
   "minecraft:trader_llama": {
     "Damage Class": "strike",
     "Modifier Tags": [
-      "LARGE",
-      "FLAMMABLE"
+      "LARGE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -3022,8 +3010,7 @@
     "Damage Class": "pierce",
     "Modifier Tags": [
       "MEDIUM",
-      "EVASIVE",
-      "FLAMMABLE"
+      "EVASIVE"
     ],
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -3155,7 +3142,6 @@
     "Damage Class": "strike",
     "Modifier Tags": [
       "LARGE",
-      "FLAMMABLE",
       "UNDEAD"
     ],
     "Offense Stats": {

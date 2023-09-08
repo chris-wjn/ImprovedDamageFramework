@@ -22,7 +22,6 @@ public class IDFMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        System.out.println("PRINTING CLASS NAME: " + mixinClassName);
         if (mixinClassName.equals("net.cwjn.idf.mixin.tetra.MixinItemModularHandheld") ||
             mixinClassName.equals("net.cwjn.idf.mixin.tetra.MixinSweepingEffect") ||
             mixinClassName.equals("net.cwjn.idf.mixin.tetra.MixinItemEffectHandler") ||

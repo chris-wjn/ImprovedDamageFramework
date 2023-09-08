@@ -13,6 +13,8 @@ import se.mickelus.tetra.items.modular.IModularItem;
 
 import java.util.Optional;
 
+import static se.mickelus.tetra.effect.EffectHelper.getEffectLevel;
+
 @Mixin(ItemEffectHandler.class)
 public class MixinItemEffectHandler {
 
@@ -35,11 +37,6 @@ public class MixinItemEffectHandler {
                 }
             }
         });
-    }
-
-    @Shadow(remap = false)
-    private static int getEffectLevel(ItemStack stack, ItemEffect effect) {
-        throw new IllegalStateException("failed to shadow setHealth()");
     }
 
 }

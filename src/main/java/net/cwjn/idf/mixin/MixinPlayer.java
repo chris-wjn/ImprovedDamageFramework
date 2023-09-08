@@ -16,6 +16,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
@@ -313,7 +314,7 @@ public class MixinPlayer {
             bAd = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), MobType.UNDEFINED);
         }
         this.knockback = (float)thisPlayer.getAttributeValue(Attributes.ATTACK_KNOCKBACK) + EnchantmentHelper.getKnockbackBonus(thisPlayer);
-        if (thisPlayer.isSprinting() && scalar > 0.9) knockback += DamageHandler.DEFAULT_KNOCKBACK;
+        if (thisPlayer.isSprinting() && scalar > 0.9F) knockback += DamageHandler.DEFAULT_KNOCKBACK;
         this.pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
         this.force = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
         this.lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
@@ -360,14 +361,9 @@ public class MixinPlayer {
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean reworkHurt(Entity instance, DamageSource pSource, float pAmount) {
         Player thisPlayer = (Player)((Object)this);
+        System.out.println(knockback);
         return instance.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force, damageClass), ad);
     }
-
-    /**
-     * void knockback in normal and sweep attacks because it gets handled in DamageHandler
-     */
-    //@Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void removeKnockback(double d, double d1, double d2) {}
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean reworkSweepHurt(LivingEntity instance, DamageSource source, float amt) {
@@ -375,6 +371,26 @@ public class MixinPlayer {
         float ratio = 0.25f + EnchantmentHelper.getSweepingDamageRatio(thisPlayer);
         return instance.hurt(new IDFEntityDamageSource("player", thisPlayer, ratio*fd, ratio*wd, ratio*ld, ratio*md, ratio*dd, ratio*hd, pen, lifesteal, knockback, force,
                 damageClass), ratio*ad);
+    }
+
+    /**
+     * makes vanilla variable not store knockback from attribute and enchantment. Sprint knockback will still apply.
+     * to account for this, we don't include sprint knockback bonus into the Damage Handler
+     */
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getAttributeValue(Lnet/minecraft/world/entity/ai/attributes/Attribute;)D", ordinal = 1))
+    private double removeKnockback(Player instance, Attribute attribute) {
+        return 0;
+    }
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getKnockbackBonus(Lnet/minecraft/world/entity/LivingEntity;)I"))
+    private int removeKnockback1(LivingEntity pPlayer) {
+        return 0;
+    }
+    /**
+     * This makes targets hit by sweep not get knockbacked by default and only handled in the DamageHandler
+     */
+    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 0.4f))
+    private float removeKnockback2(float constant) {
+        return 0f;
     }
 
     @Inject(method = "causeFoodExhaustion",

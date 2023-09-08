@@ -127,7 +127,7 @@ dependencies {
 
     //TETRA
     implementation fg.deobf("curse.maven:mutil-351914:3941314")
-    implementation fg.deobf("curse.maven:tetra-289712:4487237")
+    implementation fg.deobf("curse.maven:tetra-289712:4738567")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
