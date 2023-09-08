@@ -361,7 +361,6 @@ public class MixinPlayer {
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean reworkHurt(Entity instance, DamageSource pSource, float pAmount) {
         Player thisPlayer = (Player)((Object)this);
-        System.out.println(knockback);
         return instance.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force, damageClass), ad);
     }
 
@@ -375,7 +374,6 @@ public class MixinPlayer {
 
     /**
      * makes vanilla variable not store knockback from attribute and enchantment. Sprint knockback will still apply.
-     * to account for this, we don't include sprint knockback bonus into the Damage Handler
      */
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getAttributeValue(Lnet/minecraft/world/entity/ai/attributes/Attribute;)D", ordinal = 1))
     private double removeKnockback(Player instance, Attribute attribute) {
@@ -384,13 +382,6 @@ public class MixinPlayer {
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getKnockbackBonus(Lnet/minecraft/world/entity/LivingEntity;)I"))
     private int removeKnockback1(LivingEntity pPlayer) {
         return 0;
-    }
-    /**
-     * This makes targets hit by sweep not get knockbacked by default and only handled in the DamageHandler
-     */
-    @ModifyConstant(method = "attack", constant = @Constant(floatValue = 0.4f))
-    private float removeKnockback2(float constant) {
-        return 0f;
     }
 
     @Inject(method = "causeFoodExhaustion",
