@@ -298,18 +298,22 @@ public class MixinPlayer {
     /**
      * Check for damage using all new damage types
      */
-    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getKnockbackBonus(Lnet/minecraft/world/entity/LivingEntity;)I"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
-    private void checkForDamage(Entity pTarget, CallbackInfo ci, float f, float f1, float f2, boolean flag, boolean flag1, float i) {
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getKnockbackBonus(Lnet/minecraft/world/entity/LivingEntity;)I"), cancellable = true)
+    private void checkForDamage(Entity pTarget, CallbackInfo ci) {
         Player thisPlayer = (Player)((Object)this);
-        this.scalar = f2;
-        this.ad = f;
+        this.scalar = thisPlayer.getAttackStrengthScale(0.5F);
+        this.ad = (float)thisPlayer.getAttributeValue(Attributes.ATTACK_DAMAGE);
         this.fd = (float)thisPlayer.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get());
         this.wd = (float)thisPlayer.getAttributeValue(IDFAttributes.WATER_DAMAGE.get());
         this.ld = (float)thisPlayer.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
         this.md = (float)thisPlayer.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
         this.dd = (float)thisPlayer.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
         this.hd = (float)thisPlayer.getAttributeValue(HOLY.damage);
-        this.bAd = f1;
+        if (pTarget instanceof LivingEntity) {
+            bAd = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), ((LivingEntity)pTarget).getMobType());
+        } else {
+            bAd = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), MobType.UNDEFINED);
+        }
         this.pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
         this.force = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
         this.lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
@@ -323,7 +327,7 @@ public class MixinPlayer {
         hd *= 0.2F + scalar * scalar * 0.8F;
         force *= 0.2F + scalar * scalar * 0.8F;
         bAd *= scalar;
-        if (!(f > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || hd > 0.0F || bAd > 0.0F)) {
+        if (!(ad > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || hd > 0.0F || bAd > 0.0F)) {
             ci.cancel();
         }
     }
