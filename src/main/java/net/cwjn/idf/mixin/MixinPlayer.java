@@ -3,12 +3,9 @@ package net.cwjn.idf.mixin;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
-import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.damage.*;
 import net.cwjn.idf.event.LogicalEvents;
-import net.cwjn.idf.sound.IDFSounds;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -30,9 +27,6 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.UUID;
 
 import static net.cwjn.idf.attribute.IDFElement.HOLY;
 import static net.minecraftforge.common.ForgeHooks.getCriticalHit;
@@ -295,13 +289,17 @@ public class MixinPlayer {
         return -Float.MAX_VALUE;
     }
 
+    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getAttackStrengthScale(F)F", shift = At.Shift.BEFORE))
+    private void storeAttackStrength(Entity pTarget, CallbackInfo ci) {
+        this.scalar = ((Player)(Object)this).getAttackStrengthScale(0.5F);
+    }
+
     /**
      * Check for damage using all new damage types
      */
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getKnockbackBonus(Lnet/minecraft/world/entity/LivingEntity;)I"), cancellable = true)
     private void checkForDamage(Entity pTarget, CallbackInfo ci) {
         Player thisPlayer = (Player)((Object)this);
-        this.scalar = thisPlayer.getAttackStrengthScale(0.5F);
         this.ad = (float)thisPlayer.getAttributeValue(Attributes.ATTACK_DAMAGE);
         this.fd = (float)thisPlayer.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get());
         this.wd = (float)thisPlayer.getAttributeValue(IDFAttributes.WATER_DAMAGE.get());
@@ -314,6 +312,8 @@ public class MixinPlayer {
         } else {
             bAd = EnchantmentHelper.getDamageBonus(thisPlayer.getMainHandItem(), MobType.UNDEFINED);
         }
+        this.knockback = (float)thisPlayer.getAttributeValue(Attributes.ATTACK_KNOCKBACK) + EnchantmentHelper.getKnockbackBonus(thisPlayer);
+        if (thisPlayer.isSprinting() && scalar > 0.9) knockback += DamageHandler.DEFAULT_KNOCKBACK;
         this.pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
         this.force = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
         this.lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
@@ -330,16 +330,6 @@ public class MixinPlayer {
         if (!(ad > 0.0F || fd > 0.0F || wd > 0.0F || ld > 0.0F || md > 0.0F || dd > 0.0F || hd > 0.0F || bAd > 0.0F)) {
             ci.cancel();
         }
-    }
-
-    /**
-     * Change the default knockback sprint bonus from 1.0 to 0.4
-     */
-    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", ordinal = 0, shift = At.Shift.AFTER),
-            locals = LocalCapture.CAPTURE_FAILHARD)
-    private void fixKnockback(Entity target, CallbackInfo callback, float f, float f1, float f2, boolean flag, boolean flag1, float i) {
-        i -= 0.6;
-        this.knockback = i;
     }
 
     /**
@@ -367,33 +357,23 @@ public class MixinPlayer {
     /**
      * Make a DamageSource with new system
      */
-    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;", shift = At.Shift.AFTER, ordinal = 0))
-    private void reworkHurt(Entity target, CallbackInfo callback) {
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+    private boolean reworkHurt(Entity instance, DamageSource pSource, float pAmount) {
         Player thisPlayer = (Player)((Object)this);
-        storeHurtVar = target.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force, damageClass), ad);
-    }
-
-    /**
-     * Use the new DamageSource
-     */
-    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", ordinal = 0))
-    private boolean useNewHurt(Entity instance, DamageSource pSource, float pAmount) {
-        return storeHurtVar;
+        return instance.hurt(new IDFEntityDamageSource("player", thisPlayer, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force, damageClass), ad);
     }
 
     /**
      * void knockback in normal and sweep attacks because it gets handled in DamageHandler
      */
     //@Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void voidKnockback(double d, double d1, double d2) {
+    private void removeKnockback(double d, double d1, double d2) {}
 
-    }
-
-    @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V", shift = At.Shift.AFTER, ordinal = 1))
-    private void reworkSweepHurt(Entity target, CallbackInfo callback) {
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
+    private boolean reworkSweepHurt(LivingEntity instance, DamageSource source, float amt) {
         Player thisPlayer = (Player)((Object)this);
         float ratio = 0.25f + EnchantmentHelper.getSweepingDamageRatio(thisPlayer);
-        target.hurt(new IDFEntityDamageSource("player", thisPlayer, ratio*fd, ratio*wd, ratio*ld, ratio*md, ratio*dd, ratio*hd, pen, lifesteal, knockback, force,
+        return instance.hurt(new IDFEntityDamageSource("player", thisPlayer, ratio*fd, ratio*wd, ratio*ld, ratio*md, ratio*dd, ratio*hd, pen, lifesteal, knockback, force,
                 damageClass), ratio*ad);
     }
 
