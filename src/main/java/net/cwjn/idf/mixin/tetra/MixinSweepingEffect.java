@@ -85,7 +85,7 @@ public class MixinSweepingEffect {
      * @reason
      */
     @Overwrite(remap = false)
-    public static void truesweep(ItemStack itemStack, LivingEntity attacker) {
+    public static void truesweep(ItemStack itemStack, LivingEntity attacker, boolean triggerVfx) {
         int sweepingLevel = getSweepingLevel(itemStack);
         float damage = (float)Math.max(attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (double)((float)sweepingLevel * 0.125F), 1.0);
         float fd = (float) (attacker.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()) * ((double)sweepingLevel * 0.125F));
@@ -120,8 +120,10 @@ public class MixinSweepingEffect {
                             attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
             causeTruesweepDamage(damageSource, damage*critMultiplier, itemStack, attacker, entity);
         });
-        attacker.level.playSound((Player)null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
-        CastOptional.cast(attacker, Player.class).ifPresent(Player::sweepAttack);
+        if (triggerVfx) {
+            attacker.level.playSound((Player)null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
+            CastOptional.cast(attacker, Player.class).ifPresent(Player::sweepAttack);
+        }
     }
 
     /**
