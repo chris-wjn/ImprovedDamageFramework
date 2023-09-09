@@ -36,6 +36,11 @@ public class AttachAttributesOnJoin {
             if (livingEntity.getPersistentData().getBoolean(ENTITY_BONUS)) return;
             AttributeInstance healthInstance = livingEntity.getAttribute(Attributes.MAX_HEALTH);
             AttributeInstance damageInstance = livingEntity.getAttribute(Attributes.ATTACK_DAMAGE);
+            AttributeInstance knockbackInstance = livingEntity.getAttribute(Attributes.ATTACK_KNOCKBACK);
+            AttributeInstance knockbackResInstance = livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+            AttributeInstance armorInstance = livingEntity.getAttribute(Attributes.ARMOR);
+            AttributeInstance armorToughnessInstance = livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS);
+            AttributeInstance movespeedInstance = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
             if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() * 2);
             healthInstance.setBaseValue(healthInstance.getBaseValue() * 5);
 
@@ -43,12 +48,12 @@ public class AttachAttributesOnJoin {
             EntityData data = CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(livingEntity.getType()));
             if (data != null) {
                 if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() + data.oData().pDmg());
-                livingEntity.getAttribute(Attributes.ARMOR).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.dData().pDef());
-                livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS) + data.dData().weight());
-                livingEntity.getAttribute(Attributes.ATTACK_KNOCKBACK).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ATTACK_KNOCKBACK) + data.oData().kb());
+                if (armorInstance != null) armorInstance.setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR) + data.dData().pDef());
+                if (armorToughnessInstance != null) armorToughnessInstance.setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ARMOR_TOUGHNESS) + data.dData().weight());
+                if (knockbackInstance != null) knockbackInstance.setBaseValue(livingEntity.getAttributeBaseValue(Attributes.ATTACK_KNOCKBACK) + data.oData().kb());
                 healthInstance.setBaseValue(healthInstance.getBaseValue() + data.aData().hp());
-                livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.dData().kbr());
-                livingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(livingEntity.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * data.aData().ms());
+                if (knockbackResInstance != null) knockbackResInstance.setBaseValue(livingEntity.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) + data.dData().kbr());
+                if (movespeedInstance != null) movespeedInstance.setBaseValue(livingEntity.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * data.aData().ms());
                 //FOURTH SECTION: give the entity it's attribute modifiers defined by its tags
                 for (EntityTag e : data.tags()) {
                     for (Iterator<Pair<Attribute, Double>> it = e.getOffensiveData().getAttributesWithModifier(); it.hasNext(); ) {
