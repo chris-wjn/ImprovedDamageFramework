@@ -380,7 +380,7 @@ public class Util {
             MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
             return includeSpacer? comp.append(comp1) : comp1;
         }
-        else return Component.empty();
+        else return Component.translatable(name);
     }
 
     public static MutableComponent spacer(int i) {
