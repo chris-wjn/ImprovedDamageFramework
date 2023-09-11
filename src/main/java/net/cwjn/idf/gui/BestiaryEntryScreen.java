@@ -116,12 +116,12 @@ public class BestiaryEntryScreen extends Screen {
         font.draw(matrix, Component.translatable("idf.bestiary_info.speed").append(" " + Util.mBPS(entity.getAttributeValue(Attributes.MOVEMENT_SPEED)) + "bps"), infoLeft+getX(0,2), infoTop+getY(0,2), Color.GREEN.getColor());
         int x = 2, y = 2, x1 = 0, y1 = 0, x2 = 0, y2 = 0;
         for (Attribute a : AUXILIARY_ATTRIBUTES) {
-            if (entity.getAttribute(a) != null) {
+            if (entity.getAttribute(a) != null && !a.equals(Attributes.MAX_HEALTH) && !a.equals(Attributes.MOVEMENT_SPEED)) {
                 if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(0,++x), infoTop+getY(0,++y), Color.DARKSLATEGREY.getColor());
             }
         }
         for (Attribute a : DEFENSIVE_ATTRIBUTES) {
-            if (entity.getAttribute(a) != null) {
+            if (entity.getAttribute(a) != null && !a.equals(Attributes.ARMOR_TOUGHNESS)) {
                 if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(1,x1++), infoTop+getY(1,y1++), Color.DARKSLATEGREY.getColor());
             }
         }

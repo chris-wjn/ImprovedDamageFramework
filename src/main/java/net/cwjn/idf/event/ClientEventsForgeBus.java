@@ -4,15 +4,14 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.config.ClientConfig;
 import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.gui.BestiaryScreen;
-import net.cwjn.idf.gui.InfoScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
 import net.cwjn.idf.hud.MobHealthbar;
 import net.cwjn.idf.network.PacketHandler;
-import net.cwjn.idf.network.packets.RequestBestiaryEntriesPacket;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
@@ -33,22 +32,29 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.data.CommonData.*;
-import static net.cwjn.idf.gui.buttons.TabButton.TabType.*;
+import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
+import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
 import static net.cwjn.idf.util.Util.*;
+import static net.minecraft.network.chat.Component.translatable;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -57,132 +63,321 @@ public class ClientEventsForgeBus {
     public static float MOB_HEALTH_BAR_DISTANCE_FACTOR = 30;
     private static final Predicate<Attribute> isPercentageAttribute = a -> (
             a.equals(IDFAttributes.EVASION.get()) ||
-            a.equals(IDFAttributes.LIFESTEAL.get()) ||
-            a.equals(IDFAttributes.CRIT_CHANCE.get()) ||
-            a.equals(IDFAttributes.PENETRATING.get())
-            );
+                    a.equals(IDFAttributes.LIFESTEAL.get()) ||
+                    a.equals(IDFAttributes.CRIT_CHANCE.get()) ||
+                    a.equals(IDFAttributes.CRIT_DAMAGE.get()) ||
+                    a.equals(IDFAttributes.STRIKE_MULT.get()) ||
+                    a.equals(IDFAttributes.SLASH_MULT.get()) ||
+                    a.equals(IDFAttributes.PIERCE_MULT.get()) ||
+                    a.equals(Attributes.KNOCKBACK_RESISTANCE) ||
+                    a.equals(Attributes.ATTACK_KNOCKBACK) ||
+                    a.equals(IDFAttributes.PENETRATING.get())
+    );
+    private static final Predicate<Attribute> shouldMult100 = a -> (
+            a.equals(IDFAttributes.STRIKE_MULT.get()) ||
+            a.equals(IDFAttributes.SLASH_MULT.get()) ||
+            a.equals(IDFAttributes.PIERCE_MULT.get()) ||
+            a.equals(Attributes.KNOCKBACK_RESISTANCE) ||
+            a.equals(Attributes.ATTACK_KNOCKBACK)
+    );
+    private static final Predicate<Attribute> isInverseNegative = a -> (
+            a.equals(IDFAttributes.STRIKE_MULT.get()) ||
+                    a.equals(IDFAttributes.SLASH_MULT.get()) ||
+                    a.equals(IDFAttributes.PIERCE_MULT.get())
+    );
+
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack item = event.getItemStack();
-        //we only need to affect equipment tagged items
         if (item.hasTag() && item.getTag().contains(EQUIPMENT_TAG)) {
-            //first get items attribute modifiers for the item's normal slot
-            //we don't display attribute modifiers in slots the item doesn't usually take
-            //modifiers in because it's too hard to fit in.
             List<Component> list = event.getToolTip();
             EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
             Multimap<Attribute, AttributeModifier> map = HashMultimap.create(item.getAttributeModifiers(slot));
-            MutableComponent line1 = Component.empty().withStyle(Style.EMPTY);
-            MutableComponent line2 = Component.empty().withStyle(Style.EMPTY);
-            List<Component> main = new ArrayList<>();
-            List<Component> other = new ArrayList<>();
             boolean isWeapon = item.getTag().contains(WEAPON_TAG);
             boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
+            if (ClientConfig.USE_OLD_TOOLTIPS.get()) {
+                //first get items attribute modifiers for the item's normal slot
+                //we don't display attribute modifiers in slots the item doesn't usually take
+                //modifiers in because it's too hard to fit in.
+                MutableComponent line1 = Component.empty().withStyle(Style.EMPTY);
+                MutableComponent line2 = Component.empty().withStyle(Style.EMPTY);
+                List<Component> main = new ArrayList<>();
+                List<Component> other = new ArrayList<>();
 
-            if (isWeapon) {
-                //static lines for weapons. Durability, force, atkspd, crit, pen, knockback
-                if (item.isDamageableItem()) {
-                    double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
-                    Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
-                    line1.append(Util.writeStaticTooltipComponent(item.getMaxDamage() - item.getDamageValue(), "durability", colour, false, true));
+                if (isWeapon) {
+                    //static lines for weapons. Durability, force, atkspd, crit, pen, knockback
+                    if (item.isDamageableItem()) {
+                        double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
+                        Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
+                        line1.append(Util.writeStaticTooltipComponent(item.getMaxDamage() - item.getDamageValue(), "durability", colour, false, true));
+                    } else {
+                        line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
+                    }
+                    double force = convertAndRemoveAttribute(map, IDFAttributes.FORCE.get());
+                    line1.append(Util.writeStaticTooltipComponent(force, "force", null, false, false));
+                    if (!isRanged) {
+                        double atkSpd = (convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED));
+                        line1.append(Util.writeStaticTooltipComponent(atkSpd, "attack_speed", null, false, true));
+                    } else {
+                        double accuracy = (getAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()));
+                        line1.append(Util.writeStaticTooltipComponent(accuracy, "accuracy", null, false, true));
+                    }
+                    double crit = convertAndRemoveAttribute(map, IDFAttributes.CRIT_CHANCE.get());
+                    double critDmg = convertAndRemoveAttribute(map, IDFAttributes.CRIT_DAMAGE.get()) + 150;
+                    BigDecimal numerator = BigDecimal.valueOf(convertAndRemoveAttribute(map, Attributes.ATTACK_KNOCKBACK)), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
+                    double knockback = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
+                    line2.append(Util.writeStaticTooltipComponent(crit, "crit_chance", null, true, true));
+                    line2.append(Util.writeStaticTooltipComponent(critDmg, "crit_damage", null, true, false));
+                    line2.append(Util.writeStaticTooltipComponent(knockback * 100, "knockback", null, true, true));
                 } else {
-                    line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
+                    //If the item is tagged as equipment but doesn't have a damage class it is wearable equipment.
+                    if (item.isDamageableItem()) {
+                        double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
+                        Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
+                        line1.append(Util.writeStaticTooltipComponent(item.getMaxDamage() - item.getDamageValue(), "durability", colour, false, true));
+                    } else {
+                        line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
+                    }
+                    double wgt = getAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS);
+                    double kbr = getAndRemoveAttribute(map, Attributes.KNOCKBACK_RESISTANCE);
+                    line1.append(Util.writeStaticTooltipComponent(wgt, "force", null, false, false));
+                    line1.append(Util.writeStaticTooltipComponent(kbr * 100, "knockback_resistance", null, true, true));
+                    double str = getAndRemoveAttribute(map, IDFAttributes.STRIKE_MULT.get()) * 100;
+                    double prc = getAndRemoveAttribute(map, IDFAttributes.PIERCE_MULT.get()) * 100;
+                    double sls = getAndRemoveAttribute(map, IDFAttributes.SLASH_MULT.get()) * 100;
+                    line2.append(Util.writeStaticTooltipComponent(str, "strike", pickColour(str), true, true));
+                    line2.append(Util.writeStaticTooltipComponent(prc, "pierce", pickColour(prc), true, false));
+                    line2.append(Util.writeStaticTooltipComponent(sls, "slash", pickColour(sls), true, true));
                 }
-                double force = convertAndRemoveAttribute(map, IDFAttributes.FORCE.get());
-                line1.append(Util.writeStaticTooltipComponent(force, "force", null, false, false));
-                if (!isRanged) {
-                    double atkSpd = (convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED));
-                    line1.append(Util.writeStaticTooltipComponent(atkSpd, "attack_speed", null, false, true));
-                } else {
-                    double accuracy = (getAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()));
-                    line1.append(Util.writeStaticTooltipComponent(accuracy, "accuracy", null, false, true));
+                list.add(divider(20, Color.LIGHTGREY));
+                String[] keys = Util.sort(map, isWeapon);
+                for (String key : keys) {
+                    Attribute a = CommonData.ATTRIBUTES.get(key);
+                    Collection<AttributeModifier> mods = map.get(a);
+                    final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                    double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
+                    double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                    Component comp;
+                    if (mult != 1)
+                        comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(scalingDoubleSize(mult * flat));
+                    else comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(spacer(2));
+                    main.add(comp);
+                    main.add(Component.empty());
+                    map.removeAll(a);
                 }
-                double crit = convertAndRemoveAttribute(map, IDFAttributes.CRIT_CHANCE.get());
-                double critDmg = convertAndRemoveAttribute(map, IDFAttributes.CRIT_DAMAGE.get())+150;
-                BigDecimal numerator = BigDecimal.valueOf(convertAndRemoveAttribute(map, Attributes.ATTACK_KNOCKBACK)), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
-                double knockback = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
-                line2.append(Util.writeStaticTooltipComponent(crit, "crit_chance", null, true, true));
-                line2.append(Util.writeStaticTooltipComponent(critDmg, "crit_damage", null, true, false));
-                line2.append(Util.writeStaticTooltipComponent(knockback*100, "knockback", null, true, true));
-            }
-            else {
-                //If the item is tagged as equipment but doesn't have a damage class it is wearable equipment.
-                if (item.isDamageableItem()) {
-                    double percentage = (double) (item.getMaxDamage() - item.getDamageValue()) / (double) item.getMaxDamage();
-                    Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
-                    line1.append(Util.writeStaticTooltipComponent(item.getMaxDamage() - item.getDamageValue(), "durability", colour, false, true));
-                } else {
-                    line1.append(Util.writeStaticInfinityComponent(Color.DARKSEAGREEN, true));
-                }
-                double wgt = getAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS);
-                double kbr = getAndRemoveAttribute(map, Attributes.KNOCKBACK_RESISTANCE);
-                line1.append(Util.writeStaticTooltipComponent(wgt, "force", null, false, false));
-                line1.append(Util.writeStaticTooltipComponent(kbr * 100, "knockback_resistance", null, true, true));
-                double str = getAndRemoveAttribute(map, IDFAttributes.STRIKE_MULT.get())*100;
-                double prc = getAndRemoveAttribute(map, IDFAttributes.PIERCE_MULT.get())*100;
-                double sls = getAndRemoveAttribute(map, IDFAttributes.SLASH_MULT.get())*100;
-                line2.append(Util.writeStaticTooltipComponent(str, "strike", pickColour(str), true, true));
-                line2.append(Util.writeStaticTooltipComponent(prc, "pierce", pickColour(prc), true, false));
-                line2.append(Util.writeStaticTooltipComponent(sls, "slash", pickColour(sls), true, true));
-            }
 
-            String[] keys = Util.sort(map, isWeapon);
-            for (String key : keys) {
-                Attribute a = CommonData.ATTRIBUTES.get(key);
-                Collection<AttributeModifier> mods = map.get(a);
-                final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
-                Component comp;
-                if (mult != 1) comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(scalingDoubleSize(mult * flat));
-                else comp = iconDoubleSize(key, false).append(writeDoubleSize(flat)).append(spacer(2));
-                main.add(comp);
-                main.add(Component.empty());
-                map.removeAll(a);
-            }
-
-            for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
-                Attribute a = entry.getKey();
-                MutableComponent comp = Util.text(" ");
-                if (entry.getKey() == Attributes.MOVEMENT_SPEED) {
-                    double value = Util.pBPS(entry.getValue().getAmount());
+                for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
+                    Attribute a = entry.getKey();
+                    MutableComponent comp = Util.text(" ");
+                    if (entry.getKey() == Attributes.MOVEMENT_SPEED) {
+                        double value = Util.pBPS(entry.getValue().getAmount());
+                        if (entry.getValue().getOperation() == ADDITION) {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                            comp.append(writeTooltipDouble(value, true, false, false, false, Color.FLORALWHITE));
+                        } else {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                            comp.append(writeTooltipDouble(entry.getValue().getAmount() + 1, true, true, false, false, Color.FLORALWHITE));
+                        }
+                        other.add(comp);
+                        continue;
+                    }
                     if (entry.getValue().getOperation() == ADDITION) {
-                        comp.append(Util.translation("idf.right_arrow.symbol"));
-                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(value, a.getDescriptionId(), true, false, false));
-                    }
-                    else {
-                        comp.append(Util.translation("idf.right_arrow.symbol"));
-                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, a.getDescriptionId(), true, true, false));
-                    }
-                    other.add(comp);
-                    continue;
-                }
-                if (entry.getValue().getOperation() == ADDITION) {
-                    if (isPercentageAttribute.test(entry.getKey())) {
-                        comp.append(Util.translation("idf.right_arrow.symbol"));
-                        comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), a.getDescriptionId(), entry.getValue().getAmount() >= 0, false, true));
+                        if (isPercentageAttribute.test(entry.getKey())) {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                            comp.append(writeTooltipDouble(entry.getValue().getAmount(), entry.getValue().getAmount() >= 0, false, true, false, Color.FLORALWHITE));
+                        } else {
+                            comp.append(Util.translation("idf.right_arrow.symbol"));
+                            comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
+                            comp.append(writeTooltipDouble(entry.getValue().getAmount(), entry.getValue().getAmount() >= 0, false, false, false, Color.FLORALWHITE));
+                        }
                     } else {
                         comp.append(Util.translation("idf.right_arrow.symbol"));
                         comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                        comp.append(writeTooltipDouble(entry.getValue().getAmount(), a.getDescriptionId(), entry.getValue().getAmount() >= 0, false, false));
+                        comp.append(writeTooltipDouble(entry.getValue().getAmount() + 1, entry.getValue().getAmount() >= 0, true, false, false, Color.FLORALWHITE));
                     }
-                } else {
-                    comp.append(Util.translation("idf.right_arrow.symbol"));
-                    comp.append(Util.writeIcon(entry.getKey().getDescriptionId(), true));
-                    comp.append(writeTooltipDouble(entry.getValue().getAmount()+1, a.getDescriptionId(), entry.getValue().getAmount() >= 0, true, false));
+                    other.add(comp);
                 }
-                other.add(comp);
-            }
 
-            //here we add all the components we've created.
-            list.add(line1);
-            list.add(line2);
-            list.addAll(main);
-            list.addAll(other);
+                //here we add all the components we've created.
+                list.add(line1);
+                list.add(line2);
+                list.addAll(main);
+                list.addAll(other);
+            }
+            else {
+                if (item.isDamageableItem()) {
+                    int currentDurability = item.getMaxDamage() - item.getDamageValue();
+                    double percentage = (double) currentDurability / (double) item.getMaxDamage();
+                    Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
+                    MutableComponent durabilityComponent = Component.empty();
+                    list.add(durabilityComponent
+                            .append(Util.writeIcon("durability", true))
+                            .append(Util.withColor(translatable("idf.tooltip.durability"), Color.GREY)
+                            .append(Util.withColor(writeTooltipString(String.valueOf(currentDurability)), colour))
+                            ));
+                }
+                else {
+                    MutableComponent durabilityComponent = Component.empty();
+                    list.add(durabilityComponent
+                            .append(Util.writeIcon("durability", true))
+                            .append(Util.withColor(translation("idf.tooltip.durability"), Color.GREY)
+                            .append(withColor(writeIcon("infinity.symbol", true), Color.DARKSEAGREEN))
+                            ));
+                }
+                if (isWeapon) {
+                    if (!isRanged) {
+                        MutableComponent atkSpeed = Component.empty();
+                        list.add(atkSpeed
+                                .append(Util.writeIcon("attack_speed", true))
+                                .append(Util.withColor(translatable("idf.tooltip.attack_speed"), Color.GREY))
+                                .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED))), Color.HOLY_COLOUR))
+                        );
+                    }
+                    else {
+                        MutableComponent accuracy = Component.empty();
+                        list.add(accuracy
+                                .append(Util.writeIcon("accuracy", true))
+                                .append(Util.withColor(translatable("idf.tooltip.accuracy"), Color.GREY))
+                                .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()))), Color.HOLY_COLOUR))
+                        );
+                    }
+                    MutableComponent force = Component.empty();
+                    list.add(force
+                            .append(Util.writeIcon("force", true))
+                            .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
+                            .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.FORCE.get()))), Color.HOLY_COLOUR))
+                    );
+                }
+                else {
+                    MutableComponent weight = Component.empty();
+                    list.add(weight
+                            .append(Util.writeIcon("weight", true))
+                            .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GREY))
+                            .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS))), Color.HOLY_COLOUR))
+                    );
+                }
+                for (EquipmentSlot s : EquipmentSlot.values()) {
+                    boolean isStandardSlot = s == slot;
+                    if (isStandardSlot) {
+                        String[] keys = Util.sort(map, isWeapon);
+                        Color cl = isWeapon? Color.PALEVIOLETRED : Color.LIGHTSTEELBLUE;
+                        for (String key : keys) {
+                            Attribute a = CommonData.ATTRIBUTES.get(key);
+                            Collection<AttributeModifier> mods = map.get(a);
+                            final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                            double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
+                            double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                            MutableComponent c = Component.empty();
+                            c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
+                            if (mult != 1) c.append(
+                                            writeIcon(key, true))
+                                    .append(Util.withColor(translation(key), Color.GREY))
+                                    .append(" ")
+                                    .append(writeTooltipDouble(flat, true, false, false, false, cl))
+                                    .append(writeScalingTooltip(mult, cl));
+                            else c.append(
+                                            writeIcon(key, true))
+                                    .append(Util.withColor(translation(key), Color.GREY))
+                                    .append(" ")
+                                    .append(writeTooltipDouble(flat, true, false, false, false, cl));
+                            map.removeAll(a);
+                            list.add(c);
+                        }
+                        for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
+                            Attribute a  = entry.getKey();
+                            String name = a.getDescriptionId();
+                            AttributeModifier.Operation op = entry.getValue().getOperation();
+                            Color col;
+                            MutableComponent c = Component.empty().withStyle(Style.EMPTY);
+                            c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
+                            double val = entry.getValue().getAmount();
+                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
+                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTSTEELBLUE;
+                            else if (AUXILIARY_ATTRIBUTES.contains(a)) col = Color.GOLD;
+                            else col = Color.WHITESMOKE;
+                            if (a == Attributes.MOVEMENT_SPEED) val = Util.pBPS(val);
+                            if (a == Attributes.ATTACK_KNOCKBACK) {
+                                BigDecimal numerator = BigDecimal.valueOf(val), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
+                                val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
+                            }
+                            if (shouldMult100.test(a)) val*=100;
+                            if (op == ADDITION) {
+                                c.append(writeIcon(name, true))
+                                        .append(Util.withColor(translatable(name), Color.GREY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), col));
+                            } else {
+                                c.append(writeIcon(name, true))
+                                        .append(Util.withColor(translatable(name), Color.GREY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val+1, true, true, false, isInverseNegative.test(a), col));
+                            }
+                            list.add(c);
+                        }
+                    }
+                    else {
+                        String[] keys = Util.sort(map, isWeapon);
+                        Color cl = isWeapon? Color.PALEVIOLETRED : Color.LIGHTSTEELBLUE;
+                        for (String key : keys) {
+                            Attribute a = CommonData.ATTRIBUTES.get(key);
+                            Collection<AttributeModifier> mods = map.get(a);
+                            final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                            double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
+                            double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                            MutableComponent c = Component.empty();
+                            c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
+                            if (mult != 1) c.append(
+                                            writeIcon(key, true))
+                                    .append(Util.withColor(translation(key), Color.GREY))
+                                    .append(" ")
+                                    .append(writeTooltipDouble(flat, true, false, false, false, cl))
+                                    .append(writeScalingTooltip(mult, cl));
+                            else c.append(
+                                            writeIcon(key, true))
+                                    .append(Util.withColor(translation(key), Color.GREY))
+                                    .append(" ")
+                                    .append(writeTooltipDouble(flat, true, false, false, false, cl));
+                            map.removeAll(a);
+                            list.add(c);
+                        }
+                        for (Map.Entry<Attribute, AttributeModifier> entry : item.getAttributeModifiers(s).entries()) {
+                            Attribute a  = entry.getKey();
+                            String name = a.getDescriptionId();
+                            AttributeModifier.Operation op = entry.getValue().getOperation();
+                            Color col;
+                            MutableComponent c = Component.empty().withStyle(Style.EMPTY);
+                            c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
+                            double val = entry.getValue().getAmount();
+                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
+                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTSTEELBLUE;
+                            else if (AUXILIARY_ATTRIBUTES.contains(a)) col = Color.GOLD;
+                            else col = Color.WHITESMOKE;
+                            if (a == Attributes.MOVEMENT_SPEED) val = Util.pBPS(val);
+                            else if (a == Attributes.ATTACK_KNOCKBACK) {
+                                BigDecimal numerator = BigDecimal.valueOf(val), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
+                                val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
+                            }
+                            else if (shouldMult100.test(a)) val*=100;
+                            if (op == ADDITION) {
+                                c.append(writeIcon(name, true))
+                                        .append(Util.withColor(translatable(name), Color.GREY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), col));
+                            } else {
+                                c.append(writeIcon(name, true))
+                                        .append(Util.withColor(translatable(name), Color.GREY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val+1, true, true, false, isInverseNegative.test(a), col));
+                            }
+                            list.add(c);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -249,8 +444,21 @@ public class ClientEventsForgeBus {
         return mult < 0 ? comp.withStyle(ChatFormatting.RED) : comp;
     }
 
+    public static Component writeScalingTooltip(double mult, Color colour) {
+        MutableComponent comp = Component.empty().withStyle(TOOLTIP);
+        comp.append(spacer(-1));
+        comp.append("+");
+        comp.append(spacer(-1));
+        comp.append("(");
+        comp.append(spacer(-1));
+        comp.append(writeTooltipDouble(mult, true, false, false, false, colour));
+        comp.append(spacer(-1));
+        comp.append(")");
+        return mult < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour);
+    }
+
     public static MutableComponent writeAltima(String s) {
-        return Component.translatable(s).withStyle(ALTIMA_2X);
+        return translatable(s).withStyle(ALTIMA_2X);
     }
 
     @SubscribeEvent

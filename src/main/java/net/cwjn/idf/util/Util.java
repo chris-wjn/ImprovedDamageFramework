@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -30,6 +31,7 @@ import java.util.function.Predicate;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
 import static net.cwjn.idf.attribute.IDFAttributes.*;
+import static net.minecraft.network.chat.Component.translatable;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
@@ -40,11 +42,10 @@ public class Util {
     public static final Style ICON_2X = Style.EMPTY.withFont(FONT_ICONS_2X);
     public static final Style TOOLTIP = Style.EMPTY.withFont(FONT_TOOLTIPS);
     public static final Style TOOLTIP_2X = Style.EMPTY.withFont(FONT_TOOLTIPS_2X);
-    public static final Style ALTIMA = Style.EMPTY.withFont(FONT_ALTIMA);
     public static final Style ALTIMA_2X = Style.EMPTY.withFont(FONT_ALTIMA_2X);
     private static final Style SPACER = Style.EMPTY.withFont(FONT_SPACER);
-    public static final Style VERT_SPACER = Style.EMPTY.withFont(FONT_VERTICAL_SPACER);
     private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
+    private static final Style DIVIDERS = Style.EMPTY.withFont(FONT_DIVIDERS);
     public static final Predicate<String> offensiveAttribute = name -> (
             (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))
     );
@@ -91,7 +92,7 @@ public class Util {
     }
 
     public static MutableComponent translation(String main, Object... additions) {
-        return Component.translatable(main, additions);
+        return translatable(main, additions);
     }
 
     public static MutableComponent text(String text) {
@@ -126,13 +127,13 @@ public class Util {
         return ForgeRegistries.ITEMS.getValue(loc);
     }
 
-    public static float pBPS(double attribute) {
+    public static double pBPS(double attribute) {
         BigDecimal x = new BigDecimal(attribute * 43.178 - 0.02141);
         x = x.setScale(1, RoundingMode.HALF_UP);
         return x.floatValue();
     }
 
-    public static float mBPS(double attribute) {
+    public static double mBPS(double attribute) {
         BigDecimal x = new BigDecimal(attribute * 9.60845544);
         x = x.setScale(1, RoundingMode.HALF_UP);
         return x.floatValue();
@@ -276,7 +277,7 @@ public class Util {
         return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : comp) : comp;
     }
 
-    public static MutableComponent writeTooltipDouble(double num, String name, boolean withColour, boolean appendX, boolean appendPercentage) {
+    public static MutableComponent writeTooltipDouble(double num, boolean withColour, boolean appendX, boolean appendPercentage, boolean invertNegative, Color colour) {
         MutableComponent comp = Component.empty().withStyle(TOOLTIP);
         String number = num > 0?  "+" + tenths.format(num) : tenths.format(num);
         if (number.charAt(0) == '1') comp.append(spacer(-1));
@@ -300,10 +301,15 @@ public class Util {
             comp.append("%");
         }
         comp.append(spacer(1));
-        return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : comp) : comp;
+        if (invertNegative) {
+            return withColour? (num > 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour)) : comp;
+        }
+        else {
+            return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour)) : comp;
+        }
     }
 
-    public static MutableComponent writeTooltipString(String s, boolean withColour) {
+    public static MutableComponent writeTooltipString(String s) {
         MutableComponent comp = Util.text("").withStyle(TOOLTIP);
         if (s.charAt(0) == '1') comp.append(spacer(-1));
         for(int i = 0; i < s.length() ; i++) {
@@ -353,10 +359,10 @@ public class Util {
         //add the number to the component. Also add a percent if needed
         comp.append(translation("idf.icon." + name).withStyle(ICON)).append(spacer(-1));
         if (colour == null) {
-            comp.append(writeTooltipString(num+(isPercentage ? "%" : ""), false));
+            comp.append(writeTooltipString(num+(isPercentage ? "%" : "")));
         }
         else {
-            comp.append(withColor(writeTooltipString(num+(isPercentage ? "%" : ""), false), colour));
+            comp.append(withColor(writeTooltipString(num+(isPercentage ? "%" : "")), colour));
         }
 
         //add a half spacer if total spaces is odd, then add the rest of the right padding
@@ -380,7 +386,7 @@ public class Util {
             MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
             return includeSpacer? comp.append(comp1) : comp1;
         }
-        else return Component.translatable(name);
+        else return Component.empty();
     }
 
     public static MutableComponent spacer(int i) {
@@ -429,6 +435,51 @@ public class Util {
             returnRL[i-1] = new ResourceLocation(MOD_ID, "textures/gui/book_content_appear/" + i + ".png");
         }
         return returnRL;
+    }
+
+    public static Component divider(int length, Color colour) {
+        MutableComponent c = Component.empty().withStyle(DIVIDERS);
+        int j = Math.max(1, (int) (length*0.04));
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider1")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider2")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider3")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider4")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider5")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider6")).append(spacer(-1));
+        }
+        for (int i = 0; i < length*0.6; i++) {
+            c.append(translatable("idf.divider7")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider6")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider5")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider4")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider3")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider2")).append(spacer(-1));
+        }
+        for (int i = 0; i < j; i++) {
+            c.append(translatable("idf.divider1")).append(spacer(-1));
+        }
+        return Util.withColor(c, colour);
     }
 
 }

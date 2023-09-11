@@ -64,6 +64,7 @@ public class CommonData {
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.CRIT_CHANCE.get());
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.CRIT_DAMAGE.get());
             OFFENSIVE_ATTRIBUTES.add(IDFAttributes.PENETRATING.get());
+            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.ACCURACY.get());
             OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_SPEED);
             OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_KNOCKBACK);
             OFFENSIVE_ATTRIBUTES.add(Attributes.ATTACK_DAMAGE);
@@ -76,6 +77,7 @@ public class CommonData {
         } //offensive
         {
             DEFENSIVE_ATTRIBUTES.add(Attributes.ARMOR);
+            DEFENSIVE_ATTRIBUTES.add(Attributes.ARMOR_TOUGHNESS);
             DEFENSIVE_ATTRIBUTES.add(Attributes.KNOCKBACK_RESISTANCE);
             DEFENSIVE_ATTRIBUTES.add(IDFElement.FIRE.defence);
             DEFENSIVE_ATTRIBUTES.add(IDFElement.WATER.defence);
@@ -90,7 +92,8 @@ public class CommonData {
         } //defensive
         {
             AUXILIARY_ATTRIBUTES.add(Attributes.LUCK);
-            OFFENSIVE_ATTRIBUTES.add(IDFAttributes.ACCURACY.get());
+            AUXILIARY_ATTRIBUTES.add(Attributes.MAX_HEALTH);
+            AUXILIARY_ATTRIBUTES.add(Attributes.MOVEMENT_SPEED);
         } //auxiliary
     }
 
