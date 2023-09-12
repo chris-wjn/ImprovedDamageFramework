@@ -172,7 +172,7 @@
   "idf.total_multiplication": "(T⁎",
   "idf.ohm.symbol": "Ω",
   "idf.halfmoon.symbol":"◐",
-  "idf.icon.infinity.symbol": ": ∞",
+  "idf.icon.infinity.symbol": "∞",
 
   "//COMMANDS/MESSAGES": "USED VARIOUS PLACES",
   "idf.client.armour.map.updated": "Your armour values have been updated by the server.",

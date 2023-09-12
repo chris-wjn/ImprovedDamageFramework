@@ -225,7 +225,7 @@ public class ClientEventsForgeBus {
                     list.add(durabilityComponent
                             .append(Util.writeIcon("durability", true))
                             .append(Util.withColor(translation("idf.tooltip.durability"), Color.GREY)
-                            .append(withColor(writeIcon("infinity.symbol", true), Color.DARKSEAGREEN))
+                            .append(withColor(translation("idf.icon.infinity.symbol"), Color.DARKSEAGREEN))
                             ));
                 }
                 if (isWeapon) {
