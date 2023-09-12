@@ -49,7 +49,7 @@ public class Util {
     public static final Predicate<String> offensiveAttribute = name -> (
             (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))
     );
-    public static final int ICON_PIXEL_SPACER = 2;
+    public static final int ICON_PIXEL_SPACER = 1;
     public static final DecimalFormat tenths = new DecimalFormat("#.#");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
     public static final UUID[] UUID_BASE_STAT_ADDITION = {
@@ -130,13 +130,13 @@ public class Util {
     public static double pBPS(double attribute) {
         BigDecimal x = new BigDecimal(attribute * 43.178 - 0.02141);
         x = x.setScale(1, RoundingMode.HALF_UP);
-        return x.floatValue();
+        return x.doubleValue();
     }
 
     public static double mBPS(double attribute) {
         BigDecimal x = new BigDecimal(attribute * 9.60845544);
         x = x.setScale(1, RoundingMode.HALF_UP);
-        return x.floatValue();
+        return x.doubleValue();
     }
 
     public static double fastSqrt(double d) {
@@ -384,7 +384,7 @@ public class Util {
         if (I18n.exists("idf.icon." + name)) {
             MutableComponent comp = spacer(ICON_PIXEL_SPACER);
             MutableComponent comp1 = translation("idf.icon." + name).withStyle(ICON);
-            return includeSpacer? comp.append(comp1) : comp1;
+            return includeSpacer? comp1.append(comp) : comp1;
         }
         else return Component.empty();
     }
