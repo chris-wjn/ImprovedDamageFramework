@@ -118,7 +118,7 @@ public class IDFIndirectEntityDamageSource extends IndirectEntityDamageSource im
         return lifesteal;
     }
 
-    public float getWeight() {
+    public float getForce() {
         return weight;
     }
 

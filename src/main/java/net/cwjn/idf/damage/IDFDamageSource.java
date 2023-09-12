@@ -1,11 +1,10 @@
 package net.cwjn.idf.damage;
 
 import net.minecraft.world.damagesource.DamageSource;
-import org.jetbrains.annotations.NotNull;
 
 public class IDFDamageSource extends DamageSource implements IDFInterface {
 
-    private final float fire, water, lightning, magic, dark, holy, pen, lifesteal, weight, knockback;
+    private final float fire, water, lightning, magic, dark, holy, pen, lifesteal, force, knockback;
     private final String damageClass; //strike, pierce, _slash, _crush, genric
     private boolean isTrue = false, isConversion = false;
 
@@ -19,7 +18,7 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         holy = 0;
         pen = 0;
         lifesteal = 0;
-        weight = -1;
+        force = -1;
         knockback = 0;
         damageClass = dc;
     }
@@ -34,12 +33,12 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         holy = h;
         damageClass = dc;
         lifesteal = ls;
-        weight = -1;
+        force = -1;
         knockback = 0;
         this.pen = pen;
     }
 
-    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, float wt, String dc) {
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, float frc, String dc) {
         super(msgId);
         fire = f;
         water = w;
@@ -49,12 +48,12 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         holy = h;
         damageClass = dc;
         lifesteal = ls;
-        weight = wt;
+        force = frc;
         knockback = 0;
         this.pen = pen;
     }
 
-    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, float kb, float wt, String dc) {
+    public IDFDamageSource(String msgId, float f, float w, float l, float m, float d, float h, float pen, float ls, float kb, float frc, String dc) {
         super(msgId);
         fire = f;
         water = w;
@@ -64,7 +63,7 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         holy = h;
         damageClass = dc;
         lifesteal = ls;
-        weight = wt;
+        force = frc;
         knockback = kb;
         this.pen = pen;
     }
@@ -117,8 +116,8 @@ public class IDFDamageSource extends DamageSource implements IDFInterface {
         return lifesteal;
     }
 
-    public float getWeight() {
-        return weight;
+    public float getForce() {
+        return force;
     }
 
     public String getDamageClass() {

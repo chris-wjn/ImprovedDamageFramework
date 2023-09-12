@@ -62,7 +62,7 @@ public class DamageHandler {
 
         //run our numbers through the pre-multiplier event. Use the armour formula to convert elemental armour values to resistances.
         PreDamageMultipliersEvent event = new PreDamageMultipliersEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage,
-                convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getWeight(),
+                convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getForce(),
                 (float) armourFormula(target.getAttributeValue(FIRE.defence)), (float) armourFormula(target.getAttributeValue(WATER.defence)),
                 (float) armourFormula(target.getAttributeValue(LIGHTNING.defence)), (float) armourFormula(target.getAttributeValue(MAGIC.defence)),
                 (float) armourFormula(target.getAttributeValue(DARK.defence)), (float) armourFormula(target.getAttributeValue(HOLY.defence)),
@@ -273,14 +273,14 @@ public class DamageHandler {
         log.debug("---> Physical: " + physicalDamage);
         log.debug("--> Auxiliary Information:");
         log.debug("---> Damage Class: " + convertedSource.getDamageClass());
-        log.debug("---> Force: " + convertedSource.getWeight());
+        log.debug("---> Force: " + convertedSource.getForce());
         log.debug("---> Pen: " + convertedSource.getPen());
         log.debug("---> Lifesteal: " + convertedSource.getLifesteal());
         log.debug("---> Knockback: " + convertedSource.getKnockback());
 
         //run our numbers through the pre-multiplier event. Use the armour formula to convert elemental armour values to resistances.
         PreDamageMultipliersEvent event = new PreDamageMultipliersEvent(target, fireDamage, waterDamage, lightningDamage, magicDamage, darkDamage, holyDamage, physicalDamage,
-                convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getWeight(),
+                convertedSource.getPen(), convertedSource.getLifesteal(), convertedSource.getKnockback(), convertedSource.getForce(),
                 (float) armourFormula(target.getAttributeValue(FIRE.defence)), (float) armourFormula(target.getAttributeValue(WATER.defence)),
                 (float) armourFormula(target.getAttributeValue(LIGHTNING.defence)), (float) armourFormula(target.getAttributeValue(MAGIC.defence)),
                 (float) armourFormula(target.getAttributeValue(DARK.defence)), (float) armourFormula(target.getAttributeValue(HOLY.defence)),

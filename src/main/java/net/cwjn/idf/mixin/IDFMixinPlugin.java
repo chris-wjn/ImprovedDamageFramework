@@ -27,7 +27,11 @@ public class IDFMixinPlugin implements IMixinConfigPlugin {
             mixinClassName.equals("net.cwjn.idf.mixin.tetra.MixinItemEffectHandler") ||
             mixinClassName.equals("net.cwjn.idf.mixin.tetra.MixinWorkbenchTile")) {
             return FMLLoader.getLoadingModList().getModFileById("tetra")!=null;
-        } else {
+        }
+        else if (mixinClassName.equals("net.cwjn.idf.mixin.irons_spells.MixinDamageSources")) {
+            return FMLLoader.getLoadingModList().getModFileById("irons_spellbooks")!=null;
+        }
+        else {
             return true;
         }
     }

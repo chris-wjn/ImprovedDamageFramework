@@ -103,7 +103,7 @@ public class IDFEntityDamageSource extends EntityDamageSource implements IDFInte
         return lifesteal;
     }
 
-    public float getWeight() {
+    public float getForce() {
         return weight;
     }
 

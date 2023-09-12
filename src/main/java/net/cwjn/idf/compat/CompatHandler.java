@@ -9,11 +9,11 @@ public class CompatHandler {
         if (ModList.get().isLoaded("tetra")) {
             TetraCompat.register();
         }
-        if (ModList.get().isLoaded("patchouli")) {
-            PatchouliCompat.register();
-        }
         if (ModList.get().isLoaded("oculus")) {
             OculusCompat.register();
+        }
+        if (ModList.get().isLoaded("irons_spellbooks")) {
+            IronsSpellsCompat.register();
         }
         if (ImprovedDamageFramework.IAFLoaded) {
             ImprovedDamageFramework.LOGGER.info("Detected ImprovedAdventureFramework. Good choice.");

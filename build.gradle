@@ -106,14 +106,27 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.2.0.246"))
     // at runtime, use the full JEI jar for Forge
     runtimeOnly(fg.deobf("mezz.jei:jei-1.19.2-forge:11.2.0.246"))
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-76")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.3.0")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.3.0:api")
+    runtimeOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19.2-3.0.0.6")
+    compileOnly fg.deobf("top.theillusivec4.caelus:caelus-forge:1.19.2-3.0.0.6:api")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.19.2-77")
+    implementation fg.deobf("curse.maven:clothconfig-348521:4633416")
+    implementation fg.deobf("curse.maven:architectuary-419699:4555749")
+    implementation fg.deobf("curse.maven:smartlib-661293:4458565")
+    implementation fg.deobf("curse.maven:modonomicon-538392:4641884")
 
-    //naturalist (to test bestiary with other mods)
+    //magic mods
+    implementation fg.deobf("curse.maven:arsnouveau-401955:4712382")
+    implementation fg.deobf("curse.maven:scriptor-817436:4549561")
+    implementation fg.deobf("curse.maven:hexcasting-569849:4166956")
+    implementation fg.deobf("curse.maven:paucal-597824:4100645")
+    implementation fg.deobf("curse.maven:kotlinforge-351264:4513187")
+    implementation fg.deobf("curse.maven:ironspells-855414:4693051")
+    implementation fg.deobf("curse.maven:occultism-361026:4739023")
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
-    implementation fg.deobf("curse.maven:naturalist-627986:4660377")
+    implementation fg.deobf("curse.maven:playeranim-658587:4418149")
 
     //rubidium and oculus
     implementation fg.deobf("curse.maven:oculus-581495:4578731")

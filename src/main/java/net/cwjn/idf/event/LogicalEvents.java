@@ -50,16 +50,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.ConfigCommand;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber
 public class LogicalEvents {
 
     public static boolean debugMode = false;
     private static final Random random = new Random();
+    public static List<String> undodgables = new ArrayList<>();
+    static {
+        undodgables.addAll(CommonConfig.UNDODGABLE_SOURCES.get());
+    }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void instantiateDefaultTags(OnItemStackCreatedEvent event) {
@@ -96,7 +97,7 @@ public class LogicalEvents {
         LivingEntity target = event.getEntity();
         if (target.getLevel() instanceof ServerLevel) {
             if (target.getAttributeValue(IDFAttributes.EVASION.get())/100 >= Math.random()) {
-                if (CommonConfig.UNDODGABLE_SOURCES.get().contains(event.getSource().msgId)) return;
+                if (undodgables.contains(event.getSource().msgId)) return;
                 PacketHandler.serverToNearPoint(new DisplayMissPacket(target.getX(), target.getY(), target.getZ(), 0, target.getUUID()), target.getX(), target.getY(), target.getZ(), 15, target.getCommandSenderWorld().dimension());
                 event.setCanceled(true);
             }

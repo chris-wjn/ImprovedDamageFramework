@@ -10,7 +10,7 @@ public interface IDFInterface {
     float getHoly();
     float getPen();
     float getLifesteal();
-    float getWeight();
+    float getForce();
     float getKnockback();
     String getDamageClass();
     boolean isTrue();
