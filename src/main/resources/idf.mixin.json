@@ -41,7 +41,6 @@
     "equipment.MixinSwordItem",
     "equipment.MixinTridentItem",
     "irons_spells.MixinDamageSources",
-    "irons_spells.MixinTooltipsUtils",
     "tetra.MixinItemEffectHandler",
     "tetra.MixinItemModularHandheld",
     "tetra.MixinSweepingEffect",
