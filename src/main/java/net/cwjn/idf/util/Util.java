@@ -50,7 +50,7 @@ public class Util {
             (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))
     );
     public static final int ICON_PIXEL_SPACER = 1;
-    public static final DecimalFormat tenths = new DecimalFormat("#.#");
+    public static final DecimalFormat tenths = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
     public static final UUID[] UUID_BASE_STAT_ADDITION = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F7"),
@@ -279,7 +279,11 @@ public class Util {
 
     public static MutableComponent writeTooltipDouble(double num, boolean withColour, boolean appendX, boolean appendPercentage, boolean invertNegative, Color colour) {
         MutableComponent comp = Component.empty().withStyle(TOOLTIP);
-        String number = num > 0?  "+" + tenths.format(num) : tenths.format(num);
+        String number = (num > 0 && !appendX)?  "+" + tenths.format(num) : tenths.format(num);
+        if (appendX) {
+            comp.append(spacer(-1));
+            comp.append("x");
+        }
         if (number.charAt(0) == '1') comp.append(spacer(-1));
         for(int i = 0; i < number.length() ; i++) {
             comp.append(String.valueOf(number.charAt(i)));
@@ -292,11 +296,7 @@ public class Util {
                 comp.append(spacer(-1));
             }
         }
-        if (appendX) {
-            comp.append(spacer(-1));
-            comp.append("x");
-        }
-        else if (appendPercentage) {
+        if (appendPercentage) {
             comp.append(spacer(-1));
             comp.append("%");
         }

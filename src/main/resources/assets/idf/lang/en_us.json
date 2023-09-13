@@ -281,6 +281,14 @@
   "idf.pierce_tooltip": " (Pierce)",
   "idf.slash_tooltip": " (Slash)",
   "idf.tooltip.force": "Force: ",
-  "idf.tooltip.weight": "Weight: "
+  "idf.tooltip.weight": "Weight: ",
+  "idf.irons_spellbook.fire_damage_tooltip": "%s Fire Damage",
+  "idf.irons_spellbook.water_damage_tooltip": "%s Water Damage",
+  "idf.irons_spellbook.lightning_damage_tooltip": "%s Lightning Damage",
+  "idf.irons_spellbook.magic_damage_tooltip": "%s Magic Damage",
+  "idf.irons_spellbook.dark_damage_tooltip": "%s Dark Damage",
+  "idf.irons_spellbook.holy_damage_tooltip": "%s Holy Damage",
+  "idf.irons_spellbook.physical_damage_tooltip": "%s Physical Damage",
+  "idf.AOE.text": "(AOE)"
 }
 

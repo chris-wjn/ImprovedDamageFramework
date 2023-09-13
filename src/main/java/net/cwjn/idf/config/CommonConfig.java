@@ -17,7 +17,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> LEGENDARY_TOOLTIPS_COMPAT_MODE;
     private static final String[] defaultNoInvulnList = {"player", "fall"};
     private static final String[] undodgableList = {"inFire", "onFire", "lava", "hotFloor", "inWall",
-            "cramming", "drown", "starve", "fall", "flyIntoWall", "outOfWorld", "wither", "dryout", "freeze"};
+            "cramming", "drown", "starve", "fall", "flyIntoWall", "outOfWorld", "wither", "dryout", "freeze", "bleed_effect", "blood_cauldron", "heartstop"};
     private static final String[] defaultReducedList = {"mob", "sting"};
     private static final String[] defaultBlacklist = {"minecraft:slime", "minecraft:magma_cube"};
 
