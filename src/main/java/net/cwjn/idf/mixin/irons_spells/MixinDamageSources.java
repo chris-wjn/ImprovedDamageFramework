@@ -25,8 +25,8 @@ public class MixinDamageSources {
             case FIRE -> f = 1;
             case ICE -> w = 1;
             case LIGHTNING -> l = 1;
-            case ENDER -> m = 1;
-            case BLOOD -> d = 1;
+            case ENDER,POISON -> m = 1;
+            case BLOOD,VOID -> d = 1;
             case HOLY -> h = 1;
             default -> {}
         }

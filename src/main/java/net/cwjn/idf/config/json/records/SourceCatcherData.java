@@ -22,6 +22,7 @@ public record SourceCatcherData(float fire, float water, float lightning, float 
         if (source instanceof IDFInterface) return (IDFInterface) source;
         final boolean isFall = source.isFall();
         final boolean isFire = source.isFire();
+        final boolean isMagic = source.isMagic();
         final boolean isProjectile = source.isProjectile();
         final boolean isExplosion = source.isExplosion();
         final boolean isBypassInvul = source.isBypassInvul();
@@ -60,21 +61,22 @@ public record SourceCatcherData(float fire, float water, float lightning, float 
         } else {
             if (source instanceof IndirectEntityDamageSource) {
                 newSource = new IDFIndirectEntityDamageSource(source.msgId, source.getDirectEntity(), source.getEntity(),
-                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, isMagic? 1:0, 0, 0, 0, 0,
                         "strike").setIsConversion();
             } else if (source instanceof EntityDamageSource) {
                 newSource = new IDFEntityDamageSource(source.msgId, source.getEntity(),
-                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, isMagic? 1:0, 0, 0, 0, 0,
                         "strike").setIsConversion();
             } else {
                 newSource = new IDFDamageSource(source.msgId,
-                        0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, isMagic? 1:0, 0, 0, 0, 0,
                         "strike").setIsConversion();
             }
         }
         if (isBypassInvul) newSource.bypassInvul();
         if (isFire) newSource.setIsFire();
         if (isFall) newSource.setIsFall();
+        if (isMagic) newSource.setMagic();
         if (isProjectile) newSource.setProjectile();
         if (isExplosion) newSource.setExplosion();
         return (IDFInterface) newSource;

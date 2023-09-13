@@ -15,7 +15,6 @@ import se.mickelus.tetra.effect.ItemEffect;
 import se.mickelus.tetra.gui.stats.bar.GuiStatBar;
 import se.mickelus.tetra.gui.stats.getter.*;
 import se.mickelus.tetra.items.modular.IModularItem;
-import se.mickelus.tetra.items.modular.ModularItem;
 
 import static se.mickelus.tetra.gui.stats.StatsHelper.barLength;
 
