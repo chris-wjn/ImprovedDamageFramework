@@ -86,7 +86,6 @@ public class ClientEventsForgeBus {
                     a.equals(IDFAttributes.PIERCE_MULT.get())
     );
 
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack item = event.getItemStack();
@@ -257,7 +256,7 @@ public class ClientEventsForgeBus {
                     list.add(weight
                             .append(Util.writeIcon("weight", true))
                             .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GREY))
-                            .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS))), Color.HOLY_COLOUR))
+                            .append(Util.withColor(writeTooltipString(tenths.format(getAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS))), Color.HOLY_COLOUR))
                     );
                 }
                 for (EquipmentSlot s : EquipmentSlot.values()) {

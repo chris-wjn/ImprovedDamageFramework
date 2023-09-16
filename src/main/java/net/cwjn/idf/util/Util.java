@@ -47,8 +47,9 @@ public class Util {
     private static final Style DEFAULT = Style.EMPTY.withFont(Style.DEFAULT_FONT);
     private static final Style DIVIDERS = Style.EMPTY.withFont(FONT_DIVIDERS);
     public static final Predicate<String> offensiveAttribute = name -> (
-            (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen") || name.contains("attack_speed"))
+            (name.contains("damage") || name.contains("crit") || name.contains("attack_knockback") || name.contains("force") || name.contains("lifesteal") || name.contains("pen"))
     );
+    // || name.contains("attack_speed")
     public static final int ICON_PIXEL_SPACER = 1;
     public static final DecimalFormat tenths = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");

@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(DamageSources.class)
 public class MixinDamageSources {
 
-    @Redirect(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"), remap = false)
+    @Redirect(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private static boolean convertToIDFSource(LivingEntity instance, DamageSource source, float amount, Entity e, float baseAmount, DamageSource oSource, SchoolType school) {
         DamageSource ds;
         float f=0, w=0, l=0, m=0, d=0, h=0;
