@@ -11,7 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.*;
@@ -19,10 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
@@ -84,6 +80,30 @@ public class MixinLivingEntity {
                 thisLivingEntity.gameEvent(GameEvent.ENTITY_DAMAGE);
             }
         }
+    }
+
+    /*
+    Makes sure players can't use ranged weapons as melee weapons
+     */
+    @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
+    private Multimap<Attribute, AttributeModifier> reworkAttributeModifiers(ItemStack item, EquipmentSlot slot) {
+        //first lets instantiate two maps, one to be modified and returned and one to get the original modifiers
+        Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
+        Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
+        if (!item.hasTag()) {
+            return oldMap;
+        }
+        if (!item.getTag().contains(WEAPON_TAG)) {
+            return oldMap;
+        }
+        //weapon case
+        boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
+        for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
+            if (!isRanged || !offensiveAttribute.test(entry.getKey().getDescriptionId().toLowerCase())) {
+                newMap.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return newMap;
     }
 
     /**

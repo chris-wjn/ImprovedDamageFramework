@@ -259,7 +259,7 @@
 
   "//TOOLTIPS": "",
   "idf.damage.tooltip": "Damage",
-  "idf.tooltip.accuracy": "Accuracy:",
+  "idf.tooltip.accuracy": "Accuracy: ",
   "idf.tooltip.durability": "Durability: ",
   "idf.tooltip.attack_speed": "Atk. Speed: ",
   "idf.tooltip.attribute.name.generic.attack_damage": "Physical Damage: ",

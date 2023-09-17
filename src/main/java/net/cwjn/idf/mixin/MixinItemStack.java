@@ -96,11 +96,9 @@ public abstract class MixinItemStack {
             return;
         }
         //weapon case
-        boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
         for (Map.Entry<Attribute, AttributeModifier> entry : multimap.entries()) {
             String name = entry.getKey().getDescriptionId().toLowerCase();
             if (offensiveAttribute.test(name)) {
-                if (isRanged) continue;
                 if (entry.getKey() == Attributes.ATTACK_SPEED) {
                     Collection<AttributeModifier> mods = multimap.get(entry.getKey());
                     final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
