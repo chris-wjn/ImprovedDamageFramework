@@ -33,6 +33,8 @@ public class CommonData {
     public static final String THROWN_TAG = "idf.thrown_weapon";
     public static final String WEAPON_TAG = "idf.damage_class";
     public static final String ENTITY_BONUS = "idf.base_bonus";
+    public static final String BORDER_TAG = "idf.tooltip_border";
+    public static final String DEFAULT_TAG_APPLIED = "idf.default_applied";
     public static final String TETRA_CRIT_LEVEL = "idf.tetra_crit_level";
     public static final String TETRA_CRIT_EFFICIENCY = "idf.tetra_crit_efficiency";
 

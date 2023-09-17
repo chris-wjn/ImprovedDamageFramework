@@ -2,7 +2,6 @@ package net.cwjn.idf.event;
 
 import net.cwjn.idf.api.event.LivingLifestealEvent;
 import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
-import net.cwjn.idf.api.event.OnItemStackCreatedEvent;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
@@ -23,34 +22,34 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.server.command.ConfigCommand;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import static net.cwjn.idf.data.CommonData.BORDER_TAG;
+import static net.cwjn.idf.data.CommonData.DEFAULT_TAG_APPLIED;
 
 @Mod.EventBusSubscriber
 public class LogicalEvents {
@@ -58,15 +57,16 @@ public class LogicalEvents {
     public static boolean debugMode = false;
     private static final Random random = new Random();
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void instantiateDefaultTags(OnItemStackCreatedEvent event) {
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void instantiateDefaultTags(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack();
-        Item baseItem = item.getItem();
-        CompoundTag defaultTag = ((ItemInterface) baseItem).getDefaultTags();
+        if (item.getOrCreateTag().contains(DEFAULT_TAG_APPLIED)) return;
+        CompoundTag defaultTag = ((ItemInterface) item.getItem()).getDefaultTags();
         if (defaultTag != null) {
+            defaultTag.putBoolean(DEFAULT_TAG_APPLIED, true);
             item.getOrCreateTag().merge(defaultTag);
-            if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains("idf.tooltip_border")) {
-                item.getTag().putInt("idf.tooltip_border", Util.getItemBorderType(item.getTag().getString(CommonData.WEAPON_TAG), item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item))));
+            if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains(BORDER_TAG)) {
+                item.getTag().putInt(BORDER_TAG, Util.getItemBorderType(item.getTag().getString(CommonData.WEAPON_TAG), item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item))));
             }
         }
     }

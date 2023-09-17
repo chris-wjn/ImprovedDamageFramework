@@ -323,7 +323,7 @@ public class JSONHandler {
                 });
                 idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
             }
-            MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, item.toString()));
+            MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, Util.getItemRegistryName(item)));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
         }
