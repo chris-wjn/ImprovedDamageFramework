@@ -144,63 +144,35 @@ public class Util {
         return Double.longBitsToDouble(((Double.doubleToRawLongBits(d) >> 32) + 1072632448 ) << 31);
     }
 
-    public static int getItemBorderType(String dc, Multimap<Attribute, AttributeModifier> map) {
-        double f = 0, w = 0, l = 0, m = 0, d = 0, p = 2;
-        for (Map.Entry<Attribute, AttributeModifier> entry : map.entries()) {
-            if (entry.getKey() == FIRE_DAMAGE.get()) {
-                if (entry.getValue().getOperation() == ADDITION) {
-                    f += entry.getValue().getAmount();
-                } else {
-                    f += entry.getValue().getAmount() * 10;
-                }
-            } else if (entry.getKey() == IDFAttributes.WATER_DAMAGE.get()) {
-                if (entry.getValue().getOperation() == ADDITION) {
-                    w += entry.getValue().getAmount();
-                } else {
-                    w += entry.getValue().getAmount() * 10;
-                }
-            } else if (entry.getKey() == IDFAttributes.LIGHTNING_DAMAGE.get()) {
-                if (entry.getValue().getOperation() == ADDITION) {
-                    l += entry.getValue().getAmount();
-                } else {
-                    l += entry.getValue().getAmount() * 10;
-                }
-            } else if (entry.getKey() == IDFAttributes.MAGIC_DAMAGE.get()) {
-                if (entry.getValue().getOperation() == ADDITION) {
-                    m += entry.getValue().getAmount();
-                } else {
-                    m += entry.getValue().getAmount() * 10;
-                }
-            } else if (entry.getKey() == IDFAttributes.DARK_DAMAGE.get()) {
-                if (entry.getValue().getOperation() == ADDITION) {
-                    d += entry.getValue().getAmount();
-                } else {
-                    d += entry.getValue().getAmount() * 10;
-                }
-            } else if (entry.getKey() == ATTACK_DAMAGE) {
-                if (entry.getValue().getOperation() == ADDITION) {
-                    p += entry.getValue().getAmount();
-                } else {
-                    p += entry.getValue().getAmount() * 10;
-                }
+    public static int getItemBorderType(String dc, Map<String, Double> map) {
+        double f = 0, w = 0, l = 0, m = 0, d = 0, h = 0, p = 0;
+        for (Map.Entry<String, Double> entry : map.entrySet()) {
+            switch (entry.getKey()) {
+                case "fire_damage" -> f = entry.getValue();
+                case "water_damage" -> w = entry.getValue();
+                case "lightning_damage" -> l = entry.getValue();
+                case "magic_damage" -> m = entry.getValue();
+                case "dark_damage" -> d = entry.getValue();
+                case "holy_damage" -> h = entry.getValue();
+                case "physical_damage" -> p = entry.getValue();
             }
         }
-        double[] dv = new double[] {f, w, l, m, d, p};
-        int index = 5;
+        double[] dv = new double[] {f, w, l, m, d, h, p};
+        int index = 6;
         double highest = 0.0D;
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 6; ++i) {
             if (dv[i] > highest) {
                 index = i;
                 highest = dv[i];
             }
         }
-        if (index != 5) {
+        if (index != 6) {
             return index;
         } else {
             return switch (dc) {
-                case "strike" -> 5;
-                case "pierce" -> 6;
-                case "slash" -> 7;
+                case "strike" -> 6;
+                case "pierce" -> 7;
+                case "slash" -> 8;
                 default -> 10;
             };
         }

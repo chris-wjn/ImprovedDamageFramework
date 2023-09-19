@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.ClientConfig;
+import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.data.ClientData;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.gui.BestiaryScreen;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -43,16 +45,14 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
+import static net.cwjn.idf.util.Color.LIGHTGREEN;
 import static net.cwjn.idf.util.Util.*;
 import static net.minecraft.network.chat.Component.translatable;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
@@ -89,12 +89,16 @@ public class ClientEventsForgeBus {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack item = event.getItemStack();
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return;
         if (item.hasTag() && item.getTag().contains(EQUIPMENT_TAG)) {
             List<Component> list = event.getToolTip();
             EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
             Multimap<Attribute, AttributeModifier> map = HashMultimap.create(item.getAttributeModifiers(slot));
             boolean isWeapon = item.getTag().contains(WEAPON_TAG);
             boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
+            boolean writeBorderTag = isWeapon && CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains(BORDER_TAG);
+            Optional<Map<String, Double>> borderHelper = writeBorderTag? Optional.of(new HashMap<>()) : Optional.empty();
             if (ClientConfig.USE_OLD_TOOLTIPS.get()) {
                 //first get items attribute modifiers for the item's normal slot
                 //we don't display attribute modifiers in slots the item doesn't usually take
@@ -261,9 +265,9 @@ public class ClientEventsForgeBus {
                 }
                 for (EquipmentSlot s : EquipmentSlot.values()) {
                     boolean isStandardSlot = s == slot;
+                    String[] keys = Util.sort(map, isWeapon);
+                    Color cl = LIGHTGREEN;
                     if (isStandardSlot) {
-                        String[] keys = Util.sort(map, isWeapon);
-                        Color cl = isWeapon? Color.PALEVIOLETRED : Color.LIGHTSTEELBLUE;
                         for (String key : keys) {
                             Attribute a = CommonData.ATTRIBUTES.get(key);
                             Collection<AttributeModifier> mods = map.get(a);
@@ -276,13 +280,16 @@ public class ClientEventsForgeBus {
                                             writeIcon(key, true))
                                     .append(Util.withColor(translation(key), Color.GREY))
                                     .append(" ")
-                                    .append(writeTooltipDouble(flat, true, false, false, false, cl))
-                                    .append(writeScalingTooltip(mult, cl));
+                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl))
+                                    .append(writeScalingTooltip(mult*flat, cl));
                             else c.append(
                                             writeIcon(key, true))
                                     .append(Util.withColor(translation(key), Color.GREY))
                                     .append(" ")
-                                    .append(writeTooltipDouble(flat, true, false, false, false, cl));
+                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl));
+                            if (writeBorderTag) {
+                                borderHelper.ifPresent(h -> h.put(key, flat*mult));
+                            }
                             map.removeAll(a);
                             list.add(c);
                         }
@@ -294,8 +301,8 @@ public class ClientEventsForgeBus {
                             MutableComponent c = Component.empty().withStyle(Style.EMPTY);
                             c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
                             double val = entry.getValue().getAmount();
-                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
-                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTSTEELBLUE;
+                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = LIGHTGREEN;
+                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = LIGHTGREEN;
                             else if (AUXILIARY_ATTRIBUTES.contains(a)) col = Color.GOLD;
                             else col = Color.WHITESMOKE;
                             if (a == Attributes.MOVEMENT_SPEED) val = Util.pBPS(val);
@@ -319,8 +326,6 @@ public class ClientEventsForgeBus {
                         }
                     }
                     else {
-                        String[] keys = Util.sort(map, isWeapon);
-                        Color cl = isWeapon? Color.PALEVIOLETRED : Color.LIGHTSTEELBLUE;
                         for (String key : keys) {
                             Attribute a = CommonData.ATTRIBUTES.get(key);
                             Collection<AttributeModifier> mods = map.get(a);
@@ -333,13 +338,16 @@ public class ClientEventsForgeBus {
                                             writeIcon(key, true))
                                     .append(Util.withColor(translation(key), Color.GREY))
                                     .append(" ")
-                                    .append(writeTooltipDouble(flat, true, false, false, false, cl))
-                                    .append(writeScalingTooltip(mult, cl));
+                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl))
+                                    .append(writeScalingTooltip(mult*flat, cl));
                             else c.append(
                                             writeIcon(key, true))
                                     .append(Util.withColor(translation(key), Color.GREY))
                                     .append(" ")
-                                    .append(writeTooltipDouble(flat, true, false, false, false, cl));
+                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl));
+                            if (writeBorderTag) {
+                                borderHelper.ifPresent(h -> h.put(key, flat*mult));
+                            }
                             map.removeAll(a);
                             list.add(c);
                         }
@@ -351,8 +359,8 @@ public class ClientEventsForgeBus {
                             MutableComponent c = Component.empty().withStyle(Style.EMPTY);
                             c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
                             double val = entry.getValue().getAmount();
-                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
-                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTSTEELBLUE;
+                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = LIGHTGREEN;
+                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
                             else if (AUXILIARY_ATTRIBUTES.contains(a)) col = Color.GOLD;
                             else col = Color.WHITESMOKE;
                             if (a == Attributes.MOVEMENT_SPEED) val = Util.pBPS(val);
@@ -376,6 +384,7 @@ public class ClientEventsForgeBus {
                         }
                     }
                 }
+                borderHelper.ifPresent(h -> item.getTag().putInt(BORDER_TAG, Util.getItemBorderType(item.getTag().getString(CommonData.WEAPON_TAG), h)));
             }
         }
     }
@@ -443,21 +452,51 @@ public class ClientEventsForgeBus {
         return mult < 0 ? comp.withStyle(ChatFormatting.RED) : comp;
     }
 
-    public static Component writeScalingTooltip(double mult, Color colour) {
+    public static Component writeScalingTooltip(double num, Color colour) {
         MutableComponent comp = Component.empty().withStyle(TOOLTIP);
         comp.append(spacer(-1));
-        comp.append("+");
+        comp.append(num < 0? "-" : "+");
         comp.append(spacer(-1));
         comp.append("(");
         comp.append(spacer(-1));
-        comp.append(writeTooltipDouble(mult, true, false, false, false, colour));
-        comp.append(spacer(-1));
+        MutableComponent comp1 = Component.empty().withStyle(TOOLTIP);
+        String number = num < 0 ? tenths.format(Math.abs(num)) : tenths.format(num);
+        if (number.charAt(0) == '1') comp.append(spacer(-1));
+        for(int i = 0; i < number.length() ; i++) {
+            comp.append(String.valueOf(number.charAt(i)));
+            if (i != number.length()-1) {
+                if (number.charAt(i+1) == '.') {
+                    comp.append(spacer(-2));
+                } else if (number.charAt(i+1) == '1') {
+                    comp.append(spacer(-1));
+                }
+                comp.append(spacer(-1));
+            }
+        }
+        comp.append(spacer(1));
+        comp.append(comp1);
+        comp.append(spacer(-2));
         comp.append(")");
-        return mult < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour);
+        return num < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour);
     }
 
-    public static MutableComponent writeAltima(String s) {
-        return translatable(s).withStyle(ALTIMA_2X);
+    public static MutableComponent writeDamageTooltip(double num, Color colour) {
+        MutableComponent comp = Component.empty().withStyle(TOOLTIP);
+        String number = tenths.format(num);
+        if (number.charAt(0) == '1') comp.append(spacer(-1));
+        for(int i = 0; i < number.length() ; i++) {
+            comp.append(String.valueOf(number.charAt(i)));
+            if (i != number.length()-1) {
+                if (number.charAt(i+1) == '.') {
+                    comp.append(spacer(-2));
+                } else if (number.charAt(i+1) == '1') {
+                    comp.append(spacer(-1));
+                }
+                comp.append(spacer(-1));
+            }
+        }
+        comp.append(spacer(1));
+        return (num < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour));
     }
 
     @SubscribeEvent

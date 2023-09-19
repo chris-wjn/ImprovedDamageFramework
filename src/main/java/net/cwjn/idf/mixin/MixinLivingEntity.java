@@ -87,7 +87,6 @@ public class MixinLivingEntity {
      */
     @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
     private Multimap<Attribute, AttributeModifier> reworkAttributeModifiers(ItemStack item, EquipmentSlot slot) {
-        //first lets instantiate two maps, one to be modified and returned and one to get the original modifiers
         Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
         Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
         if (!item.hasTag()) {
@@ -99,7 +98,23 @@ public class MixinLivingEntity {
         //weapon case
         boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
         for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
-            if (!isRanged || !offensiveAttribute.test(entry.getKey().getDescriptionId().toLowerCase())) {
+            String name = entry.getKey().getDescriptionId().toLowerCase();
+            if (offensiveAttribute.test(name)) {
+                if (isRanged) continue;
+                if (entry.getKey() == Attributes.ATTACK_SPEED) {
+                    Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
+                    final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                    double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+                    double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                    newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "conversion", (f2 * (f1 + 4.0)) - 4.0, ADDITION));
+                    continue;
+                }
+                Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
+                final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+                double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+                double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+                newMap.put(entry.getKey(), new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()], "conversion", f1 * f2, ADDITION));
+            } else {
                 newMap.put(entry.getKey(), entry.getValue());
             }
         }

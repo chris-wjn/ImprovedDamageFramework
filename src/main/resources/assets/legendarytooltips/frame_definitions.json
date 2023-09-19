@@ -38,8 +38,8 @@
     {
       
       "index": 4,
-      "startColor": "#5CDBEE",
-      "endColor": "#66FFE3",
+      "startColor": "#723177",
+      "endColor": "#2f1232",
       "bgStartColor": "#F0912307-v125+s35",
       "bgEndColor": "#F4818385-v100+s55",
       "selectors": ["&idf.tooltip_border=4"]
@@ -47,10 +47,10 @@
     {
       
       "index": 5,
-      "startColor": "#7e7e8f",
-      "endColor": "#7e7e8f",
+      "startColor": "#fff7c2",
+      "endColor": "#ffe786",
       "bgStartColor": "#F07D8A91-v125+s35",
-      "bgEndColor": "#F47D8A91-v100+s55",
+      "bgEndColor": "#F4818385-v100+s55",
       "selectors": ["&idf.tooltip_border=5"]
     },
     {
@@ -90,7 +90,6 @@
       "selectors": ["&idf.tooltip_border=9"]
     },
     {
-      
       "index": 10,
       "startColor": "#ffffff",
       "endColor": "#ffffff",

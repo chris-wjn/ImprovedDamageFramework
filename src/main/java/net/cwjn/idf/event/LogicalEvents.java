@@ -1,8 +1,10 @@
 package net.cwjn.idf.event;
 
+import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.event.LivingLifestealEvent;
 import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
+import net.cwjn.idf.api.event.ReplaceAttributeModifierEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.InfoPageCommand;
@@ -48,10 +50,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import static net.cwjn.idf.data.CommonData.BORDER_TAG;
-import static net.cwjn.idf.data.CommonData.DEFAULT_TAG_APPLIED;
+import static net.cwjn.idf.data.CommonData.*;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID)
 public class LogicalEvents {
 
     public static boolean debugMode = false;
@@ -60,14 +61,22 @@ public class LogicalEvents {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void instantiateDefaultTags(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack();
-        if (item.getOrCreateTag().contains(DEFAULT_TAG_APPLIED)) return;
+        if (item.getTag() != null && item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
         CompoundTag defaultTag = ((ItemInterface) item.getItem()).getDefaultTags();
         if (defaultTag != null) {
             defaultTag.putBoolean(DEFAULT_TAG_APPLIED, true);
             item.getOrCreateTag().merge(defaultTag);
-            if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get() && !item.getTag().contains(BORDER_TAG)) {
-                item.getTag().putInt(BORDER_TAG, Util.getItemBorderType(item.getTag().getString(CommonData.WEAPON_TAG), item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item))));
-            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void instantiateDefaultTags(ReplaceAttributeModifierEvent event) {
+        ItemStack item = event.item;
+        if (item.getTag() != null && item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
+        CompoundTag defaultTag = ((ItemInterface) item.getItem()).getDefaultTags();
+        if (defaultTag != null) {
+            defaultTag.putBoolean(DEFAULT_TAG_APPLIED, true);
+            item.getOrCreateTag().merge(defaultTag);
         }
     }
 

@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.1.5-1.19.2'
+version = '0.1.5c-1.19.2'
 group = 'net.cwjn.idf' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'idf'
 
@@ -92,6 +92,9 @@ repositories {
     maven {
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        url 'https://api.modrinth.com/maven'
+    }
     jcenter()
     mavenCentral()
     mavenLocal()
@@ -127,7 +130,7 @@ dependencies {
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
     implementation fg.deobf("curse.maven:playeranim-658587:4418149")
     implementation fg.deobf("curse.maven:pyromancer-471135:4717766")
-    implementation fg.deobf("curse.maven:bettercombat-639842:4534620")
+    compileOnly fg.deobf("maven.modrinth:better-combat:1.7.1+1.19-forge")
 
     //rubidium and oculus
     implementation fg.deobf("curse.maven:oculus-581495:4578731")

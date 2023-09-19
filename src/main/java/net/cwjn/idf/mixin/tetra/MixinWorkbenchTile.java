@@ -57,9 +57,6 @@ public class MixinWorkbenchTile {
             else if (highest == prc) dc = "pierce";
         }
         tag.putString(WEAPON_TAG, dc);
-        if (CommonConfig.LEGENDARY_TOOLTIPS_COMPAT_MODE.get()) {
-            tag.putInt("idf.tooltip_border", Util.getItemBorderType(dc, upgradedStack.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(upgradedStack))));
-        }
     }
 
 }
