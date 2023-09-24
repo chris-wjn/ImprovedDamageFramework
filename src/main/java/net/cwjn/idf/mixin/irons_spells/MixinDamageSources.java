@@ -20,6 +20,10 @@ public class MixinDamageSources {
     @Redirect(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private static boolean convertToIDFSource(LivingEntity instance, DamageSource source, float amount, Entity e, float baseAmount, DamageSource oSource, SchoolType school) {
         DamageSource ds;
+        if (school == null) {
+            return instance.hurt(new IDFDamageSource(source.msgId,
+                    0, 0, 0, 1, 0, 0, 0f, 0f, "none").setIsConversion(), amount);
+        }
         float f=0, w=0, l=0, m=0, d=0, h=0;
         switch (school) {
             case FIRE -> f = 1;
