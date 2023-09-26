@@ -3,7 +3,6 @@ package net.cwjn.idf.util;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.attribute.IDFAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
@@ -14,7 +13,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -30,10 +28,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
-import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.minecraft.network.chat.Component.translatable;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
-import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 public class Util {
 
@@ -74,6 +69,14 @@ public class Util {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FB"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C63"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC9")};
+    public static final UUID[] UUID_IDF_CUSTOM_ITEMS = {
+            UUID.fromString("3B3A2AC8-EB86-4B37-ABF1-1DF34F564F29"),
+            UUID.fromString("98A3F188-6A2C-4827-90A9-FB49632A135E"),
+            UUID.fromString("E57F9B5D-3D47-498A-884F-7E739E98A489"),
+            UUID.fromString("4F7F98E3-42D6-4E7D-A50C-BF4D9805AB12"),
+            UUID.fromString("A542BAC0-C124-4F4E-9F0D-829F7C1DD8E9"),
+            UUID.fromString("7B8ECA81-1B6A-4AC7-9FED-6720EB2E2F4A")
+    };
 
     public static MutableComponent withColor(MutableComponent text, int color) {
         return text.withStyle(text.getStyle().withColor(net.minecraft.network.chat.TextColor.fromRgb(color & 0xFFFFFF)));

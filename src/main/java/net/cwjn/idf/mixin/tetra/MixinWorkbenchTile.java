@@ -1,10 +1,7 @@
 package net.cwjn.idf.mixin.tetra;
 
-import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.data.CommonData;
-import net.cwjn.idf.util.Util;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,6 +16,7 @@ import se.mickelus.tetra.effect.ItemEffect;
 import se.mickelus.tetra.items.modular.IModularItem;
 import se.mickelus.tetra.items.modular.impl.bow.ModularBowItem;
 import se.mickelus.tetra.items.modular.impl.crossbow.ModularCrossbowItem;
+import se.mickelus.tetra.items.modular.impl.holo.ModularHolosphereItem;
 import se.mickelus.tetra.module.ItemModule;
 
 import java.util.Map;
@@ -32,6 +30,7 @@ public class MixinWorkbenchTile {
     private void addDamageClass(Player player, CallbackInfo ci, ItemStack targetStack, ItemStack upgradedStack, IModularItem item, BlockState blockState, Map availableTools, ItemStack[] materials, ItemStack[] materialsAltered, ItemStack tempStack) {
         CompoundTag tag = upgradedStack.getTag();
         if (tag == null) return;
+        if (item instanceof ModularHolosphereItem) return;
         tag.putBoolean(CommonData.EQUIPMENT_TAG, true);
         ItemModule[] modules = item.getMajorModules(upgradedStack);
         String dc = "strike";

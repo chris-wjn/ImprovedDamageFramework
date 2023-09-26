@@ -13,7 +13,7 @@ import oshi.util.tuples.Pair;
 
 import java.util.Map;
 
-import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
+import static net.cwjn.idf.util.Util.UUID_IDF_CUSTOM_ITEMS;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
@@ -22,9 +22,9 @@ public class IDFSwordItem extends SwordItem implements IDFCustomEquipment {
     public IDFSwordItem(Tier tier, String damageClass, double physicalDamage, double force, double speed, Properties p, Pair<Attribute, AttributeModifier>... bonusAttributes) {
         super(tier, (int) physicalDamage, (float) speed, p);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "base_physical_damage", physicalDamage+tier.getAttackDamageBonus(), ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "base_attack_speed", speed+tier.getSpeed(), ADDITION));
-        builder.put(IDFAttributes.FORCE.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[0], "base_force", force, ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[0], "base_physical_damage", physicalDamage+tier.getAttackDamageBonus(), ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[0], "base_attack_speed", speed+tier.getSpeed(), ADDITION));
+        builder.put(IDFAttributes.FORCE.get(), new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[0], "base_force", force, ADDITION));
         ((ItemInterface) this).setDamageClass(damageClass);
         for (Pair<Attribute, AttributeModifier> pair : bonusAttributes) {
             builder.put(pair.getA(), pair.getB());

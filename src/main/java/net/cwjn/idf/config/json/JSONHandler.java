@@ -326,6 +326,7 @@ public class JSONHandler {
             MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, Util.getItemRegistryName(item)));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
+            System.out.println("running jsonhandler itemupdate");
         }
     }
 

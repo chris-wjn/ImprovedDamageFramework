@@ -13,6 +13,7 @@ import oshi.util.tuples.Pair;
 import java.util.Map;
 
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
+import static net.cwjn.idf.util.Util.UUID_IDF_CUSTOM_ITEMS;
 
 public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
 
@@ -23,14 +24,14 @@ public class IDFArmourItem extends ArmorItem implements IDFCustomEquipment {
                          Properties properties, Pair<Attribute, AttributeModifier>... bonusAttributes) {
         super(material, slot, properties);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ARMOR, new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_physical_defence", physicalDefence+material.getPhysicalDefenceForSlot(slot), AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_weight", weight+material.getWeightForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR, new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[slot.getIndex()], "base_physical_defence", physicalDefence+material.getPhysicalDefenceForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[slot.getIndex()], "base_weight", weight+material.getWeightForSlot(slot), AttributeModifier.Operation.ADDITION));
         if (this.knockbackResistance > 0) {
-            builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_knockback_resistance", KBR+material.getKnockbackResistance(), AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[slot.getIndex()], "base_knockback_resistance", KBR+material.getKnockbackResistance(), AttributeModifier.Operation.ADDITION));
         }
-        builder.put(IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_strike", strike+material.getStrikeForSlot(slot), AttributeModifier.Operation.ADDITION));
-        builder.put(IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_pierce", pierce+material.getPierceForSlot(slot), AttributeModifier.Operation.ADDITION));
-        builder.put(IDFAttributes.SLASH_MULT.get(), new AttributeModifier(UUID_BASE_STAT_ADDITION[slot.getIndex()], "base_slash", slash+material.getSlashForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(IDFAttributes.STRIKE_MULT.get(), new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[slot.getIndex()], "base_strike", strike+material.getStrikeForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(IDFAttributes.PIERCE_MULT.get(), new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[slot.getIndex()], "base_pierce", pierce+material.getPierceForSlot(slot), AttributeModifier.Operation.ADDITION));
+        builder.put(IDFAttributes.SLASH_MULT.get(), new AttributeModifier(UUID_IDF_CUSTOM_ITEMS[slot.getIndex()], "base_slash", slash+material.getSlashForSlot(slot), AttributeModifier.Operation.ADDITION));
         for (Pair<Attribute, AttributeModifier> pair : bonusAttributes) {
             builder.put(pair.getA(), pair.getB());
         }
