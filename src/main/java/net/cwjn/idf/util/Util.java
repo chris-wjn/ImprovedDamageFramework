@@ -277,11 +277,12 @@ public class Util {
             comp.append("%");
         }
         comp.append(spacer(1));
+        int threshhold = appendX? 1 : 0;
         if (invertNegative) {
-            return withColour? (num > 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour)) : comp;
+            return withColour? (num > threshhold ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour)) : comp;
         }
         else {
-            return withColour? (num < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour)) : comp;
+            return withColour? (num < threshhold ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour)) : comp;
         }
     }
 

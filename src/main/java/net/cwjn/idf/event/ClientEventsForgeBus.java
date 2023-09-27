@@ -12,7 +12,6 @@ import net.cwjn.idf.gui.BestiaryScreen;
 import net.cwjn.idf.gui.StatScreen;
 import net.cwjn.idf.gui.buttons.TabButton;
 import net.cwjn.idf.hud.MobHealthbar;
-import net.cwjn.idf.network.PacketHandler;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Keybinds;
 import net.cwjn.idf.util.Util;
@@ -272,23 +271,19 @@ public class ClientEventsForgeBus {
                             Attribute a = CommonData.ATTRIBUTES.get(key);
                             Collection<AttributeModifier> mods = map.get(a);
                             final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                            double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                            double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                            double mult_base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
+                            double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
                             MutableComponent c = Component.empty();
                             c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
-                            if (mult != 1) c.append(
-                                            writeIcon(key, true))
+                            c.append(
+                                    writeIcon(key, true))
                                     .append(Util.withColor(translation(key), Color.GREY))
                                     .append(" ")
-                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl))
-                                    .append(writeScalingTooltip(mult*flat, cl));
-                            else c.append(
-                                            writeIcon(key, true))
-                                    .append(Util.withColor(translation(key), Color.GREY))
-                                    .append(" ")
-                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl));
+                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + base, cl));
+                            if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
+                            if (mult_total != 1) c.append(writeScalingTooltip(mult_total*(mult_base+base), Color.DARKBLUE));
                             if (writeBorderTag) {
-                                borderHelper.ifPresent(h -> h.put(key, flat*mult));
+                                borderHelper.ifPresent(h -> h.put(key, mult_total*(mult_base+base)));
                             }
                             map.removeAll(a);
                             list.add(c);
@@ -330,23 +325,19 @@ public class ClientEventsForgeBus {
                             Attribute a = CommonData.ATTRIBUTES.get(key);
                             Collection<AttributeModifier> mods = map.get(a);
                             final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                            double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                            double mult = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
+                            double mult_base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
+                            double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).reduce(1, (x, y) -> x * y);
                             MutableComponent c = Component.empty();
                             c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
-                            if (mult != 1) c.append(
-                                            writeIcon(key, true))
+                            c.append(
+                                    writeIcon(key, true))
                                     .append(Util.withColor(translation(key), Color.GREY))
                                     .append(" ")
-                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl))
-                                    .append(writeScalingTooltip(mult*flat, cl));
-                            else c.append(
-                                            writeIcon(key, true))
-                                    .append(Util.withColor(translation(key), Color.GREY))
-                                    .append(" ")
-                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + flat, cl));
+                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + base, cl));
+                            if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
+                            if (mult_total != 1) c.append(writeScalingTooltip(mult_total*(mult_base+base), Color.DARKBLUE));
                             if (writeBorderTag) {
-                                borderHelper.ifPresent(h -> h.put(key, flat*mult));
+                                borderHelper.ifPresent(h -> h.put(key, mult_total*(mult_base+base)));
                             }
                             map.removeAll(a);
                             list.add(c);
