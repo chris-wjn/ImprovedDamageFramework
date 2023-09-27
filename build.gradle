@@ -101,7 +101,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.21'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.3.0'
 
     //STAPLES
     // compile against the JEI API but do not include it at runtime

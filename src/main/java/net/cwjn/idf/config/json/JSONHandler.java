@@ -44,9 +44,8 @@ import java.util.function.Predicate;
 import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
-import static net.minecraft.world.entity.ai.attributes.Attributes.ARMOR;
-import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL;
 
 @SuppressWarnings(value = "UnstableApiUsage")
 @Mod.EventBusSubscriber
@@ -326,7 +325,6 @@ public class JSONHandler {
             MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, Util.getItemRegistryName(item)));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);
             idfItem.setDefaultAttributes(builder.build());
-            System.out.println("running jsonhandler itemupdate");
         }
     }
 
