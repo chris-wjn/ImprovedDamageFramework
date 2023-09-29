@@ -1,6 +1,7 @@
 package net.cwjn.idf.api.event;
 
 import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -31,4 +32,10 @@ public class ItemAttributeReworkEvent extends Event {
     public boolean isCancelable() {
         return false;
     }
+
+    public double getFlatAmountForAttribute(Attribute a) {
+        Multimap<Attribute, AttributeModifier> copyMap = attributeBuilder.build();
+        return copyMap.get(a).stream().filter(m -> m.getOperation() == AttributeModifier.Operation.ADDITION).mapToDouble(AttributeModifier::getAmount).sum();
+    }
+
 }

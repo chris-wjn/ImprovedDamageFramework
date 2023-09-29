@@ -281,7 +281,7 @@ public class ClientEventsForgeBus {
                                     .append(" ")
                                     .append(writeDamageTooltip(player.getAttributeBaseValue(a) + base, cl));
                             if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
-                            if (mult_total != 1) c.append(writeScalingTooltip(mult_total*(mult_base+base), Color.DARKBLUE));
+                            if (mult_total != 1) c.append(writeScalingTooltip((mult_total - 1)*(mult_base+base), Color.DARKBLUE));
                             if (writeBorderTag) {
                                 borderHelper.ifPresent(h -> h.put(key, mult_total*(mult_base+base)));
                             }
@@ -335,7 +335,7 @@ public class ClientEventsForgeBus {
                                     .append(" ")
                                     .append(writeDamageTooltip(player.getAttributeBaseValue(a) + base, cl));
                             if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
-                            if (mult_total != 1) c.append(writeScalingTooltip(mult_total*(mult_base+base), Color.DARKBLUE));
+                            if (mult_total != 1) c.append(writeScalingTooltip((mult_total - 1)*(mult_base+base), Color.DARKBLUE));
                             if (writeBorderTag) {
                                 borderHelper.ifPresent(h -> h.put(key, mult_total*(mult_base+base)));
                             }
