@@ -43,12 +43,18 @@ side = "BOTH"
 [[dependencies.idf]]
 modId = "tetra"
 mandatory = false
-versionRange = "[5,]"
+versionRange = "[5,)"
 ordering = "AFTER"
 side = "BOTH"
 [[dependencies.idf]]
 modId = "oculus"
 mandatory = false
-versionRange = "[1.6.4,]"
+versionRange = "[1.6.4,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.idf]]
+modId = "irons_spellbooks"
+mandatory = false
+versionRange = "[1.19.2-2.0.0,)"
 ordering = "AFTER"
 side = "BOTH"

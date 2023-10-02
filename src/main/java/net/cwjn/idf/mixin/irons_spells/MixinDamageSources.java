@@ -1,7 +1,7 @@
 package net.cwjn.idf.mixin.irons_spells;
 
+import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.damage.DamageSources;
-import io.redspace.ironsspellbooks.spells.SchoolType;
 import net.cwjn.idf.damage.IDFDamageSource;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.cwjn.idf.damage.IDFIndirectEntityDamageSource;
@@ -18,20 +18,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinDamageSources {
 
     @Redirect(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
-    private static boolean convertToIDFSource(LivingEntity instance, DamageSource source, float amount, Entity e, float baseAmount, DamageSource oSource, SchoolType school) {
+    private static boolean convertToIDFSource(LivingEntity instance, DamageSource source, float amount, Entity target, float baseAmount, DamageSource damageSource, SchoolType school) {
         DamageSource ds;
         if (school == null) {
             return instance.hurt(new IDFDamageSource(source.msgId,
                     0, 0, 0, 1, 0, 0, 0f, 0f, "none").setIsConversion(), amount);
         }
         float f=0, w=0, l=0, m=0, d=0, h=0;
-        switch (school) {
-            case FIRE -> f = 1;
-            case ICE -> w = 1;
-            case LIGHTNING -> l = 1;
-            case ENDER,POISON -> m = 1;
-            case BLOOD,VOID -> d = 1;
-            case HOLY -> h = 1;
+        switch (school.getId().toString()) {
+            case "irons_spellbooks:fire" -> f = 1;
+            case "irons_spellbooks:ice" -> w = 1;
+            case "irons_spellbooks:lightning" -> l = 1;
+            case "irons_spellbooks:ender","irons_spellbooks:nature" -> m = 1;
+            case "irons_spellbooks:blood","irons_spellbooks:evocation" -> d = 1;
+            case "irons_spellbooks:holy" -> h = 1;
             default -> {}
         }
         if (source instanceof IndirectEntityDamageSource) {

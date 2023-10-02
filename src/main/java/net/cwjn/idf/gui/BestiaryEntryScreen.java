@@ -3,7 +3,6 @@ package net.cwjn.idf.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.records.EntityData;
 import net.cwjn.idf.config.json.records.EntityTag;
 import net.cwjn.idf.data.CommonData;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.registries.ForgeRegistries;
 import oshi.util.tuples.Pair;
 
 import java.awt.event.KeyEvent;
@@ -28,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.cwjn.idf.data.CommonData.*;
 import static net.minecraft.client.gui.screens.inventory.InventoryScreen.renderEntityInInventory;
 
@@ -122,7 +121,7 @@ public class BestiaryEntryScreen extends Screen {
         }
         for (Attribute a : DEFENSIVE_ATTRIBUTES) {
             if (entity.getAttribute(a) != null && !a.equals(Attributes.ARMOR_TOUGHNESS)) {
-                if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(1,x1++), infoTop+getY(1,y1++), Color.DARKSLATEGREY.getColor());
+                if (entity.getAttributeValue(a) != 0 || a == STRIKE_MULT.get() || a == PIERCE_MULT.get() || a == SLASH_MULT.get()) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(1,x1++), infoTop+getY(1,y1++), Color.DARKSLATEGREY.getColor());
             }
         }
         for (Attribute a : OFFENSIVE_ATTRIBUTES) {

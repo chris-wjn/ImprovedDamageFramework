@@ -126,7 +126,7 @@ dependencies {
     implementation fg.deobf("curse.maven:hexcasting-569849:4166956")
     implementation fg.deobf("curse.maven:paucal-597824:4100645")
     implementation fg.deobf("curse.maven:kotlinforge-351264:4513187")
-    implementation fg.deobf("curse.maven:ironspells-855414:4693051")
+    implementation fg.deobf("curse.maven:ironspells-855414:4766218")
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
     implementation fg.deobf("curse.maven:playeranim-658587:4418149")
     implementation fg.deobf("curse.maven:pyromancer-471135:4717766")
