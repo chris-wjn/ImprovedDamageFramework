@@ -1,13 +1,10 @@
 package net.cwjn.idf.data;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.config.json.records.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,6 +19,7 @@ public class CommonData {
     public static Map<ResourceLocation, ItemData> LOGICAL_WEAPON_MAP_MULT = new HashMap<>();
     public static Map<ResourceLocation, EntityData> LOGICAL_ENTITY_MAP = new HashMap<>();
     public static Map<String, SourceCatcherData> LOGICAL_SOURCE_MAP = new HashMap<>();
+    public static List<ResourceLocation> COMPAT_ITEMS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
     public static Multimap<UUID, ResourceLocation> BESTIARY_MAP;
     public static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();
@@ -33,6 +31,7 @@ public class CommonData {
     public static final String THROWN_TAG = "idf.thrown_weapon";
     public static final String WEAPON_TAG = "idf.damage_class";
     public static final String ENTITY_BONUS = "idf.base_bonus";
+    public static final String COMPAT_ITEM = "idf.needs_compat";
     public static final String BORDER_TAG = "idf.tooltip_border";
     public static final String DEFAULT_TAG_APPLIED = "idf.default_applied";
     public static final String TETRA_CRIT_LEVEL = "idf.tetra_crit_level";

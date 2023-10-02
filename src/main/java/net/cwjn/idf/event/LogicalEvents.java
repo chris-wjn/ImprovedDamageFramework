@@ -4,12 +4,15 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.event.LivingLifestealEvent;
 import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.api.event.PostMitigationDamageEvent;
-import net.cwjn.idf.api.event.ReplaceAttributeModifierEvent;
+import net.cwjn.idf.api.event.ReplaceItemAttributeModifierEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.InfoPageCommand;
 import net.cwjn.idf.command.UnlockBestiaryCommand;
 import net.cwjn.idf.config.CommonConfig;
+import net.cwjn.idf.config.json.records.ArmourData;
+import net.cwjn.idf.config.json.records.ItemData;
+import net.cwjn.idf.config.json.records.WeaponData;
 import net.cwjn.idf.data.BestiaryData;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.network.PacketHandler;
@@ -22,9 +25,11 @@ import net.cwjn.idf.util.ItemInterface;
 import net.cwjn.idf.util.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +47,6 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.server.command.ConfigCommand;
 
 import java.util.ArrayList;
@@ -51,6 +55,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import static net.cwjn.idf.data.CommonData.*;
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
+import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID)
 public class LogicalEvents {
@@ -58,7 +66,7 @@ public class LogicalEvents {
     public static boolean debugMode = false;
     private static final Random random = new Random();
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void instantiateDefaultTags(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack();
         if (item.getTag() != null && item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
@@ -67,10 +75,38 @@ public class LogicalEvents {
             defaultTag.putBoolean(DEFAULT_TAG_APPLIED, true);
             item.getOrCreateTag().merge(defaultTag);
         }
+        if (item.getOrCreateTag().contains(COMPAT_ITEM)) {
+            ResourceLocation loc = Util.getItemRegistryName(item.getItem());
+            int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item).getFilterFlag();
+            ArmourData data0 = LOGICAL_ARMOUR_MAP_FLAT.get(loc);
+            ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
+            WeaponData data01 = LOGICAL_WEAPON_MAP_FLAT.get(loc);
+            ItemData data21 = LOGICAL_WEAPON_MAP_MULT.get(loc);
+            data0.forEach(pair -> {
+                if (pair.getB() != 0) {
+                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                }
+            });
+            data2.forEach(pair -> {
+                if (pair.getB() != 0) {
+                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                }
+            });
+            data01.forEach(pair -> {
+                if (pair.getB() != 0) {
+                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                }
+            });
+            data21.forEach(pair -> {
+                if (pair.getB() != 0) {
+                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                }
+            });
+        }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void instantiateDefaultTags(ReplaceAttributeModifierEvent event) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void instantiateDefaultTags(ReplaceItemAttributeModifierEvent event) {
         ItemStack item = event.item;
         if (item.getTag() != null && item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
         CompoundTag defaultTag = ((ItemInterface) item.getItem()).getDefaultTags();
@@ -84,7 +120,7 @@ public class LogicalEvents {
     @SubscribeEvent
     public static void assertMaxHP(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity.getHealth() > entity.getMaxHealth()) entity.setHealth(entity.getMaxHealth());
+        if (Float.isNaN(entity.getHealth())) entity.setHealth(entity.getMaxHealth());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

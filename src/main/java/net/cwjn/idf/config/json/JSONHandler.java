@@ -37,6 +37,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
@@ -53,6 +54,7 @@ public class JSONHandler {
     public static final Map<ResourceLocation, Multimap<Attribute, AttributeModifier>> baseModifiers = new HashMap<>();
     private static final Predicate<Item> isKnownWeapon = (item) -> item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem;
     public static final Map<ResourceLocation, Integer> vanillaDurability = new HashMap<>();
+    private static final Path compatDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework", "compat");
     public static final Gson SERIALIZER = new GsonBuilder().
             setPrettyPrinting().
             registerTypeAdapter(ArmourData.class, new ArmourData.ArmourSerializer()).
@@ -171,6 +173,7 @@ public class JSONHandler {
         Map<String, ItemData> tempWeaponOp2Map = JSONUtil.getOrCreateConfigFile(configDir, "weapon_items_multiply.json", DEFAULT_WEAPON_MULT, new TypeToken<Map<String, ItemData>>() {}.getType());
         Map<String, EntityData> tempEntityMap = JSONUtil.getOrCreateConfigFile(configDir, "entity_data.json", DEFAULT_ENTITY, new TypeToken<Map<String, EntityData>>() {}.getType());
         Map<String, SourceCatcherData> tempSourceMap = JSONUtil.getOrCreateConfigFile(configDir, "source_catcher.json", DEFAULT_SOURCE, new TypeToken<Map<String, SourceCatcherData>>() {}.getType());
+        List<ResourceLocation> compatItems = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_items.json", new ArrayList<>(), new TypeToken<List<ResourceLocation>>() {}.getType());
 
         //if the maps taken from the config folder are missing entries, fill them in
         //this is helpful if the user accidentally deletes an entry, or adds new mods
@@ -231,6 +234,9 @@ public class JSONHandler {
         if (!sortedSourceMap.isEmpty()) {
             LOGICAL_SOURCE_MAP = sortedSourceMap;
         }
+        if (!compatItems.isEmpty()) {
+            COMPAT_ITEMS.addAll(compatItems);
+        }
 
         //this is for ImprovedAdventureFramework
         if (ModList.get().isLoaded("iaf")) {
@@ -262,6 +268,7 @@ public class JSONHandler {
         JSONUtil.writeFile(new File(configDir, "weapon_items_flat.json"), sortedWeaponOp0Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_multiply.json"), sortedWeaponOp2Map);
         JSONUtil.writeFile(new File(configDir, "source_catcher.json"), sortedSourceMap);
+        JSONUtil.writeFile(new File(compatDir.toFile(), "compat_items.json"), compatItems);
     }
 
     private static void saveVanillaStats() {
@@ -321,6 +328,9 @@ public class JSONHandler {
                     }
                 });
                 idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
+            }
+            if (COMPAT_ITEMS.contains(loc)) {
+                defaultTag.putBoolean(COMPAT_ITEM, true);
             }
             MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, Util.getItemRegistryName(item)));
             if (!defaultTag.isEmpty()) idfItem.setDefaultTag(defaultTag);

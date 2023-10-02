@@ -11,6 +11,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -20,13 +22,16 @@ public class SyncClientConfigPacket implements IDFPacket {
     public final Map<ResourceLocation, ItemData> weaponMult;
     public final Map<ResourceLocation, ArmourData> armourFlat;
     public final Map<ResourceLocation, ItemData> armourMult;
+    public final List<ResourceLocation> compatItems;
 
     public SyncClientConfigPacket(Map<ResourceLocation, WeaponData> weaponMap0, Map<ResourceLocation, ItemData> weaponMap2,
-                                  Map<ResourceLocation, ArmourData> armourMap0, Map<ResourceLocation, ItemData> armourMap2) {
+                                  Map<ResourceLocation, ArmourData> armourMap0, Map<ResourceLocation, ItemData> armourMap2,
+                                  List<ResourceLocation> compatItems) {
         this.weaponFlat = weaponMap0;
         this.weaponMult = weaponMap2;
         this.armourFlat = armourMap0;
         this.armourMult = armourMap2;
+        this.compatItems = compatItems;
     }
 
     public static void encode(SyncClientConfigPacket packet, FriendlyByteBuf buffer) {
@@ -34,6 +39,10 @@ public class SyncClientConfigPacket implements IDFPacket {
         buffer.writeMap(packet.weaponMult, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
         buffer.writeMap(packet.armourFlat, FriendlyByteBuf::writeResourceLocation, (buf, ArmourData) -> ArmourData.writeArmourData(buf));
         buffer.writeMap(packet.armourMult, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
+        buffer.writeInt(packet.compatItems.size());
+        for (ResourceLocation rl : packet.compatItems) {
+            buffer.writeResourceLocation(rl);
+        }
     }
 
     public static SyncClientConfigPacket decode(FriendlyByteBuf buffer) {
@@ -41,7 +50,12 @@ public class SyncClientConfigPacket implements IDFPacket {
         Map<ResourceLocation, ItemData> weaponMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
         Map<ResourceLocation, ArmourData> armourMap00 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ArmourData::readArmourData);
         Map<ResourceLocation, ItemData> armourMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
-        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22);
+        int size = buffer.readInt();
+        List<ResourceLocation> list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(buffer.readResourceLocation());
+        }
+        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22, list);
     }
 
     public static void handle(SyncClientConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
