@@ -1,0 +1,10 @@
+{
+  "attribute.name.generic.attack_damage": "物理伤害",
+  "attribute.name.generic.armor": "物理防御",
+  "attribute.name.generic.armor_toughness": "重量",
+  "effect.minecraft.fire_resistance": "火焰免疫",
+  "item.minecraft.tipped_arrow.effect.fire_resistance": "火焰免疫之箭",
+  "item.minecraft.potion.effect.fire_resistance": "火焰免疫药水",
+  "item.minecraft.splash_potion.effect.fire_resistance": "喷溅型火焰免疫药水",
+  "item.minecraft.lingering_potion.effect.fire_resistance": "滞留型火焰免疫药水"
+}
