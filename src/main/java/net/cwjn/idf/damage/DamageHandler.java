@@ -76,7 +76,7 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.25, 2);
+        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
@@ -294,7 +294,7 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.25, 2);
+        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
         knockback = event.getKnockback();
         float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
