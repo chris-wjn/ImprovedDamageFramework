@@ -173,7 +173,7 @@ public class JSONHandler {
         Map<String, ItemData> tempWeaponOp2Map = JSONUtil.getOrCreateConfigFile(configDir, "weapon_items_multiply.json", DEFAULT_WEAPON_MULT, new TypeToken<Map<String, ItemData>>() {}.getType());
         Map<String, EntityData> tempEntityMap = JSONUtil.getOrCreateConfigFile(configDir, "entity_data.json", DEFAULT_ENTITY, new TypeToken<Map<String, EntityData>>() {}.getType());
         Map<String, SourceCatcherData> tempSourceMap = JSONUtil.getOrCreateConfigFile(configDir, "source_catcher.json", DEFAULT_SOURCE, new TypeToken<Map<String, SourceCatcherData>>() {}.getType());
-        List<ResourceLocation> compatItems = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_items.json", new ArrayList<>(), new TypeToken<List<ResourceLocation>>() {}.getType());
+        List<String> compatItems = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_items.json", new ArrayList<>(), new TypeToken<List<String>>() {}.getType());
 
         //if the maps taken from the config folder are missing entries, fill them in
         //this is helpful if the user accidentally deletes an entry, or adds new mods
@@ -235,7 +235,9 @@ public class JSONHandler {
             LOGICAL_SOURCE_MAP = sortedSourceMap;
         }
         if (!compatItems.isEmpty()) {
-            COMPAT_ITEMS.addAll(compatItems);
+            for (String s : compatItems) {
+                COMPAT_ITEMS.add(new ResourceLocation(s));
+            }
         }
 
         //this is for ImprovedAdventureFramework

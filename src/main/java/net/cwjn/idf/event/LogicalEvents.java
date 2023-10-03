@@ -55,6 +55,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import static net.cwjn.idf.data.CommonData.*;
+import static net.cwjn.idf.data.CommonData.LOGICAL_WEAPON_MAP_MULT;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
@@ -69,39 +70,44 @@ public class LogicalEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void instantiateDefaultTags(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack();
-        if (item.getTag() != null && item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
+        if (item.hasTag() && item.getOrCreateTag().contains(COMPAT_ITEM)) {
+            ResourceLocation loc = Util.getItemRegistryName(item.getItem());
+            int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item).getFilterFlag();
+            if (event.getSlotType() == LivingEntity.getEquipmentSlotForItem(item)) {
+                if (LOGICAL_ARMOUR_MAP_FLAT.containsKey(loc)) {
+                    ArmourData data0 = LOGICAL_ARMOUR_MAP_FLAT.get(loc);
+                    ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
+                    data0.forEach(pair -> {
+                        if (pair.getB() != 0) {
+                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                        }
+                    });
+                    data2.forEach(pair -> {
+                        if (pair.getB() != 0) {
+                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                        }
+                    });
+                } else if (LOGICAL_WEAPON_MAP_FLAT.containsKey(loc)) {
+                    WeaponData data01 = LOGICAL_WEAPON_MAP_FLAT.get(loc);
+                    ItemData data21 = LOGICAL_WEAPON_MAP_MULT.get(loc);
+                    data01.forEach(pair -> {
+                        if (pair.getB() != 0) {
+                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                        }
+                    });
+                    data21.forEach(pair -> {
+                        if (pair.getB() != 0) {
+                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                        }
+                    });
+                }
+            }
+        }
+        if (item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
         CompoundTag defaultTag = ((ItemInterface) item.getItem()).getDefaultTags();
         if (defaultTag != null) {
             defaultTag.putBoolean(DEFAULT_TAG_APPLIED, true);
             item.getOrCreateTag().merge(defaultTag);
-        }
-        if (item.getOrCreateTag().contains(COMPAT_ITEM)) {
-            ResourceLocation loc = Util.getItemRegistryName(item.getItem());
-            int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item).getFilterFlag();
-            ArmourData data0 = LOGICAL_ARMOUR_MAP_FLAT.get(loc);
-            ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
-            WeaponData data01 = LOGICAL_WEAPON_MAP_FLAT.get(loc);
-            ItemData data21 = LOGICAL_WEAPON_MAP_MULT.get(loc);
-            data0.forEach(pair -> {
-                if (pair.getB() != 0) {
-                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
-                }
-            });
-            data2.forEach(pair -> {
-                if (pair.getB() != 0) {
-                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
-                }
-            });
-            data01.forEach(pair -> {
-                if (pair.getB() != 0) {
-                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
-                }
-            });
-            data21.forEach(pair -> {
-                if (pair.getB() != 0) {
-                    event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
-                }
-            });
         }
     }
 
