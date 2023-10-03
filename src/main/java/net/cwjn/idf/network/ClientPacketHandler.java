@@ -27,6 +27,7 @@ public class ClientPacketHandler {
         LOGICAL_WEAPON_MAP_FLAT = packet.weaponFlat;
         LOGICAL_WEAPON_MAP_MULT = packet.weaponMult;
         COMPAT_ITEMS = packet.compatItems;
+        COMPAT_MODS = packet.compatMods;
         JSONHandler.updateItems();
     }
 

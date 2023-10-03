@@ -26,6 +26,7 @@ public class ClientData {
     public static Map<ResourceLocation, WeaponData> CLIENT_WEAPON_MAP_FLAT;
     public static Map<ResourceLocation, ItemData> CLIENT_WEAPON_MAP_MULT;
     public static List<ResourceLocation> CLIENT_COMPAT_ITEMS;
+    public static List<String> CLIENT_COMPAT_MODS;
     public static TreeSet<ResourceLocation> BESTIARY_ENTRIES;
     public static int skyDarken = 0;
     public static boolean shadersLoaded = false;
@@ -41,6 +42,7 @@ public class ClientData {
         CLIENT_WEAPON_MAP_FLAT = LOGICAL_WEAPON_MAP_FLAT;
         CLIENT_WEAPON_MAP_MULT = LOGICAL_WEAPON_MAP_MULT;
         CLIENT_COMPAT_ITEMS = COMPAT_ITEMS;
+        CLIENT_COMPAT_MODS = COMPAT_MODS;
     }
 
     //This works kind of weirdly; PlayerLoggedInEvent only fires on the logical server (afaik),
@@ -54,6 +56,7 @@ public class ClientData {
         LOGICAL_WEAPON_MAP_FLAT = CLIENT_WEAPON_MAP_FLAT;
         LOGICAL_WEAPON_MAP_MULT = CLIENT_WEAPON_MAP_MULT;
         COMPAT_ITEMS = CLIENT_COMPAT_ITEMS;
+        COMPAT_MODS = CLIENT_COMPAT_MODS;
         updateItems();
     }
 

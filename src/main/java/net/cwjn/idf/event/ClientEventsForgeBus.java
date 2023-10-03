@@ -217,6 +217,7 @@ public class ClientEventsForgeBus {
                     Color colour = new Color((int) (128 + (128 * 0.5 * (1.0 - percentage))), (int) (255 * percentage), 0);
                     MutableComponent durabilityComponent = Component.empty();
                     list.add(durabilityComponent
+                            .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                             .append(Util.writeIcon("durability", true))
                             .append(Util.withColor(translatable("idf.tooltip.durability"), Color.GREY)
                             .append(Util.withColor(writeTooltipString(String.valueOf(currentDurability)), colour))
@@ -225,6 +226,7 @@ public class ClientEventsForgeBus {
                 else {
                     MutableComponent durabilityComponent = Component.empty();
                     list.add(durabilityComponent
+                            .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                             .append(Util.writeIcon("durability", true))
                             .append(Util.withColor(translation("idf.tooltip.durability"), Color.GREY)
                             .append(withColor(translation("idf.icon.infinity.symbol"), Color.DARKSEAGREEN))
@@ -234,6 +236,7 @@ public class ClientEventsForgeBus {
                     if (!isRanged) {
                         MutableComponent atkSpeed = Component.empty();
                         list.add(atkSpeed
+                                .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                                 .append(Util.writeIcon("attack_speed", true))
                                 .append(Util.withColor(translatable("idf.tooltip.attack_speed"), Color.GREY))
                                 .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED))), Color.HOLY_COLOUR))
@@ -242,6 +245,7 @@ public class ClientEventsForgeBus {
                     else {
                         MutableComponent accuracy = Component.empty();
                         list.add(accuracy
+                                .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                                 .append(Util.writeIcon("accuracy", true))
                                 .append(Util.withColor(translatable("idf.tooltip.accuracy"), Color.GREY))
                                 .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()))), Color.HOLY_COLOUR))
@@ -249,6 +253,7 @@ public class ClientEventsForgeBus {
                     }
                     MutableComponent force = Component.empty();
                     list.add(force
+                            .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                             .append(Util.writeIcon("force", true))
                             .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
                             .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.FORCE.get()))), Color.HOLY_COLOUR))
@@ -257,6 +262,7 @@ public class ClientEventsForgeBus {
                 else {
                     MutableComponent weight = Component.empty();
                     list.add(weight
+                            .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                             .append(Util.writeIcon("weight", true))
                             .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GREY))
                             .append(Util.withColor(writeTooltipString(tenths.format(getAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS))), Color.HOLY_COLOUR))

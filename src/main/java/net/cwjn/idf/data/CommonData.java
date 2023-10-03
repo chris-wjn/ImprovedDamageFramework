@@ -20,6 +20,7 @@ public class CommonData {
     public static Map<ResourceLocation, EntityData> LOGICAL_ENTITY_MAP = new HashMap<>();
     public static Map<String, SourceCatcherData> LOGICAL_SOURCE_MAP = new HashMap<>();
     public static List<ResourceLocation> COMPAT_ITEMS = new ArrayList<>();
+    public static List<String> COMPAT_MODS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
     public static Multimap<UUID, ResourceLocation> BESTIARY_MAP;
     public static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();

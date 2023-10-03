@@ -70,7 +70,7 @@ public class LogicalEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void instantiateDefaultTags(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack();
-        if (item.hasTag() && item.getOrCreateTag().contains(COMPAT_ITEM)) {
+        if (item.getTag() != null && item.getTag().contains(COMPAT_ITEM)) {
             ResourceLocation loc = Util.getItemRegistryName(item.getItem());
             int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item).getFilterFlag();
             if (event.getSlotType() == LivingEntity.getEquipmentSlotForItem(item)) {
@@ -103,7 +103,7 @@ public class LogicalEvents {
                 }
             }
         }
-        if (item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
+        if (item.getTag() != null && item.getTag().getBoolean(DEFAULT_TAG_APPLIED)) return;
         CompoundTag defaultTag = ((ItemInterface) item.getItem()).getDefaultTags();
         if (defaultTag != null) {
             defaultTag.putBoolean(DEFAULT_TAG_APPLIED, true);

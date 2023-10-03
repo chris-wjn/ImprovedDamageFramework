@@ -174,6 +174,7 @@ public class JSONHandler {
         Map<String, EntityData> tempEntityMap = JSONUtil.getOrCreateConfigFile(configDir, "entity_data.json", DEFAULT_ENTITY, new TypeToken<Map<String, EntityData>>() {}.getType());
         Map<String, SourceCatcherData> tempSourceMap = JSONUtil.getOrCreateConfigFile(configDir, "source_catcher.json", DEFAULT_SOURCE, new TypeToken<Map<String, SourceCatcherData>>() {}.getType());
         List<String> compatItems = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_items.json", new ArrayList<>(), new TypeToken<List<String>>() {}.getType());
+        List<String> compatMods = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_mods.json", new ArrayList<>(), new TypeToken<List<String>>() {}.getType());
 
         //if the maps taken from the config folder are missing entries, fill them in
         //this is helpful if the user accidentally deletes an entry, or adds new mods
@@ -239,6 +240,9 @@ public class JSONHandler {
                 COMPAT_ITEMS.add(new ResourceLocation(s));
             }
         }
+        if (!compatMods.isEmpty()) {
+            COMPAT_MODS.addAll(compatMods);
+        }
 
         //this is for ImprovedAdventureFramework
         if (ModList.get().isLoaded("iaf")) {
@@ -271,6 +275,7 @@ public class JSONHandler {
         JSONUtil.writeFile(new File(configDir, "weapon_items_multiply.json"), sortedWeaponOp2Map);
         JSONUtil.writeFile(new File(configDir, "source_catcher.json"), sortedSourceMap);
         JSONUtil.writeFile(new File(compatDir.toFile(), "compat_items.json"), compatItems);
+        JSONUtil.writeFile(new File(compatDir.toFile(), "compat_mods.json"), compatMods);
     }
 
     private static void saveVanillaStats() {
@@ -331,7 +336,7 @@ public class JSONHandler {
                 });
                 idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());
             }
-            if (COMPAT_ITEMS.contains(loc)) {
+            if (COMPAT_ITEMS.contains(loc) || COMPAT_MODS.contains(loc.getNamespace())) {
                 defaultTag.putBoolean(COMPAT_ITEM, true);
             }
             MinecraftForge.EVENT_BUS.post(new ItemAttributeReworkEvent(builder, defaultTag, Util.getItemRegistryName(item)));

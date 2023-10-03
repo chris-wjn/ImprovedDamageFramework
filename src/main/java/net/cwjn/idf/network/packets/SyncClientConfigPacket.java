@@ -5,6 +5,7 @@ import net.cwjn.idf.config.json.records.ItemData;
 import net.cwjn.idf.config.json.records.WeaponData;
 import net.cwjn.idf.network.ClientPacketHandler;
 import net.cwjn.idf.network.IDFPacket;
+import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,15 +24,17 @@ public class SyncClientConfigPacket implements IDFPacket {
     public final Map<ResourceLocation, ArmourData> armourFlat;
     public final Map<ResourceLocation, ItemData> armourMult;
     public final List<ResourceLocation> compatItems;
+    public final List<String> compatMods;
 
     public SyncClientConfigPacket(Map<ResourceLocation, WeaponData> weaponMap0, Map<ResourceLocation, ItemData> weaponMap2,
                                   Map<ResourceLocation, ArmourData> armourMap0, Map<ResourceLocation, ItemData> armourMap2,
-                                  List<ResourceLocation> compatItems) {
+                                  List<ResourceLocation> compatItems, List<String> compatMods) {
         this.weaponFlat = weaponMap0;
         this.weaponMult = weaponMap2;
         this.armourFlat = armourMap0;
         this.armourMult = armourMap2;
         this.compatItems = compatItems;
+        this.compatMods = compatMods;
     }
 
     public static void encode(SyncClientConfigPacket packet, FriendlyByteBuf buffer) {
@@ -42,6 +45,10 @@ public class SyncClientConfigPacket implements IDFPacket {
         buffer.writeInt(packet.compatItems.size());
         for (ResourceLocation rl : packet.compatItems) {
             buffer.writeResourceLocation(rl);
+        }
+        buffer.writeInt(packet.compatMods.size());
+        for (String s : packet.compatMods) {
+            Util.writeString(s, buffer);
         }
     }
 
@@ -55,7 +62,12 @@ public class SyncClientConfigPacket implements IDFPacket {
         for (int i = 0; i < size; i++) {
             list.add(buffer.readResourceLocation());
         }
-        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22, list);
+        int size1 = buffer.readInt();
+        List<String> list1 = new ArrayList<>();
+        for (int n = 0; n < size1; n++) {
+            list1.add(Util.readString(buffer));
+        }
+        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22, list, list1);
     }
 
     public static void handle(SyncClientConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {
