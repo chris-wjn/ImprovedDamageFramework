@@ -15,7 +15,7 @@ public class MixinMobEffect {
 
     @Redirect(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", ordinal = 0))
     private boolean hurtRedirectPoison(LivingEntity instance, DamageSource source, float useless) {
-        return instance.hurt(source, instance.getMaxHealth()*0.05f);
+        return instance.hurt(source, instance.getMaxHealth()*0.04f);
     }
 
     @Redirect(method = "applyEffectTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", ordinal = 1))

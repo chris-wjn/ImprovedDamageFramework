@@ -13,8 +13,12 @@ public class MixinLargeFireball {
 
     @Redirect(method = "onHitEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"))
     private boolean hurtRedirect(Entity instance, DamageSource pSource, float pAmount) {
-        if (instance instanceof LivingEntity livingEntity) {
-            return livingEntity.hurt(pSource, livingEntity.getMaxHealth()*0.4f);
+        if (!(pSource.getEntity() instanceof LivingEntity)) {
+            if (instance instanceof LivingEntity livingEntity) {
+                return livingEntity.hurt(pSource, livingEntity.getMaxHealth() * 0.4f);
+            } else {
+                return instance.hurt(pSource, pAmount);
+            }
         } else {
             return instance.hurt(pSource, pAmount);
         }

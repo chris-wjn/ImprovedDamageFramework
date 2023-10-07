@@ -214,10 +214,25 @@ public class MixinDamageSource {
      */
     @Overwrite
     public static DamageSource fireball(Fireball fireball, @Nullable Entity indirectSource) {
-        return indirectSource == null ?
-                (new IDFIndirectEntityDamageSource("onFire", fireball, fireball, 1, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setIsFire().setProjectile()
-                :
-                (new IDFIndirectEntityDamageSource("fireball", fireball, indirectSource, 1, 0, 0, 0, 0, 0, 0, 0, "strike")).setIsConversion().setIsFire().setProjectile();
+        if (indirectSource == null) {
+            return new IDFIndirectEntityDamageSource("onFire", fireball, fireball, 1, 0, 0, 0, 0, 0, 0, 0, "strike").setIsConversion().setIsFire().setProjectile();
+        } else if (indirectSource instanceof LivingEntity mob) {
+            final float fire = (float) mob.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get());
+            final float water = (float) mob.getAttributeValue(IDFAttributes.WATER_DAMAGE.get());
+            final float lightning = (float) mob.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get());
+            final float magic = (float) mob.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get());
+            final float dark = (float) mob.getAttributeValue(IDFAttributes.DARK_DAMAGE.get());
+            final float holy = (float) mob.getAttributeValue(IDFElement.HOLY.damage);
+            final float pen = (float) mob.getAttributeValue(IDFAttributes.PENETRATING.get());
+            final float lifesteal = (float) mob.getAttributeValue(IDFAttributes.LIFESTEAL.get());
+            final float weight = (float) mob.getAttributeValue(IDFAttributes.FORCE.get());
+            final float knockback = (float) mob.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+            AuxiliaryData data = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+            return new IDFIndirectEntityDamageSource("fireball", fireball, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, data.getDamageClass()).setIsFire().setProjectile();
+        }
+        else {
+            return new IDFIndirectEntityDamageSource("fireball", fireball, fireball, 1, 0, 0, 0, 0, 0, 0, 0, "strike").setIsConversion().setIsFire().setProjectile();
+        }
     }
 
     /**
