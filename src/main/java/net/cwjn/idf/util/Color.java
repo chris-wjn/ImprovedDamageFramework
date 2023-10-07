@@ -3,6 +3,9 @@ package net.cwjn.idf.util;
 import com.google.common.primitives.UnsignedInts;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -179,6 +182,23 @@ public class Color {
     private final int green;
     private final int blue;
     private final int alpha;
+    public static final Map<String, Color> ATTRIBUTE_COLOURS = new HashMap<>();
+
+    static {
+        for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {
+            if (a.getDescriptionId().contains("fire")) ATTRIBUTE_COLOURS.put(a.getDescriptionId(), FIRE_COLOUR);
+            else if (a.getDescriptionId().contains("water")) ATTRIBUTE_COLOURS.put(a.getDescriptionId(), WATER_COLOUR);
+            else if (a.getDescriptionId().contains("lightning"))
+                ATTRIBUTE_COLOURS.put(a.getDescriptionId(), LIGHTNING_COLOUR);
+            else if (a.getDescriptionId().contains("magic")) ATTRIBUTE_COLOURS.put(a.getDescriptionId(), MAGIC_COLOUR);
+            else if (a.getDescriptionId().contains("dark")) ATTRIBUTE_COLOURS.put(a.getDescriptionId(), DARK_COLOUR);
+            else if (a.getDescriptionId().contains("holy")) ATTRIBUTE_COLOURS.put(a.getDescriptionId(), HOLY_COLOUR);
+            else if (a.getDescriptionId().equals("attribute.name.generic.attack_damage"))
+                ATTRIBUTE_COLOURS.put(a.getDescriptionId(), PHYSICAL_COLOUR);
+            else if (a.getDescriptionId().equals("attribute.name.generic.armor"))
+                ATTRIBUTE_COLOURS.put(a.getDescriptionId(), PHYSICAL_COLOUR);
+        }
+    }
 
     public Color(int color) {
         this.red = color >> 16 & 255;
