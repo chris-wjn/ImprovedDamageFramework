@@ -27,6 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
+import static net.cwjn.idf.config.CommonConfig.SCALE_DAMAGE;
+import static net.cwjn.idf.config.CommonConfig.SCALE_HEALTH;
 import static net.cwjn.idf.data.CommonData.*;
 import static net.minecraft.client.gui.screens.inventory.InventoryScreen.renderEntityInInventory;
 
@@ -183,8 +185,8 @@ public class BestiaryEntryScreen extends Screen {
         if (entity.getPersistentData().getBoolean(ENTITY_BONUS)) return entity;
         AttributeInstance healthInstance = entity.getAttribute(Attributes.MAX_HEALTH);
         AttributeInstance damageInstance = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() * 2);
-        healthInstance.setBaseValue(healthInstance.getBaseValue() * 5);
+        if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() * SCALE_DAMAGE.get());
+        healthInstance.setBaseValue(healthInstance.getBaseValue() * SCALE_HEALTH.get());
 
         //THIRD SECTION: attach bonus attributes defined in entity_data.json
         EntityData data = CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(entity.getType()));

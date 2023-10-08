@@ -9,7 +9,6 @@ import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.InfoPageCommand;
 import net.cwjn.idf.command.UnlockBestiaryCommand;
-import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.config.json.records.ArmourData;
 import net.cwjn.idf.config.json.records.ItemData;
 import net.cwjn.idf.config.json.records.WeaponData;
@@ -54,8 +53,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static net.cwjn.idf.config.CommonConfig.*;
 import static net.cwjn.idf.data.CommonData.*;
-import static net.cwjn.idf.data.CommonData.LOGICAL_WEAPON_MAP_MULT;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
 import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
@@ -133,7 +132,7 @@ public class LogicalEvents {
     public static void cancelWeakAttacks(AttackEntityEvent event) {
         Player player = event.getEntity();
         if (!player.level.isClientSide()) {
-            if (player.getAttackStrengthScale(0.5f) < 0.4) {
+            if (player.getAttackStrengthScale(0.5f) < MIN_ATTACK_STRENGTH_THRESHOLD.get()) {
                 event.setCanceled(true);
             }
         }
@@ -144,7 +143,7 @@ public class LogicalEvents {
         LivingEntity target = event.getEntity();
         if (target.getLevel() instanceof ServerLevel) {
             if (target.getAttributeValue(IDFAttributes.EVASION.get())/100 >= Math.random()) {
-                if (CommonConfig.UNDODGABLE_SOURCES.get().contains(event.getSource().msgId)) return;
+                if (UNDODGABLE_SOURCES.get().contains(event.getSource().msgId)) return;
                 PacketHandler.serverToNearPoint(new DisplayMissPacket(target.getX(), target.getY(), target.getZ(), 0, target.getUUID()), target.getX(), target.getY(), target.getZ(), 15, target.getCommandSenderWorld().dimension());
                 event.setCanceled(true);
             }
@@ -236,7 +235,7 @@ public class LogicalEvents {
     public static void addWeightToFoodExhaustion(OnFoodExhaustionEvent event) {
         LivingEntity entity = event.getEntity();
         double weight = entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
-        event.setExhaustionAmount((float) (event.getExhaustionAmount() * (weight*0.01 + 1)));
+        event.setExhaustionAmount((float) (event.getExhaustionAmount() * (weight*WEIGHT_FOOD_EXHAUSTION_MULTIPLIER.get() + 1)));
     }
 
     @SubscribeEvent

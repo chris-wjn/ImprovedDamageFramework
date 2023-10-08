@@ -1,12 +1,12 @@
 package net.cwjn.idf.damage;
 
 import net.cwjn.idf.api.event.LivingLifestealEvent;
+import net.cwjn.idf.api.event.PostMitigationDamageEvent;
 import net.cwjn.idf.api.event.PreDamageMultipliersEvent;
-import net.cwjn.idf.util.Util;
+import net.cwjn.idf.api.event.PreMitigationDamageEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.json.records.SourceCatcherData;
-import net.cwjn.idf.api.event.PostMitigationDamageEvent;
-import net.cwjn.idf.api.event.PreMitigationDamageEvent;
+import net.cwjn.idf.util.Util;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static net.cwjn.idf.attribute.IDFElement.*;
+import static net.cwjn.idf.config.CommonConfig.MAX_FORCE_WEIGHT_MULTIPLIER;
+import static net.cwjn.idf.config.CommonConfig.MIN_FORCE_WEIGHT_MULTIPLIER;
 
 public class DamageHandler {
 
@@ -76,7 +78,7 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
+        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), MIN_FORCE_WEIGHT_MULTIPLIER.get(), MAX_FORCE_WEIGHT_MULTIPLIER.get());
         knockback = event.getKnockback();
         float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 
@@ -294,7 +296,7 @@ public class DamageHandler {
         pen = event.getPen();
         lifesteal = event.getLifesteal();
         damageClass = event.getDamageClass();
-        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), 0.5, 2);
+        double weightMultiplier = event.getForce() < 0 ? 1 : Mth.clamp(Util.fastSqrt(event.getForce())/Util.fastSqrt(event.getWeight() <= 0 ? 1 : event.getWeight()), MIN_FORCE_WEIGHT_MULTIPLIER.get(), MAX_FORCE_WEIGHT_MULTIPLIER.get());
         knockback = event.getKnockback();
         float[] rv = {event.getFireDef(), event.getWaterDef(), event.getLightningDef(), event.getMagicDef(), event.getDarkDef(), event.getHolyDef(), event.getPhysicalDef()};
 

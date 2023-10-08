@@ -1,10 +1,10 @@
 package net.cwjn.idf.attribute;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.config.json.records.EntityData;
 import net.cwjn.idf.config.json.records.EntityTag;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.util.Util;
-import net.cwjn.idf.config.json.records.EntityData;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -16,6 +16,8 @@ import oshi.util.tuples.Pair;
 
 import java.util.Iterator;
 
+import static net.cwjn.idf.config.CommonConfig.SCALE_DAMAGE;
+import static net.cwjn.idf.config.CommonConfig.SCALE_HEALTH;
 import static net.cwjn.idf.data.CommonData.ENTITY_BONUS;
 import static net.minecraftforge.eventbus.api.EventPriority.HIGHEST;
 
@@ -41,8 +43,8 @@ public class AttachAttributesOnJoin {
             AttributeInstance armorInstance = livingEntity.getAttribute(Attributes.ARMOR);
             AttributeInstance armorToughnessInstance = livingEntity.getAttribute(Attributes.ARMOR_TOUGHNESS);
             AttributeInstance movespeedInstance = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
-            if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() * 2);
-            healthInstance.setBaseValue(healthInstance.getBaseValue() * 5);
+            if (damageInstance != null) damageInstance.setBaseValue(damageInstance.getBaseValue() * SCALE_DAMAGE.get());
+            healthInstance.setBaseValue(healthInstance.getBaseValue() * SCALE_HEALTH.get());
 
             //THIRD SECTION: attach bonus attributes defined in entity_data.json
             EntityData data = CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(livingEntity.getType()));
