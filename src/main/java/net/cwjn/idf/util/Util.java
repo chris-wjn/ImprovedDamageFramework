@@ -185,7 +185,7 @@ public class Util {
         //get all the requested elements in the list and put them in an array
         ArrayList<String> list = new ArrayList<>();
         for (Attribute a : map.keySet()) {
-            if (damage? a.getDescriptionId().contains("damage") : a.getDescriptionId().contains("defence") || a.getDescriptionId().contains("armor")) {
+            if (damage? a.getDescriptionId().contains("damage") && !a.getDescriptionId().contains("crit") : a.getDescriptionId().contains("defence") || a.getDescriptionId().contains("armor")) {
                 list.add(a.getDescriptionId());
             }
         }
