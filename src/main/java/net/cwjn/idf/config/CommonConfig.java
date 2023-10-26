@@ -20,6 +20,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.DoubleValue MIN_FORCE_WEIGHT_MULTIPLIER;
     public static final ForgeConfigSpec.DoubleValue MIN_ATTACK_STRENGTH_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue WEIGHT_FOOD_EXHAUSTION_MULTIPLIER;
+    public static final ForgeConfigSpec.BooleanValue ALLOW_JUMP_CRITS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LEGENDARY_TOOLTIPS_COMPAT_MODE;
     private static final String[] defaultNoInvulnList = {"player", "fall"};
     private static final String[] undodgableList = {"inFire", "onFire", "lava", "hotFloor", "inWall",
@@ -89,6 +90,10 @@ public class CommonConfig {
         WEIGHT_FOOD_EXHAUSTION_MULTIPLIER = BUILDER.comment("""
                         Percentage of weight that multiplies food exhaustion. Default 0.01, or 1% of weight. Min 0, max 1""")
                 .defineInRange("Food Exhaustion Weight Multiplier", 0.01D, 0D, 1D);
+
+        ALLOW_JUMP_CRITS = BUILDER.comment("""
+                        Allow the player to still crit by attacking while falling.""")
+                .define("Allow Jump Crits", false);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

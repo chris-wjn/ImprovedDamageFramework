@@ -4,6 +4,7 @@ import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
+import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.*;
 import net.cwjn.idf.event.LogicalEvents;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -13,6 +14,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -339,6 +341,9 @@ public class MixinPlayer {
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/common/ForgeHooks;getCriticalHit(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Entity;ZF)Lnet/minecraftforge/event/entity/player/CriticalHitEvent;"))
     private CriticalHitEvent reworkCriticalHit(Player player, Entity target, boolean vanillaCritical, float damageModifier) {
         boolean isCrit = (player.getAttributeValue(IDFAttributes.CRIT_CHANCE.get())*0.01) > player.getRandom().nextDouble() && target instanceof LivingEntity;
+        if (CommonConfig.ALLOW_JUMP_CRITS.get()) {
+            isCrit = isCrit || player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS) && !player.isPassenger() && target instanceof LivingEntity;
+        }
         float critMod = isCrit? (float) (player.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())*0.01) : 1.0F;
         CriticalHitEvent hitResult = getCriticalHit(player, target, isCrit, critMod);
         isCrit = hitResult != null;
