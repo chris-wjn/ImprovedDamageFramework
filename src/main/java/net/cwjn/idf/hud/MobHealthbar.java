@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class MobHealthbar {
 
-    private static final int BAR_WIDTH = 75;
+    private static final int MAX_BAR_WIDTH = 75;
 
     private static final ResourceLocation HEALTH_GUI = new ResourceLocation(
             ImprovedDamageFramework.MOD_ID, "textures/gui/healthbar.png");
@@ -86,91 +86,80 @@ public class MobHealthbar {
         float currentHealth = entity.getHealth();
         float maxHealth = entity.getMaxHealth();
         float percent = Math.min(1, Math.min(currentHealth, maxHealth) / maxHealth);
-        int numDividers = Math.max((int) maxHealth/25, 1);
-        float widthOfDividers = (float) BAR_WIDTH /numDividers;
+        int numDividers = (int)maxHealth/10;
+        float percentOfMax = Math.min(10/maxHealth, 1);
 
         //draw bars
         Matrix4f m4f = matrix.last().pose();
-        drawBar(m4f, 1, 0, true, alpha, 0, 0);
-        drawBar(m4f, percent, 1, false, alpha, numDividers, widthOfDividers);
+        drawBar(m4f, 1, 0, true, alpha, 0);
+        drawBar(m4f, percent, 1, false, alpha, percentOfMax);
     }
 
-    private static void drawBar(Matrix4f matrix, float percent, int zOffset, boolean background, float alpha, int numDividers, float widthOfDividers) {
+    private static void drawBar(Matrix4f matrix, float percent, int zOffset, boolean background, float alpha, float percentOfMax) {
         float CONSTANT = 0.00390625F;
-        int xTexOffset = 0;
+        int xTexOffset = 3;
         int yTexOffset = background ? 34 : 30;
         int width = Mth.ceil(81 * percent);
         int height = 4;
-        float half = (float) BAR_WIDTH / 2;
+        float half = (float) MAX_BAR_WIDTH / 2;
         float zOffsetAmount = -0.1F;
-        int dividerOverlayZOffset = 2;
+        double size = percent * (float) MAX_BAR_WIDTH;
 
-        double size = percent * (float) BAR_WIDTH;
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, HEALTH_GUI);
         RenderSystem.enableBlend();
         if (ClientData.shadersLoaded) {
-            RenderSystem.setShaderColor(0.4f, 0.4f, 0.4f, 1.0f);
+            RenderSystem.setShaderColor(0.4f, 0.4f, 0.4f, alpha);
         }
         else {
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1.0f);
+            RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
         }
 
+        //Red bar
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder buffer = tesselator.getBuilder();
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        buffer.vertex(matrix, (float) (-half + (double) 0), (float) (double) 2, zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + (double) 0), (float) (double) -0.1, zOffset * zOffsetAmount)
                 .uv(xTexOffset * CONSTANT, yTexOffset * CONSTANT).endVertex();
-        buffer.vertex(matrix, (float) (-half + (double) 0), (float) (height + (double) 2), zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + (double) 0), (float) (height + (double) 0.1), zOffset * zOffsetAmount)
                 .uv(xTexOffset * CONSTANT, (yTexOffset + height) * CONSTANT).endVertex();
-        buffer.vertex(matrix, (float) (-half + size + (double) 0), (float) (height + (double) 2), zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + size + (double) 0), (float) (height + (double) 0.1), zOffset * zOffsetAmount)
                 .uv((xTexOffset + width) * CONSTANT, (yTexOffset + height) * CONSTANT).endVertex();
-        buffer.vertex(matrix, (float) (-half + size + (double) 0), (float) (double) 2, zOffset * zOffsetAmount)
+        buffer.vertex(matrix, (float) (-half + size + (double) 0), (float) (double) -0.1, zOffset * zOffsetAmount)
                 .uv(((xTexOffset + width) * CONSTANT), yTexOffset * CONSTANT).endVertex();
         tesselator.end();
 
-        if (numDividers != 0) {
-            float x = -half;
-            float middleLength = Math.max(0, widthOfDividers - 10);
-            float sideLength = Math.min(widthOfDividers/2, 5);
-            for (int i =1; i <= numDividers; i++) {
-                //LEFT SIDE
+        if (!background) {
+            //Border
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+            buffer.vertex(matrix, -half - 2.7f, -3, (zOffset+1)*zOffsetAmount) //top left
+                    .uv(0, 38*CONSTANT).endVertex();
+            buffer.vertex(matrix, -half - 2.7f, -3 + 10, (zOffset+1)*zOffsetAmount) //bottom left
+                    .uv(0, 48*CONSTANT).endVertex();
+            buffer.vertex(matrix, -half + MAX_BAR_WIDTH + 2.6f, -3 + 10, (zOffset+1)*zOffsetAmount) //bottom right
+                    .uv(87*CONSTANT, 48*CONSTANT).endVertex();
+            buffer.vertex(matrix, -half + MAX_BAR_WIDTH + 2.6f, -3, (zOffset+1)*zOffsetAmount) //top right
+                    .uv(87*CONSTANT, 38*CONSTANT).endVertex();
+            tesselator.end();
+
+            //Dividers
+            float dividerSpacing = MAX_BAR_WIDTH*percentOfMax;
+            float f = -half + dividerSpacing;
+            while (f < (MAX_BAR_WIDTH - half)) {
                 buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                buffer.vertex(matrix, x, 0f, dividerOverlayZOffset * zOffsetAmount)
-                        .uv(23 * CONSTANT, 18 * CONSTANT).endVertex(); //topleft
-                buffer.vertex(matrix, x, (float) (8), dividerOverlayZOffset * zOffsetAmount)
-                        .uv(23 * CONSTANT, (18 + 8) * CONSTANT).endVertex(); //bottomleft
-                buffer.vertex(matrix, (x+=sideLength), (float) (8), dividerOverlayZOffset * zOffsetAmount)
-                        .uv((23 + 5) * CONSTANT, (18 + 8) * CONSTANT).endVertex(); //bottomright
-                buffer.vertex(matrix, (x), 0f, dividerOverlayZOffset * zOffsetAmount)
-                        .uv(((23 + 5) * CONSTANT), 18 * CONSTANT).endVertex(); //topright
+                buffer.vertex(matrix, f, 0, (zOffset + 1) * zOffsetAmount) //top left
+                        .uv(2 * CONSTANT, 41 * CONSTANT).endVertex();
+                buffer.vertex(matrix, f, 4, (zOffset + 1) * zOffsetAmount) //bottom left
+                        .uv(2 * CONSTANT, 43 * CONSTANT).endVertex();
+                buffer.vertex(matrix, f + 0.5f, 4, (zOffset + 1) * zOffsetAmount) //bottom right
+                        .uv(3 * CONSTANT, 43 * CONSTANT).endVertex();
+                buffer.vertex(matrix, f + 0.5f, 0, (zOffset + 1) * zOffsetAmount) //top right
+                        .uv(3 * CONSTANT, 41 * CONSTANT).endVertex();
                 tesselator.end();
-                //MIDDLE
-                if (middleLength != 0) {
-                    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                    buffer.vertex(matrix, x, 0f, dividerOverlayZOffset * zOffsetAmount)
-                            .uv(29 * CONSTANT, 18 * CONSTANT).endVertex(); //topleft
-                    buffer.vertex(matrix, x, (float) (8), dividerOverlayZOffset * zOffsetAmount)
-                            .uv(29 * CONSTANT, (18 + 8) * CONSTANT).endVertex(); //bottomleft
-                    buffer.vertex(matrix, (x += middleLength), (float) (8), dividerOverlayZOffset * zOffsetAmount)
-                            .uv((29 + 3) * CONSTANT, (18 + 8) * CONSTANT).endVertex(); //bottomright
-                    buffer.vertex(matrix, (x), 0f, dividerOverlayZOffset * zOffsetAmount)
-                            .uv(((29 + 3) * CONSTANT), 18 * CONSTANT).endVertex(); //topright
-                    tesselator.end();
-                }
-                //RIGHT SIDE
-                buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                buffer.vertex(matrix, (x), 0f, dividerOverlayZOffset * zOffsetAmount)
-                        .uv(33 * CONSTANT, 18 * CONSTANT).endVertex(); //topleft
-                buffer.vertex(matrix, (x), (float) (8), dividerOverlayZOffset * zOffsetAmount)
-                        .uv(33 * CONSTANT, (18 + 8) * CONSTANT).endVertex(); //bottomleft
-                buffer.vertex(matrix, (x += sideLength), (float) (8), dividerOverlayZOffset * zOffsetAmount)
-                        .uv((33 + 5) * CONSTANT, (18 + 8) * CONSTANT).endVertex(); //bottomright
-                buffer.vertex(matrix, (x), 0f, dividerOverlayZOffset * zOffsetAmount)
-                        .uv(((33 + 5) * CONSTANT), 18 * CONSTANT).endVertex(); //topright
-                tesselator.end();
+                f += dividerSpacing;
             }
         }
+
         RenderSystem.disableBlend();
 
     }
