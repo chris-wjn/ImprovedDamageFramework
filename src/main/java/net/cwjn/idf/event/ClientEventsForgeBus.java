@@ -271,11 +271,12 @@ public class ClientEventsForgeBus {
                 for (EquipmentSlot s : EquipmentSlot.values()) {
                     boolean isStandardSlot = s == slot;
                     String[] keys = Util.sort(map, isWeapon);
-                    Color cl = LIGHTGREEN;
+                    Color cl;
                     if (isStandardSlot) {
                         for (String key : keys) {
                             Attribute a = CommonData.ATTRIBUTES.get(key);
                             cl = Color.ATTRIBUTE_COLOURS.get(a.getDescriptionId());
+                            if (cl == null) cl = LIGHTGREEN;
                             Collection<AttributeModifier> mods = map.get(a);
                             final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                             double mult_base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
@@ -332,6 +333,7 @@ public class ClientEventsForgeBus {
                             Attribute a = CommonData.ATTRIBUTES.get(key);
                             Collection<AttributeModifier> mods = map.get(a);
                             cl = Color.ATTRIBUTE_COLOURS.get(a.getDescriptionId());
+                            if (cl == null) cl = LIGHTGREEN;
                             final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                             double mult_base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
                             double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1, (x, y) -> x * y);

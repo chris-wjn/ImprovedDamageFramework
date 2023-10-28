@@ -3,6 +3,7 @@ package net.cwjn.idf.util;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.data.CommonData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
@@ -24,7 +25,10 @@ import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.ImprovedDamageFramework.*;
@@ -185,7 +189,11 @@ public class Util {
         //get all the requested elements in the list and put them in an array
         ArrayList<String> list = new ArrayList<>();
         for (Attribute a : map.keySet()) {
-            if (damage? a.getDescriptionId().contains("damage") && !a.getDescriptionId().contains("crit") : a.getDescriptionId().contains("defence") || a.getDescriptionId().contains("armor")) {
+            if (damage? a.getDescriptionId().equals("attribute.name.generic.attack_damage") : a.getDescriptionId().equals("attribute.name.generic.armor")) {
+                list.add(a.getDescriptionId());
+            }
+            if (!CommonData.ELEMENTS.contains(a)) continue;
+            if (damage? a.getDescriptionId().contains("damage") : a.getDescriptionId().contains("defence")) {
                 list.add(a.getDescriptionId());
             }
         }

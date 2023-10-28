@@ -11,6 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
+import static net.cwjn.idf.attribute.IDFAttributes.*;
+
 public class CommonData {
 
     public static Map<ResourceLocation, ArmourData> LOGICAL_ARMOUR_MAP_FLAT = new HashMap<>();
@@ -27,6 +29,7 @@ public class CommonData {
     public static final List<Attribute> OFFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> DEFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> AUXILIARY_ATTRIBUTES = new ArrayList<>(8);
+    public static Set<Attribute> ELEMENTS = new HashSet<>();
     public static final String EQUIPMENT_TAG = "idf.equipment";
     public static final String RANGED_TAG = "idf.ranged_weapon";
     public static final String THROWN_TAG = "idf.thrown_weapon";
@@ -40,6 +43,18 @@ public class CommonData {
     public static boolean ARTIFACT_COMPAT_ENABLED = false;
 
     static {
+        ELEMENTS.add(FIRE_DAMAGE.get());
+        ELEMENTS.add(FIRE_DEFENCE.get());
+        ELEMENTS.add(WATER_DAMAGE.get());
+        ELEMENTS.add(WATER_DEFENCE.get());
+        ELEMENTS.add(LIGHTNING_DAMAGE.get());
+        ELEMENTS.add(LIGHTNING_DEFENCE.get());
+        ELEMENTS.add(MAGIC_DAMAGE.get());
+        ELEMENTS.add(MAGIC_DEFENCE.get());
+        ELEMENTS.add(DARK_DAMAGE.get());
+        ELEMENTS.add(DARK_DEFENCE.get());
+        ELEMENTS.add(HOLY_DAMAGE.get());
+        ELEMENTS.add(HOLY_DEFENCE.get());
         for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {
             ATTRIBUTES.put(a.getDescriptionId(), a);
         }
