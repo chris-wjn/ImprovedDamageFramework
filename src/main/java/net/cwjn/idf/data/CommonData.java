@@ -37,6 +37,7 @@ public class CommonData {
     public static final String DEFAULT_TAG_APPLIED = "idf.default_applied";
     public static final String TETRA_CRIT_LEVEL = "idf.tetra_crit_level";
     public static final String TETRA_CRIT_EFFICIENCY = "idf.tetra_crit_efficiency";
+    public static boolean ARTIFACT_COMPAT_ENABLED = false;
 
     static {
         for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {
