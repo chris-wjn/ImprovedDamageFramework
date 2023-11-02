@@ -55,6 +55,6 @@ side = "BOTH"
 [[dependencies.idf]]
 modId = "irons_spellbooks"
 mandatory = false
-versionRange = "[1.19.2-2.0.0,)"
+versionRange = "[1.19.2-2.0.2,)"
 ordering = "AFTER"
 side = "BOTH"

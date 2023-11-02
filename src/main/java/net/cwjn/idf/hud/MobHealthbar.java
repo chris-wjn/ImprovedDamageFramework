@@ -53,6 +53,8 @@ public class MobHealthbar {
                 GL11.GL_ZERO);
 
         for (LivingEntity entity : renderables.keySet()) {
+            float alpha = renderables.get(entity);
+            if (alpha <= 0.05) continue;
             float scaleToGui = 0.025f;
             boolean sneaking = entity.isCrouching();
             float height = entity.getBbHeight() + 0.73F - (sneaking ? 0.25F : 0.0F);
@@ -86,7 +88,6 @@ public class MobHealthbar {
         float currentHealth = entity.getHealth();
         float maxHealth = entity.getMaxHealth();
         float percent = Math.min(1, Math.min(currentHealth, maxHealth) / maxHealth);
-        int numDividers = (int)maxHealth/10;
         float percentOfMax = Math.min(10/maxHealth, 1);
 
         //draw bars
@@ -145,15 +146,16 @@ public class MobHealthbar {
             //Dividers
             float dividerSpacing = MAX_BAR_WIDTH*percentOfMax;
             float f = -half + dividerSpacing;
+            float dividerWidth = (float) Mth.clamp(dividerSpacing*0.1, 0.25f, 0.5f);
             while (f < (MAX_BAR_WIDTH - half)) {
                 buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
                 buffer.vertex(matrix, f, 0, (zOffset + 1) * zOffsetAmount) //top left
                         .uv(2 * CONSTANT, 41 * CONSTANT).endVertex();
                 buffer.vertex(matrix, f, 4, (zOffset + 1) * zOffsetAmount) //bottom left
                         .uv(2 * CONSTANT, 43 * CONSTANT).endVertex();
-                buffer.vertex(matrix, f + 0.5f, 4, (zOffset + 1) * zOffsetAmount) //bottom right
+                buffer.vertex(matrix, f + dividerWidth, 4, (zOffset + 1) * zOffsetAmount) //bottom right
                         .uv(3 * CONSTANT, 43 * CONSTANT).endVertex();
-                buffer.vertex(matrix, f + 0.5f, 0, (zOffset + 1) * zOffsetAmount) //top right
+                buffer.vertex(matrix, f + dividerWidth, 0, (zOffset + 1) * zOffsetAmount) //top right
                         .uv(3 * CONSTANT, 41 * CONSTANT).endVertex();
                 tesselator.end();
                 f += dividerSpacing;
