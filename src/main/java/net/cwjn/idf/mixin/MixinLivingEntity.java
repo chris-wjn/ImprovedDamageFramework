@@ -10,6 +10,7 @@ import net.cwjn.idf.util.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
@@ -200,6 +201,16 @@ public class MixinLivingEntity {
         if (source != DamageSource.DROWN && (!flag || hasDamage)) {
             thisLivingEntity.markHurt();
         }
+        if (thisLivingEntity.isDeadOrDying()) {
+            if (!this.checkTotemDeathProtection(source)) {
+                SoundEvent soundevent = this.getDeathSound();
+                if (soundevent != null) {
+                    thisLivingEntity.playSound(soundevent, this.getSoundVolume(), thisLivingEntity.getVoicePitch());
+                }
+            }
+        } else {
+            this.playHurtSound(source);
+        }
     }
 
     /**
@@ -271,5 +282,21 @@ public class MixinLivingEntity {
     @Shadow
     public void setHealth(float newHealth){
             throw new IllegalStateException("failed to shadow setHealth()");
+    }
+    @Shadow
+    private boolean checkTotemDeathProtection(DamageSource pDamageSource) {
+        throw new IllegalStateException("failed to shade checkTotemDeathProtection(DamageSource ds)");
+    }
+    @Shadow
+    protected SoundEvent getDeathSound() {
+        throw new IllegalStateException("failed to shade getDeathSound()");
+    }
+    @Shadow
+    protected float getSoundVolume() {
+        throw new IllegalStateException("failed to shade getSoundVolume()");
+    }
+    @Shadow
+    protected void playHurtSound(DamageSource pSource) {
+        throw new IllegalStateException("failed to shade playHurtSound(DamageSource ds)");
     }
 }
