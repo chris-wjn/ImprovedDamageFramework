@@ -70,7 +70,6 @@ public class MixinPlayer {
         }
     }
 
-    private boolean storeHurtVar;
     private float ad, bAd, fd, wd, ld, md, dd, hd, pen, force, scalar, knockback, lifesteal;
     private String damageClass;
 
