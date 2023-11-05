@@ -316,7 +316,7 @@ public class JSONHandler {
                         builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
                     }
                 });
-                data2.forEach(pair -> {
+                if (data2 != null) data2.forEach(pair -> {
                     if (pair.getB() != 0) {
                         builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"json_mult", pair.getB(), MULTIPLY_TOTAL));
                     }
@@ -332,7 +332,7 @@ public class JSONHandler {
                         builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
                     }
                 });
-                data2.forEach(pair -> {
+                if (data2 != null) data2.forEach(pair -> {
                     if (pair.getB() != 0) {
                         builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
                     }
