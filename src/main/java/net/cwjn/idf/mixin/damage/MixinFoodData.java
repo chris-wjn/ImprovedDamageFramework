@@ -21,21 +21,4 @@ public class MixinFoodData {
         return instance.hurt(pSource, instance.getMaxHealth()*0.05f);
     }
 
-    @Redirect(
-            method = "tick",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/player/Player;heal(F)V",
-                    ordinal = 0
-            )
-    )
-    private void healRedirect(Player instance, float v) {
-        float val = net.minecraftforge.event.ForgeEventFactory.onLivingHeal(instance, instance.getMaxHealth()*0.02f);
-        if (val <= 0) return;
-        float f = instance.getHealth();
-        if (f > 0.0F) {
-            instance.setHealth(f + val);
-        }
-    }
-
 }
