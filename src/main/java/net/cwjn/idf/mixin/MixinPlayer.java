@@ -31,6 +31,10 @@ import static net.minecraftforge.common.ForgeHooks.getCriticalHit;
 @Mixin(Player.class)
 public class MixinPlayer {
 
+    private Player thisPlayer() {
+        return (Player)(Object)this;
+    }
+
     /**
      * @author cwJn
      * @reason

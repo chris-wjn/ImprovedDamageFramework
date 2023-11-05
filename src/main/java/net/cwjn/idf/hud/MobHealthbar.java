@@ -87,16 +87,17 @@ public class MobHealthbar {
         //get values from entity
         float currentHealth = entity.getHealth();
         float maxHealth = entity.getMaxHealth();
+        boolean isHundreds = maxHealth>=1000;
         float percent = Math.min(1, Math.min(currentHealth, maxHealth) / maxHealth);
-        float percentOfMax = Math.min(10/maxHealth, 1);
+        float percentOfMax = Math.min((isHundreds? 100:10)/maxHealth, 1);
 
         //draw bars
         Matrix4f m4f = matrix.last().pose();
-        drawBar(m4f, 1, 0, true, alpha, 0);
-        drawBar(m4f, percent, 1, false, alpha, percentOfMax);
+        drawBar(m4f, 1, 0, true, alpha, 0, false);
+        drawBar(m4f, percent, 1, false, alpha, percentOfMax, isHundreds);
     }
 
-    private static void drawBar(Matrix4f matrix, float percent, int zOffset, boolean background, float alpha, float percentOfMax) {
+    private static void drawBar(Matrix4f matrix, float percent, int zOffset, boolean background, float alpha, float percentOfMax, boolean isHundreds) {
         float CONSTANT = 0.00390625F;
         int xTexOffset = 3;
         int yTexOffset = background ? 34 : 30;
@@ -110,10 +111,12 @@ public class MobHealthbar {
         RenderSystem.setShaderTexture(0, HEALTH_GUI);
         RenderSystem.enableBlend();
         if (ClientData.shadersLoaded) {
-            RenderSystem.setShaderColor(0.4f, 0.4f, 0.4f, alpha);
+            if (isHundreds) RenderSystem.setShaderColor(0.4f, 0.4f, 0f, alpha);
+            else RenderSystem.setShaderColor(0.4f, 0f, 0f, alpha);
         }
         else {
-            RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+            if (isHundreds) RenderSystem.setShaderColor(1f, 1f, 0f, alpha);
+            else RenderSystem.setShaderColor(1f, 0f, 0f, alpha);
         }
 
         //Red bar
@@ -130,6 +133,12 @@ public class MobHealthbar {
                 .uv(((xTexOffset + width) * CONSTANT), yTexOffset * CONSTANT).endVertex();
         tesselator.end();
 
+        if (ClientData.shadersLoaded) {
+            RenderSystem.setShaderColor(0.2f, 0.4f, 0.4f, alpha);
+        }
+        else {
+            RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+        }
         if (!background) {
             //Border
             buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);

@@ -4,7 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.config.CommonConfig;
-import net.cwjn.idf.damage.*;
+import net.cwjn.idf.damage.DamageHandler;
+import net.cwjn.idf.damage.IDFInterface;
 import net.cwjn.idf.event.LogicalEvents;
 import net.cwjn.idf.util.Util;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -35,7 +37,7 @@ import java.util.Map;
 import static net.cwjn.idf.data.CommonData.RANGED_TAG;
 import static net.cwjn.idf.data.CommonData.WEAPON_TAG;
 import static net.cwjn.idf.util.Util.offensiveAttribute;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
@@ -217,16 +219,18 @@ public class MixinLivingEntity {
      * The following code was written by Darkhax as part of his maxhealthfix mod.
      * I've included it here since this mod essentially requires this fix to function
      * properly.
-     */
+     **/
+
     @Unique
     @Nullable
     private Float actualHealth = null;
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("HEAD"))
     private void maxhealthfix$readAdditionalSaveData(CompoundTag tag, CallbackInfo callback) {
+        if (!(thisLivingEntity instanceof Player)) return;
         if (tag.contains("Health", Tag.TAG_ANY_NUMERIC)) {
             final float savedHealth = tag.getFloat("Health");
-            if (savedHealth > getMaxHealth()*5 && savedHealth > 0) {
+            if (savedHealth > this.getMaxHealth() && savedHealth > 0) {
                 actualHealth = savedHealth;
             }
         }
@@ -234,6 +238,7 @@ public class MixinLivingEntity {
 
     @Inject(method = "detectEquipmentUpdates()V", at = @At("RETURN"))
     private void maxhealthfix$detectEquipmentUpdates(CallbackInfo callback) {
+        if (!(thisLivingEntity instanceof Player)) return;
         if (actualHealth != null && actualHealth > 0 && actualHealth > this.getHealth()) {
             this.setHealth(actualHealth);
             actualHealth = null;

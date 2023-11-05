@@ -85,6 +85,14 @@ public class ClientEventsForgeBus {
                     a.equals(IDFAttributes.PIERCE_MULT.get())
     );
 
+    @SubscribeEvent
+    public static void onEntityNametagRender(RenderNameTagEvent event) {
+        if (event.getEntity() instanceof LivingEntity le) {
+            le.setCustomNameVisible(true);
+            le.setCustomName(Component.literal(String.valueOf((int)le.getHealth())));
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onItemTooltip(ItemTooltipEvent event) {
         ItemStack item = event.getItemStack();
