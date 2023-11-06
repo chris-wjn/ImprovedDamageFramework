@@ -26,7 +26,6 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.living.LivingGetProjectileEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -119,8 +118,8 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void setMobRangedHelpers(LivingGetProjectileEvent event) {
-        ItemStack item = event.getProjectileWeaponItemStack();
+    public static void setMobRangedHelpers(LivingEquipmentChangeEvent event) {
+        ItemStack item = event.getTo();
         LivingEntity entity = event.getEntity();
         if (entity instanceof Player) return;
         boolean isMainHandUse = true;//entity.getUsedItemHand().equals(InteractionHand.MAIN_HAND);
