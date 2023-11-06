@@ -1,17 +1,17 @@
 package net.cwjn.idf.capability;
 
 import com.google.common.collect.Multimap;
-import net.cwjn.idf.attribute.IDFElement;
-import net.cwjn.idf.data.CommonData;
-import net.cwjn.idf.util.Util;
+import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
+import net.cwjn.idf.attribute.IDFElement;
 import net.cwjn.idf.capability.data.AuxiliaryData;
 import net.cwjn.idf.capability.data.ProjectileHelper;
 import net.cwjn.idf.capability.provider.ArrowHelperProvider;
 import net.cwjn.idf.capability.provider.AuxiliaryProvider;
 import net.cwjn.idf.capability.provider.TridentHelperProvider;
 import net.cwjn.idf.config.json.records.EntityData;
-import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.data.CommonData;
+import net.cwjn.idf.util.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -21,11 +21,12 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingGetProjectileEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -75,7 +76,7 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingUseItem(LivingEntityUseItemEvent.Stop event) {
+    public static void setPlayerRangedHelpers(LivingEntityUseItemEvent.Stop event) {
         ItemStack item = event.getItem();
         LivingEntity entity = event.getEntity();
         boolean isMainHandUse = entity.getUsedItemHand().equals(InteractionHand.MAIN_HAND);
@@ -108,6 +109,50 @@ public class CapabilityEvents {
                 h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
                 h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
                 h.setCrit((entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()))*0.01 > entity.getRandom().nextDouble() && entity instanceof Player);
+                h.setCritDmg((float) (entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
+                h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
+                h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
+                h.setDamageClass(item.hasTag() ?
+                        item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
+            });
+        }
+    }
+
+    @SubscribeEvent
+    public static void setMobRangedHelpers(LivingGetProjectileEvent event) {
+        ItemStack item = event.getProjectileWeaponItemStack();
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Player) return;
+        boolean isMainHandUse = true;//entity.getUsedItemHand().equals(InteractionHand.MAIN_HAND);
+        if (item.hasTag() && item.getTag().getBoolean(CommonData.RANGED_TAG)) {
+            Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item));
+            entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
+                h.setFire((float) (getAttributeAmount(map.get(FIRE.damage)) + (isMainHandUse? entity.getAttributeValue(FIRE.damage):0)));
+                h.setWater((float) (getAttributeAmount(map.get(WATER.damage)) + (isMainHandUse? entity.getAttributeValue(WATER.damage):0)));
+                h.setLightning((float) (getAttributeAmount(map.get(LIGHTNING.damage)) + (isMainHandUse? entity.getAttributeValue(LIGHTNING.damage):0)));
+                h.setMagic((float) (getAttributeAmount(map.get(MAGIC.damage)) + (isMainHandUse? entity.getAttributeValue(MAGIC.damage):0)));
+                h.setDark((float) (getAttributeAmount(map.get(DARK.damage)) + (isMainHandUse? entity.getAttributeValue(DARK.damage):0)));
+                h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + (isMainHandUse? entity.getAttributeValue(HOLY.damage):0)));
+                h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + (isMainHandUse? entity.getAttributeValue(Attributes.ATTACK_DAMAGE):0)));
+                h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.PENETRATING.get()):0)));
+                h.setCrit(false);
+                h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()):0)));
+                h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()):0)));
+                h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.FORCE.get()):0)));
+                h.setDamageClass(item.hasTag() ?
+                        item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
+            });
+        } else if (item.hasTag() && item.getTag().getBoolean(CommonData.THROWN_TAG)) {
+            entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
+                h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
+                h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
+                h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
+                h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
+                h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
+                h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
+                h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
+                h.setCrit(false);
                 h.setCritDmg((float) (entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
                 h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
                 h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
