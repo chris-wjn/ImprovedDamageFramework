@@ -26,6 +26,7 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -118,46 +119,47 @@ public class CapabilityEvents {
     }
 
     @SubscribeEvent
-    public static void setMobRangedHelpers(LivingEquipmentChangeEvent event) {
-        ItemStack item = event.getTo();
+    public static void setMobRangedHelpers(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity instanceof Player) return;
-        boolean isMainHandUse = true;//entity.getUsedItemHand().equals(InteractionHand.MAIN_HAND);
-        if (item.hasTag() && item.getTag().getBoolean(CommonData.RANGED_TAG)) {
-            Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item));
-            entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                h.setFire((float) (getAttributeAmount(map.get(FIRE.damage)) + (isMainHandUse? entity.getAttributeValue(FIRE.damage):0)));
-                h.setWater((float) (getAttributeAmount(map.get(WATER.damage)) + (isMainHandUse? entity.getAttributeValue(WATER.damage):0)));
-                h.setLightning((float) (getAttributeAmount(map.get(LIGHTNING.damage)) + (isMainHandUse? entity.getAttributeValue(LIGHTNING.damage):0)));
-                h.setMagic((float) (getAttributeAmount(map.get(MAGIC.damage)) + (isMainHandUse? entity.getAttributeValue(MAGIC.damage):0)));
-                h.setDark((float) (getAttributeAmount(map.get(DARK.damage)) + (isMainHandUse? entity.getAttributeValue(DARK.damage):0)));
-                h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + (isMainHandUse? entity.getAttributeValue(HOLY.damage):0)));
-                h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + (isMainHandUse? entity.getAttributeValue(Attributes.ATTACK_DAMAGE):0)));
-                h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.PENETRATING.get()):0)));
-                h.setCrit(false);
-                h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()):0)));
-                h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()):0)));
-                h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.FORCE.get()):0)));
-                h.setDamageClass(item.hasTag() ?
-                        item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
-            });
-        } else if (item.hasTag() && item.getTag().getBoolean(CommonData.THROWN_TAG)) {
-            entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
-                h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
-                h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
-                h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
-                h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
-                h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
-                h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
-                h.setCrit(false);
-                h.setCritDmg((float) (entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
-                h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
-                h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
-                h.setDamageClass(item.hasTag() ?
-                        item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
-            });
+        if (entity.tickCount % 100 == 0) {
+            ItemStack item = entity.getMainHandItem();
+            if (item.hasTag() && item.getTag().getBoolean(CommonData.RANGED_TAG)) {
+                Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item));
+                entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
+                    h.setFire((float) (getAttributeAmount(map.get(FIRE.damage)) + entity.getAttributeValue(FIRE.damage)));
+                    h.setWater((float) (getAttributeAmount(map.get(WATER.damage)) + entity.getAttributeValue(WATER.damage)));
+                    h.setLightning((float) (getAttributeAmount(map.get(LIGHTNING.damage)) + entity.getAttributeValue(LIGHTNING.damage)));
+                    h.setMagic((float) (getAttributeAmount(map.get(MAGIC.damage)) + entity.getAttributeValue(MAGIC.damage)));
+                    h.setDark((float) (getAttributeAmount(map.get(DARK.damage)) + entity.getAttributeValue(DARK.damage)));
+                    h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + entity.getAttributeValue(HOLY.damage)));
+                    h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + entity.getAttributeValue(Attributes.ATTACK_DAMAGE)));
+                    h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + entity.getAttributeValue(IDFAttributes.PENETRATING.get())));
+                    h.setCrit(false);
+                    h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
+                    h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + entity.getAttributeValue(IDFAttributes.LIFESTEAL.get())));
+                    h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + entity.getAttributeValue(IDFAttributes.FORCE.get())));
+                    h.setDamageClass(item.hasTag() ?
+                            item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
+                });
+            } else if (item.hasTag() && item.getTag().getBoolean(CommonData.THROWN_TAG)) {
+                entity.getCapability(TridentHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
+                    h.setFire((float) entity.getAttributeValue(IDFAttributes.FIRE_DAMAGE.get()));
+                    h.setWater((float) entity.getAttributeValue(IDFAttributes.WATER_DAMAGE.get()));
+                    h.setLightning((float) entity.getAttributeValue(IDFAttributes.LIGHTNING_DAMAGE.get()));
+                    h.setMagic((float) entity.getAttributeValue(IDFAttributes.MAGIC_DAMAGE.get()));
+                    h.setDark((float) entity.getAttributeValue(IDFAttributes.DARK_DAMAGE.get()));
+                    h.setHoly((float) entity.getAttributeValue(IDFElement.HOLY.damage));
+                    h.setPhys((float) entity.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    h.setPen((float) entity.getAttributeValue(IDFAttributes.PENETRATING.get()));
+                    h.setCrit(false);
+                    h.setCritDmg((float) (entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
+                    h.setLifesteal((float) entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()));
+                    h.setWeight((float) entity.getAttributeValue(IDFAttributes.FORCE.get()));
+                    h.setDamageClass(item.hasTag() ?
+                            item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
+                });
+            }
         }
     }
 
