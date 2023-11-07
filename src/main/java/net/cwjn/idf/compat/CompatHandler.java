@@ -15,9 +15,6 @@ public class CompatHandler {
         if (ModList.get().isLoaded("irons_spellbooks")) {
             IronsSpellsCompat.register();
         }
-        if (ModList.get().isLoaded("artifacts")) {
-            ArtifactCompat.register();
-        }
         if (ImprovedDamageFramework.IAFLoaded) {
             ImprovedDamageFramework.LOGGER.info("Detected ImprovedAdventureFramework. Good choice.");
         }

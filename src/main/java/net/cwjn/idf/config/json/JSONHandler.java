@@ -26,7 +26,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.AbstractSkullBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -295,9 +294,7 @@ public class JSONHandler {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
             CompoundTag defaultTag = new CompoundTag();
-            int equipmentSlot;
-            if (CommonData.ARTIFACT_COMPAT_ENABLED) equipmentSlot = LivingEntity.getEquipmentSlotForItem(item.getDefaultInstance()).getFilterFlag();
-            else equipmentSlot = getEquipmentSlotForItem(item.getDefaultInstance()).getFilterFlag();
+            int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item.getDefaultInstance()).getFilterFlag();
             ResourceLocation loc = Util.getItemRegistryName(item);
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
             if (baseModifiers.get(loc) != null) {
@@ -359,23 +356,6 @@ public class JSONHandler {
                 new TypeToken<Map<String, RpgItemData>>() {}.getType());
         rpgArmourItems.putAll(rpgWeaponItems);
         return rpgArmourItems;
-    }
-
-    private static EquipmentSlot getEquipmentSlotForItem(ItemStack pItem) {
-        final EquipmentSlot slot = pItem.getEquipmentSlot();
-        if (slot != null) return slot;
-        Item item = pItem.getItem();
-        if (!pItem.is(Items.CARVED_PUMPKIN) && (!(item instanceof BlockItem) || !(((BlockItem)item).getBlock() instanceof AbstractSkullBlock))) {
-            if (item instanceof ArmorItem) {
-                return ((ArmorItem)item).getSlot();
-            } else if (pItem.is(Items.ELYTRA)) {
-                return EquipmentSlot.CHEST;
-            } else {
-                return EquipmentSlot.MAINHAND;
-            }
-        } else {
-            return EquipmentSlot.HEAD;
-        }
     }
 
 }

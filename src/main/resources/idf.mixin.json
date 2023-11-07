@@ -12,6 +12,7 @@
     "MixinPlayer",
     "MixinProjectile",
     "MixinThrownTrident",
+    "artifactCompat.MixinLivingEntity",
     "bettercombat.MixinPlayerAttackHelper",
     "damage.MixinAxolotl",
     "damage.MixinBaseFireBlock",

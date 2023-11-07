@@ -34,6 +34,9 @@ public class IDFMixinPlugin implements IMixinConfigPlugin {
         else if (mixinClassName.equals("net.cwjn.idf.mixin.bettercombat.MixinPlayerAttackHelper")) {
             return FMLLoader.getLoadingModList().getModFileById("bettercombat")!=null;
         }
+        else if (mixinClassName.equals("net.cwjn.idf.mixin.artifactCompat.MixinLivingEntity")) {
+            return FMLLoader.getLoadingModList().getModFileById("artifacts")!=null;
+        }
         else {
             return true;
         }

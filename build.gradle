@@ -120,6 +120,7 @@ dependencies {
     implementation fg.deobf("curse.maven:smartlib-661293:4458565")
     implementation fg.deobf("curse.maven:modonomicon-538392:4641884")
     implementation fg.deobf("curse.maven:terrablender-563928:4618490")
+    implementation fg.deobf("maven.modrinth:artifacts:5.0.4+forge")
 
     //magic mods
     implementation fg.deobf("curse.maven:scriptor-817436:4549561")
