@@ -50,6 +50,7 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static net.cwjn.idf.config.ClientConfig.DISPLAY_HEALTHBAR_ONLY_ON_DAMAGE;
 import static net.cwjn.idf.config.ClientConfig.HEALTHBAR_ON_DAMAGE_DISPLAY_TIME;
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.data.ClientData.displayHealthbarTicks;
@@ -534,14 +535,14 @@ public class ClientEventsForgeBus {
 
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
-        if (event.getEntity() instanceof Mob entity) {
+        if (event.getEntity() instanceof Mob entity && DISPLAY_HEALTHBAR_ONLY_ON_DAMAGE.get()) {
             displayHealthbarTicks.put(entity, HEALTHBAR_ON_DAMAGE_DISPLAY_TIME.get());
         }
     }
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity() instanceof Mob entity) {
+        if (event.getEntity() instanceof Mob entity && DISPLAY_HEALTHBAR_ONLY_ON_DAMAGE.get()) {
             if (displayHealthbarTicks.containsKey(entity)) {
                 int current = displayHealthbarTicks.get(entity);
                 if (current <= 1) {
@@ -556,15 +557,23 @@ public class ClientEventsForgeBus {
     @SubscribeEvent
     public static void prepareHealthbar(RenderNameTagEvent event) {
         if (event.getEntity() instanceof Mob entity) {
-            if (displayHealthbarTicks.containsKey(entity)) {
-                if (entity.isInvisible()) return;
-                if (entity.isVehicle()) return;
-                if (ClientConfig.BLACKLISTED_HEALTHBAR_ENTITIES.get().contains(Util.getEntityRegistryName(entity.getType()).toString()))
-                    return;
+            if (entity.isInvisible()) return;
+            if (entity.isVehicle()) return;
+            if (ClientConfig.BLACKLISTED_HEALTHBAR_ENTITIES.get().contains(Util.getEntityRegistryName(entity.getType()).toString()))
+                return;
+            if (DISPLAY_HEALTHBAR_ONLY_ON_DAMAGE.get()) {
+                if (displayHealthbarTicks.containsKey(entity)) {
+                    int unpackedLight = Math.max(LightTexture.sky(event.getPackedLight()) - ClientData.skyDarken, LightTexture.block(event.getPackedLight()));
+                    float distance = entity.distanceTo(Minecraft.getInstance().player) - unpackedLight + 15;
+                    float minAlpha = distance < MOB_HEALTH_BAR_DISTANCE_FACTOR * 0.5 ? 1 : (1 - (distance / MOB_HEALTH_BAR_DISTANCE_FACTOR));
+                    float alpha = (float) Math.min(minAlpha, ((float) displayHealthbarTicks.get(entity) / (HEALTHBAR_ON_DAMAGE_DISPLAY_TIME.get() * 0.5)));
+                    MobHealthbar.prepare(entity, alpha);
+                }
+            }
+            else {
                 int unpackedLight = Math.max(LightTexture.sky(event.getPackedLight()) - ClientData.skyDarken, LightTexture.block(event.getPackedLight()));
                 float distance = entity.distanceTo(Minecraft.getInstance().player) - unpackedLight + 15;
-                float minAlpha = distance < MOB_HEALTH_BAR_DISTANCE_FACTOR*0.5 ? 1 : (1 - (distance/MOB_HEALTH_BAR_DISTANCE_FACTOR));
-                float alpha = (float) Math.min(minAlpha, ((float) displayHealthbarTicks.get(entity)/(HEALTHBAR_ON_DAMAGE_DISPLAY_TIME.get()*0.5)));
+                float alpha = distance < MOB_HEALTH_BAR_DISTANCE_FACTOR*0.5 ? 1 : (1 - (distance/MOB_HEALTH_BAR_DISTANCE_FACTOR));
                 MobHealthbar.prepare(entity, alpha);
             }
         }
