@@ -1,6 +1,7 @@
 package net.cwjn.idf.attribute;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.config.json.records.EntityData;
 import net.cwjn.idf.config.json.records.EntityTag;
 import net.cwjn.idf.data.CommonData;
@@ -78,7 +79,9 @@ public class AttachAttributesOnJoin {
             }
 
             //FIFTH SECTION: give the entity a tag, so it doesn't get modified again on world reload
-            if (livingEntity.getHealth() < livingEntity.getMaxHealth()) livingEntity.heal(livingEntity.getMaxHealth() - livingEntity.getHealth());
+            if (!CommonConfig.BLACKLIST_MOB_HEAL_ON_SPAWN.get().contains(Util.getEntityRegistryName(livingEntity.getType()).toString()) &&
+                    livingEntity.getHealth() < livingEntity.getMaxHealth())
+                livingEntity.heal(livingEntity.getMaxHealth() - livingEntity.getHealth());
             livingEntity.getPersistentData().putBoolean(ENTITY_BONUS, true);
         }
     }

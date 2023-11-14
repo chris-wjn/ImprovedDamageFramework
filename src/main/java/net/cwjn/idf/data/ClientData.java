@@ -5,6 +5,7 @@ import net.cwjn.idf.config.json.records.ArmourData;
 import net.cwjn.idf.config.json.records.ItemData;
 import net.cwjn.idf.config.json.records.WeaponData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -28,6 +29,7 @@ public class ClientData {
     public static List<ResourceLocation> CLIENT_COMPAT_ITEMS;
     public static List<String> CLIENT_COMPAT_MODS;
     public static TreeSet<ResourceLocation> BESTIARY_ENTRIES;
+    public static HashMap<Mob, Integer> displayHealthbarTicks = new HashMap<>();
     public static int skyDarken = 0;
     public static boolean shadersLoaded = false;
 

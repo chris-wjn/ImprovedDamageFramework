@@ -119,6 +119,8 @@ public class MobHealthbar {
             else RenderSystem.setShaderColor(1f, 0f, 0f, alpha);
         }
 
+        if (background) RenderSystem.setShaderColor(0f, 0f, 0f, alpha);
+
         //Red bar
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder buffer = tesselator.getBuilder();
@@ -134,7 +136,8 @@ public class MobHealthbar {
         tesselator.end();
 
         if (ClientData.shadersLoaded) {
-            RenderSystem.setShaderColor(0.2f, 0.4f, 0.4f, alpha);
+            if (alpha >= 0.96) RenderSystem.setShaderColor(0.2f, 0.4f, 0.4f, alpha);
+            else RenderSystem.setShaderColor(0.35f, 0.4f, 0.4f, alpha);
         }
         else {
             RenderSystem.setShaderColor(1f, 1f, 1f, alpha);

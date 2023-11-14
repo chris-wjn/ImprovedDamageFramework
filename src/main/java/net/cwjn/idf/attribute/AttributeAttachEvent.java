@@ -1,14 +1,15 @@
 package net.cwjn.idf.attribute;
 
-import net.cwjn.idf.data.CommonData;
-import net.cwjn.idf.util.Util;
 import net.cwjn.idf.config.json.Config;
 import net.cwjn.idf.config.json.records.EntityData;
+import net.cwjn.idf.data.CommonData;
+import net.cwjn.idf.util.Util;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
 import static net.cwjn.idf.attribute.IDFElement.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)

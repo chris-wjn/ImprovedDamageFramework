@@ -21,6 +21,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.DoubleValue MIN_ATTACK_STRENGTH_THRESHOLD;
     public static final ForgeConfigSpec.DoubleValue WEIGHT_FOOD_EXHAUSTION_MULTIPLIER;
     public static final ForgeConfigSpec.BooleanValue ALLOW_JUMP_CRITS;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLIST_MOB_HEAL_ON_SPAWN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LEGENDARY_TOOLTIPS_COMPAT_MODE;
     private static final String[] defaultNoInvulnList = {"player", "fall"};
     private static final String[] undodgableList = {"inFire", "onFire", "lava", "hotFloor", "inWall",
@@ -58,6 +59,14 @@ public class CommonConfig {
         BUILDER.pop();
 
         BUILDER.push("Attribute and Damage Calculation Configuration");
+
+        BLACKLIST_MOB_HEAL_ON_SPAWN = BUILDER.comment("""
+                Normally, mobs have their maxhp scaled up to the SCALE_HEALTH value when they join the world. Then they are
+                healed up to that amount, otherwise they would spawn with only their normal amount of hp. Mobs included in this
+                list will not be healed when they spawn. This is to fix edge cases where another mod may want a mob to spawn
+                at a reduced hp value.
+                """)
+                .defineList("No Heal on Spawn", Arrays.asList(new String[]{"minecraft:example"}), s -> s instanceof String);
 
         SCALE_HEALTH = BUILDER.comment("""
                         Value to scale HP of mobs and the player by. Happens before config data is added.

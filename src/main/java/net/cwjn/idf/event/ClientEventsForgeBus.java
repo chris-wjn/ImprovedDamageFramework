@@ -27,6 +27,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,6 +38,8 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,7 +50,9 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static net.cwjn.idf.config.ClientConfig.HEALTHBAR_ON_DAMAGE_DISPLAY_TIME;
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
+import static net.cwjn.idf.data.ClientData.displayHealthbarTicks;
 import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
@@ -528,12 +533,38 @@ public class ClientEventsForgeBus {
     }
 
     @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event) {
+        if (event.getEntity() instanceof Mob entity) {
+            displayHealthbarTicks.put(entity, HEALTHBAR_ON_DAMAGE_DISPLAY_TIME.get());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity() instanceof Mob entity) {
+            if (displayHealthbarTicks.containsKey(entity)) {
+                int current = displayHealthbarTicks.get(entity);
+                if (current <= 1) {
+                    displayHealthbarTicks.remove(entity);
+                } else {
+                    displayHealthbarTicks.put(entity, --current);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void prepareHealthbar(RenderNameTagEvent event) {
-        if (event.getEntity() instanceof LivingEntity entity) {
-            if (entity != Minecraft.getInstance().player) {
+        if (event.getEntity() instanceof Mob entity) {
+            if (displayHealthbarTicks.containsKey(entity)) {
+                if (entity.isInvisible()) return;
+                if (entity.isVehicle()) return;
+                if (ClientConfig.BLACKLISTED_HEALTHBAR_ENTITIES.get().contains(Util.getEntityRegistryName(entity.getType()).toString()))
+                    return;
                 int unpackedLight = Math.max(LightTexture.sky(event.getPackedLight()) - ClientData.skyDarken, LightTexture.block(event.getPackedLight()));
                 float distance = entity.distanceTo(Minecraft.getInstance().player) - unpackedLight + 15;
-                float alpha = distance < MOB_HEALTH_BAR_DISTANCE_FACTOR*0.5 ? 1 : (1 - (distance/MOB_HEALTH_BAR_DISTANCE_FACTOR));
+                float minAlpha = distance < MOB_HEALTH_BAR_DISTANCE_FACTOR*0.5 ? 1 : (1 - (distance/MOB_HEALTH_BAR_DISTANCE_FACTOR));
+                float alpha = (float) Math.min(minAlpha, ((float) displayHealthbarTicks.get(entity)/(HEALTHBAR_ON_DAMAGE_DISPLAY_TIME.get()*0.5)));
                 MobHealthbar.prepare(entity, alpha);
             }
         }
