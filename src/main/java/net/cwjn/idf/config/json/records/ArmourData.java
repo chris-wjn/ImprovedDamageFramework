@@ -4,6 +4,7 @@ import com.google.gson.*;
 import net.cwjn.idf.config.json.records.subtypes.AuxiliaryData;
 import net.cwjn.idf.config.json.records.subtypes.DefenceData;
 import net.cwjn.idf.config.json.records.subtypes.OffenseData;
+import net.cwjn.idf.util.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import org.jetbrains.annotations.NotNull;
@@ -12,13 +13,14 @@ import oshi.util.tuples.Pair;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
 import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
-public record ArmourData(int durability, OffenseData oData, DefenceData dData, AuxiliaryData aData)
+public record ArmourData(List<String> presets, int durability, OffenseData oData, DefenceData dData, AuxiliaryData aData)
         implements Iterable<Pair<Attribute, Double>> {
 
     @NotNull
@@ -70,21 +72,30 @@ public record ArmourData(int durability, OffenseData oData, DefenceData dData, A
     }
 
     public static ArmourData combine(ArmourData data1, ArmourData data2) {
-        return new ArmourData(data1.durability + data2.durability,
+        return new ArmourData(data1.presets, data1.durability + data2.durability,
                 OffenseData.combine(data1.oData, data2.oData),
                 DefenceData.combine(data1.dData, data2.dData),
                 AuxiliaryData.combine(data1.aData, data2.aData));
     }
 
     public static ArmourData readArmourData(FriendlyByteBuf buffer) {
+        int length = buffer.readInt();
+        List<String> presets = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            presets.add(Util.readString(buffer));
+        }
         int d = buffer.readInt();
         OffenseData newOData = OffenseData.read(buffer);
         DefenceData newDData = DefenceData.read(buffer);
         AuxiliaryData newAData = AuxiliaryData.read(buffer);
-        return new ArmourData(d, newOData, newDData, newAData);
+        return new ArmourData(presets, d, newOData, newDData, newAData);
     }
 
-    public void writeArmourData(FriendlyByteBuf buffer) {
+    public void writeData(FriendlyByteBuf buffer) {
+        buffer.writeInt(presets.size());
+        for (String s : presets) {
+            Util.writeString(s, buffer);
+        }
         buffer.writeInt(durability);
         oData.write(buffer);
         dData.write(buffer);
@@ -98,7 +109,14 @@ public record ArmourData(int durability, OffenseData oData, DefenceData dData, A
         @Override
         public ArmourData deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) throws JsonParseException {
             final JsonObject obj = json.getAsJsonObject();
-            return new ArmourData(obj.get("Bonus Durability").getAsInt(),
+            List<String> retList = new ArrayList<>();
+            JsonArray array = obj.has("Presets")? obj.getAsJsonArray("Presets") : new JsonArray();
+            for (JsonElement element : array) {
+                retList.add(element.getAsString());
+            }
+            return new ArmourData(
+                    retList,
+                    obj.get("Bonus Durability").getAsInt(),
                     ctx.deserialize(obj.get("Offense Stats"), OffenseData.class),
                     ctx.deserialize(obj.get("Defense Stats"), DefenceData.class),
                     ctx.deserialize(obj.get("Auxiliary Stats"), AuxiliaryData.class));
@@ -107,6 +125,11 @@ public record ArmourData(int durability, OffenseData oData, DefenceData dData, A
         @Override
         public JsonElement serialize(ArmourData data, Type type, JsonSerializationContext ctx) {
             JsonObject obj = new JsonObject();
+            JsonArray presets = new JsonArray();
+            for (String preset : data.presets) {
+                presets.add(preset);
+            }
+            obj.add("Presets", presets);
             obj.addProperty("Bonus Durability", data.durability);
             obj.add("Offense Stats", ctx.serialize(data.oData, OffenseData.class));
             obj.add("Defense Stats", ctx.serialize(data.dData, DefenceData.class));

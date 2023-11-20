@@ -25,6 +25,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,8 +44,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.data.CommonData.*;
-import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
-import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
+import static net.cwjn.idf.util.Util.*;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL;
 
@@ -67,17 +67,29 @@ public class JSONHandler {
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
             registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObject.StatObjectSerializer()).
             registerTypeAdapter(RpgItemData.class, new RpgItemData.RpgItemSerializer()).
+            registerTypeAdapter(PresetData.class, new PresetData.PresetSerializer()).
+            registerTypeAdapter(PresetData.AttributeAndModifier.class, new PresetData.AttributeAndModifierSerializer()).
             create();
 
     public static void init(File configDir) {
 
         //instantiate default maps
-        Map<String, ArmourData> DEFAULT_ARMOUR_FLAT = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_flat.json")))), new TypeToken<Map<String, ArmourData>>(){}.getType());
-        Map<String, ItemData> DEFAULT_ARMOUR_MULT = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_multiply.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, WeaponData> DEFAULT_WEAPON_FLAT = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_flat.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
-        Map<String, ItemData> DEFAULT_WEAPON_MULT = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_multiply.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
-        Map<String, EntityData> DEFAULT_ENTITY = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
+        Map<String, PresetData> DEFAULT_PRESETS = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/presets.json")))), new TypeToken<Map<String, PresetData>>(){}.getType());
+        Map<String, ArmourData> DEFAULT_ARMOUR_FLAT = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_flat.json")))), new TypeToken<Map<String, ArmourData>>(){}.getType());
+        Map<String, ItemData> DEFAULT_ARMOUR_MULT = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/armour_items_multiply.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, WeaponData> DEFAULT_WEAPON_FLAT = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_flat.json")))), new TypeToken<Map<String, WeaponData>>(){}.getType());
+        Map<String, ItemData> DEFAULT_WEAPON_MULT = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/weapon_items_multiply.json")))), new TypeToken<Map<String, ItemData>>(){}.getType());
+        Map<String, EntityData> DEFAULT_ENTITY = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
         Map<String, SourceCatcherData> DEFAULT_SOURCE = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
+
+        DEFAULT_PRESETS.put(
+                "Example",
+                new PresetData(Attributes.ATTACK_DAMAGE, ADDITION, 4.0)
+        );
+        DEFAULT_PRESETS.put(
+                "Example2",
+                new PresetData(Attributes.ARMOR, ADDITION, 2.5)
+        );
 
         //ENTITIES
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
@@ -94,7 +106,7 @@ public class JSONHandler {
                 boolean thrown = item instanceof TridentItem;
                 if (item instanceof IDFCustomEquipment modItem) {
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, ((ItemInterface) modItem).getDamageClass(), ranged, thrown,
+                            new WeaponData(Collections.emptyList(), 0, ((ItemInterface) modItem).getDamageClass(), ranged, thrown,
                                     OffenseData.empty(),
                                     DefenceData.empty(),
                                     AuxiliaryData.empty()));
@@ -106,9 +118,13 @@ public class JSONHandler {
                     if (Util.getItemRegistryName(item).toString().contains("pickaxe") || Util.getItemRegistryName(item).toString().contains("bow")) {
                         damageClass = "pierce";
                     }
+                    double damage = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE)
+                                    .stream().mapToDouble(AttributeModifier::getAmount).sum();
+                    double speed = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED)
+                            .stream().mapToDouble(AttributeModifier::getAmount).sum();
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(0, damageClass, ranged, thrown,
-                                    OffenseData.empty(),
+                            new WeaponData(Collections.emptyList(), 0, damageClass, ranged, thrown,
+                                    ranged? OffenseData.rangedDefault() : OffenseData.guessForceFromDamageSpeed(damage, speed),
                                     DefenceData.empty(),
                                     AuxiliaryData.empty()));
                 }
@@ -118,14 +134,18 @@ public class JSONHandler {
             } //In the case the item is a sword, tool, bow, crossbow, or trident, the case is trivial, and we know it's a weapon.
             else {
                 if (item instanceof IDFCustomEquipment) {
-                    DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
+                    DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(Collections.emptyList(),
+                            0,
                             OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
                     DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
                             OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
                 } //If the item is an instance of IDF equipment that isn't a weapon, it is guaranteed to be armour.
                 else {
-                    boolean isWeapon = !item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).isEmpty();
-                    if (isWeapon) {
+                    double damage = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE)
+                            .stream().mapToDouble(AttributeModifier::getAmount).sum();
+                    double speed = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED)
+                            .stream().mapToDouble(AttributeModifier::getAmount).sum();
+                    if (damage != 0) {
                         String dc = "strike";
                         if (Util.getItemRegistryName(item).toString().contains("sword") || Util.getItemRegistryName(item).toString().contains("axe")) {
                             dc = "slash";
@@ -134,8 +154,8 @@ public class JSONHandler {
                             dc = "pierce";
                         }
                         DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                                new WeaponData(0, dc, false, false,
-                                        OffenseData.empty(),
+                                new WeaponData(Collections.emptyList(), 0, dc, false, false,
+                                        OffenseData.guessForceFromDamageSpeed(damage, speed),
                                         DefenceData.empty(),
                                         AuxiliaryData.empty()));
                         DEFAULT_WEAPON_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
@@ -148,7 +168,8 @@ public class JSONHandler {
                         Multimap<Attribute, AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS);
                         Multimap<Attribute, AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST);
                         if (!armour0.isEmpty() || !armour1.isEmpty() || !armour2.isEmpty() || !armour3.isEmpty()) {
-                            DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(0,
+                            DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(Collections.emptyList(),
+                                    0,
                                     OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
                             DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
                                     OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
@@ -159,6 +180,7 @@ public class JSONHandler {
         }
 
         //ensure we're starting with clean maps
+        LOGICAL_PRESET_MAP.clear();
         LOGICAL_ARMOUR_MAP_FLAT.clear();
         LOGICAL_ARMOUR_MAP_MULT.clear();
         LOGICAL_WEAPON_MAP_FLAT.clear();
@@ -173,6 +195,7 @@ public class JSONHandler {
         Map<String, ItemData> tempWeaponOp2Map = JSONUtil.getOrCreateConfigFile(configDir, "weapon_items_multiply.json", DEFAULT_WEAPON_MULT, new TypeToken<Map<String, ItemData>>() {}.getType());
         Map<String, EntityData> tempEntityMap = JSONUtil.getOrCreateConfigFile(configDir, "entity_data.json", DEFAULT_ENTITY, new TypeToken<Map<String, EntityData>>() {}.getType());
         Map<String, SourceCatcherData> tempSourceMap = JSONUtil.getOrCreateConfigFile(configDir, "source_catcher.json", DEFAULT_SOURCE, new TypeToken<Map<String, SourceCatcherData>>() {}.getType());
+        Map<String, PresetData> tempPresetMap = JSONUtil.getOrCreateConfigFile(configDir, "presets.json", DEFAULT_PRESETS, new TypeToken<Map<String, PresetData>>() {}.getType());
         List<String> compatItems = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_items.json", new ArrayList<>(), new TypeToken<List<String>>() {}.getType());
         List<String> compatMods = JSONUtil.getOrCreateConfigFile(compatDir.toFile(), "compat_mods.json", new ArrayList<>(), new TypeToken<List<String>>() {}.getType());
 
@@ -196,6 +219,9 @@ public class JSONHandler {
         for (Map.Entry<String, SourceCatcherData> entry : DEFAULT_SOURCE.entrySet()) {
             tempSourceMap.putIfAbsent(entry.getKey(), entry.getValue());
         }
+        for (Map.Entry<String, PresetData> entry : DEFAULT_PRESETS.entrySet()) {
+            tempPresetMap.putIfAbsent(entry.getKey(), entry.getValue());
+        }
 
         //sort the maps before converting to resource locations so the json files get sorted automatically
         //by mod first then item/entity name
@@ -205,6 +231,7 @@ public class JSONHandler {
         SortedMap<String, ItemData> sortedWeaponOp2Map = new TreeMap<>(tempWeaponOp2Map);
         SortedMap<String, EntityData> sortedEntityMap = new TreeMap<>(tempEntityMap);
         SortedMap<String, SourceCatcherData> sortedSourceMap = new TreeMap<>(tempSourceMap);
+        SortedMap<String, PresetData> sortedPresetMap = new TreeMap<>(tempPresetMap);
 
         //now we fill the actual maps that get used by the game
         if (!sortedArmourOp0Map.isEmpty()) {
@@ -234,6 +261,9 @@ public class JSONHandler {
         }
         if (!sortedSourceMap.isEmpty()) {
             LOGICAL_SOURCE_MAP = sortedSourceMap;
+        }
+        if (!sortedSourceMap.isEmpty()) {
+            LOGICAL_PRESET_MAP = sortedPresetMap;
         }
         if (!compatItems.isEmpty()) {
             for (String s : compatItems) {
@@ -308,6 +338,12 @@ public class JSONHandler {
                 defaultTag.putBoolean(RANGED_TAG, data0.ranged());
                 defaultTag.putBoolean(THROWN_TAG, data0.thrown());
                 ItemData data2 = LOGICAL_WEAPON_MAP_MULT.get(loc);
+                for (String s : data0.presets()) {
+                    PresetData preset = LOGICAL_PRESET_MAP.get(s);
+                    for (PresetData.AttributeAndModifier combo : preset) {
+                        builder.put(combo.getAttribute(), new AttributeModifier(UUID_PRESET_MODIFIERS[equipmentSlot], "preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
+                    }
+                }
                 data0.forEach(pair -> {
                     if (pair.getB() != 0) {
                         builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
@@ -324,6 +360,12 @@ public class JSONHandler {
                 defaultTag.putBoolean(CommonData.EQUIPMENT_TAG, true);
                 ArmourData data0 = LOGICAL_ARMOUR_MAP_FLAT.get(loc);
                 ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
+                for (String s : data0.presets()) {
+                    PresetData preset = LOGICAL_PRESET_MAP.get(s);
+                    for (PresetData.AttributeAndModifier combo : preset) {
+                        builder.put(combo.getAttribute(), new AttributeModifier(UUID_PRESET_MODIFIERS[equipmentSlot], "preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
+                    }
+                }
                 data0.forEach(pair -> {
                     if (pair.getB() != 0) {
                         builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));

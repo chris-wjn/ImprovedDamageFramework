@@ -26,6 +26,8 @@ public class JSONUtil {
             registerTypeAdapter(AuxiliaryData.class, new AuxiliaryData.AuxiliaryDataSerializer()).
             registerTypeAdapter(RpgItemData.StatObject.class, new RpgItemData.StatObject.StatObjectSerializer()).
             registerTypeAdapter(RpgItemData.class, new RpgItemData.RpgItemSerializer()).
+            registerTypeAdapter(PresetData.class, new PresetData.PresetSerializer()).
+            registerTypeAdapter(PresetData.AttributeAndModifier.class, new PresetData.AttributeAndModifierSerializer()).
             create();
 
     public static <T> T getOrCreateConfigFile(File configDir, String configName, T defaults, Type type) {

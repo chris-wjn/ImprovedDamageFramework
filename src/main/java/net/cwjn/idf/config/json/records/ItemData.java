@@ -75,14 +75,14 @@ public record ItemData(OffenseData oData, DefenceData dData, AuxiliaryData aData
                 AuxiliaryData.combine(data1.aData, data2.aData));
     }
 
-    public static ItemData readItemData(FriendlyByteBuf buffer) {
+    public static ItemData readData(FriendlyByteBuf buffer) {
         OffenseData newOData = OffenseData.read(buffer);
         DefenceData newDData = DefenceData.read(buffer);
         AuxiliaryData newAData = AuxiliaryData.read(buffer);
         return new ItemData(newOData, newDData, newAData);
     }
 
-    public void writeItemData(FriendlyByteBuf buffer) {
+    public void writeData(FriendlyByteBuf buffer) {
         oData.write(buffer);
         dData.write(buffer);
         aData.write(buffer);

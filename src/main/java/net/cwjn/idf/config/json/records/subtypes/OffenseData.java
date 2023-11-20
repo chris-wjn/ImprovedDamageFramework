@@ -5,7 +5,6 @@ import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import oshi.util.tuples.Pair;
 
@@ -34,6 +33,16 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
     public static OffenseData empty() {
         return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0.0, 0);
+    }
+
+    public static OffenseData guessForceFromDamageSpeed(double damage, double speed) {
+        return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0.35*damage*Math.abs(speed), 0, 0.0, 0);
+    }
+
+    public static OffenseData rangedDefault() {
+        return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 2, 10, 0.0, 0);
     }
 
     public Iterator<Pair<Attribute, Double>> getAttributesWithModifier() {

@@ -2,6 +2,7 @@ package net.cwjn.idf.network.packets;
 
 import net.cwjn.idf.config.json.records.ArmourData;
 import net.cwjn.idf.config.json.records.ItemData;
+import net.cwjn.idf.config.json.records.PresetData;
 import net.cwjn.idf.config.json.records.WeaponData;
 import net.cwjn.idf.network.ClientPacketHandler;
 import net.cwjn.idf.network.IDFPacket;
@@ -23,25 +24,28 @@ public class SyncClientConfigPacket implements IDFPacket {
     public final Map<ResourceLocation, ItemData> weaponMult;
     public final Map<ResourceLocation, ArmourData> armourFlat;
     public final Map<ResourceLocation, ItemData> armourMult;
+    public final Map<String, PresetData> presets;
     public final List<ResourceLocation> compatItems;
     public final List<String> compatMods;
 
     public SyncClientConfigPacket(Map<ResourceLocation, WeaponData> weaponMap0, Map<ResourceLocation, ItemData> weaponMap2,
                                   Map<ResourceLocation, ArmourData> armourMap0, Map<ResourceLocation, ItemData> armourMap2,
-                                  List<ResourceLocation> compatItems, List<String> compatMods) {
+                                  Map<String, PresetData> presets, List<ResourceLocation> compatItems, List<String> compatMods) {
         this.weaponFlat = weaponMap0;
         this.weaponMult = weaponMap2;
         this.armourFlat = armourMap0;
         this.armourMult = armourMap2;
+        this.presets = presets;
         this.compatItems = compatItems;
         this.compatMods = compatMods;
     }
 
     public static void encode(SyncClientConfigPacket packet, FriendlyByteBuf buffer) {
-        buffer.writeMap(packet.weaponFlat, FriendlyByteBuf::writeResourceLocation, (buf, WeaponData) -> WeaponData.writeWeaponData(buf));
-        buffer.writeMap(packet.weaponMult, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
-        buffer.writeMap(packet.armourFlat, FriendlyByteBuf::writeResourceLocation, (buf, ArmourData) -> ArmourData.writeArmourData(buf));
-        buffer.writeMap(packet.armourMult, FriendlyByteBuf::writeResourceLocation, (buf, ItemData) -> ItemData.writeItemData(buf));
+        buffer.writeMap(packet.weaponFlat, FriendlyByteBuf::writeResourceLocation, (buf, weaponData) -> weaponData.writeData(buf));
+        buffer.writeMap(packet.weaponMult, FriendlyByteBuf::writeResourceLocation, (buf, itemData) -> itemData.writeData(buf));
+        buffer.writeMap(packet.armourFlat, FriendlyByteBuf::writeResourceLocation, (buf, armourData) -> armourData.writeData(buf));
+        buffer.writeMap(packet.armourMult, FriendlyByteBuf::writeResourceLocation, (buf, itemData) -> itemData.writeData(buf));
+        buffer.writeMap(packet.presets, (buf, s) -> Util.writeString(s, buf), (buf, presetData) -> presetData.writeData(buf));
         buffer.writeInt(packet.compatItems.size());
         for (ResourceLocation rl : packet.compatItems) {
             buffer.writeResourceLocation(rl);
@@ -54,9 +58,10 @@ public class SyncClientConfigPacket implements IDFPacket {
 
     public static SyncClientConfigPacket decode(FriendlyByteBuf buffer) {
         Map<ResourceLocation, WeaponData> weaponMap00 = buffer.readMap(FriendlyByteBuf::readResourceLocation, WeaponData::readWeaponData);
-        Map<ResourceLocation, ItemData> weaponMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
+        Map<ResourceLocation, ItemData> weaponMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readData);
         Map<ResourceLocation, ArmourData> armourMap00 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ArmourData::readArmourData);
-        Map<ResourceLocation, ItemData> armourMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readItemData);
+        Map<ResourceLocation, ItemData> armourMap22 = buffer.readMap(FriendlyByteBuf::readResourceLocation, ItemData::readData);
+        Map<String, PresetData> presets = buffer.readMap(Util::readString, PresetData::readData);
         int size = buffer.readInt();
         List<ResourceLocation> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -67,7 +72,7 @@ public class SyncClientConfigPacket implements IDFPacket {
         for (int n = 0; n < size1; n++) {
             list1.add(Util.readString(buffer));
         }
-        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22, list, list1);
+        return new SyncClientConfigPacket(weaponMap00, weaponMap22, armourMap00, armourMap22, presets, list, list1);
     }
 
     public static void handle(SyncClientConfigPacket packet, Supplier<NetworkEvent.Context> ctxSupplier) {

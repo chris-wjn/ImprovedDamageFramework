@@ -21,6 +21,7 @@ public class CommonData {
     public static Map<ResourceLocation, ItemData> LOGICAL_WEAPON_MAP_MULT = new HashMap<>();
     public static Map<ResourceLocation, EntityData> LOGICAL_ENTITY_MAP = new HashMap<>();
     public static Map<String, SourceCatcherData> LOGICAL_SOURCE_MAP = new HashMap<>();
+    public static Map<String, PresetData> LOGICAL_PRESET_MAP = new HashMap<>();
     public static List<ResourceLocation> COMPAT_ITEMS = new ArrayList<>();
     public static List<String> COMPAT_MODS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();

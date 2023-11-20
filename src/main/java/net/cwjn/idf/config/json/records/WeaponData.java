@@ -13,6 +13,7 @@ import oshi.util.tuples.Pair;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
@@ -20,7 +21,7 @@ import static net.cwjn.idf.attribute.IDFAttributes.*;
 import static net.minecraft.world.entity.ai.attributes.Attributes.*;
 
 //used to hold data for weapons in the json config files
-public record WeaponData(int durability, String damageClass, boolean ranged, boolean thrown, OffenseData oData, DefenceData dData, AuxiliaryData aData)
+public record WeaponData(List<String> presets, int durability, String damageClass, boolean ranged, boolean thrown, OffenseData oData, DefenceData dData, AuxiliaryData aData)
         implements Iterable<Pair<Attribute, Double>> {
 
     //iterate through pairs of attribute instances and their values from this data object. Used
@@ -74,7 +75,7 @@ public record WeaponData(int durability, String damageClass, boolean ranged, boo
 
     //combines two WeaponData objects. data1's damage class will be kept.
     public static WeaponData combine(WeaponData data1, WeaponData data2) {
-        return new WeaponData(data1.durability + data2.durability, data1.damageClass, data1.ranged, data1.thrown,
+        return new WeaponData(data1.presets(), data1.durability + data2.durability, data1.damageClass, data1.ranged, data1.thrown,
                 OffenseData.combine(data1.oData, data2.oData),
                 DefenceData.combine(data1.dData, data2.dData),
                 AuxiliaryData.combine(data1.aData, data2.aData));
@@ -82,6 +83,11 @@ public record WeaponData(int durability, String damageClass, boolean ranged, boo
 
     //used to read a WeaponData object from a packet
     public static WeaponData readWeaponData(FriendlyByteBuf buffer) {
+        int length = buffer.readInt();
+        List<String> presets = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            presets.add(Util.readString(buffer));
+        }
         int d = buffer.readInt();
         String dc = Util.readString(buffer);
         boolean r = buffer.readBoolean();
@@ -89,11 +95,15 @@ public record WeaponData(int durability, String damageClass, boolean ranged, boo
         OffenseData newOData = OffenseData.read(buffer);
         DefenceData newDData = DefenceData.read(buffer);
         AuxiliaryData newAData = AuxiliaryData.read(buffer);
-        return new WeaponData(d, dc, r, t, newOData, newDData, newAData);
+        return new WeaponData(presets, d, dc, r, t, newOData, newDData, newAData);
     }
 
     //used to write a WeaponData object to a packet
-    public void writeWeaponData(FriendlyByteBuf buffer) {
+    public void writeData(FriendlyByteBuf buffer) {
+        buffer.writeInt(presets.size());
+        for (String s : presets) {
+            Util.writeString(s, buffer);
+        }
         buffer.writeInt(durability);
         Util.writeString(damageClass, buffer);
         buffer.writeBoolean(ranged);
@@ -111,7 +121,13 @@ public record WeaponData(int durability, String damageClass, boolean ranged, boo
         @Override
         public WeaponData deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) throws JsonParseException {
             final JsonObject obj = json.getAsJsonObject();
+            List<String> retList = new ArrayList<>();
+            JsonArray array = obj.has("Presets")? obj.getAsJsonArray("Presets") : new JsonArray();
+            for (JsonElement element : array) {
+                retList.add(element.getAsString());
+            }
             return new WeaponData(
+                    retList,
                     obj.get("Bonus Durability").getAsInt(),
                     obj.get("Damage Class").getAsString(),
                     obj.get("Ranged?").getAsBoolean(),
@@ -125,6 +141,11 @@ public record WeaponData(int durability, String damageClass, boolean ranged, boo
         @Override
         public JsonElement serialize(WeaponData data, Type type, JsonSerializationContext ctx) {
             JsonObject obj = new JsonObject();
+            JsonArray presets = new JsonArray();
+            for (String preset : data.presets) {
+                presets.add(preset);
+            }
+            obj.add("Presets", presets);
             obj.addProperty("Bonus Durability", data.durability);
             obj.addProperty("Damage Class", data.damageClass);
             obj.addProperty("Ranged?", data.ranged);

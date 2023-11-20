@@ -17,6 +17,7 @@ import se.mickelus.tetra.items.modular.IModularItem;
 import se.mickelus.tetra.items.modular.impl.bow.ModularBowItem;
 import se.mickelus.tetra.items.modular.impl.crossbow.ModularCrossbowItem;
 import se.mickelus.tetra.items.modular.impl.holo.ModularHolosphereItem;
+import se.mickelus.tetra.items.modular.impl.toolbelt.ModularToolbeltItem;
 import se.mickelus.tetra.module.ItemModule;
 
 import java.util.Map;
@@ -30,7 +31,7 @@ public class MixinWorkbenchTile {
     private void addDamageClass(Player player, CallbackInfo ci, ItemStack targetStack, ItemStack upgradedStack, IModularItem item, BlockState blockState, Map availableTools, ItemStack[] materials, ItemStack[] materialsAltered, ItemStack tempStack) {
         CompoundTag tag = upgradedStack.getTag();
         if (tag == null) return;
-        if (item instanceof ModularHolosphereItem) return;
+        if (item instanceof ModularHolosphereItem || item instanceof ModularToolbeltItem) return;
         tag.putBoolean(CommonData.EQUIPMENT_TAG, true);
         ItemModule[] modules = item.getMajorModules(upgradedStack);
         String dc = "strike";
@@ -45,10 +46,12 @@ public class MixinWorkbenchTile {
             int str = 0;
             boolean thrown = false;
             for (ItemModule module : modules) {
-                if (module.getAspects(upgradedStack).contains(ItemAspect.throwable)) thrown = true;
-                sls += module.getAspects(upgradedStack).getLevel(ItemAspect.edgedWeapon);
-                str += module.getAspects(upgradedStack).getLevel(ItemAspect.bluntWeapon);
-                prc += module.getAspects(upgradedStack).getLevel(ItemAspect.pointyWeapon);
+                if (module != null) {
+                    if (module.getAspects(upgradedStack).contains(ItemAspect.throwable)) thrown = true;
+                    sls += module.getAspects(upgradedStack).getLevel(ItemAspect.edgedWeapon);
+                    str += module.getAspects(upgradedStack).getLevel(ItemAspect.bluntWeapon);
+                    prc += module.getAspects(upgradedStack).getLevel(ItemAspect.pointyWeapon);
+                }
             }
             if (thrown) tag.putBoolean(CommonData.THROWN_TAG, true);
             int highest = Math.max(sls, Math.max(prc, str));

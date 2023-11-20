@@ -35,7 +35,8 @@ public class ServerData {
     //Here we send our config files to clients who join the server
     public static void onPlayerLoginEventServer(PlayerEvent.PlayerLoggedInEvent event) {
         PacketHandler.serverToPlayer(
-                new SyncClientConfigPacket(LOGICAL_WEAPON_MAP_FLAT, LOGICAL_WEAPON_MAP_MULT, LOGICAL_ARMOUR_MAP_FLAT, LOGICAL_ARMOUR_MAP_MULT, COMPAT_ITEMS, COMPAT_MODS),
+                new SyncClientConfigPacket(LOGICAL_WEAPON_MAP_FLAT, LOGICAL_WEAPON_MAP_MULT, LOGICAL_ARMOUR_MAP_FLAT, LOGICAL_ARMOUR_MAP_MULT,
+                        LOGICAL_PRESET_MAP, COMPAT_ITEMS, COMPAT_MODS),
                 (ServerPlayer) event.getEntity());
         ImprovedDamageFramework.LOGGER.info("Sent server mappings to player " + event.getEntity().getScoreboardName());
     }
