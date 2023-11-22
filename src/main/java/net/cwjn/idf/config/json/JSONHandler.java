@@ -82,15 +82,6 @@ public class JSONHandler {
         Map<String, EntityData> DEFAULT_ENTITY = new HashMap<>();//SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/entity_data.json")))), new TypeToken<Map<String, EntityData>>(){}.getType());
         Map<String, SourceCatcherData> DEFAULT_SOURCE = SERIALIZER.fromJson(new BufferedReader(new InputStreamReader(Objects.requireNonNull(JSONHandler.class.getClassLoader().getResourceAsStream("data/idf/default/source_catcher.json")))), new TypeToken<Map<String, SourceCatcherData>>(){}.getType());
 
-        DEFAULT_PRESETS.put(
-                "Example",
-                new PresetData(Attributes.ATTACK_DAMAGE, ADDITION, 4.0)
-        );
-        DEFAULT_PRESETS.put(
-                "Example2",
-                new PresetData(Attributes.ARMOR, ADDITION, 2.5)
-        );
-
         //ENTITIES
         for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES.getValues()) {
             if (entityType.getCategory() != MobCategory.MISC) { //make sure this isn't an arrow entity or something
@@ -122,8 +113,21 @@ public class JSONHandler {
                                     .stream().mapToDouble(AttributeModifier::getAmount).sum();
                     double speed = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED)
                             .stream().mapToDouble(AttributeModifier::getAmount).sum();
+                    List<String> materialPresets = new ArrayList<>();
+                    if (!ranged && !thrown) {
+                        List<ItemStack> materials = List.of(((TieredItem)item).getTier().getRepairIngredient().getItems());
+                        if (materials.contains(Items.COBBLESTONE.getDefaultInstance())) materialPresets.add("STONE");
+                        if (materials.contains(Items.OAK_PLANKS.getDefaultInstance())) materialPresets.add("WOOD");
+                        if (materials.size() == 1) {
+                            ItemStack material = materials.get(0);
+                            if (material.is(Items.IRON_INGOT)) materialPresets.add("IRON");
+                            else if (material.is(Items.DIAMOND)) materialPresets.add("DIAMOND");
+                            else if (material.is(Items.GOLD_INGOT)) materialPresets.add("GOLD");
+                            else if (material.is(Items.NETHERITE_INGOT)) materialPresets.add("NETHERITE");
+                        }
+                    }
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
-                            new WeaponData(Collections.emptyList(), 0, damageClass, ranged, thrown,
+                            new WeaponData(materialPresets, 0, damageClass, ranged, thrown,
                                     ranged? OffenseData.rangedDefault() : OffenseData.guessForceFromDamageSpeed(damage, speed),
                                     DefenceData.empty(),
                                     AuxiliaryData.empty()));
@@ -340,6 +344,10 @@ public class JSONHandler {
                 ItemData data2 = LOGICAL_WEAPON_MAP_MULT.get(loc);
                 for (String s : data0.presets()) {
                     PresetData preset = LOGICAL_PRESET_MAP.get(s);
+                    if (preset == null) {
+                        ImprovedDamageFramework.LOGGER.warn("Preset " + s + " does not exist!");
+                        continue;
+                    }
                     for (PresetData.AttributeAndModifier combo : preset) {
                         builder.put(combo.getAttribute(), new AttributeModifier(UUID_PRESET_MODIFIERS[equipmentSlot], "preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
                     }
