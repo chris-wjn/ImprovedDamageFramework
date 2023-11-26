@@ -34,8 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
-import static net.cwjn.idf.data.CommonData.RANGED_TAG;
-import static net.cwjn.idf.data.CommonData.WEAPON_TAG;
+import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.util.Util.offensiveAttribute;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 

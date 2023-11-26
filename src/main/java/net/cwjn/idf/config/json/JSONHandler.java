@@ -114,18 +114,6 @@ public class JSONHandler {
                     double speed = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_SPEED)
                             .stream().mapToDouble(AttributeModifier::getAmount).sum();
                     List<String> materialPresets = new ArrayList<>();
-                    if (!ranged && !thrown) {
-                        List<ItemStack> materials = List.of(((TieredItem)item).getTier().getRepairIngredient().getItems());
-                        if (materials.contains(Items.COBBLESTONE.getDefaultInstance())) materialPresets.add("STONE");
-                        if (materials.contains(Items.OAK_PLANKS.getDefaultInstance())) materialPresets.add("WOOD");
-                        if (materials.size() == 1) {
-                            ItemStack material = materials.get(0);
-                            if (material.is(Items.IRON_INGOT)) materialPresets.add("IRON");
-                            else if (material.is(Items.DIAMOND)) materialPresets.add("DIAMOND");
-                            else if (material.is(Items.GOLD_INGOT)) materialPresets.add("GOLD");
-                            else if (material.is(Items.NETHERITE_INGOT)) materialPresets.add("NETHERITE");
-                        }
-                    }
                     DEFAULT_WEAPON_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(),
                             new WeaponData(materialPresets, 0, damageClass, ranged, thrown,
                                     ranged? OffenseData.rangedDefault() : OffenseData.guessForceFromDamageSpeed(damage, speed),
@@ -302,6 +290,7 @@ public class JSONHandler {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientData::saveClientMappings);
 
         //Write the maps to config json files so users can edit items
+        JSONUtil.writeFile(new File(configDir, "presets.json"), sortedPresetMap);
         JSONUtil.writeFile(new File(configDir, "entity_data.json"), sortedEntityMap);
         JSONUtil.writeFile(new File(configDir, "armour_items_flat.json"), sortedArmourOp0Map);
         JSONUtil.writeFile(new File(configDir, "armour_items_multiply.json"), sortedArmourOp2Map);
@@ -349,7 +338,7 @@ public class JSONHandler {
                         continue;
                     }
                     for (PresetData.AttributeAndModifier combo : preset) {
-                        builder.put(combo.getAttribute(), new AttributeModifier(UUID_PRESET_MODIFIERS[equipmentSlot], "preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
+                        builder.put(combo.getAttribute(), new AttributeModifier("preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
                     }
                 }
                 data0.forEach(pair -> {
@@ -370,8 +359,12 @@ public class JSONHandler {
                 ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
                 for (String s : data0.presets()) {
                     PresetData preset = LOGICAL_PRESET_MAP.get(s);
+                    if (preset == null) {
+                        ImprovedDamageFramework.LOGGER.warn("Preset " + s + " does not exist!");
+                        continue;
+                    }
                     for (PresetData.AttributeAndModifier combo : preset) {
-                        builder.put(combo.getAttribute(), new AttributeModifier(UUID_PRESET_MODIFIERS[equipmentSlot], "preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
+                        builder.put(combo.getAttribute(), new AttributeModifier("preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
                     }
                 }
                 data0.forEach(pair -> {

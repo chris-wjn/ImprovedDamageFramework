@@ -258,12 +258,23 @@ public class ClientEventsForgeBus {
                         );
                     }
                     MutableComponent force = Component.empty();
-                    list.add(force
-                            .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
-                            .append(Util.writeIcon("force", true))
-                            .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
-                            .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.FORCE.get()))), Color.HOLY_COLOUR))
-                    );
+                    double num = convertAndRemoveAttribute(map, IDFAttributes.FORCE.get());
+                    if (num < 0) {
+                        list.add(force
+                                .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
+                                .append(Util.writeIcon("force", true))
+                                .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
+                                .append(Util.withColor(Util.writeTooltipString("N/A"), Color.LIGHTGREY))
+                        );
+                    }
+                    else {
+                        list.add(force
+                                .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
+                                .append(Util.writeIcon("force", true))
+                                .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
+                                .append(Util.withColor(writeTooltipString(tenths.format(num)), Color.HOLY_COLOUR))
+                        );
+                    }
                 }
                 else {
                     MutableComponent weight = Component.empty();

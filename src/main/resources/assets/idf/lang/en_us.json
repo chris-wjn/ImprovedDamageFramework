@@ -117,7 +117,7 @@
   "idf.icon.pierce_mult": "\u0045",
   "idf.icon.slash": "\u0046",
   "idf.icon.slash_mult": "\u0046",
-  "idf.icon.3x8": "\u0047",
+  "idf.icon.ignore_weight": "\u0047",
   "idf.icon.durability": "\u0048",
   "idf.icon.fire_damage": "\u0049",
   "idf.icon.3x11": "\u004A",
@@ -169,7 +169,7 @@
   "idf.fleur_de_lis.symbol": "⚜",
   "idf.right_arrow_2.symbol": "➢",
   "idf.right_arrow.symbol": "►",
-  "idf.sword.symbol": "⚔ ",
+  "idf.sword.symbol": "⚔",
   "idf.base_multiplication": "(B⁎",
   "idf.total_multiplication": "(T⁎",
   "idf.ohm.symbol": "Ω",
@@ -291,6 +291,7 @@
   "idf.irons_spellbook.dark_damage_tooltip": "%s Dark Damage",
   "idf.irons_spellbook.holy_damage_tooltip": "%s Holy Damage",
   "idf.irons_spellbook.physical_damage_tooltip": "%s Physical Damage",
-  "idf.AOE.text": "(AOE)"
+  "idf.AOE.text": "(AOE)",
+  "idf.not_applicable": "N/A"
 }
 

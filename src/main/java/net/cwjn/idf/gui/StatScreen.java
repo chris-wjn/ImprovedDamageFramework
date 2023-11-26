@@ -19,7 +19,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -31,7 +30,7 @@ import static net.cwjn.idf.attribute.IDFElement.*;
 import static net.cwjn.idf.damage.DamageHandler.DEFAULT_KNOCKBACK;
 import static net.cwjn.idf.util.Color.INDIANRED;
 import static net.cwjn.idf.util.Util.numericalAttributeComponent;
-import static net.cwjn.idf.util.Util.pBPS;
+import static net.minecraft.network.chat.Component.translatable;
 
 @OnlyIn(Dist.CLIENT)
 public class StatScreen extends Screen {
@@ -145,7 +144,13 @@ public class StatScreen extends Screen {
         drawCenteredPercentage(font, matrix, player.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()), left+149, y, getColourGreaterThan(player.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()), 150));
         font.draw(matrix, drawIconAndString("force", "force"), left+96, y+=16, 0xffffff);
         drawbar(matrix, left+96, y);
-        drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.FORCE.get()), left+149, y, 0x111111);
+        double force = player.getAttributeValue(IDFAttributes.FORCE.get());
+        if (force < 0) {
+            Util.drawCenteredString(font, matrix, translatable("idf.not_applicable"), left+149, y, 0x111111);
+        }
+        else {
+            drawCenteredString(font, matrix, player.getAttributeValue(IDFAttributes.FORCE.get()), left+149, y, 0x111111);
+        }
         font.draw(matrix, drawIconAndString("knockback", "knockback"), left+96, y+=16, 0xffffff);
         drawbar(matrix, left+96, y);
         BigDecimal numerator = BigDecimal.valueOf(player.getAttributeValue(Attributes.ATTACK_KNOCKBACK)), denominator = new BigDecimal(DEFAULT_KNOCKBACK);

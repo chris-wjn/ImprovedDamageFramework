@@ -80,13 +80,6 @@ public class Util {
             UUID.fromString("4F7F98E3-42D6-4E7D-A50C-BF4D9805AB12"),
             UUID.fromString("A542BAC0-C124-4F4E-9F0D-829F7C1DD8E9"),
             UUID.fromString("7B8ECA81-1B6A-4AC7-9FED-6720EB2E2F4A")};
-    public static final UUID[] UUID_PRESET_MODIFIERS = {
-            UUID.fromString("3B3A2AC8-EB86-4B37-ABF1-1DF34F564F2A"),
-            UUID.fromString("98A3F188-6A2C-4827-90A9-FB49632A135F"),
-            UUID.fromString("E57F9B5D-3D47-498A-884F-7E739E98A48A"),
-            UUID.fromString("4F7F98E3-42D6-4E7D-A50C-BF4D9805AB13"),
-            UUID.fromString("A542BAC0-C124-4F4E-9F0D-829F7C1DD8EA"),
-            UUID.fromString("7B8ECA81-1B6A-4AC7-9FED-6720EB2E2F4B")};
 
     public static MutableComponent withColor(MutableComponent text, int color) {
         return text.withStyle(text.getStyle().withColor(net.minecraft.network.chat.TextColor.fromRgb(color & 0xFFFFFF)));
@@ -308,7 +301,7 @@ public class Util {
             if (i != s.length()-1) {
                 if (s.charAt(i+1) == '.') {
                     comp.append(spacer(-2));
-                } else if (s.charAt(i+1) == '1') {
+                } else if (s.charAt(i+1) == '1' || s.charAt(i+1) == '/') {
                     comp.append(spacer(-1));
                 }
                 comp.append(spacer(-1));
