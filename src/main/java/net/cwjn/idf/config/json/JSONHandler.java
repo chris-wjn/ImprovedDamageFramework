@@ -290,7 +290,6 @@ public class JSONHandler {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientData::saveClientMappings);
 
         //Write the maps to config json files so users can edit items
-        JSONUtil.writeFile(new File(configDir, "presets.json"), sortedPresetMap);
         JSONUtil.writeFile(new File(configDir, "entity_data.json"), sortedEntityMap);
         JSONUtil.writeFile(new File(configDir, "armour_items_flat.json"), sortedArmourOp0Map);
         JSONUtil.writeFile(new File(configDir, "armour_items_multiply.json"), sortedArmourOp2Map);

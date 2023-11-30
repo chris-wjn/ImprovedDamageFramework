@@ -36,6 +36,7 @@ public record OffenseData(double pDmg, double fDmg, double wDmg, double lDmg, do
     }
 
     public static OffenseData guessForceFromDamageSpeed(double damage, double speed) {
+        if (damage == 0) damage = 1;
         return new OffenseData(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0.35*damage*Math.abs(speed), 0, 0.0, 0);
     }

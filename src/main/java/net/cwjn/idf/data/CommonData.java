@@ -7,7 +7,6 @@ import net.cwjn.idf.config.json.records.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
@@ -26,7 +25,6 @@ public class CommonData {
     public static List<String> COMPAT_MODS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
     public static Multimap<UUID, ResourceLocation> BESTIARY_MAP;
-    public static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();
     public static final List<Attribute> OFFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> DEFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> AUXILIARY_ATTRIBUTES = new ArrayList<>(8);
@@ -55,9 +53,8 @@ public class CommonData {
         ELEMENTS.add(DARK_DEFENCE.get());
         ELEMENTS.add(HOLY_DAMAGE.get());
         ELEMENTS.add(HOLY_DEFENCE.get());
-        for (Attribute a : ForgeRegistries.ATTRIBUTES.getValues()) {
-            ATTRIBUTES.put(a.getDescriptionId(), a);
-        }
+        ELEMENTS.add(Attributes.ATTACK_DAMAGE);
+        ELEMENTS.add(Attributes.ARMOR);
         {
             SCALABLE_ATTRIBUTES.put("FORCE", IDFAttributes.FORCE.get());
             SCALABLE_ATTRIBUTES.put("WEIGHT", Attributes.ARMOR_TOUGHNESS);

@@ -1,0 +1,118 @@
+{
+  "DIAMOND": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_damage",
+        "Operation": "ADDITION",
+        "Amount": 7.0
+      },
+      {
+        "Attribute": "idf:force",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": 0.33
+      }
+    ]
+  },
+  "GOLD": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_damage",
+        "Operation": "ADDITION",
+        "Amount": 8.0
+      },
+      {
+        "Attribute": "idf:force",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": 1.0
+      }
+    ]
+  },
+  "HEAVY": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_speed",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": -0.1
+      },
+      {
+        "Attribute": "idf:force",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": 0.1
+      }
+    ]
+  },
+  "IGNORE_WEIGHT": {
+    "Modifiers": [
+      {
+        "Attribute": "idf:force",
+        "Operation": "ADDITION",
+        "Amount": -9999.0
+      }
+    ]
+  },
+  "IRON": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_damage",
+        "Operation": "ADDITION",
+        "Amount": 10.0
+      },
+      {
+        "Attribute": "minecraft:generic.attack_speed",
+        "Operation": "ADDITION",
+        "Amount": 0.1
+      }
+    ]
+  },
+  "LIGHT": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_speed",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": 0.1
+      },
+      {
+        "Attribute": "idf:force",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": -0.1
+      }
+    ]
+  },
+  "NETHERITE": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_damage",
+        "Operation": "ADDITION",
+        "Amount": 4.0
+      },
+      {
+        "Attribute": "idf:fire_damage",
+        "Operation": "ADDITION",
+        "Amount": 6.0
+      },
+      {
+        "Attribute": "idf:force",
+        "Operation": "MULTIPLY_BASE",
+        "Amount": 0.25
+      }
+    ]
+  },
+  "STONE": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_damage",
+        "Operation": "ADDITION",
+        "Amount": 8.0
+      }
+    ]
+  },
+  "WOOD": {
+    "Modifiers": [
+      {
+        "Attribute": "minecraft:generic.attack_damage",
+        "Operation": "ADDITION",
+        "Amount": 8.0
+      }
+    ]
+  }
+}

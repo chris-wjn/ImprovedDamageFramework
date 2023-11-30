@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -44,6 +45,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -59,6 +61,7 @@ import static net.cwjn.idf.gui.buttons.TabButton.TabType.INVENTORY;
 import static net.cwjn.idf.gui.buttons.TabButton.TabType.STATS;
 import static net.cwjn.idf.util.Color.LIGHTGREEN;
 import static net.cwjn.idf.util.Util.*;
+import static net.minecraft.network.chat.Component.literal;
 import static net.minecraft.network.chat.Component.translatable;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
 
@@ -161,7 +164,7 @@ public class ClientEventsForgeBus {
                 list.add(divider(20, Color.LIGHTGREY));
                 String[] keys = Util.sort(map, isWeapon);
                 for (String key : keys) {
-                    Attribute a = CommonData.ATTRIBUTES.get(key);
+                    Attribute a = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryParse(key));
                     Collection<AttributeModifier> mods = map.get(a);
                     final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
@@ -291,7 +294,8 @@ public class ClientEventsForgeBus {
                     Color cl;
                     if (isStandardSlot) {
                         for (String key : keys) {
-                            Attribute a = CommonData.ATTRIBUTES.get(key);
+                            Attribute a = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryParse(key));
+                            String name = a.getDescriptionId();
                             cl = Color.ATTRIBUTE_COLOURS.get(a.getDescriptionId());
                             if (cl == null) cl = LIGHTGREEN;
                             Collection<AttributeModifier> mods = map.get(a);
@@ -300,13 +304,22 @@ public class ClientEventsForgeBus {
                             double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1, (x, y) -> x * y);
                             MutableComponent c = Component.empty();
                             c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
-                            c.append(
-                                    writeIcon(key, true))
-                                    .append(Util.withColor(translation(key), Color.GREY))
-                                    .append(" ")
-                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + base, cl));
-                            if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
-                            if (mult_total != 1) c.append(writeScalingTooltip((mult_total - 1)*(mult_base+base), Color.BLUE));
+                            if (ELEMENTS.contains(a)) {
+                                c.append(writeIcon(name, true))
+                                        .append(Util.withColor(translation(name), Color.GREY))
+                                        .append(" ")
+                                        .append(writeDamageTooltip((player.getAttributeBaseValue(a) + base + mult_base)*mult_total, cl));
+                            }
+                            else {
+                                double val = (base + mult_base)*mult_total;
+                                if (shouldMult100.test(a)) val*=100;
+                                c.append(writeIcon(name, true))
+                                        .append(Util.withColor(translatable(name), Color.GREY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), cl));
+                            }
+                            //if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
+                            //if (mult_total != 1) c.append(writeScalingTooltip((mult_total - 1)*(mult_base+base), Color.BLUE));
                             if (writeBorderTag) {
                                 borderHelper.ifPresent(h -> h.put(key, mult_total*(mult_base+base)));
                             }
@@ -330,7 +343,7 @@ public class ClientEventsForgeBus {
                                 BigDecimal numerator = BigDecimal.valueOf(val), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
                                 val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
                             }
-                            if (shouldMult100.test(a)) val*=100;
+                            if (shouldMult100.test(a) && op == ADDITION) val*=100;
                             if (op == ADDITION) {
                                 c.append(writeIcon(name, true))
                                         .append(Util.withColor(translatable(name), Color.GREY))
@@ -346,29 +359,6 @@ public class ClientEventsForgeBus {
                         }
                     }
                     else {
-                        for (String key : keys) {
-                            Attribute a = CommonData.ATTRIBUTES.get(key);
-                            Collection<AttributeModifier> mods = map.get(a);
-                            cl = Color.ATTRIBUTE_COLOURS.get(a.getDescriptionId());
-                            if (cl == null) cl = LIGHTGREEN;
-                            final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-                            double mult_base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                            double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1, (x, y) -> x * y);
-                            MutableComponent c = Component.empty();
-                            c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
-                            c.append(
-                                    writeIcon(key, true))
-                                    .append(Util.withColor(translation(key), Color.GREY))
-                                    .append(" ")
-                                    .append(writeDamageTooltip(player.getAttributeBaseValue(a) + base, cl));
-                            if (mult_base != 0) c.append(writeScalingTooltip(mult_base, Color.LIGHTBLUE));
-                            if (mult_total != 1) c.append(writeScalingTooltip((mult_total - 1)*(mult_base+base), Color.BLUE));
-                            if (writeBorderTag) {
-                                borderHelper.ifPresent(h -> h.put(key, mult_total*(mult_base+base)));
-                            }
-                            map.removeAll(a);
-                            list.add(c);
-                        }
                         for (Map.Entry<Attribute, AttributeModifier> entry : item.getAttributeModifiers(s).entries()) {
                             Attribute a  = entry.getKey();
                             String name = a.getDescriptionId();
@@ -386,7 +376,7 @@ public class ClientEventsForgeBus {
                                 BigDecimal numerator = BigDecimal.valueOf(val), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
                                 val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
                             }
-                            else if (shouldMult100.test(a)) val*=100;
+                            else if (shouldMult100.test(a) && op == ADDITION) val*=100;
                             if (op == ADDITION) {
                                 c.append(writeIcon(name, true))
                                         .append(Util.withColor(translatable(name), Color.GREY))
@@ -398,6 +388,7 @@ public class ClientEventsForgeBus {
                                         .append(" ")
                                         .append(writeTooltipDouble(val+1, true, true, false, isInverseNegative.test(a), col));
                             }
+                            c.append(literal("(").append(Component.translatable("item.modifiers." + slot.getName()).append(literal(")")))).withStyle(ChatFormatting.GRAY);
                             list.add(c);
                         }
                     }

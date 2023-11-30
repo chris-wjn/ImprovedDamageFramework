@@ -187,13 +187,21 @@ public class Util {
     public static String[] sort(Multimap<Attribute, AttributeModifier> map, boolean damage) {
         //get all the requested elements in the list and put them in an array
         ArrayList<String> list = new ArrayList<>();
-        for (Attribute a : map.keySet()) {
+        /*for (Attribute a : map.keySet()) {
             if (damage? a.getDescriptionId().equals("attribute.name.generic.attack_damage") : a.getDescriptionId().equals("attribute.name.generic.armor")) {
                 list.add(a.getDescriptionId());
             }
             if (!CommonData.ELEMENTS.contains(a)) continue;
             if (damage? a.getDescriptionId().contains("damage") : a.getDescriptionId().contains("defence")) {
                 list.add(a.getDescriptionId());
+            }
+        }*/
+        for (Attribute a : map.keySet()) {
+            if (damage && CommonData.OFFENSIVE_ATTRIBUTES.contains(a)) {
+                list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+            }
+            else if (!damage && CommonData.DEFENSIVE_ATTRIBUTES.contains(a)) {
+                list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
             }
         }
         list.sort(String.CASE_INSENSITIVE_ORDER);
