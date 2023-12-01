@@ -187,6 +187,7 @@ public class Util {
     public static String[] sort(Multimap<Attribute, AttributeModifier> map, boolean damage) {
         //get all the requested elements in the list and put them in an array
         ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> elements = new ArrayList<>();
         /*for (Attribute a : map.keySet()) {
             if (damage? a.getDescriptionId().equals("attribute.name.generic.attack_damage") : a.getDescriptionId().equals("attribute.name.generic.armor")) {
                 list.add(a.getDescriptionId());
@@ -198,14 +199,18 @@ public class Util {
         }*/
         for (Attribute a : map.keySet()) {
             if (damage && CommonData.OFFENSIVE_ATTRIBUTES.contains(a)) {
-                list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                if (CommonData.ELEMENTS.contains(a)) elements.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                else list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
             }
             else if (!damage && CommonData.DEFENSIVE_ATTRIBUTES.contains(a)) {
-                list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                if (CommonData.ELEMENTS.contains(a)) elements.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                else list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
             }
         }
+        elements.sort(String.CASE_INSENSITIVE_ORDER);
         list.sort(String.CASE_INSENSITIVE_ORDER);
-        return list.toArray(new String[list.size()]);
+        elements.addAll(list);
+        return elements.toArray(new String[list.size()]);
     }
 
     //number 0-9, (), %, -, +

@@ -1,5 +1,10 @@
 {
   "minecraft:chainmail_boots": {
+    "Presets": [
+      "MEDIUM",
+      "BOOTS",
+      "HARDENED"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -12,13 +17,14 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
@@ -26,9 +32,9 @@
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
-      "Damage Class - PIERCE": -0.01,
-      "Damage Class - SLASH": -0.02,
-      "Weight": 1.5,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -39,6 +45,11 @@
     }
   },
   "minecraft:chainmail_chestplate": {
+    "Presets": [
+      "MEDIUM",
+      "CHESTPLATE",
+      "HARDENED"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -51,13 +62,14 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
@@ -65,11 +77,11 @@
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
-      "Damage Class - PIERCE": -0.06,
-      "Damage Class - SLASH": -0.09,
-      "Weight": 4.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.1
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -78,6 +90,11 @@
     }
   },
   "minecraft:chainmail_helmet": {
+    "Presets": [
+      "MEDIUM_ARMOUR",
+      "HELMET",
+      "HARDENED"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -90,13 +107,14 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
@@ -104,9 +122,9 @@
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
-      "Damage Class - PIERCE": -0.03,
-      "Damage Class - SLASH": -0.04,
-      "Weight": 2.5,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -117,6 +135,11 @@
     }
   },
   "minecraft:chainmail_leggings": {
+    "Presets": [
+      "MEDIUM_ARMOUR",
+      "LEGGINGS",
+      "HARDENED"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -129,13 +152,14 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
@@ -143,9 +167,9 @@
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
-      "Damage Class - PIERCE": -0.05,
-      "Damage Class - SLASH": -0.07,
-      "Weight": 3.0,
+      "Damage Class - PIERCE": 0.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -156,6 +180,11 @@
     }
   },
   "minecraft:diamond_boots": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "BOOTS"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -168,6 +197,7 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
@@ -181,10 +211,10 @@
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.05,
-      "Damage Class - PIERCE": -0.05,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 1.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -195,6 +225,11 @@
     }
   },
   "minecraft:diamond_chestplate": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "CHESTPLATE"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -207,6 +242,7 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
@@ -220,10 +256,10 @@
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.08,
-      "Damage Class - PIERCE": -0.08,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 3.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -234,6 +270,11 @@
     }
   },
   "minecraft:diamond_helmet": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "HELMET"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -246,6 +287,7 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
@@ -259,10 +301,10 @@
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.05,
-      "Damage Class - PIERCE": -0.05,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 1.5,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -273,6 +315,11 @@
     }
   },
   "minecraft:diamond_leggings": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "LEGGINGS"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -285,6 +332,7 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
@@ -298,10 +346,10 @@
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.07,
-      "Damage Class - PIERCE": -0.07,
+      "Damage Class - STRIKE": 0.0,
+      "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 2.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -312,7 +360,12 @@
     }
   },
   "minecraft:golden_boots": {
-    "Bonus Durability": 100,
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "BOOTS"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -324,25 +377,26 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
-      "Defence - LIGHTNING": -1.0,
-      "Defence - MAGIC": 5.0,
-      "Defence - DARK": 2.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 3.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.15
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -351,7 +405,12 @@
     }
   },
   "minecraft:golden_chestplate": {
-    "Bonus Durability": 100,
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "CHESTPLATE"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -363,25 +422,26 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
-      "Defence - LIGHTNING": -2.0,
-      "Defence - MAGIC": 7.0,
-      "Defence - DARK": 4.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 5.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.2
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -390,7 +450,12 @@
     }
   },
   "minecraft:golden_helmet": {
-    "Bonus Durability": 100,
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "HELMET"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -402,25 +467,26 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
-      "Defence - LIGHTNING": -1.0,
-      "Defence - MAGIC": 5.5,
-      "Defence - DARK": 2.5,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 3.5,
+      "Weight": 0.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.1
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -429,7 +495,12 @@
     }
   },
   "minecraft:golden_leggings": {
-    "Bonus Durability": 100,
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "DENSE",
+      "LEGGINGS"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -441,25 +512,26 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
-      "Defence - LIGHTNING": -1.5,
-      "Defence - MAGIC": 6.0,
-      "Defence - DARK": 3.0,
+      "Defence - LIGHTNING": 0.0,
+      "Defence - MAGIC": 0.0,
+      "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 4.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.15
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -468,7 +540,12 @@
     }
   },
   "minecraft:iron_boots": {
-    "Bonus Durability": 200,
+    "Presets": [
+      "MEDIUM_ARMOUR",
+      "PLATED",
+      "BOOTS"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -480,14 +557,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 3.0,
-      "Defence - FIRE": -1.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -495,10 +573,10 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.02,
+      "Damage Class - SLASH": 0.0,
       "Weight": 2.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.05
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -507,7 +585,12 @@
     }
   },
   "minecraft:iron_chestplate": {
-    "Bonus Durability": 200,
+    "Presets": [
+      "MEDIUM_ARMOUR",
+      "PLATED",
+      "CHESTPLATE"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -519,14 +602,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 3.0,
-      "Defence - FIRE": -1.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -534,10 +618,10 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.08,
-      "Weight": 4.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 2.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.1
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -546,7 +630,12 @@
     }
   },
   "minecraft:iron_helmet": {
-    "Bonus Durability": 200,
+    "Presets": [
+      "MEDIUM_ARMOUR",
+      "PLATED",
+      "HELMET"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -558,14 +647,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 3.0,
-      "Defence - FIRE": -1.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -573,10 +663,10 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.04,
-      "Weight": 2.5,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 2.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.05
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -585,7 +675,12 @@
     }
   },
   "minecraft:iron_leggings": {
-    "Bonus Durability": 200,
+    "Presets": [
+      "MEDIUM_ARMOUR",
+      "PLATED",
+      "LEGGINGS"
+    ],
+    "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -597,14 +692,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 3.0,
-      "Defence - FIRE": -1.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -612,10 +708,10 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.06,
-      "Weight": 3.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 2.0,
       "Evasion": 0.0,
-      "Knockback Resistance": 0.08
+      "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
@@ -624,6 +720,11 @@
     }
   },
   "minecraft:leather_boots": {
+    "Presets": [
+      "LIGHT_ARMOUR",
+      "DENSE",
+      "BOOTS"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -636,6 +737,7 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
@@ -643,26 +745,31 @@
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
-      "Defence - FIRE": 1.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.01,
+      "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.5,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
     "Auxiliary Stats": {
       "Max Health": 0.0,
-      "Movement Speed": 0.01,
+      "Movement Speed": 0.0,
       "Luck": 0.0
     }
   },
   "minecraft:leather_chestplate": {
+    "Presets": [
+      "LIGHT_ARMOUR",
+      "DENSE",
+      "CHESTPLATE"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -675,23 +782,24 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
-      "Defence - FIRE": 1.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.02,
+      "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 1.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -702,6 +810,11 @@
     }
   },
   "minecraft:leather_helmet": {
+    "Presets": [
+      "LIGHT_ARMOUR",
+      "DENSE",
+      "HELMET"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -714,6 +827,7 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
@@ -721,16 +835,16 @@
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
-      "Defence - FIRE": 1.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
-      "Damage Class - STRIKE": -0.01,
+      "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.5,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -741,6 +855,11 @@
     }
   },
   "minecraft:leather_leggings": {
+    "Presets": [
+      "LIGHT_ARMOUR",
+      "DENSE",
+      "LEGGINGS"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -753,14 +872,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 1.0,
-      "Defence - FIRE": 1.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -768,8 +888,8 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.02,
-      "Weight": 1.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -780,6 +900,11 @@
     }
   },
   "minecraft:netherite_boots": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "PLATED",
+      "BOOTS"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -792,14 +917,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 2.5,
-      "Defence - FIRE": 2.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -807,7 +933,7 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.02,
+      "Damage Class - SLASH": 0.0,
       "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
@@ -819,6 +945,11 @@
     }
   },
   "minecraft:netherite_chestplate": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "PLATED",
+      "CHESTPLATE"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -831,14 +962,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 3.0,
-      "Defence - FIRE": 8.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -846,8 +978,8 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.08,
-      "Weight": 2.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -858,6 +990,11 @@
     }
   },
   "minecraft:netherite_helmet": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "PLATED",
+      "HELMET"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -870,14 +1007,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 2.5,
-      "Defence - FIRE": 4.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -885,7 +1023,7 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.04,
+      "Damage Class - SLASH": 0.0,
       "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
@@ -897,6 +1035,11 @@
     }
   },
   "minecraft:netherite_leggings": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "PLATED",
+      "LEGGINGS"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -909,14 +1052,15 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 2.5,
-      "Defence - FIRE": 6.0,
+      "Defence - PHYSICAL": 0.0,
+      "Defence - FIRE": 0.0,
       "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
@@ -924,8 +1068,8 @@
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.06,
-      "Weight": 2.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -936,6 +1080,11 @@
     }
   },
   "minecraft:turtle_helmet": {
+    "Presets": [
+      "HEAVY_ARMOUR",
+      "HARDENED",
+      "HELMET"
+    ],
     "Bonus Durability": 0,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
@@ -948,23 +1097,24 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
+      "Critical Damage": 0.0,
       "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
-      "Defence - PHYSICAL": 4.0,
+      "Defence - PHYSICAL": 0.0,
       "Defence - FIRE": 0.0,
-      "Defence - WATER": 10.0,
+      "Defence - WATER": 0.0,
       "Defence - LIGHTNING": 0.0,
       "Defence - MAGIC": 0.0,
       "Defence - DARK": 0.0,
       "Defence - HOLY": 0.0,
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
-      "Damage Class - SLASH": -0.25,
-      "Weight": 3.0,
+      "Damage Class - SLASH": 0.0,
+      "Weight": 0.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },

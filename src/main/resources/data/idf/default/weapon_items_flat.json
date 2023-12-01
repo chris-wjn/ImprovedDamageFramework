@@ -1,10 +1,12 @@
 {
   "minecraft:bow": {
+    "Presets": [],
     "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": true,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 7.0,
+      "Damage - PHYSICAL": 3.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -12,9 +14,10 @@
       "Damage - DARK": 0.0,
       "Damage - HOLY": 0.0,
       "Lifesteal": 0.0,
-      "Armour Penetration": 16.0,
+      "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.0,
+      "Critical Damage": 0.0,
+      "Force": 5.0,
       "Accuracy": 10.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -41,11 +44,13 @@
     }
   },
   "minecraft:crossbow": {
+    "Presets": [],
     "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": true,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 7.0,
+      "Damage - PHYSICAL": 5.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -53,10 +58,11 @@
       "Damage - DARK": 0.0,
       "Damage - HOLY": 0.0,
       "Lifesteal": 0.0,
-      "Armour Penetration": 20.0,
+      "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.0,
-      "Accuracy": 12.0,
+      "Critical Damage": 0.0,
+      "Force": 5.0,
+      "Accuracy": 10.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
     },
@@ -82,11 +88,16 @@
     }
   },
   "minecraft:diamond_axe": {
+    "Presets": [
+      "TOOL_DIAMOND",
+      "HEAVY_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -96,9 +107,10 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 8.0,
+      "Critical Damage": 0.0,
+      "Force": 8.399999999999999,
       "Accuracy": 0.0,
-      "Knockback": 0.4,
+      "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
@@ -123,11 +135,15 @@
     }
   },
   "minecraft:diamond_hoe": {
+    "Presets": [
+      "TOOL_DIAMOND"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -137,10 +153,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.0,
+      "Critical Damage": 0.0,
+      "Force": 1.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": -2.0
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -164,11 +181,15 @@
     }
   },
   "minecraft:diamond_pickaxe": {
+    "Presets": [
+      "TOOL_DIAMOND"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 1.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -178,7 +199,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 5.0,
+      "Critical Damage": 0.0,
+      "Force": 3.9199999332427975,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -205,11 +227,15 @@
     }
   },
   "minecraft:diamond_shovel": {
+    "Presets": [
+      "TOOL_DIAMOND"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 1.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -219,7 +245,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 6.0,
+      "Critical Damage": 0.0,
+      "Force": 4.725,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -246,11 +273,16 @@
     }
   },
   "minecraft:diamond_sword": {
+    "Presets": [
+      "TOOL_DIAMOND",
+      "LIGHT_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -260,9 +292,10 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 7.0,
+      "Critical Damage": 0.0,
+      "Force": 5.040000200271606,
       "Accuracy": 0.0,
-      "Knockback": 0.3,
+      "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
@@ -287,11 +320,16 @@
     }
   },
   "minecraft:golden_axe": {
-    "Bonus Durability": 68,
+    "Presets": [
+      "TOOL_GOLD",
+      "HEAVY_WEAPON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -301,9 +339,10 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 7.5,
+      "Critical Damage": 0.0,
+      "Force": 6.299999999999999,
       "Accuracy": 0.0,
-      "Knockback": 0.2,
+      "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
@@ -328,11 +367,15 @@
     }
   },
   "minecraft:golden_hoe": {
-    "Bonus Durability": 68,
+    "Presets": [
+      "TOOL_GOLD"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -342,7 +385,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 3.0,
+      "Critical Damage": 0.0,
+      "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -369,11 +413,15 @@
     }
   },
   "minecraft:golden_pickaxe": {
-    "Bonus Durability": 68,
+    "Presets": [
+      "TOOL_GOLD"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 4.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -383,7 +431,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 3.5,
+      "Critical Damage": 0.0,
+      "Force": 0.9799999833106994,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -410,11 +459,15 @@
     }
   },
   "minecraft:golden_shovel": {
-    "Bonus Durability": 68,
+    "Presets": [
+      "TOOL_GOLD"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 4.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -424,7 +477,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 5.0,
+      "Critical Damage": 0.0,
+      "Force": 1.5749999999999997,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -451,11 +505,16 @@
     }
   },
   "minecraft:golden_sword": {
-    "Bonus Durability": 68,
+    "Presets": [
+      "TOOL_GOLD",
+      "LIGHT_WEAPON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 4.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -465,9 +524,10 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 6.0,
+      "Critical Damage": 0.0,
+      "Force": 2.520000100135803,
       "Accuracy": 0.0,
-      "Knockback": 0.1,
+      "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
@@ -492,11 +552,16 @@
     }
   },
   "minecraft:iron_axe": {
-    "Bonus Durability": 249,
+    "Presets": [
+      "TOOL_IRON",
+      "HEAVY_WEAPON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -506,10 +571,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 6.5,
+      "Critical Damage": 0.0,
+      "Force": 8.67999973297119,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -533,11 +599,15 @@
     }
   },
   "minecraft:iron_hoe": {
-    "Bonus Durability": 250,
+    "Presets": [
+      "TOOL_IRON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 4.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -547,10 +617,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 2.5,
+      "Critical Damage": 0.0,
+      "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": -0.8
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -574,11 +645,15 @@
     }
   },
   "minecraft:iron_pickaxe": {
-    "Bonus Durability": 249,
+    "Presets": [
+      "TOOL_IRON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -588,10 +663,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 3.0,
+      "Critical Damage": 0.0,
+      "Force": 2.9399999499320977,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -615,11 +691,15 @@
     }
   },
   "minecraft:iron_shovel": {
-    "Bonus Durability": 250,
+    "Presets": [
+      "TOOL_IRON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -629,10 +709,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.5,
+      "Critical Damage": 0.0,
+      "Force": 3.675,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -656,11 +737,16 @@
     }
   },
   "minecraft:iron_sword": {
-    "Bonus Durability": 250,
+    "Presets": [
+      "TOOL_IRON",
+      "LIGHT_WEAPON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 4.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -670,10 +756,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 5.0,
+      "Critical Damage": 0.0,
+      "Force": 4.200000166893005,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -697,11 +784,16 @@
     }
   },
   "minecraft:netherite_axe": {
+    "Presets": [
+      "TOOL_NETHERITE",
+      "HEAVY_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -711,10 +803,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 8.0,
+      "Critical Damage": 0.0,
+      "Force": 9.45,
       "Accuracy": 0.0,
-      "Knockback": 0.6,
-      "Attack Speed": 0.1
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -738,11 +831,15 @@
     }
   },
   "minecraft:netherite_hoe": {
+    "Presets": [
+      "TOOL_NETHERITE"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 5.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -752,10 +849,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.0,
+      "Critical Damage": 0.0,
+      "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": -1.8
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -779,11 +877,15 @@
     }
   },
   "minecraft:netherite_pickaxe": {
+    "Presets": [
+      "TOOL_NETHERITE"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -793,10 +895,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 5.0,
+      "Critical Damage": 0.0,
+      "Force": 4.899999916553497,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -820,11 +923,15 @@
     }
   },
   "minecraft:netherite_shovel": {
+    "Presets": [
+      "TOOL_NETHERITE"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -834,10 +941,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 6.0,
+      "Critical Damage": 0.0,
+      "Force": 5.7749999999999995,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -861,11 +969,16 @@
     }
   },
   "minecraft:netherite_sword": {
+    "Presets": [
+      "TOOL_NETHERITE",
+      "LIGHT_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 3.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -875,10 +988,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 7.0,
+      "Critical Damage": 0.0,
+      "Force": 5.880000233650207,
       "Accuracy": 0.0,
-      "Knockback": 0.5,
-      "Attack Speed": 0.2
+      "Knockback": 0.0,
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -902,9 +1016,14 @@
     }
   },
   "minecraft:stone_axe": {
+    "Presets": [
+      "TOOL_STONE",
+      "HEAVY_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
       "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
@@ -916,9 +1035,10 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 6.5,
+      "Critical Damage": 0.0,
+      "Force": 8.960000133514404,
       "Accuracy": 0.0,
-      "Knockback": 0.2,
+      "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
@@ -943,11 +1063,15 @@
     }
   },
   "minecraft:stone_hoe": {
+    "Presets": [
+      "TOOL_STONE"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -957,7 +1081,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 2.5,
+      "Critical Damage": 0.0,
+      "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -984,11 +1109,15 @@
     }
   },
   "minecraft:stone_pickaxe": {
+    "Presets": [
+      "TOOL_STONE"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -998,7 +1127,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 3.0,
+      "Critical Damage": 0.0,
+      "Force": 1.9599999666213987,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -1025,11 +1155,15 @@
     }
   },
   "minecraft:stone_shovel": {
+    "Presets": [
+      "TOOL_STONE"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1039,7 +1173,8 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.5,
+      "Critical Damage": 0.0,
+      "Force": 2.625,
       "Accuracy": 0.0,
       "Knockback": 0.0,
       "Attack Speed": 0.0
@@ -1066,11 +1201,16 @@
     }
   },
   "minecraft:stone_sword": {
+    "Presets": [
+      "TOOL_STONE",
+      "LIGHT_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.5,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1080,9 +1220,10 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 5.0,
+      "Critical Damage": 0.0,
+      "Force": 3.3600001335144043,
       "Accuracy": 0.0,
-      "Knockback": 0.1,
+      "Knockback": 0.0,
       "Attack Speed": 0.0
     },
     "Defense Stats": {
@@ -1107,25 +1248,30 @@
     }
   },
   "minecraft:trident": {
-    "Bonus Durability": 750,
+    "Presets": [
+      "TOOL_IRON",
+      "HEAVY_WEAPON"
+    ],
+    "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
     "Thrown?": true,
     "Offense Stats": {
-      "Damage - PHYSICAL": -4.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
-      "Damage - WATER": 6.0,
+      "Damage - WATER": 8.0,
       "Damage - LIGHTNING": 0.0,
       "Damage - MAGIC": 0.0,
       "Damage - DARK": 0.0,
       "Damage - HOLY": 0.0,
       "Lifesteal": 0.0,
-      "Armour Penetration": 25.0,
+      "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 7.5,
-      "Accuracy": 10.0,
+      "Critical Damage": 0.0,
+      "Force": 8.120000267028809,
+      "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.3
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -1149,11 +1295,16 @@
     }
   },
   "minecraft:wooden_axe": {
+    "Presets": [
+      "TOOL_WOOD",
+      "HEAVY_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1163,10 +1314,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 4.0,
+      "Critical Damage": 0.0,
+      "Force": 6.7200001001358025,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -1190,11 +1342,15 @@
     }
   },
   "minecraft:wooden_hoe": {
+    "Presets": [
+      "TOOL_WOOD"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 1.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1204,10 +1360,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 1.0,
+      "Critical Damage": 0.0,
+      "Force": 0.0,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 1.0
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -1231,11 +1388,15 @@
     }
   },
   "minecraft:wooden_pickaxe": {
+    "Presets": [
+      "TOOL_WOOD"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "pierce",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1245,10 +1406,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 2.0,
+      "Critical Damage": 0.0,
+      "Force": 0.9799999833106994,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.2
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -1272,11 +1434,15 @@
     }
   },
   "minecraft:wooden_shovel": {
+    "Presets": [
+      "TOOL_WOOD"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "strike",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1286,10 +1452,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 2.5,
+      "Critical Damage": 0.0,
+      "Force": 1.5749999999999997,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.5
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,
@@ -1313,11 +1480,16 @@
     }
   },
   "minecraft:wooden_sword": {
+    "Presets": [
+      "TOOL_WOOD",
+      "LIGHT_WEAPON"
+    ],
     "Bonus Durability": 0,
     "Damage Class": "slash",
     "Ranged?": false,
+    "Thrown?": false,
     "Offense Stats": {
-      "Damage - PHYSICAL": 2.0,
+      "Damage - PHYSICAL": 0.0,
       "Damage - FIRE": 0.0,
       "Damage - WATER": 0.0,
       "Damage - LIGHTNING": 0.0,
@@ -1327,10 +1499,11 @@
       "Lifesteal": 0.0,
       "Armour Penetration": 0.0,
       "Critical Chance": 0.0,
-      "Force": 3.0,
+      "Critical Damage": 0.0,
+      "Force": 2.520000100135803,
       "Accuracy": 0.0,
       "Knockback": 0.0,
-      "Attack Speed": 0.4
+      "Attack Speed": 0.0
     },
     "Defense Stats": {
       "Defence - PHYSICAL": 0.0,

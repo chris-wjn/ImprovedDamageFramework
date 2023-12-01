@@ -3,6 +3,7 @@ package net.cwjn.idf.mixin;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.DamageHandler;
 import net.cwjn.idf.damage.IDFInterface;
@@ -110,7 +111,7 @@ public class MixinLivingEntity {
             boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
             for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
                 if (OFFENSIVE_ATTRIBUTES.contains(entry.getKey())) {
-                    if (isRanged) continue;
+                    if (isRanged && entry.getKey() != IDFAttributes.ACCURACY.get()) continue;
                     if (entry.getKey() == Attributes.ATTACK_SPEED) {
                         Collection<AttributeModifier> mods = oldMap.get(entry.getKey());
                         final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
