@@ -169,6 +169,10 @@ public class MixinPlayer {
         return instance.hurt(new IDFEntityDamageSource("player", thisPlayer, ratio*fd, ratio*wd, ratio*ld, ratio*md, ratio*dd, ratio*hd, pen, lifesteal, knockback, force,
                 damageClass), ratio*ad);
     }
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V", ordinal = 1))
+    private void removeSweepKnockback(LivingEntity instance, double strength, double x, double z) {
+
+    }
 
     /**
      * makes vanilla variable not store knockback from attribute and enchantment. Sprint knockback will still apply.

@@ -112,6 +112,11 @@
         "Attribute": "idf:force",
         "Operation": "MULTIPLY_BASE",
         "Amount": 0.1
+      },
+      {
+        "Attribute": "minecraft:generic.attack_knockback",
+        "Operation": "ADDITION",
+        "Amount": 0.4
       }
     ]
   },

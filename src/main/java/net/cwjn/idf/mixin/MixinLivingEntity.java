@@ -236,7 +236,6 @@ public class MixinLivingEntity {
 
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("HEAD"))
     private void maxhealthfix$readAdditionalSaveData(CompoundTag tag, CallbackInfo callback) {
-        if (!(thisLivingEntity instanceof Player)) return;
         if (tag.contains("Health", Tag.TAG_ANY_NUMERIC)) {
             final float savedHealth = tag.getFloat("Health");
             if (savedHealth > this.getMaxHealth() && savedHealth > 0) {
@@ -247,9 +246,10 @@ public class MixinLivingEntity {
 
     @Inject(method = "detectEquipmentUpdates()V", at = @At("RETURN"))
     private void maxhealthfix$detectEquipmentUpdates(CallbackInfo callback) {
-        if (!(thisLivingEntity instanceof Player)) return;
-        if (actualHealth != null && actualHealth > 0 && actualHealth > this.getHealth()) {
-            this.setHealth(actualHealth);
+        if (actualHealth != null) {
+            if (actualHealth > 0 && actualHealth > this.getHealth()) {
+                this.setHealth(actualHealth);
+            }
             actualHealth = null;
         }
     }

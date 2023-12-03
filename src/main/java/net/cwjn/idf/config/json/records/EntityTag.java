@@ -7,11 +7,11 @@ import net.cwjn.idf.config.json.records.subtypes.OffenseData;
 public enum EntityTag {
 
     //Size
-    TINY(OffenseData.setForce(2), DefenceData.weightAndPhysical(1, 5), AuxiliaryData.create(0, 1.1, 0)),
-    SMALL(OffenseData.setForce(3), DefenceData.weightAndPhysical(1.5, 7), AuxiliaryData.empty()),
-    MEDIUM(OffenseData.setForce(6), DefenceData.weightAndPhysical(2.5, 11), AuxiliaryData.empty()),
-    LARGE(OffenseData.setForce(7), DefenceData.weightAndPhysical(3, 14), AuxiliaryData.empty()),
-    GIANT(OffenseData.setForce(9), DefenceData.weightAndPhysical(4, 20), AuxiliaryData.create(0, 0.9, 0)),
+    TINY(OffenseData.setForce(4), DefenceData.weightAndPhysical(1, 5), AuxiliaryData.create(0, 1.1, 0)),
+    SMALL(OffenseData.setForce(5), DefenceData.weightAndPhysical(1.5, 7), AuxiliaryData.empty()),
+    MEDIUM(OffenseData.setForce(8), DefenceData.weightAndPhysical(2.5, 11), AuxiliaryData.empty()),
+    LARGE(OffenseData.setForce(9), DefenceData.weightAndPhysical(3, 14), AuxiliaryData.empty()),
+    GIANT(OffenseData.setForce(11), DefenceData.weightAndPhysical(4, 20), AuxiliaryData.create(0, 0.9, 0)),
 
     //Origin
     AETHER(OffenseData.empty(), DefenceData.resistance(-1, 0, 0, 0, 10, 0, -10, 10), AuxiliaryData.empty()),
