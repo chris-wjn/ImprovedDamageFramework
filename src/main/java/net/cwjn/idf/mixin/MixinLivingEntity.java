@@ -172,9 +172,12 @@ public class MixinLivingEntity {
             gotHit(source, hasDamage, flag);
         }
         else if (thisLivingEntity.invulnerableTime > 0) {
-            if (CommonConfig.WHITELISTED_SOURCES_NO_INVULN.get().contains(msgID) || (thisLivingEntity.invulnerableTime < 11 && CommonConfig.WHITELISTED_SOURCES_REDUCED_INVULN.get().contains(msgID))) {
+            if (CommonConfig.WHITELISTED_SOURCES_NO_INVULN.get().contains(msgID) || (thisLivingEntity.invulnerableTime < 21-CommonConfig.REDUCED_INVULN_FRAMES.get() && CommonConfig.WHITELISTED_SOURCES_REDUCED_INVULN.get().contains(msgID))) {
+                thisLivingEntity.invulnerableTime = 20;
                 this.actuallyHurt(source, val);
                 gotHit(source, hasDamage, flag);
+                thisLivingEntity.hurtDuration = 10;
+                thisLivingEntity.hurtTime = thisLivingEntity.hurtDuration;
             }
             else {
                 callback.setReturnValue(false);

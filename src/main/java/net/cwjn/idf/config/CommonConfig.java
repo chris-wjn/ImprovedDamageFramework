@@ -11,6 +11,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_SOURCES_REDUCED_INVULN;
+    public static final ForgeConfigSpec.IntValue REDUCED_INVULN_FRAMES;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> UNDODGABLE_SOURCES;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_SOURCES_NO_INVULN;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ENTITIES;
@@ -45,6 +46,9 @@ public class CommonConfig {
         WHITELISTED_SOURCES_REDUCED_INVULN = BUILDER.comment("Damage Sources that will make the target get half the regular i-frames. \n" +
                         "Takes DamageSource object's msgId field. If you don't know what that is, don't touch this.")
                 .defineList("Whitelisted reduced invulnerability sources", Arrays.asList(defaultReducedList), s -> s instanceof String);
+
+        REDUCED_INVULN_FRAMES = BUILDER.comment("How many invulnerability frames should be given on the list of reduced sources?")
+                .defineInRange("Frames", 10, 0, 20);
 
         UNDODGABLE_SOURCES = BUILDER.comment("Damage source that are undodgable.")
                 .defineList("Undodgable sources", Arrays.asList(undodgableList), s -> s instanceof String);
