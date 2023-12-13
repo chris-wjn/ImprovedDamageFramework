@@ -1,7 +1,9 @@
 package net.cwjn.idf.compat;
 
+import net.bettercombat.api.WeaponAttributes;
 import net.bettercombat.logic.WeaponRegistry;
-import net.cwjn.idf.api.event.IDFTooltipStartEvent;
+import net.cwjn.idf.api.event.IDFAttackRangeTooltip;
+import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Util;
 import net.minecraft.network.chat.Component;
@@ -16,11 +18,12 @@ public class BetterCombatCompat {
 
     public static void register() {
         MinecraftForge.EVENT_BUS.register(BetterCombatCompat.class);
+        CommonData.BETTER_COMBAT_LOADED = true;
     }
 
     @SubscribeEvent
-    public static void onItemTooltipEvent(IDFTooltipStartEvent event) {
-        var attributes = WeaponRegistry.getAttributes(event.getItem());
+    public static void addAttackRangeTooltip(IDFAttackRangeTooltip event) {
+        WeaponAttributes attributes = WeaponRegistry.getAttributes(event.getItem());
         if (attributes != null) {
             double range = attributes.attackRange();
             MutableComponent durabilityComponent = Component.empty();

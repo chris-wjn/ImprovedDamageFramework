@@ -29,6 +29,7 @@ public class CommonData {
     public static final List<Attribute> DEFENSIVE_ATTRIBUTES = new ArrayList<>(8);
     public static final List<Attribute> AUXILIARY_ATTRIBUTES = new ArrayList<>(8);
     public static Set<Attribute> ELEMENTS = new HashSet<>();
+    public static boolean BETTER_COMBAT_LOADED = false;
     public static final String EQUIPMENT_TAG = "idf.equipment";
     public static final String RANGED_TAG = "idf.ranged_weapon";
     public static final String THROWN_TAG = "idf.thrown_weapon";

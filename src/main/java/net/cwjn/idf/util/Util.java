@@ -4,7 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cwjn.idf.ImprovedDamageFramework;
-import net.cwjn.idf.api.event.IDFTooltipStartEvent;
+import net.cwjn.idf.api.event.IDFAttackRangeTooltip;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.data.CommonData;
@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -530,19 +531,33 @@ public class Util {
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("attack_speed", true))
                         .append(Util.withColor(translatable("idf.tooltip.attack_speed"), Color.GREY))
-                        .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED))), Color.HOLY_COLOUR))
+                        .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED, player, true))), Color.HOLY_COLOUR))
                 );
+                if (BETTER_COMBAT_LOADED) {
+                    IDFAttackRangeTooltip event = new IDFAttackRangeTooltip(item, player, list, true);
+                    MinecraftForge.EVENT_BUS.post(event);
+                    list = event.getList();
+                }
+                else {
+                    MutableComponent atkRange = Component.empty();
+                    list.add(atkRange
+                            .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
+                            .append(Util.writeIcon("attack_range", true))
+                            .append(Util.withColor(translatable("idf.tooltip.attack_range"), Color.GREY))
+                            .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, ForgeMod.ATTACK_RANGE.get(), player, true))), Color.HOLY_COLOUR))
+                    );
+                }
             } else {
                 MutableComponent accuracy = Component.empty();
                 list.add(accuracy
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("accuracy", true))
                         .append(Util.withColor(translatable("idf.tooltip.accuracy"), Color.GREY))
-                        .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.ACCURACY.get()))), Color.HOLY_COLOUR))
+                        .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.ACCURACY.get(), player, true))), Color.HOLY_COLOUR))
                 );
             }
             MutableComponent force = Component.empty();
-            double num = convertAndRemoveAttribute(map, IDFAttributes.FORCE.get());
+            double num = convertAndRemoveAttribute(map, IDFAttributes.FORCE.get(), player, true);
             if (num < 0) {
                 list.add(force
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
@@ -564,12 +579,9 @@ public class Util {
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("weight", true))
                     .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GREY))
-                    .append(Util.withColor(writeTooltipString(tenths.format(getAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS))), Color.HOLY_COLOUR))
+                    .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS, player, false))), Color.HOLY_COLOUR))
             );
         }
-        IDFTooltipStartEvent event = new IDFTooltipStartEvent(item, player, list, isWeapon);
-        MinecraftForge.EVENT_BUS.post(event);
-        list = event.getList();
         for (EquipmentSlot s : EquipmentSlot.values()) {
             boolean isStandardSlot = s == slot;
             Color cl;
@@ -675,17 +687,9 @@ public class Util {
         borderHelper.ifPresent(h -> item.getTag().putInt(BORDER_TAG, Util.getItemBorderType(item.getTag().getString(CommonData.WEAPON_TAG), h)));
     }
 
-    private static double getAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a) {
+    private static double convertAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a, Player player, boolean factorBase) {
         Collection<AttributeModifier> mods = map.get(a);
-        final double base = (a == Attributes.ATTACK_SPEED ? 4 : 0) + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-        double flat = base + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-        map.removeAll(a);
-        return flat;
-    }
-
-    private static double convertAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a) {
-        Collection<AttributeModifier> mods = map.get(a);
-        final double flat = (a == Attributes.ATTACK_SPEED ? 4 : 0) + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+        final double flat = (factorBase? player.getAttributeBaseValue(a) : 0) + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
         double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
         double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
         map.removeAll(a);

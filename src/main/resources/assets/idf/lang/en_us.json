@@ -264,6 +264,7 @@
   "idf.tooltip.accuracy": "Accuracy: ",
   "idf.tooltip.durability": "Durability: ",
   "idf.tooltip.attack_speed": "Atk. Speed: ",
+  "idf.tooltip.attack_range": "Atk. Range: ",
   "idf.tooltip.attribute.name.generic.attack_damage": "Physical Damage: ",
   "idf.tooltip.fire_damage": "Fire Damage: ",
   "idf.tooltip.water_damage": "Water Damage: ",

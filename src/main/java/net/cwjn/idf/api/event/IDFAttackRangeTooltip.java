@@ -7,7 +7,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
-public class IDFTooltipStartEvent extends Event {
+public class IDFAttackRangeTooltip extends Event {
 
     private final ItemStack item;
     private final Player player;
@@ -30,7 +30,7 @@ public class IDFTooltipStartEvent extends Event {
         return isWeapon;
     }
 
-    public IDFTooltipStartEvent(ItemStack item, Player player, List<Component> list, boolean isWeapon) {
+    public IDFAttackRangeTooltip(ItemStack item, Player player, List<Component> list, boolean isWeapon) {
         this.item = item;
         this.player = player;
         this.list = list;
