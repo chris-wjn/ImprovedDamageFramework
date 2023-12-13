@@ -53,6 +53,7 @@
   },
   "refmap": "idf.mixin-refmap.json",
   "client": [
-    "MixinClientTextTooltip"
+    "MixinClientTextTooltip",
+    "apothCompat.MixinAttributesLibClient"
   ]
 }

@@ -122,6 +122,9 @@ dependencies {
     implementation fg.deobf("curse.maven:terrablender-563928:4618490")
     implementation fg.deobf("maven.modrinth:artifacts:5.0.4+forge")
 
+    implementation fg.deobf("curse.maven:placebo-283644:4876369")
+    implementation fg.deobf("curse.maven:apotheosis-313970:4876447")
+
     //magic mods
     implementation fg.deobf("curse.maven:scriptor-817436:4549561")
     implementation fg.deobf("curse.maven:hexcasting-569849:4166956")
@@ -132,7 +135,7 @@ dependencies {
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
     implementation fg.deobf("curse.maven:playeranim-658587:4418149")
     implementation fg.deobf("curse.maven:pyromancer-471135:4717766")
-    compileOnly fg.deobf("maven.modrinth:better-combat:1.7.1+1.19-forge")
+    implementation fg.deobf("maven.modrinth:better-combat:1.7.1+1.19-forge")
 
     //rubidium and oculus
     implementation fg.deobf("curse.maven:oculus-581495:4578731")
