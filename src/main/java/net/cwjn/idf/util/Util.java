@@ -537,6 +537,7 @@ public class Util {
                     IDFAttackRangeTooltip event = new IDFAttackRangeTooltip(item, player, list, true);
                     MinecraftForge.EVENT_BUS.post(event);
                     list = event.getList();
+                    map.removeAll(ForgeMod.ATTACK_RANGE.get());
                 }
                 else {
                     MutableComponent atkRange = Component.empty();
@@ -689,14 +690,14 @@ public class Util {
 
     private static double convertAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a, Player player, boolean factorBase) {
         Collection<AttributeModifier> mods = map.get(a);
-        final double flat = (factorBase? player.getAttributeBaseValue(a) : 0) + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
         double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
         double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
         map.removeAll(a);
         if (f1 >= 0) {
-            return f1 * f2;
+            return (f1 + (factorBase? player.getAttributeBaseValue(a) : 0)) * f2;
         } else {
-            return f1;
+            return f1 + (factorBase? player.getAttributeBaseValue(a) : 0);
         }
     }
 
