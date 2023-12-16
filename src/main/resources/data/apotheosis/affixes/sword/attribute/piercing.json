@@ -1,0 +1,40 @@
+{
+  "type": "apotheosis:attribute",
+  "attribute": "idf:penetrating",
+  "operation": "ADDITION",
+  "values": {
+    "common": {
+      "min": 5,
+      "steps": 4,
+      "step": 1
+    },
+    "uncommon": {
+      "min": 7,
+      "steps": 4,
+      "step": 1
+    },
+    "rare": {
+      "min": 9,
+      "steps": 8,
+      "step": 1
+    },
+    "epic": {
+      "min": 11,
+      "steps": 12,
+      "step": 1
+    },
+    "mythic": {
+      "min": 13,
+      "steps": 12,
+      "step": 1
+    },
+    "ancient": {
+      "min": 15,
+      "steps": 12,
+      "step": 1
+    }
+  },
+  "types": [
+    "sword", "trident"
+  ]
+}
