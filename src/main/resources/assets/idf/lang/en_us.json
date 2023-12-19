@@ -293,6 +293,13 @@
   "idf.irons_spellbook.holy_damage_tooltip": "%s Holy Damage",
   "idf.irons_spellbook.physical_damage_tooltip": "%s Physical Damage",
   "idf.AOE.text": "(AOE)",
-  "idf.not_applicable": "N/A"
+  "idf.not_applicable": "N/A",
+  "idf.hold_shift_for_tooltips": "(Hold Shift for Other Slot Modifiers)",
+  "idf.itemslot.mainhand": "When in Main Hand",
+  "idf.itemslot.offhand": "When in Offhand",
+  "idf.itemslot.feet": "When on Feet",
+  "idf.itemslot.legs": "When on Legs",
+  "idf.itemslot.chest": "When on Chest",
+  "idf.itemslot.head": "When on Head"
 }
 

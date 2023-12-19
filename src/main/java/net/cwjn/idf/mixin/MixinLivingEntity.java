@@ -21,7 +21,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.objectweb.asm.Opcodes;
@@ -167,7 +166,7 @@ public class MixinLivingEntity {
     private void injectOverrideLogic(DamageSource source, float val, CallbackInfoReturnable<Boolean> callback, float f, boolean flag, float f1, boolean flag1) {
         String msgID = source.getMsgId();
         boolean hasDamage = source instanceof IDFInterface? ((IDFInterface) source).hasDamage() || val > 0 : val > 0;
-        if (source.getEntity() instanceof Player) {
+        if (source.msgId.equals("player")) {
             this.actuallyHurt(source, val);
             gotHit(source, hasDamage, flag);
         }

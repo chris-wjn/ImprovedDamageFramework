@@ -36,6 +36,9 @@
   },
   "types": [
     "sword",
+    "trident",
+    "bow",
+    "crossbow",
     "trident"
   ]
 }

@@ -4,41 +4,37 @@
   "operation": "ADDITION",
   "values": {
     "common": {
-      "min": 10,
+      "min": 20,
       "steps": 10,
       "step": 1
     },
     "uncommon": {
-      "min": 10,
+      "min": 20,
       "steps": 10,
       "step": 1
     },
     "rare": {
-      "min": 10,
-      "steps": 10,
+      "min": 20,
+      "steps": 15,
       "step": 1
     },
     "epic": {
-      "min": 15,
-      "steps": 10,
+      "min": 20,
+      "steps": 15,
       "step": 1
     },
     "mythic": {
-      "min": 20,
-      "steps": 10,
+      "min": 25,
+      "steps": 15,
       "step": 1
     },
     "ancient": {
-      "min": 20,
-      "steps": 20,
+      "min": 30,
+      "steps": 15,
       "step": 1
     }
   },
   "types": [
-    "sword",
-    "trident",
-    "bow",
-    "crossbow",
-    "trident"
+    "heavy_weapon"
   ]
 }

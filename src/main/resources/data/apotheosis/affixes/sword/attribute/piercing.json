@@ -35,6 +35,10 @@
     }
   },
   "types": [
-    "sword", "trident"
+    "sword",
+    "trident",
+    "bow",
+    "crossbow",
+    "trident"
   ]
 }

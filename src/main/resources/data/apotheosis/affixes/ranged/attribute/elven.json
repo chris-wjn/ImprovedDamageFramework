@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "idf:holy_damage",
+  "attribute": "minecraft:generic.attack_damage",
   "operation": "ADDITION",
   "values": {
     "common": {
@@ -35,8 +35,6 @@
     }
   },
   "types": [
-    "sword",
-    "trident",
     "bow",
     "crossbow",
     "trident"

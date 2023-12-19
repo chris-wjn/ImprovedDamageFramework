@@ -10,6 +10,7 @@ import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.data.CommonData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -512,15 +513,16 @@ public class Util {
             list.add(durabilityComponent
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("durability", true))
-                    .append(Util.withColor(translatable("idf.tooltip.durability"), Color.GREY)
+                    .append(translatable("idf.tooltip.durability").withStyle(ChatFormatting.GRAY)
                             .append(Util.withColor(writeTooltipString(String.valueOf(currentDurability)), colour))
                     ));
-        } else {
+        }
+        else {
             MutableComponent durabilityComponent = Component.empty();
             list.add(durabilityComponent
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("durability", true))
-                    .append(Util.withColor(translation("idf.tooltip.durability"), Color.GREY)
+                    .append(translatable("idf.tooltip.durability").withStyle(ChatFormatting.GRAY)
                             .append(withColor(translation("idf.icon.infinity.symbol"), Color.DARKSEAGREEN))
                     ));
         }
@@ -530,7 +532,7 @@ public class Util {
                 list.add(atkSpeed
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("attack_speed", true))
-                        .append(Util.withColor(translatable("idf.tooltip.attack_speed"), Color.GREY))
+                        .append(Util.withColor(translatable("idf.tooltip.attack_speed"), ChatFormatting.GRAY.getColor()))
                         .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED, player, true))), Color.HOLY_COLOUR))
                 );
                 if (BETTER_COMBAT_LOADED) {
@@ -544,7 +546,7 @@ public class Util {
                     list.add(atkRange
                             .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                             .append(Util.writeIcon("attack_range", true))
-                            .append(Util.withColor(translatable("idf.tooltip.attack_range"), Color.GREY))
+                            .append(Util.withColor(translatable("idf.tooltip.attack_range"), ChatFormatting.GRAY.getColor()))
                             .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, ForgeMod.ATTACK_RANGE.get(), player, true))), Color.HOLY_COLOUR))
                     );
                 }
@@ -553,7 +555,7 @@ public class Util {
                 list.add(accuracy
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("accuracy", true))
-                        .append(Util.withColor(translatable("idf.tooltip.accuracy"), Color.GREY))
+                        .append(Util.withColor(translatable("idf.tooltip.accuracy"), ChatFormatting.GRAY.getColor()))
                         .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, IDFAttributes.ACCURACY.get(), player, true))), Color.HOLY_COLOUR))
                 );
             }
@@ -563,23 +565,24 @@ public class Util {
                 list.add(force
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("force", true))
-                        .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
+                        .append(Util.withColor(translatable("idf.tooltip.force"), ChatFormatting.GRAY.getColor()))
                         .append(Util.withColor(Util.writeTooltipString("N/A"), Color.LIGHTGREY))
                 );
             } else {
                 list.add(force
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("force", true))
-                        .append(Util.withColor(translatable("idf.tooltip.force"), Color.GREY))
+                        .append(Util.withColor(translatable("idf.tooltip.force"), ChatFormatting.GRAY.getColor()))
                         .append(Util.withColor(writeTooltipString(tenths.format(num)), Color.HOLY_COLOUR))
                 );
             }
-        } else {
+        }
+        else {
             MutableComponent weight = Component.empty();
             list.add(weight
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("weight", true))
-                    .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GREY))
+                    .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GRAY))
                     .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS, player, false))), Color.HOLY_COLOUR))
             );
         }
@@ -601,14 +604,14 @@ public class Util {
                     c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
                     if (ELEMENTS.contains(a)) {
                         c.append(writeIcon(name, true))
-                                .append(Util.withColor(translation(name), Color.GREY))
+                                .append(translatable(name).withStyle(ChatFormatting.GRAY))
                                 .append(" ")
                                 .append(writeDamageTooltip((player.getAttributeBaseValue(a) + base + mult_base) * mult_total, cl));
                     } else {
                         double val = (base + mult_base) * mult_total;
                         if (shouldMult100.test(a)) val *= 100;
                         c.append(writeIcon(name, true))
-                                .append(Util.withColor(translatable(name), Color.GREY))
+                                .append(translatable(name).withStyle(ChatFormatting.GRAY))
                                 .append(" ")
                                 .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), cl));
                     }
@@ -639,49 +642,59 @@ public class Util {
                     if (shouldMult100.test(a) && op == ADDITION) val *= 100;
                     if (op == ADDITION) {
                         c.append(writeIcon(name, true))
-                                .append(Util.withColor(translatable(name), Color.GREY))
+                                .append(translatable(name).withStyle(ChatFormatting.GRAY))
                                 .append(" ")
                                 .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), col));
                     } else {
                         c.append(writeIcon(name, true))
-                                .append(Util.withColor(translatable(name), Color.GREY))
+                                .append(translatable(name).withStyle(ChatFormatting.GRAY))
                                 .append(" ")
                                 .append(writeTooltipDouble(val + 1, true, true, false, isInverseNegative.test(a), col));
                     }
                     list.add(c);
                 }
-            } else {
-                for (Map.Entry<Attribute, AttributeModifier> entry : item.getAttributeModifiers(s).entries()) {
-                    Attribute a = entry.getKey();
-                    String name = a.getDescriptionId();
-                    AttributeModifier.Operation op = entry.getValue().getOperation();
-                    Color col;
-                    MutableComponent c = Component.empty().withStyle(Style.EMPTY);
-                    c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
-                    double val = entry.getValue().getAmount();
-                    if (val == 0) continue;
-                    if (OFFENSIVE_ATTRIBUTES.contains(a)) col = LIGHTGREEN;
-                    else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
-                    else if (AUXILIARY_ATTRIBUTES.contains(a)) col = Color.GOLD;
-                    else col = Color.WHITESMOKE;
-                    if (a == Attributes.MOVEMENT_SPEED) val = Util.pBPS(val);
-                    else if (a == Attributes.ATTACK_KNOCKBACK) {
-                        BigDecimal numerator = BigDecimal.valueOf(val), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
-                        val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
-                    } else if (shouldMult100.test(a) && op == ADDITION) val *= 100;
-                    if (op == ADDITION) {
-                        c.append(writeIcon(name, true))
-                                .append(Util.withColor(translatable(name), Color.GREY))
-                                .append(" ")
-                                .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), col));
-                    } else {
-                        c.append(writeIcon(name, true))
-                                .append(Util.withColor(translatable(name), Color.GREY))
-                                .append(" ")
-                                .append(writeTooltipDouble(val + 1, true, true, false, isInverseNegative.test(a), col));
+            }
+            else {
+                if (!item.getAttributeModifiers(s).isEmpty()) {
+                    if (!Screen.hasShiftDown()) {
+                        MutableComponent c = Component.empty();
+                        c.append(Component.translatable("idf.hold_shift_for_tooltips").withStyle(ChatFormatting.GRAY));
+                        list.add(c);
                     }
-                    c.append(literal("(").append(Component.translatable("item.modifiers." + slot.getName()).append(literal(")")))).withStyle(ChatFormatting.GRAY);
-                    list.add(c);
+                    else {
+                        for (Map.Entry<Attribute, AttributeModifier> entry : item.getAttributeModifiers(s).entries()) {
+                            Attribute a = entry.getKey();
+                            String name = a.getDescriptionId();
+                            AttributeModifier.Operation op = entry.getValue().getOperation();
+                            Color col;
+                            MutableComponent c = Component.empty().withStyle(Style.EMPTY);
+                            c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
+                            double val = entry.getValue().getAmount();
+                            if (val == 0) continue;
+                            if (OFFENSIVE_ATTRIBUTES.contains(a)) col = LIGHTGREEN;
+                            else if (DEFENSIVE_ATTRIBUTES.contains(a)) col = Color.LIGHTGREEN;
+                            else if (AUXILIARY_ATTRIBUTES.contains(a)) col = Color.GOLD;
+                            else col = Color.WHITESMOKE;
+                            if (a == Attributes.MOVEMENT_SPEED) val = Util.pBPS(val);
+                            else if (a == Attributes.ATTACK_KNOCKBACK) {
+                                BigDecimal numerator = BigDecimal.valueOf(val), denominator = new BigDecimal(DEFAULT_KNOCKBACK);
+                                val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
+                            } else if (shouldMult100.test(a) && op == ADDITION) val *= 100;
+                            if (op == ADDITION) {
+                                c.append(writeIcon(name, true))
+                                        .append(translatable(name).withStyle(ChatFormatting.GRAY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), col));
+                            } else {
+                                c.append(writeIcon(name, true))
+                                        .append(translatable(name).withStyle(ChatFormatting.GRAY))
+                                        .append(" ")
+                                        .append(writeTooltipDouble(val + 1, true, true, false, isInverseNegative.test(a), col));
+                            }
+                            c.append(Util.withColor(literal(" (").append(Component.translatable("idf.itemslot." + slot.getName()).append(literal(")"))), Color.GREY));
+                            list.add(c);
+                        }
+                    }
                 }
             }
         }

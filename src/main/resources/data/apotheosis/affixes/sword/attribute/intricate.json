@@ -1,6 +1,6 @@
 {
   "type": "apotheosis:attribute",
-  "attribute": "apotheosis:crit_chance",
+  "attribute": "idf:crit_chance",
   "operation": "ADDITION",
   "values": {
     "common": {
@@ -36,6 +36,9 @@
   },
   "types": [
     "sword",
+    "trident",
+    "bow",
+    "crossbow",
     "trident"
   ]
 }
