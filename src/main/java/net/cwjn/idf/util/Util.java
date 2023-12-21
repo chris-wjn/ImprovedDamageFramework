@@ -31,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -702,16 +703,9 @@ public class Util {
     }
 
     private static double convertAndRemoveAttribute(Multimap<Attribute, AttributeModifier> map, Attribute a, Player player, boolean factorBase) {
-        Collection<AttributeModifier> mods = map.get(a);
-        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
-        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+        final double value = getCollectedModifiers(map.get(a));
         map.removeAll(a);
-        if (f1 >= 0) {
-            return (f1 + (factorBase? player.getAttributeBaseValue(a) : 0)) * f2;
-        } else {
-            return f1 + (factorBase? player.getAttributeBaseValue(a) : 0);
-        }
+        return value + (factorBase? player.getAttributeBaseValue(a) : 0);
     }
 
     private static MutableComponent writeDamageTooltip(double num, Color colour) {
@@ -731,6 +725,57 @@ public class Util {
         }
         comp.append(spacer(1));
         return (num < 0 ? comp.withStyle(ChatFormatting.RED) : Util.withColor(comp, colour));
+    }
+
+    @NotNull
+    public static Multimap<Attribute, AttributeModifier> getReworkedAttributeMap(ItemStack item, EquipmentSlot slot) {
+        Multimap<Attribute, AttributeModifier> newMap = HashMultimap.create();
+        Multimap<Attribute, AttributeModifier> oldMap = item.getAttributeModifiers(slot);
+        if (!item.hasTag() || !item.getTag().contains(EQUIPMENT_TAG)) {
+            return oldMap;
+        }
+        if (!item.getTag().contains(WEAPON_TAG)) { //armour case
+            for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
+                if (DEFENSIVE_ATTRIBUTES.contains(entry.getKey())) {
+                    newMap.put(
+                            entry.getKey(),
+                            new AttributeModifier(
+                                    Util.UUID_STAT_CONVERSION[slot.getIndex()],
+                                    "conversion",
+                                    getCollectedModifiers(oldMap.get(entry.getKey())),
+                                    ADDITION));
+                } else {
+                    newMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        else { //weapon case
+            boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
+            for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
+                if (OFFENSIVE_ATTRIBUTES.contains(entry.getKey())) {
+                    if (isRanged && entry.getKey() != IDFAttributes.ACCURACY.get()) continue;
+                    newMap.put(
+                            entry.getKey(),
+                            new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()],
+                            "conversion",
+                                    getCollectedModifiers(oldMap.get(entry.getKey())),
+                                    ADDITION));
+                } else {
+                    newMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+        return newMap;
+    }
+
+    private static double getCollectedModifiers(Collection<AttributeModifier> mods) {
+        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+        if (f1 < 0.0) {
+            return f1 * (1/f2);
+        }
+        else return f1 * f2;
     }
 
 }

@@ -6,6 +6,7 @@ import net.cwjn.idf.api.event.IDFAttackRangeTooltip;
 import net.cwjn.idf.data.CommonData;
 import net.cwjn.idf.util.Color;
 import net.cwjn.idf.util.Util;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,7 +31,7 @@ public class BetterCombatCompat {
             event.getList().add(durabilityComponent
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("attack_range", true))
-                    .append(withColor(translation("attribute.name.generic.attack_range"), Color.GREY)
+                    .append(withColor(translation("attribute.name.generic.attack_range"), ChatFormatting.GRAY.getColor())
                     .append(" ")
                             .append(Util.withColor(writeTooltipString(String.valueOf(range)), Color.HOLY_COLOUR))
                     ));
