@@ -249,13 +249,6 @@ public class Util {
         return elements.toArray(new String[list.size()]);
     }
 
-    public static double getAttributeAmount(Collection<AttributeModifier> mods) {
-        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
-        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
-        return f1 * f2;
-    }
-
     /*
         Following 2 methods written by mickelus, author of MUtil, Tetra, and Scroll of Harvest. The GOAT, as they say.
      */
@@ -583,7 +576,7 @@ public class Util {
             list.add(weight
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("weight", true))
-                    .append(Util.withColor(translatable("idf.tooltip.weight"), Color.GRAY))
+                    .append(Util.withColor(translatable("idf.tooltip.weight"), ChatFormatting.GRAY.getColor()))
                     .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ARMOR_TOUGHNESS, player, false))), Color.HOLY_COLOUR))
             );
         }
@@ -768,7 +761,7 @@ public class Util {
         return newMap;
     }
 
-    private static double getCollectedModifiers(Collection<AttributeModifier> mods) {
+    public static double getCollectedModifiers(Collection<AttributeModifier> mods) {
         final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
         double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
         double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);

@@ -28,7 +28,7 @@ public abstract class MixinProjectile {
             }
             else {
                 return instance.triangle(pMin, pMax * (10 / Math.max(
-                        Util.getAttributeAmount(livingEntity.getOffhandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(IDFAttributes.ACCURACY.get())), 1)));
+                        Util.getCollectedModifiers(livingEntity.getOffhandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(IDFAttributes.ACCURACY.get())), 1)));
             }
         }
         else return instance.triangle(pMin, pMax);

@@ -37,7 +37,8 @@ public class IDFMixinPlugin implements IMixinConfigPlugin {
         else if (mixinClassName.equals("net.cwjn.idf.mixin.artifactCompat.MixinLivingEntity")) {
             return FMLLoader.getLoadingModList().getModFileById("artifacts")!=null;
         }
-        else if (mixinClassName.equals("net.cwjn.idf.mixin.apothCompat.MixinPlayerAttackHelper")) {
+        else if (mixinClassName.equals("net.cwjn.idf.mixin.apothCompat.MixinAttributesLibClient") ||
+                 mixinClassName.equals("net.cwjn.idf.mixin.apothCompat.MixinApothAttributeEvent")) {
             return FMLLoader.getLoadingModList().getModFileById("apotheosis")!=null;
         }
         else {

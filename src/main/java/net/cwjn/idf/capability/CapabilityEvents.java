@@ -31,7 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static net.cwjn.idf.attribute.IDFElement.*;
-import static net.cwjn.idf.util.Util.getAttributeAmount;
+import static net.cwjn.idf.util.Util.getCollectedModifiers;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID)
 public class CapabilityEvents {
@@ -83,18 +83,18 @@ public class CapabilityEvents {
         if (item.hasTag() && item.getTag().getBoolean(CommonData.RANGED_TAG)) {
             Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item));
             entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                h.setFire((float) (getAttributeAmount(map.get(FIRE.damage)) + (isMainHandUse? entity.getAttributeValue(FIRE.damage):0)));
-                h.setWater((float) (getAttributeAmount(map.get(WATER.damage)) + (isMainHandUse? entity.getAttributeValue(WATER.damage):0)));
-                h.setLightning((float) (getAttributeAmount(map.get(LIGHTNING.damage)) + (isMainHandUse? entity.getAttributeValue(LIGHTNING.damage):0)));
-                h.setMagic((float) (getAttributeAmount(map.get(MAGIC.damage)) + (isMainHandUse? entity.getAttributeValue(MAGIC.damage):0)));
-                h.setDark((float) (getAttributeAmount(map.get(DARK.damage)) + (isMainHandUse? entity.getAttributeValue(DARK.damage):0)));
-                h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + (isMainHandUse? entity.getAttributeValue(HOLY.damage):0)));
-                h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + (isMainHandUse? entity.getAttributeValue(Attributes.ATTACK_DAMAGE):0)));
-                h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.PENETRATING.get()):0)));
-                h.setCrit(((getAttributeAmount(map.get(IDFAttributes.CRIT_CHANCE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()):0))*0.01 > entity.getRandom().nextDouble()) && entity instanceof Player);
-                h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()):0)));
-                h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()):0)));
-                h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.FORCE.get()):0)));
+                h.setFire((float) (getCollectedModifiers(map.get(FIRE.damage)) + (isMainHandUse? entity.getAttributeValue(FIRE.damage):0)));
+                h.setWater((float) (getCollectedModifiers(map.get(WATER.damage)) + (isMainHandUse? entity.getAttributeValue(WATER.damage):0)));
+                h.setLightning((float) (getCollectedModifiers(map.get(LIGHTNING.damage)) + (isMainHandUse? entity.getAttributeValue(LIGHTNING.damage):0)));
+                h.setMagic((float) (getCollectedModifiers(map.get(MAGIC.damage)) + (isMainHandUse? entity.getAttributeValue(MAGIC.damage):0)));
+                h.setDark((float) (getCollectedModifiers(map.get(DARK.damage)) + (isMainHandUse? entity.getAttributeValue(DARK.damage):0)));
+                h.setHoly((float) (getCollectedModifiers(map.get(HOLY.damage)) + (isMainHandUse? entity.getAttributeValue(HOLY.damage):0)));
+                h.setPhys((float) (getCollectedModifiers(map.get(Attributes.ATTACK_DAMAGE)) + (isMainHandUse? entity.getAttributeValue(Attributes.ATTACK_DAMAGE):0)));
+                h.setPen((float) (getCollectedModifiers(map.get(IDFAttributes.PENETRATING.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.PENETRATING.get()):0)));
+                h.setCrit(((getCollectedModifiers(map.get(IDFAttributes.CRIT_CHANCE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.CRIT_CHANCE.get()):0))*0.01 > entity.getRandom().nextDouble()) && entity instanceof Player);
+                h.setCritDmg((float) (getCollectedModifiers(map.get(IDFAttributes.CRIT_DAMAGE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get()):0)));
+                h.setLifesteal((float) (getCollectedModifiers(map.get(IDFAttributes.LIFESTEAL.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.LIFESTEAL.get()):0)));
+                h.setWeight((float) (getCollectedModifiers(map.get(IDFAttributes.FORCE.get())) + (isMainHandUse? entity.getAttributeValue(IDFAttributes.FORCE.get()):0)));
                 h.setDamageClass(item.hasTag() ?
                         item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
             });
@@ -128,18 +128,18 @@ public class CapabilityEvents {
                 if (item.getTag().getBoolean(CommonData.RANGED_TAG)) {
                     Multimap<Attribute, AttributeModifier> map = item.getAttributeModifiers(LivingEntity.getEquipmentSlotForItem(item));
                     entity.getCapability(ArrowHelperProvider.PROJECTILE_HELPER).ifPresent(h -> {
-                        h.setFire((float) (getAttributeAmount(map.get(FIRE.damage)) + entity.getAttributeValue(FIRE.damage)));
-                        h.setWater((float) (getAttributeAmount(map.get(WATER.damage)) + entity.getAttributeValue(WATER.damage)));
-                        h.setLightning((float) (getAttributeAmount(map.get(LIGHTNING.damage)) + entity.getAttributeValue(LIGHTNING.damage)));
-                        h.setMagic((float) (getAttributeAmount(map.get(MAGIC.damage)) + entity.getAttributeValue(MAGIC.damage)));
-                        h.setDark((float) (getAttributeAmount(map.get(DARK.damage)) + entity.getAttributeValue(DARK.damage)));
-                        h.setHoly((float) (getAttributeAmount(map.get(HOLY.damage)) + entity.getAttributeValue(HOLY.damage)));
-                        h.setPhys((float) (getAttributeAmount(map.get(Attributes.ATTACK_DAMAGE)) + entity.getAttributeValue(Attributes.ATTACK_DAMAGE)));
-                        h.setPen((float) (getAttributeAmount(map.get(IDFAttributes.PENETRATING.get())) + entity.getAttributeValue(IDFAttributes.PENETRATING.get())));
+                        h.setFire((float) (getCollectedModifiers(map.get(FIRE.damage)) + entity.getAttributeValue(FIRE.damage)));
+                        h.setWater((float) (getCollectedModifiers(map.get(WATER.damage)) + entity.getAttributeValue(WATER.damage)));
+                        h.setLightning((float) (getCollectedModifiers(map.get(LIGHTNING.damage)) + entity.getAttributeValue(LIGHTNING.damage)));
+                        h.setMagic((float) (getCollectedModifiers(map.get(MAGIC.damage)) + entity.getAttributeValue(MAGIC.damage)));
+                        h.setDark((float) (getCollectedModifiers(map.get(DARK.damage)) + entity.getAttributeValue(DARK.damage)));
+                        h.setHoly((float) (getCollectedModifiers(map.get(HOLY.damage)) + entity.getAttributeValue(HOLY.damage)));
+                        h.setPhys((float) (getCollectedModifiers(map.get(Attributes.ATTACK_DAMAGE)) + entity.getAttributeValue(Attributes.ATTACK_DAMAGE)));
+                        h.setPen((float) (getCollectedModifiers(map.get(IDFAttributes.PENETRATING.get())) + entity.getAttributeValue(IDFAttributes.PENETRATING.get())));
                         h.setCrit(false);
-                        h.setCritDmg((float) (getAttributeAmount(map.get(IDFAttributes.CRIT_DAMAGE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
-                        h.setLifesteal((float) (getAttributeAmount(map.get(IDFAttributes.LIFESTEAL.get())) + entity.getAttributeValue(IDFAttributes.LIFESTEAL.get())));
-                        h.setWeight((float) (getAttributeAmount(map.get(IDFAttributes.FORCE.get())) + entity.getAttributeValue(IDFAttributes.FORCE.get())));
+                        h.setCritDmg((float) (getCollectedModifiers(map.get(IDFAttributes.CRIT_DAMAGE.get())) + entity.getAttributeValue(IDFAttributes.CRIT_DAMAGE.get())));
+                        h.setLifesteal((float) (getCollectedModifiers(map.get(IDFAttributes.LIFESTEAL.get())) + entity.getAttributeValue(IDFAttributes.LIFESTEAL.get())));
+                        h.setWeight((float) (getCollectedModifiers(map.get(IDFAttributes.FORCE.get())) + entity.getAttributeValue(IDFAttributes.FORCE.get())));
                         h.setDamageClass(item.hasTag() ?
                                 item.getTag().contains("idf.damage_class") ? item.getTag().getString("idf.damage_class") : "pierce" : "pierce");
                     });

@@ -55,10 +55,12 @@ public class IDFAttributes {
         AccessRangedAttribute mixinArmour = (AccessRangedAttribute) Attributes.ARMOR;
         AccessRangedAttribute mixinDefense = (AccessRangedAttribute) Attributes.ARMOR_TOUGHNESS;
         AccessRangedAttribute mixinHealth = (AccessRangedAttribute) Attributes.MAX_HEALTH;
+        AccessRangedAttribute mixinAttackSpeed = (AccessRangedAttribute) Attributes.ATTACK_SPEED;
         mixinHealth.setMax(Double.MAX_VALUE);
         mixinArmour.setMax(Double.MAX_VALUE);
         mixinArmour.setMin(-Double.MAX_VALUE);
         mixinDefense.setMax(Double.MAX_VALUE);
+        mixinAttackSpeed.setMin(0.1);
     }
 
 }

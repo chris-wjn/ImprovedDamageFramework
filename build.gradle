@@ -19,7 +19,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.3.4-1.19.2'
+version = '0.3.5-1.19.2'
 group = 'net.cwjn.idf' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'idf'
 
@@ -101,7 +101,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.3.0'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.3.2'
 
     //STAPLES
     // compile against the JEI API but do not include it at runtime

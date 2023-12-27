@@ -1,7 +1,7 @@
 {
   "minecraft:chainmail_boots": {
     "Presets": [
-      "MEDIUM",
+      "MEDIUM_ARMOUR",
       "BOOTS",
       "HARDENED"
     ],
@@ -34,7 +34,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.5,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -46,7 +46,7 @@
   },
   "minecraft:chainmail_chestplate": {
     "Presets": [
-      "MEDIUM",
+      "MEDIUM_ARMOUR",
       "CHESTPLATE",
       "HARDENED"
     ],
@@ -79,7 +79,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.5,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -124,7 +124,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.5,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -169,7 +169,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.5,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -394,7 +394,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.75,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -439,7 +439,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.75,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -484,7 +484,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.75,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -529,7 +529,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.75,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -754,7 +754,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -799,7 +799,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -844,7 +844,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },
@@ -889,7 +889,7 @@
       "Damage Class - STRIKE": 0.0,
       "Damage Class - PIERCE": 0.0,
       "Damage Class - SLASH": 0.0,
-      "Weight": 0.0,
+      "Weight": 1.0,
       "Evasion": 0.0,
       "Knockback Resistance": 0.0
     },

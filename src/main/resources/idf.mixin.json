@@ -12,6 +12,7 @@
     "MixinPlayer",
     "MixinProjectile",
     "MixinThrownTrident",
+    "apothCompat.MixinApothAttributeEvents",
     "artifactCompat.MixinLivingEntity",
     "bettercombat.MixinPlayerAttackHelper",
     "damage.MixinAxolotl",
