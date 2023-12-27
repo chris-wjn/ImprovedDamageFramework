@@ -10,7 +10,7 @@ import shadows.apotheosis.core.attributeslib.impl.AttributeEvents;
 @Mixin(AttributeEvents.class)
 public class MixinApothAttributeEvents {
 
-    @Inject(method = "apothCriticalStrike", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "apothCriticalStrike", at = @At("HEAD"), cancellable = true, remap = false)
     public void removeApothCrit(LivingHurtEvent e, CallbackInfo ci) {
         ci.cancel();
     }
