@@ -3,7 +3,7 @@ package net.cwjn.idf.data;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
-import net.cwjn.idf.config.json.records.*;
+import net.cwjn.idf.config.json.config_data.ItemDataHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,13 +14,7 @@ import static net.cwjn.idf.attribute.IDFAttributes.*;
 
 public class CommonData {
 
-    public static Map<ResourceLocation, ArmourData> LOGICAL_ARMOUR_MAP_FLAT = new HashMap<>();
-    public static Map<ResourceLocation, ItemData> LOGICAL_ARMOUR_MAP_MULT = new HashMap<>();
-    public static Map<ResourceLocation, WeaponData> LOGICAL_WEAPON_MAP_FLAT = new HashMap<>();
-    public static Map<ResourceLocation, ItemData> LOGICAL_WEAPON_MAP_MULT = new HashMap<>();
-    public static Map<ResourceLocation, EntityData> LOGICAL_ENTITY_MAP = new HashMap<>();
-    public static Map<String, SourceCatcherData> LOGICAL_SOURCE_MAP = new HashMap<>();
-    public static Map<String, PresetData> LOGICAL_PRESET_MAP = new HashMap<>();
+    public static List<ItemDataHolder> ITEM_DATA = new ArrayList<>();
     public static List<ResourceLocation> COMPAT_ITEMS = new ArrayList<>();
     public static List<String> COMPAT_MODS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
