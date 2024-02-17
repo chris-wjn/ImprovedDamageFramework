@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import oshi.util.tuples.Pair;
 
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +43,7 @@ public class BestiaryEntryScreen extends Screen {
     private final EntityType<?> type;
     private LivingEntity entity;
     private final int SCALE_FACTOR;
+    private final DecimalFormat df = new DecimalFormat("#.##");
     private static final List<Pair<Integer, Integer>> pos0 = new ArrayList<>();
     private static final List<Pair<Integer, Integer>> pos1 = new ArrayList<>();
     private static final List<Pair<Integer, Integer>> pos2 = new ArrayList<>();
@@ -112,23 +114,23 @@ public class BestiaryEntryScreen extends Screen {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, ENTITY_INFO_GUI);
         blit(matrix, infoLeft, infoTop, 62, 42, INFO_WIDTH, INFO_HEIGHT, 477, 240);
-        font.draw(matrix, Component.translatable("idf.bestiary_info.health").append(" " + entity.getAttributeValue(Attributes.MAX_HEALTH)), infoLeft+getX(0, 0), infoTop+getY(0, 0), Color.INDIANRED.getColor());
-        font.draw(matrix, Component.translatable("idf.bestiary_info.weight").append(" " + entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS)), infoLeft+getX(0,1), infoTop+getY(0,1), Color.BLACK.getColor());
+        font.draw(matrix, Component.translatable("idf.bestiary_info.health").append(" " + df.format(entity.getAttributeValue(Attributes.MAX_HEALTH))), infoLeft+getX(0, 0), infoTop+getY(0, 0), Color.INDIANRED.getColor());
+        font.draw(matrix, Component.translatable("idf.bestiary_info.weight").append(" " + df.format(entity.getAttributeValue(Attributes.ARMOR_TOUGHNESS))), infoLeft+getX(0,1), infoTop+getY(0,1), Color.BLACK.getColor());
         font.draw(matrix, Component.translatable("idf.bestiary_info.speed").append(" " + Util.mBPS(entity.getAttributeValue(Attributes.MOVEMENT_SPEED)) + "bps"), infoLeft+getX(0,2), infoTop+getY(0,2), Color.GREEN.getColor());
         int x = 2, y = 2, x1 = 0, y1 = 0, x2 = 0, y2 = 0;
         for (Attribute a : AUXILIARY_ATTRIBUTES) {
             if (entity.getAttribute(a) != null && !a.equals(Attributes.MAX_HEALTH) && !a.equals(Attributes.MOVEMENT_SPEED)) {
-                if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(0,++x), infoTop+getY(0,++y), Color.DARKSLATEGREY.getColor());
+                if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + df.format(entity.getAttributeValue(a))), infoLeft+getX(0,++x), infoTop+getY(0,++y), Color.DARKSLATEGREY.getColor());
             }
         }
         for (Attribute a : DEFENSIVE_ATTRIBUTES) {
             if (entity.getAttribute(a) != null && !a.equals(Attributes.ARMOR_TOUGHNESS)) {
-                if (entity.getAttributeValue(a) != 0 || a == STRIKE_MULT.get() || a == PIERCE_MULT.get() || a == SLASH_MULT.get()) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(1,x1++), infoTop+getY(1,y1++), Color.DARKSLATEGREY.getColor());
+                if (entity.getAttributeValue(a) != 0 || a == STRIKE_MULT.get() || a == PIERCE_MULT.get() || a == SLASH_MULT.get()) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + df.format(entity.getAttributeValue(a))), infoLeft+getX(1,x1++), infoTop+getY(1,y1++), Color.DARKSLATEGREY.getColor());
             }
         }
         for (Attribute a : OFFENSIVE_ATTRIBUTES) {
             if (entity.getAttribute(a) != null) {
-                if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + entity.getAttributeValue(a)), infoLeft+getX(2,x2++), infoTop+getY(2,y2++), Color.DARKSLATEGREY.getColor());
+                if (entity.getAttributeValue(a) != 0) font.draw(matrix, Component.translatable("idf.bestiary_info." + a.getDescriptionId()).append(" " + df.format(entity.getAttributeValue(a))), infoLeft+getX(2,x2++), infoTop+getY(2,y2++), Color.DARKSLATEGREY.getColor());
             }
         }
         renderEntityInInventory((int) (displayLeft + DISPLAY_WIDTH*0.5), (int) ((displayTop + DISPLAY_HEIGHT*0.5) + type.getHeight() * SCALE_FACTOR *0.5), SCALE_FACTOR, (float)(width*0.5) - mouseX, (float) ((displayTop + DISPLAY_HEIGHT*0.5) - mouseY - type.getHeight()* SCALE_FACTOR * 0.5), entity);

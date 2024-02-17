@@ -118,12 +118,13 @@ dependencies {
     implementation fg.deobf("curse.maven:clothconfig-348521:4633416")
     implementation fg.deobf("curse.maven:architectuary-419699:4555749")
     implementation fg.deobf("curse.maven:smartlib-661293:4458565")
-    implementation fg.deobf("curse.maven:modonomicon-538392:4641884")
     implementation fg.deobf("curse.maven:terrablender-563928:4618490")
     implementation fg.deobf("maven.modrinth:artifacts:5.0.4+forge")
 
     implementation fg.deobf("curse.maven:placebo-283644:4876369")
     implementation fg.deobf("curse.maven:apotheosis-313970:4876447")
+
+    implementation fg.deobf("curse.maven:deeperdarker-659011:4812297")
 
     //magic mods
     implementation fg.deobf("curse.maven:scriptor-817436:4549561")
@@ -134,7 +135,6 @@ dependencies {
     implementation fg.deobf("maven.modrinth:irons-spells-n-spellbooks:1.19.2-2.0.2-forge")
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
     implementation fg.deobf("curse.maven:playeranim-658587:4418149")
-    implementation fg.deobf("curse.maven:pyromancer-471135:4717766")
     implementation fg.deobf("maven.modrinth:better-combat:1.7.1+1.19-forge")
 
     //rubidium and oculus

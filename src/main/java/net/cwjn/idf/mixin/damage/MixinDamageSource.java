@@ -2,10 +2,10 @@ package net.cwjn.idf.mixin.damage;
 
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
-import net.cwjn.idf.capability.data.AuxiliaryData;
+import net.cwjn.idf.capability.data.IDFEntityData;
 import net.cwjn.idf.capability.data.ProjectileHelper;
 import net.cwjn.idf.capability.provider.ArrowHelperProvider;
-import net.cwjn.idf.capability.provider.AuxiliaryProvider;
+import net.cwjn.idf.capability.provider.IDFEntityDataProvider;
 import net.cwjn.idf.capability.provider.TridentHelperProvider;
 import net.cwjn.idf.damage.IDFDamageSource;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
@@ -43,7 +43,7 @@ public class MixinDamageSource {
         final float lifesteal = (float) bee.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         final float weight = (float) bee.getAttributeValue(IDFAttributes.FORCE.get());
         final float knockback = (float) bee.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-        AuxiliaryData data = bee.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+        IDFEntityData data = bee.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElse(new IDFEntityData());
         return new IDFEntityDamageSource("sting", bee, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, data.getDamageClass());
     }
 
@@ -64,7 +64,7 @@ public class MixinDamageSource {
         final float lifesteal = (float) mob.getAttributeValue(IDFAttributes.LIFESTEAL.get());
         final float weight = (float) mob.getAttributeValue(IDFAttributes.FORCE.get());
         final float knockback = (float)mob.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-        AuxiliaryData data = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+        IDFEntityData data = mob.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElse(new IDFEntityData());
         return new IDFEntityDamageSource("mob", mob, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, data.getDamageClass());
     }
 
@@ -96,7 +96,7 @@ public class MixinDamageSource {
             lifesteal = (float) indirectSource.getAttributeValue(IDFAttributes.LIFESTEAL.get());
             knockback = (float) indirectSource.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
             weight = (float) indirectSource.getAttributeValue(IDFAttributes.FORCE.get());
-            AuxiliaryData data = indirectSource.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+            IDFEntityData data = indirectSource.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElse(new IDFEntityData());
             damageClass = data.getDamageClass();
         }
         return new IDFIndirectEntityDamageSource("mob", source, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, damageClass);
@@ -227,7 +227,7 @@ public class MixinDamageSource {
             final float lifesteal = (float) mob.getAttributeValue(IDFAttributes.LIFESTEAL.get());
             final float weight = (float) mob.getAttributeValue(IDFAttributes.FORCE.get());
             final float knockback = (float) mob.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-            AuxiliaryData data = mob.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(new AuxiliaryData());
+            IDFEntityData data = mob.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElse(new IDFEntityData());
             return new IDFIndirectEntityDamageSource("fireball", fireball, indirectSource, fire, water, lightning, magic, dark, holy, pen, lifesteal, knockback, weight, data.getDamageClass()).setIsFire().setProjectile();
         }
         else {

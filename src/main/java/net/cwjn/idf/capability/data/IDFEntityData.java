@@ -2,7 +2,7 @@ package net.cwjn.idf.capability.data;
 
 import net.minecraft.nbt.CompoundTag;
 
-public class AuxiliaryData {
+public class IDFEntityData {
 
     private String damageClass = "strike";
 
@@ -14,7 +14,7 @@ public class AuxiliaryData {
         damageClass = dc;
     }
 
-    public void copyFrom(AuxiliaryData source) {
+    public void copyFrom(IDFEntityData source) {
         damageClass = source.getDamageClass();
     }
 

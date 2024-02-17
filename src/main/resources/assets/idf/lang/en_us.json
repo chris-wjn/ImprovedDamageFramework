@@ -261,10 +261,10 @@
 
   "//TOOLTIPS": "",
   "idf.damage.tooltip": "Damage",
-  "idf.tooltip.accuracy": "Accuracy: ",
-  "idf.tooltip.durability": "Durability: ",
-  "idf.tooltip.attack_speed": "Atk. Speed: ",
-  "idf.tooltip.attack_range": "Atk. Range: ",
+  "idf.tooltip.accuracy": "Accuracy ",
+  "idf.tooltip.durability": "Durability ",
+  "idf.tooltip.attack_speed": "Atk. Speed ",
+  "idf.tooltip.attack_range": "Atk. Range ",
   "idf.tooltip.attribute.name.generic.attack_damage": "Physical Damage: ",
   "idf.tooltip.fire_damage": "Fire Damage: ",
   "idf.tooltip.water_damage": "Water Damage: ",
@@ -283,8 +283,8 @@
   "idf.strike_tooltip": " (Strike)",
   "idf.pierce_tooltip": " (Pierce)",
   "idf.slash_tooltip": " (Slash)",
-  "idf.tooltip.force": "Force: ",
-  "idf.tooltip.weight": "Weight: ",
+  "idf.tooltip.force": "Force ",
+  "idf.tooltip.weight": "Weight ",
   "idf.irons_spellbook.fire_damage_tooltip": "%s Fire Damage",
   "idf.irons_spellbook.water_damage_tooltip": "%s Water Damage",
   "idf.irons_spellbook.lightning_damage_tooltip": "%s Lightning Damage",
@@ -294,13 +294,16 @@
   "idf.irons_spellbook.physical_damage_tooltip": "%s Physical Damage",
   "idf.AOE.text": "(AOE)",
   "idf.not_applicable": "N/A",
-  "idf.hold_shift_for_tooltips": "(Hold Shift for Other Slot Modifiers)",
-  "idf.itemslot.mainhand": "When in Main Hand",
-  "idf.itemslot.offhand": "When in Offhand",
-  "idf.itemslot.feet": "When on Feet",
-  "idf.itemslot.legs": "When on Legs",
-  "idf.itemslot.chest": "When on Chest",
-  "idf.itemslot.head": "When on Head",
+  "idf.hold_shift_for_tooltips": "(Hold §eShift§r for other slot modifiers)",
+  "idf.tooltip.main_slot": "This item is meant for your",
+  "idf.tooltip.when_in": "When in",
+  "idf.tooltip.when_on": "When on",
+  "idf.tooltip.mainhand": "Main Hand",
+  "idf.tooltip.offhand": "Offhand",
+  "idf.tooltip.feet": "Feet",
+  "idf.tooltip.legs": "Legs",
+  "idf.tooltip.chest": "Chest",
+  "idf.tooltip.head": "Head",
 
   "attribute.name.generic.attack_damage": "Physical Damage",
   "attribute.name.generic.armor": "Physical Defence",
@@ -309,6 +312,16 @@
   "item.minecraft.tipped_arrow.effect.fire_resistance": "Arrow of Flame Immunity",
   "item.minecraft.potion.effect.fire_resistance": "Potion of Flame Immunity",
   "item.minecraft.splash_potion.effect.fire_resistance": "Splash Potion of Flame Immunity",
-  "item.minecraft.lingering_potion.effect.fire_resistance": "Lingering Potion of Flame Immunity"
+  "item.minecraft.lingering_potion.effect.fire_resistance": "Lingering Potion of Flame Immunity",
+
+  "item.apotheosis.gem.idf:heat": "Heat Gem",
+  "item.apotheosis.gem.idf:tidal": "Tidal Gem",
+  "item.apotheosis.gem.idf:crackling": "Crackling Gem",
+  "item.apotheosis.gem.idf:arcane": "Arcane Gem",
+  "item.apotheosis.gem.idf:black": "Black Gem",
+  "item.apotheosis.gem.idf:divine": "Divine Gem",
+
+  "gem_class.secondary_armor": "Helmet and Boots"
+
 }
 

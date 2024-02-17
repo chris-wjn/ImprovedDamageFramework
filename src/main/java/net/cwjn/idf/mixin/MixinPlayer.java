@@ -3,7 +3,7 @@ package net.cwjn.idf.mixin;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.api.event.OnFoodExhaustionEvent;
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.capability.provider.AuxiliaryProvider;
+import net.cwjn.idf.capability.provider.IDFEntityDataProvider;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.DamageHandler;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
@@ -113,7 +113,7 @@ public class MixinPlayer {
         this.pen = (float)thisPlayer.getAttributeValue(IDFAttributes.PENETRATING.get());
         this.force = (float)thisPlayer.getAttributeValue(IDFAttributes.FORCE.get());
         this.lifesteal = scalar > 0.9F ? (float)thisPlayer.getAttributeValue(IDFAttributes.LIFESTEAL.get()) : 0;
-        this.damageClass = thisPlayer.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
+        this.damageClass = thisPlayer.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass();
         ad *= 0.2F + scalar * scalar * 0.8F;
         fd *= 0.2F + scalar * scalar * 0.8F;
         wd *= 0.2F + scalar * scalar * 0.8F;

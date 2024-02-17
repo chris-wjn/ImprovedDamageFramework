@@ -1,6 +1,6 @@
 package net.cwjn.idf.capability.provider;
 
-import net.cwjn.idf.capability.data.AuxiliaryData;
+import net.cwjn.idf.capability.data.IDFEntityData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,25 +13,25 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AuxiliaryProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class IDFEntityDataProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    public static Capability<AuxiliaryData> AUXILIARY_DATA = CapabilityManager.get(new CapabilityToken<>() {});
-    private AuxiliaryData auxiliaryData = null;
-    private final LazyOptional<AuxiliaryData> optionalAuxiliaryData = LazyOptional.of(this::createAuxiliaryData);
+    public static Capability<IDFEntityData> ENTITY_DATA = CapabilityManager.get(new CapabilityToken<>() {});
+    private IDFEntityData IDFEntityData = null;
+    private final LazyOptional<IDFEntityData> optionalEntityData = LazyOptional.of(this::createEntityData);
 
     @Nonnull
-    private AuxiliaryData createAuxiliaryData() {
-        if (auxiliaryData == null) {
-            auxiliaryData = new AuxiliaryData();
+    private IDFEntityData createEntityData() {
+        if (IDFEntityData == null) {
+            IDFEntityData = new IDFEntityData();
         }
-        return auxiliaryData;
+        return IDFEntityData;
     }
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
-        if (cap == AUXILIARY_DATA) {
-            return optionalAuxiliaryData.cast();
+        if (cap == ENTITY_DATA) {
+            return optionalEntityData.cast();
         }
         return LazyOptional.empty();
     }
@@ -45,13 +45,13 @@ public class AuxiliaryProvider implements ICapabilityProvider, INBTSerializable<
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createAuxiliaryData().saveNBTData(nbt);
+        createEntityData().saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createAuxiliaryData().loadNBTData(nbt);
+        createEntityData().loadNBTData(nbt);
     }
 
 }

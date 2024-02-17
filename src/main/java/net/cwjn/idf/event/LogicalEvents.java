@@ -9,8 +9,10 @@ import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.command.ChangeDebugStatusCommand;
 import net.cwjn.idf.command.InfoPageCommand;
 import net.cwjn.idf.command.UnlockBestiaryCommand;
+import net.cwjn.idf.command.UpdateItemsFromConfigCommand;
 import net.cwjn.idf.config.json.records.ArmourData;
 import net.cwjn.idf.config.json.records.ItemData;
+import net.cwjn.idf.config.json.records.PresetData;
 import net.cwjn.idf.config.json.records.WeaponData;
 import net.cwjn.idf.data.BestiaryData;
 import net.cwjn.idf.data.CommonData;
@@ -33,6 +35,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -46,6 +50,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.server.command.ConfigCommand;
 
 import java.util.ArrayList;
@@ -55,20 +60,25 @@ import java.util.UUID;
 
 import static net.cwjn.idf.config.CommonConfig.*;
 import static net.cwjn.idf.data.CommonData.*;
-import static net.cwjn.idf.util.Util.UUID_BASE_STAT_ADDITION;
-import static net.cwjn.idf.util.Util.UUID_BASE_STAT_MULTIPLY_TOTAL;
+import static net.cwjn.idf.util.Util.UUIDS_BASE_STAT_ADDITION;
+import static net.cwjn.idf.util.Util.UUIDS_BASE_STAT_MULTIPLY_BASE;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_BASE;
 
 @Mod.EventBusSubscriber(modid = ImprovedDamageFramework.MOD_ID)
 public class LogicalEvents {
 
     public static boolean debugMode = false;
     private static final Random random = new Random();
+    @OnlyIn(Dist.CLIENT) private static ItemStack cache;
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void instantiateDefaultTags(ItemAttributeModifierEvent event) {
         ItemStack item = event.getItemStack();
+        if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT) {
+            if (item == cache) return;
+            else cache = item;
+        }
         if (item.getTag() != null && item.getTag().contains(COMPAT_ITEM)) {
             ResourceLocation loc = Util.getItemRegistryName(item.getItem());
             int equipmentSlot = LivingEntity.getEquipmentSlotForItem(item).getFilterFlag();
@@ -76,27 +86,47 @@ public class LogicalEvents {
                 if (LOGICAL_ARMOUR_MAP_FLAT.containsKey(loc)) {
                     ArmourData data0 = LOGICAL_ARMOUR_MAP_FLAT.get(loc);
                     ItemData data2 = LOGICAL_ARMOUR_MAP_MULT.get(loc);
+                    for (String s : data0.presets()) {
+                        PresetData preset = LOGICAL_PRESET_MAP.get(s);
+                        if (preset == null) {
+                            ImprovedDamageFramework.LOGGER.warn("Preset " + s + " does not exist!");
+                            continue;
+                        }
+                        for (PresetData.AttributeAndModifier combo : preset) {
+                            event.addModifier(combo.getAttribute(), new AttributeModifier("preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
+                        }
+                    }
                     data0.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                            event.addModifier(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
                         }
                     });
                     if (data2 != null) data2.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                            event.addModifier(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_MULTIPLY_BASE[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_BASE));
                         }
                     });
                 } else if (LOGICAL_WEAPON_MAP_FLAT.containsKey(loc)) {
                     WeaponData data01 = LOGICAL_WEAPON_MAP_FLAT.get(loc);
                     ItemData data21 = LOGICAL_WEAPON_MAP_MULT.get(loc);
+                    for (String s : data01.presets()) {
+                        PresetData preset = LOGICAL_PRESET_MAP.get(s);
+                        if (preset == null) {
+                            ImprovedDamageFramework.LOGGER.warn("Preset " + s + " does not exist!");
+                            continue;
+                        }
+                        for (PresetData.AttributeAndModifier combo : preset) {
+                            event.addModifier(combo.getAttribute(), new AttributeModifier("preset_modifier", combo.getAmount(), AttributeModifier.Operation.valueOf(combo.getOperation())));
+                        }
+                    }
                     data01.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                            event.addModifier(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
                         }
                     });
                     if (data21 != null) data21.forEach(pair -> {
                         if (pair.getB() != 0) {
-                            event.addModifier(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                            event.addModifier(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_MULTIPLY_BASE[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_BASE));
                         }
                     });
                 }
@@ -219,6 +249,7 @@ public class LogicalEvents {
         new ChangeDebugStatusCommand(event.getDispatcher());
         new InfoPageCommand(event.getDispatcher());
         new UnlockBestiaryCommand(event.getDispatcher());
+        new UpdateItemsFromConfigCommand(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
     }
 

@@ -1,7 +1,7 @@
 package net.cwjn.idf.mixin.tetra;
 
 import net.cwjn.idf.attribute.IDFAttributes;
-import net.cwjn.idf.capability.provider.AuxiliaryProvider;
+import net.cwjn.idf.capability.provider.IDFEntityDataProvider;
 import net.cwjn.idf.damage.IDFEntityDamageSource;
 import net.cwjn.idf.damage.IDFIndirectEntityDamageSource;
 import net.minecraft.sounds.SoundEvents;
@@ -61,17 +61,17 @@ public class MixinSweepingEffect {
                     ((Player)attacker).crit(target);
                 }
                 DamageSource damageSource = new IDFEntityDamageSource("player", attacker, fd*critMultiplier, wd*critMultiplier, ld*critMultiplier, md*critMultiplier, dd*critMultiplier, hd*critMultiplier, pen, lifesteal, knockback, force,
-                        attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass());
+                        attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass());
                 ItemEffectHandler.applyHitEffects(itemStack, entity, attacker);
                 EffectHelper.applyEnchantmentHitEffects(itemStack, entity, attacker);
                 causeTruesweepDamage(damageSource, damage*critMultiplier, itemStack, attacker, entity);
             } else {
                 DamageSource damageSource = attacker instanceof Player ?
                         new IDFEntityDamageSource("player", attacker, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
-                                attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
+                                attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                         :
                         new IDFIndirectEntityDamageSource("mob", attacker, entity, fd, wd, ld, md, dd, hd, pen, lifesteal, knockback, force,
-                                attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
+                                attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).isPresent() ? attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElse(null).getDamageClass() : "strike");
                 entity.hurt(damageSource, damage);
             }
 
@@ -114,10 +114,10 @@ public class MixinSweepingEffect {
             EffectHelper.applyEnchantmentHitEffects(itemStack, entity, attacker);
             DamageSource damageSource = attacker instanceof Player ?
                     new IDFEntityDamageSource("player", attacker, fd*critMultiplier, wd*critMultiplier, ld*critMultiplier, md*critMultiplier, dd*critMultiplier, hd*critMultiplier, pen, lifesteal, knockback, force,
-                            attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
+                            attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElseThrow(() -> new RuntimeException("player has no damage class!")).getDamageClass())
                     :
                     new IDFIndirectEntityDamageSource("mob", attacker, entity, fd*critMultiplier, wd*critMultiplier, ld*critMultiplier, md*critMultiplier, dd*critMultiplier, hd*critMultiplier, pen, lifesteal, knockback, force,
-                            attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).isPresent() ? attacker.getCapability(AuxiliaryProvider.AUXILIARY_DATA).orElse(null).getDamageClass() : "strike");
+                            attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).isPresent() ? attacker.getCapability(IDFEntityDataProvider.ENTITY_DATA).orElse(null).getDamageClass() : "strike");
             causeTruesweepDamage(damageSource, damage*critMultiplier, itemStack, attacker, entity);
         });
         if (triggerVfx) {

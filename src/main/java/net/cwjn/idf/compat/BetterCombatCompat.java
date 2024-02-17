@@ -31,7 +31,7 @@ public class BetterCombatCompat {
             event.getList().add(durabilityComponent
                     .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                     .append(Util.writeIcon("attack_range", true))
-                    .append(withColor(translation("attribute.name.generic.attack_range"), ChatFormatting.GRAY.getColor())
+                    .append(withColor(translation("idf.tooltip.attack_range"), ChatFormatting.GRAY.getColor())
                     .append(" ")
                             .append(Util.withColor(writeTooltipString(String.valueOf(range)), Color.HOLY_COLOUR))
                     ));

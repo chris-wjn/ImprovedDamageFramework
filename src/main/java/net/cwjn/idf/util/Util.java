@@ -46,7 +46,7 @@ import static net.cwjn.idf.data.CommonData.*;
 import static net.cwjn.idf.util.Color.LIGHTGREEN;
 import static net.minecraft.network.chat.Component.literal;
 import static net.minecraft.network.chat.Component.translatable;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.*;
 
 public class Util {
 
@@ -89,28 +89,29 @@ public class Util {
     public static final int ICON_PIXEL_SPACER = 1;
     public static final DecimalFormat tenths = new DecimalFormat("#.##");
     private static final DecimalFormat hundredFormat = new DecimalFormat("###");
-    public static final UUID[] UUID_BASE_STAT_ADDITION = {
+    public static final UUID UUID_SPEED_FROM_WEIGHT = UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F0");
+    public static final UUID[] UUIDS_BASE_STAT_ADDITION = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F7"),
             UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F0"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C6E"),
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F8"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C6F"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC6")};
-    public static final UUID[] UUID_BASE_STAT_MULTIPLY_TOTAL = {
+    public static final UUID[] UUIDS_BASE_STAT_MULTIPLY_BASE = {
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6F9"),
             UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F2"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C61"),
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FA"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C62"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC8")};
-    public static final UUID[] UUID_STAT_CONVERSION = {
-            UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FA"),
+    public static final UUID[] UUIDS_STAT_CONVERSION = {
+            UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B7FA"),
             UUID.fromString("132DB4C0-8CD5-46EE-B7A6-48CCFD11B1F3"),
-            UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C62"),
+            UUID.fromString("7D6AB740-41B9-4BDE-ADBA-BAAB28623C62"),
             UUID.fromString("55CEEB33-BEFB-41DF-BF9F-0E805BA1B6FB"),
             UUID.fromString("0D6AB740-41B9-4BDE-ADBA-BAAB28623C63"),
             UUID.fromString("BCAF7601-AC93-4705-8F3A-51CA50281AC9")};
-    public static final UUID[] UUID_IDF_CUSTOM_ITEMS = {
+    public static final UUID[] UUIDS_IDF_ITEMS = {
             UUID.fromString("3B3A2AC8-EB86-4B37-ABF1-1DF34F564F29"),
             UUID.fromString("98A3F188-6A2C-4827-90A9-FB49632A135E"),
             UUID.fromString("E57F9B5D-3D47-498A-884F-7E739E98A489"),
@@ -148,7 +149,7 @@ public class Util {
         BigDecimal d = new BigDecimal(val);
         int integralDigits = d.toBigInteger().toString().length();
         d = d.setScale(2 - integralDigits, RoundingMode.HALF_EVEN);
-        return MutableComponent.create(new LiteralContents(d.toString()));
+        return MutableComponent.create(new LiteralContents(d.toPlainString()));
     }
 
     public static void drawCenteredString(Font font, PoseStack matrix, Component component, float x, float y, int colour) {
@@ -188,19 +189,7 @@ public class Util {
     }
 
     public static int getItemBorderType(String dc, Map<String, Double> map) {
-        double f = 0, w = 0, l = 0, m = 0, d = 0, h = 0, p = 0;
-        for (Map.Entry<String, Double> entry : map.entrySet()) {
-            switch (entry.getKey()) {
-                case "fire_damage" -> f = entry.getValue();
-                case "water_damage" -> w = entry.getValue();
-                case "lightning_damage" -> l = entry.getValue();
-                case "magic_damage" -> m = entry.getValue();
-                case "dark_damage" -> d = entry.getValue();
-                case "holy_damage" -> h = entry.getValue();
-                case "physical_damage" -> p = entry.getValue();
-            }
-        }
-        double[] dv = new double[]{f, w, l, m, d, h, p};
+        double[] dv = getDoubles(map);
         int index = 6;
         double highest = 0.0D;
         for (int i = 0; i < 6; ++i) {
@@ -221,32 +210,61 @@ public class Util {
         }
     }
 
+    @NotNull
+    private static double[] getDoubles(Map<String, Double> map) {
+        double f = 0, w = 0, l = 0, m = 0, d = 0, h = 0, p = 0;
+        for (Map.Entry<String, Double> entry : map.entrySet()) {
+            switch (entry.getKey()) {
+                case "idf:fire_damage" -> f = entry.getValue();
+                case "idf:water_damage" -> w = entry.getValue();
+                case "idf:lightning_damage" -> l = entry.getValue();
+                case "idf:magic_damage" -> m = entry.getValue();
+                case "idf:dark_damage" -> d = entry.getValue();
+                case "idf:holy_damage" -> h = entry.getValue();
+                case "minecraft:generic.attack_damage" -> p = entry.getValue();
+            }
+        }
+        double[] dv = new double[]{f, w, l, m, d, h, p};
+        return dv;
+    }
+
     public static String[] sort(Multimap<Attribute, AttributeModifier> map, boolean damage) {
         //get all the requested elements in the list and put them in an array
         ArrayList<String> list = new ArrayList<>();
         ArrayList<String> elements = new ArrayList<>();
-        /*for (Attribute a : map.keySet()) {
-            if (damage? a.getDescriptionId().equals("attribute.name.generic.attack_damage") : a.getDescriptionId().equals("attribute.name.generic.armor")) {
-                list.add(a.getDescriptionId());
-            }
-            if (!CommonData.ELEMENTS.contains(a)) continue;
-            if (damage? a.getDescriptionId().contains("damage") : a.getDescriptionId().contains("defence")) {
-                list.add(a.getDescriptionId());
-            }
-        }*/
-        for (Attribute a : map.keySet()) {
-            if (damage && CommonData.OFFENSIVE_ATTRIBUTES.contains(a)) {
-                if (CommonData.ELEMENTS.contains(a)) elements.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
-                else list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
-            } else if (!damage && CommonData.DEFENSIVE_ATTRIBUTES.contains(a)) {
-                if (CommonData.ELEMENTS.contains(a)) elements.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
-                else list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+        if (damage) {
+            for (Attribute a : map.keySet()) {
+                if (CommonData.OFFENSIVE_ATTRIBUTES.contains(a)) {
+                    if (CommonData.ELEMENTS.containsKey(a)) elements.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                    else list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                }
             }
         }
-        elements.sort(String.CASE_INSENSITIVE_ORDER);
+        else {
+            for (Attribute a : map.keySet()) {
+                if (CommonData.DEFENSIVE_ATTRIBUTES.contains(a)) {
+                    if (CommonData.ELEMENTS.containsKey(a)) elements.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                    else list.add(ForgeRegistries.ATTRIBUTES.getKey(a).toString());
+                }
+            }
+        }
+        elements.sort(ELEMENT_COMPARATOR);
         list.sort(String.CASE_INSENSITIVE_ORDER);
         elements.addAll(list);
         return elements.toArray(new String[list.size()]);
+    }
+
+    private static final ElementComparator ELEMENT_COMPARATOR = new ElementComparator();
+    private static class ElementComparator implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            Attribute a1 = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryParse(o1));
+            Attribute a2 = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryParse(o2));
+            if (a1 != null && a2 != null) {
+                return ELEMENTS.get(a1).compareTo(ELEMENTS.get(a2));
+            }
+            else throw new RuntimeException("Element comparator called on non-element attribute");
+        }
     }
 
     /*
@@ -446,54 +464,13 @@ public class Util {
         return returnRL;
     }
 
-    //the ugliest method known to man
-    public static Component divider(int length, Color colour) {
-        MutableComponent c = Component.empty().withStyle(DIVIDERS);
-        int j = Math.max(1, (int) (length * 0.04));
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider1")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider2")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider3")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider4")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider5")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider6")).append(spacer(-1));
-        }
-        for (int i = 0; i < length * 0.6; i++) {
-            c.append(translatable("idf.divider7")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider6")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider5")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider4")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider3")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider2")).append(spacer(-1));
-        }
-        for (int i = 0; i < j; i++) {
-            c.append(translatable("idf.divider1")).append(spacer(-1));
-        }
-        return Util.withColor(c, colour);
-    }
-
     public static void doAttributeTooltip(ItemStack item, Player player, List<Component> list) {
         EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item);
+        MutableComponent slotComponent = Util.withColor(Component.empty(), Color.GRAY).withStyle(ChatFormatting.ITALIC);
+        slotComponent.append(translation("idf.tooltip.main_slot"));
+        slotComponent.append(" ");
+        slotComponent.append(translation("idf.tooltip." + slot.getName()));
+        list.add(slotComponent);
         Multimap<Attribute, AttributeModifier> map = HashMultimap.create(item.getAttributeModifiers(slot));
         boolean isWeapon = item.getTag().contains(WEAPON_TAG);
         boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
@@ -523,11 +500,12 @@ public class Util {
         if (isWeapon) {
             if (!isRanged) {
                 MutableComponent atkSpeed = Component.empty();
+                double val = Math.max(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED, player, true), 0.25);
                 list.add(atkSpeed
                         .append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))))
                         .append(Util.writeIcon("attack_speed", true))
                         .append(Util.withColor(translatable("idf.tooltip.attack_speed"), ChatFormatting.GRAY.getColor()))
-                        .append(Util.withColor(writeTooltipString(tenths.format(convertAndRemoveAttribute(map, Attributes.ATTACK_SPEED, player, true))), Color.HOLY_COLOUR))
+                        .append(Util.withColor(writeTooltipString(tenths.format(val)), Color.HOLY_COLOUR))
                 );
                 if (BETTER_COMBAT_LOADED) {
                     IDFAttackRangeTooltip event = new IDFAttackRangeTooltip(item, player, list, true);
@@ -593,25 +571,28 @@ public class Util {
                     Collection<AttributeModifier> mods = map.get(a);
                     final double base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
                     double mult_base = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(base)).sum();
-                    double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1, (x, y) -> x * y);
+                    double mult_total = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1, (x, y) -> x * y);
                     MutableComponent c = Component.empty();
                     c.append(Component.literal(" ").append(translatable("idf.right_arrow.symbol").append(spacer(2))));
-                    if (ELEMENTS.contains(a)) {
+                    if (ELEMENTS.containsKey(a)) {
                         c.append(writeIcon(name, true))
                                 .append(translatable(name).withStyle(ChatFormatting.GRAY))
                                 .append(" ")
                                 .append(writeDamageTooltip((player.getAttributeBaseValue(a) + base + mult_base) * mult_total, cl));
                     } else {
+                        if (base == 0) {
+                            map.removeAll(a);
+                            continue;
+                        }
                         double val = (base + mult_base) * mult_total;
                         if (shouldMult100.test(a)) val *= 100;
+                        if (val == 0) continue;
                         c.append(writeIcon(name, true))
                                 .append(translatable(name).withStyle(ChatFormatting.GRAY))
                                 .append(" ")
                                 .append(writeTooltipDouble(val, true, false, isPercentageAttribute.test(a), isInverseNegative.test(a), cl));
                     }
-                    if (writeBorderTag) {
-                        borderHelper.ifPresent(h -> h.put(key, mult_total * (mult_base + base)));
-                    }
+                    borderHelper.ifPresent(h -> h.put(key, mult_total * (mult_base + base)));
                     map.removeAll(a);
                     list.add(c);
                 }
@@ -634,6 +615,7 @@ public class Util {
                         val = numerator.divide(denominator, RoundingMode.CEILING).doubleValue();
                     }
                     if (shouldMult100.test(a) && op == ADDITION) val *= 100;
+                    if (val == 0) continue;
                     if (op == ADDITION) {
                         c.append(writeIcon(name, true))
                                 .append(translatable(name).withStyle(ChatFormatting.GRAY))
@@ -685,7 +667,7 @@ public class Util {
                                         .append(" ")
                                         .append(writeTooltipDouble(val + 1, true, true, false, isInverseNegative.test(a), col));
                             }
-                            c.append(Util.withColor(literal(" (").append(Component.translatable("idf.itemslot." + slot.getName()).append(literal(")"))), Color.GREY));
+                            c.append(Util.withColor(literal(" (").append(Component.translatable("idf.tooltip." + slot.getName()).append(literal(")"))), Color.GREY));
                             list.add(c);
                         }
                     }
@@ -729,32 +711,33 @@ public class Util {
         }
         if (!item.getTag().contains(WEAPON_TAG)) { //armour case
             for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
-                if (DEFENSIVE_ATTRIBUTES.contains(entry.getKey())) {
+                Attribute a = entry.getKey();
+                if (DEFENSIVE_ATTRIBUTES.contains(a)) {
                     newMap.put(
-                            entry.getKey(),
-                            new AttributeModifier(
-                                    Util.UUID_STAT_CONVERSION[slot.getIndex()],
+                            a,
+                            new AttributeModifier(Util.UUIDS_STAT_CONVERSION[slot.getIndex()],
                                     "conversion",
-                                    getCollectedModifiers(oldMap.get(entry.getKey())),
+                                    getCollectedModifiers(oldMap.get(a)),
                                     ADDITION));
                 } else {
-                    newMap.put(entry.getKey(), entry.getValue());
+                    newMap.put(a, entry.getValue());
                 }
             }
         }
         else { //weapon case
             boolean isRanged = item.getTag().getBoolean(RANGED_TAG);
             for (Map.Entry<Attribute, AttributeModifier> entry : oldMap.entries()) {
-                if (OFFENSIVE_ATTRIBUTES.contains(entry.getKey())) {
-                    if (isRanged && entry.getKey() != IDFAttributes.ACCURACY.get()) continue;
+                Attribute a = entry.getKey();
+                if (OFFENSIVE_ATTRIBUTES.contains(a)) {
+                    if (isRanged && a != IDFAttributes.ACCURACY.get()) continue;
                     newMap.put(
-                            entry.getKey(),
-                            new AttributeModifier(Util.UUID_STAT_CONVERSION[slot.getIndex()],
+                            a,
+                            new AttributeModifier(Util.UUIDS_STAT_CONVERSION[slot.getIndex()],
                             "conversion",
-                                    getCollectedModifiers(oldMap.get(entry.getKey())),
-                                    ADDITION));
+                            getCollectedModifiers(oldMap.get(a)),
+                            ADDITION));
                 } else {
-                    newMap.put(entry.getKey(), entry.getValue());
+                    newMap.put(a, entry.getValue());
                 }
             }
         }
@@ -762,11 +745,12 @@ public class Util {
     }
 
     public static double getCollectedModifiers(Collection<AttributeModifier> mods) {
-        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
-        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
-        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(AttributeModifier.Operation.MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+        final double flat = mods.stream().filter((modifier) -> modifier.getOperation().equals(ADDITION)).mapToDouble(AttributeModifier::getAmount).sum();
+        double f1 = flat + mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_BASE)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount * Math.abs(flat)).sum();
+        double f2 = mods.stream().filter((modifier) -> modifier.getOperation().equals(MULTIPLY_TOTAL)).mapToDouble(AttributeModifier::getAmount).map((amount) -> amount + 1.0).reduce(1.0, (x, y) -> x * y);
+        if (f2 < 0) return 0;
         if (f1 < 0.0) {
-            return f1 * (1/f2);
+            return f1 * (1 / f2);
         }
         else return f1 * f2;
     }

@@ -109,6 +109,7 @@ public class CommonConfig {
                 .define("Allow Jump Crits", false);
 
         BUILDER.pop();
+
         SPEC = BUILDER.build();
 
     }

@@ -4,10 +4,10 @@ import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
-import net.cwjn.idf.capability.data.AuxiliaryData;
+import net.cwjn.idf.capability.data.IDFEntityData;
 import net.cwjn.idf.capability.data.ProjectileHelper;
 import net.cwjn.idf.capability.provider.ArrowHelperProvider;
-import net.cwjn.idf.capability.provider.AuxiliaryProvider;
+import net.cwjn.idf.capability.provider.IDFEntityDataProvider;
 import net.cwjn.idf.capability.provider.TridentHelperProvider;
 import net.cwjn.idf.config.json.records.EntityData;
 import net.cwjn.idf.data.CommonData;
@@ -38,7 +38,7 @@ public class CapabilityEvents {
 
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.register(AuxiliaryData.class);
+        event.register(IDFEntityData.class);
         event.register(ProjectileHelper.class);
     }
 
@@ -47,23 +47,24 @@ public class CapabilityEvents {
         if (event.getObject() instanceof LivingEntity entity) {
             EntityData data = CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(entity.getType())); //get the mob's json data
             if (data != null) {
-                event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "auxiliary"), new AuxiliaryProvider());
+                event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "auxiliary"), new IDFEntityDataProvider());
                 event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "arrow_helper"), new ArrowHelperProvider());
-                event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "trident_helper"), new TridentHelperProvider());
+                event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "entity_data"), new TridentHelperProvider());
             } else if (entity instanceof Player) {
                 event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "arrow_helper"), new ArrowHelperProvider());
                 event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "trident_helper"), new TridentHelperProvider());
-                event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "auxiliary"), new AuxiliaryProvider());
+                event.addCapability(new ResourceLocation(ImprovedDamageFramework.MOD_ID, "entity_data"), new IDFEntityDataProvider());
             }
         }
     }
 
     @SubscribeEvent
     public static void onLivingEquipmentChange(LivingEquipmentChangeEvent event) {
-        if (event.getSlot() == EquipmentSlot.MAINHAND) {
+        if (event.getSlot() == EquipmentSlot.MAINHAND)
+        {
             ItemStack item = event.getTo();
             LivingEntity entity = event.getEntity();
-            entity.getCapability(AuxiliaryProvider.AUXILIARY_DATA).ifPresent(h -> {
+            entity.getCapability(IDFEntityDataProvider.ENTITY_DATA).ifPresent(h -> {
                 if (CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(entity.getType())) != null)
                     h.setDamageClass(CommonData.LOGICAL_ENTITY_MAP.get(Util.getEntityRegistryName(entity.getType())).damageClass());
                 if ((item.hasTag() && item.getTag().contains("idf.damage_class"))) {

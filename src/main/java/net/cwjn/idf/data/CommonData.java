@@ -25,10 +25,10 @@ public class CommonData {
     public static List<String> COMPAT_MODS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
     public static Multimap<UUID, ResourceLocation> BESTIARY_MAP;
-    public static final List<Attribute> OFFENSIVE_ATTRIBUTES = new ArrayList<>(8);
-    public static final List<Attribute> DEFENSIVE_ATTRIBUTES = new ArrayList<>(8);
-    public static final List<Attribute> AUXILIARY_ATTRIBUTES = new ArrayList<>(8);
-    public static Set<Attribute> ELEMENTS = new HashSet<>();
+    public static final Set<Attribute> OFFENSIVE_ATTRIBUTES = new HashSet<>(8);
+    public static final Set<Attribute> DEFENSIVE_ATTRIBUTES = new HashSet<>(8);
+    public static final Set<Attribute> AUXILIARY_ATTRIBUTES = new HashSet<>(8);
+    public static Map<Attribute, Integer> ELEMENTS = new HashMap<>();
     public static boolean BETTER_COMBAT_LOADED = false;
     public static final String EQUIPMENT_TAG = "idf.equipment";
     public static final String RANGED_TAG = "idf.ranged_weapon";
@@ -42,20 +42,20 @@ public class CommonData {
     public static final String TETRA_CRIT_EFFICIENCY = "idf.tetra_crit_efficiency";
 
     static {
-        ELEMENTS.add(FIRE_DAMAGE.get());
-        ELEMENTS.add(FIRE_DEFENCE.get());
-        ELEMENTS.add(WATER_DAMAGE.get());
-        ELEMENTS.add(WATER_DEFENCE.get());
-        ELEMENTS.add(LIGHTNING_DAMAGE.get());
-        ELEMENTS.add(LIGHTNING_DEFENCE.get());
-        ELEMENTS.add(MAGIC_DAMAGE.get());
-        ELEMENTS.add(MAGIC_DEFENCE.get());
-        ELEMENTS.add(DARK_DAMAGE.get());
-        ELEMENTS.add(DARK_DEFENCE.get());
-        ELEMENTS.add(HOLY_DAMAGE.get());
-        ELEMENTS.add(HOLY_DEFENCE.get());
-        ELEMENTS.add(Attributes.ATTACK_DAMAGE);
-        ELEMENTS.add(Attributes.ARMOR);
+        ELEMENTS.put(FIRE_DAMAGE.get(), 2);
+        ELEMENTS.put(FIRE_DEFENCE.get(), 2);
+        ELEMENTS.put(WATER_DAMAGE.get(), 3);
+        ELEMENTS.put(WATER_DEFENCE.get(), 3);
+        ELEMENTS.put(LIGHTNING_DAMAGE.get(), 4);
+        ELEMENTS.put(LIGHTNING_DEFENCE.get(), 4);
+        ELEMENTS.put(MAGIC_DAMAGE.get(), 1);
+        ELEMENTS.put(MAGIC_DEFENCE.get(), 1);
+        ELEMENTS.put(DARK_DAMAGE.get(), 5);
+        ELEMENTS.put(DARK_DEFENCE.get(), 5);
+        ELEMENTS.put(HOLY_DAMAGE.get(), 6);
+        ELEMENTS.put(HOLY_DEFENCE.get(), 6);
+        ELEMENTS.put(Attributes.ATTACK_DAMAGE, 0);
+        ELEMENTS.put(Attributes.ARMOR, 0);
         {
             SCALABLE_ATTRIBUTES.put("FORCE", IDFAttributes.FORCE.get());
             SCALABLE_ATTRIBUTES.put("WEIGHT", Attributes.ARMOR_TOUGHNESS);

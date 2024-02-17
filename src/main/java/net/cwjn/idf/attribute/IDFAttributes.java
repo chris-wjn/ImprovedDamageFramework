@@ -60,7 +60,7 @@ public class IDFAttributes {
         mixinArmour.setMax(Double.MAX_VALUE);
         mixinArmour.setMin(-Double.MAX_VALUE);
         mixinDefense.setMax(Double.MAX_VALUE);
-        mixinAttackSpeed.setMin(0.1);
+        mixinAttackSpeed.setMin(0.25);
     }
 
 }

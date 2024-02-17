@@ -1,0 +1,108 @@
+{
+  "variant": "heat",
+  "weight": 10,
+  "quality": 0,
+  "dimensions": [
+  ],
+  "bonuses": [
+    {
+      "type": "apotheosis:attribute",
+      "gem_class": {
+        "key": "light_weapon",
+        "types": [
+          "sword",
+          "trident"
+        ]
+      },
+      "attribute": "idf:magic_damage",
+      "operation": "ADDITION",
+      "values": {
+        "common": 1,
+        "uncommon": 1.5,
+        "rare": 2.5,
+        "epic": 4,
+        "mythic": 6,
+        "ancient": 8
+      }
+    },
+    {
+      "type": "apotheosis:attribute",
+      "gem_class": {
+        "key": "heavy_weapon",
+        "types": [
+          "heavy_weapon"
+        ]
+      },
+      "attribute": "idf:magic_damage",
+      "operation": "ADDITION",
+      "values": {
+        "common": 1.5,
+        "uncommon": 2.25,
+        "rare": 3.75,
+        "epic": 6,
+        "mythic": 9,
+        "ancient": 12
+      }
+    },
+    {
+      "type": "apotheosis:attribute",
+      "gem_class": {
+        "key": "ranged_weapon",
+        "types": [
+          "bow",
+          "crossbow"
+        ]
+      },
+      "attribute": "idf:magic_damage",
+      "operation": "ADDITION",
+      "values": {
+        "common": 1,
+        "uncommon": 2,
+        "rare": 3,
+        "epic": 4,
+        "mythic": 5,
+        "ancient": 6
+      }
+    },
+    {
+      "type": "apotheosis:attribute",
+      "gem_class": {
+        "key": "core_armor",
+        "types": [
+          "chestplate",
+          "leggings"
+        ]
+      },
+      "attribute": "idf:magic_defence",
+      "operation": "ADDITION",
+      "values": {
+        "common": 1,
+        "uncommon": 2,
+        "rare": 3,
+        "epic": 4,
+        "mythic": 5,
+        "ancient": 6
+      }
+    },
+    {
+      "type": "apotheosis:attribute",
+      "gem_class": {
+        "key": "secondary_armor",
+        "types": [
+          "helmet",
+          "boots"
+        ]
+      },
+      "attribute": "idf:magic_defence",
+      "operation": "ADDITION",
+      "values": {
+        "common": 0.5,
+        "uncommon": 1,
+        "rare": 1.5,
+        "epic": 2,
+        "mythic": 2.5,
+        "ancient": 3
+      }
+    }
+  ]
+}

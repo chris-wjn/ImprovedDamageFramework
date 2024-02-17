@@ -44,9 +44,10 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import static net.cwjn.idf.data.CommonData.*;
-import static net.cwjn.idf.util.Util.*;
+import static net.cwjn.idf.util.Util.UUIDS_BASE_STAT_ADDITION;
+import static net.cwjn.idf.util.Util.UUIDS_BASE_STAT_MULTIPLY_BASE;
 import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
-import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_BASE;
 
 @SuppressWarnings(value = "UnstableApiUsage")
 @Mod.EventBusSubscriber
@@ -54,7 +55,7 @@ public class JSONHandler {
     public static final Map<ResourceLocation, Multimap<Attribute, AttributeModifier>> baseModifiers = new HashMap<>();
     private static final Predicate<Item> isKnownWeapon = (item) -> item instanceof SwordItem || item instanceof DiggerItem || item instanceof BowItem || item instanceof CrossbowItem || item instanceof TridentItem;
     public static final Map<ResourceLocation, Integer> vanillaDurability = new HashMap<>();
-    private static final Path compatDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework", "compat");
+    public static final Path compatDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework", "compat");
     public static final Gson SERIALIZER = new GsonBuilder().
             setPrettyPrinting().
             registerTypeAdapter(ArmourData.class, new ArmourData.ArmourSerializer()).
@@ -160,9 +161,50 @@ public class JSONHandler {
                         Multimap<Attribute, AttributeModifier> armour2 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.LEGS);
                         Multimap<Attribute, AttributeModifier> armour3 = item.getDefaultInstance().getAttributeModifiers(EquipmentSlot.CHEST);
                         if (!armour0.isEmpty() || !armour1.isEmpty() || !armour2.isEmpty() || !armour3.isEmpty()) {
-                            DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(Collections.emptyList(),
+                            EquipmentSlot slot = LivingEntity.getEquipmentSlotForItem(item.getDefaultInstance());
+                            List<String> tempList = new ArrayList<>(1);
+                            double guessWeight = 0;
+                            switch (slot) {
+                                case HEAD:
+                                    double headArmour = armour0.get(Attributes.ARMOR).stream().mapToDouble(AttributeModifier::getAmount).sum();
+                                    tempList.add("HELMET");
+                                    guessWeight = 0.75*headArmour;
+                                    if (headArmour <= 2.5) tempList.add("LIGHT_ARMOUR");
+                                    else if (headArmour <= 5) tempList.add("MEDIUM_ARMOUR");
+                                    else tempList.add("HEAVY_ARMOUR");
+                                    break;
+                                case CHEST:
+                                    double chestArmour = armour3.get(Attributes.ARMOR).stream().mapToDouble(AttributeModifier::getAmount).sum();
+                                    tempList.add("CHESTPLATE");
+                                    guessWeight = 0.5*chestArmour;
+                                    if (chestArmour <= 5) tempList.add("LIGHT_ARMOUR");
+                                    else if (chestArmour <= 8) tempList.add("MEDIUM_ARMOUR");
+                                    else tempList.add("HEAVY_ARMOUR");
+                                    break;
+                                case LEGS:
+                                    double legArmour = armour2.get(Attributes.ARMOR).stream().mapToDouble(AttributeModifier::getAmount).sum();
+                                    tempList.add("LEGGINGS");
+                                    guessWeight = 0.6*legArmour;
+                                    if (legArmour <= 4) tempList.add("LIGHT_ARMOUR");
+                                    else if (legArmour <= 7) tempList.add("MEDIUM_ARMOUR");
+                                    else tempList.add("HEAVY_ARMOUR");
+                                    break;
+                                case FEET:
+                                    double footArmour = armour1.get(Attributes.ARMOR).stream().mapToDouble(AttributeModifier::getAmount).sum();
+                                    tempList.add("BOOTS");
+                                    guessWeight = 0.75*footArmour;
+                                    if (footArmour <= 2.5) tempList.add("LIGHT_ARMOUR");
+                                    else if (footArmour <= 5) tempList.add("MEDIUM_ARMOUR");
+                                    else tempList.add("HEAVY_ARMOUR");
+                                    break;
+                            }
+                            DefenceData tempData = DefenceData.empty();
+                            if (item.getDefaultInstance().getAttributeModifiers(slot).get(Attributes.ARMOR_TOUGHNESS).stream().mapToDouble(AttributeModifier::getAmount).sum() == 0) {
+                                tempData = DefenceData.setWeight(guessWeight);
+                            }
+                            DEFAULT_ARMOUR_FLAT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ArmourData(tempList,
                                     0,
-                                    OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
+                                    OffenseData.empty(), tempData, AuxiliaryData.empty()));
                             DEFAULT_ARMOUR_MULT.putIfAbsent(Util.getItemRegistryName(item).toString(), new ItemData(
                                     OffenseData.empty(), DefenceData.empty(), AuxiliaryData.empty()));
                         }
@@ -312,6 +354,52 @@ public class JSONHandler {
         }
     }
 
+    public static void updateMaps() {
+        File configDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework").toFile();
+        Map<String, ArmourData> tempArmourOp0Map = JSONUtil.getConfigFile(configDir, "armour_items_flat.json", new TypeToken<Map<String, ArmourData>>() {}.getType());
+        Map<String, ItemData> tempArmourOp2Map = JSONUtil.getConfigFile(configDir, "armour_items_multiply.json", new TypeToken<Map<String, ItemData>>() {}.getType());
+        Map<String, WeaponData> tempWeaponOp0Map = JSONUtil.getConfigFile(configDir, "weapon_items_flat.json", new TypeToken<Map<String, WeaponData>>() {}.getType());
+        Map<String, ItemData> tempWeaponOp2Map = JSONUtil.getConfigFile(configDir, "weapon_items_multiply.json", new TypeToken<Map<String, ItemData>>() {}.getType());
+        Map<String, SourceCatcherData> tempSourceMap = JSONUtil.getConfigFile(configDir, "source_catcher.json", new TypeToken<Map<String, SourceCatcherData>>() {}.getType());
+        Map<String, PresetData> tempPresetMap = JSONUtil.getConfigFile(configDir, "presets.json", new TypeToken<Map<String, PresetData>>() {}.getType());
+        List<String> compatItems = JSONUtil.getConfigFile(compatDir.toFile(), "compat_items.json", new TypeToken<List<String>>() {}.getType());
+        List<String> compatMods = JSONUtil.getConfigFile(compatDir.toFile(), "compat_mods.json", new TypeToken<List<String>>() {}.getType());
+        if (!tempArmourOp0Map.isEmpty()) {
+            for (Map.Entry<String, ArmourData> entry : tempArmourOp0Map.entrySet()) {
+                LOGICAL_ARMOUR_MAP_FLAT.put(new ResourceLocation(entry.getKey()), entry.getValue());
+            }
+        }
+        if (!tempArmourOp2Map.isEmpty()) {
+            for (Map.Entry<String, ItemData> entry : tempArmourOp2Map.entrySet()) {
+                LOGICAL_ARMOUR_MAP_MULT.put(new ResourceLocation(entry.getKey()), entry.getValue());
+            }
+        }
+        if (!tempWeaponOp0Map.isEmpty()) {
+            for (Map.Entry<String, WeaponData> entry : tempWeaponOp0Map.entrySet()) {
+                LOGICAL_WEAPON_MAP_FLAT.put(new ResourceLocation(entry.getKey()), entry.getValue());
+            }
+        }
+        if (!tempWeaponOp2Map.isEmpty()) {
+            for (Map.Entry<String, ItemData> entry : tempWeaponOp2Map.entrySet()) {
+                LOGICAL_WEAPON_MAP_MULT.put(new ResourceLocation(entry.getKey()), entry.getValue());
+            }
+        }
+        if (!tempSourceMap.isEmpty()) {
+            LOGICAL_SOURCE_MAP = tempSourceMap;
+        }
+        if (!tempPresetMap.isEmpty()) {
+            LOGICAL_PRESET_MAP = tempPresetMap;
+        }
+        if (!compatItems.isEmpty()) {
+            for (String s : compatItems) {
+                COMPAT_ITEMS.add(new ResourceLocation(s));
+            }
+        }
+        if (!compatMods.isEmpty()) {
+            COMPAT_MODS.addAll(compatMods);
+        }
+    }
+
     public static void updateItems() {
         for (Item item : ForgeRegistries.ITEMS.getValues()) {
             ItemInterface idfItem = (ItemInterface) item;
@@ -342,12 +430,12 @@ public class JSONHandler {
                 }
                 data0.forEach(pair -> {
                     if (pair.getB() != 0) {
-                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                        builder.put(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
                     }
                 });
                 if (data2 != null) data2.forEach(pair -> {
                     if (pair.getB() != 0) {
-                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot],"json_mult", pair.getB(), MULTIPLY_TOTAL));
+                        builder.put(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_MULTIPLY_BASE[equipmentSlot],"json_mult", pair.getB(), MULTIPLY_BASE));
                     }
                 });
                 defaultTag.putString(WEAPON_TAG, data0.damageClass());
@@ -368,12 +456,12 @@ public class JSONHandler {
                 }
                 data0.forEach(pair -> {
                     if (pair.getB() != 0) {
-                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
+                        builder.put(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_ADDITION[equipmentSlot], "json_flat", pair.getB(), ADDITION));
                     }
                 });
                 if (data2 != null) data2.forEach(pair -> {
                     if (pair.getB() != 0) {
-                        builder.put(pair.getA(), new AttributeModifier(UUID_BASE_STAT_MULTIPLY_TOTAL[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_TOTAL));
+                        builder.put(pair.getA(), new AttributeModifier(UUIDS_BASE_STAT_MULTIPLY_BASE[equipmentSlot], "json_mult", pair.getB(), MULTIPLY_BASE));
                     }
                 });
                 idfItem.setMaxDamage(vanillaDurability.getOrDefault(loc, 0) + data0.durability());

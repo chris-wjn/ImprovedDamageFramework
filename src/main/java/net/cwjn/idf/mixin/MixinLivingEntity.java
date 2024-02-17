@@ -2,6 +2,7 @@ package net.cwjn.idf.mixin;
 
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.api.event.LivingEntityAttributeChange;
 import net.cwjn.idf.config.CommonConfig;
 import net.cwjn.idf.damage.DamageHandler;
 import net.cwjn.idf.damage.IDFInterface;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -28,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
@@ -76,11 +79,19 @@ public class MixinLivingEntity {
     }
 
     /*
-    Makes sure players can't use ranged weapons as melee weapons
+    Makes sure players can't use ranged weapons as melee weapons.
      */
     @Redirect(method = "collectEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
     private Multimap<Attribute, AttributeModifier> reworkAttributeModifiers(ItemStack item, EquipmentSlot slot) {
         return Util.getReworkedAttributeMap(item, slot);
+    }
+
+    /*
+    Essentially the same event as LivingEquipmentChange but fires after the entity's attributes have been changed.
+     */
+    @Inject(method = "collectEquipmentChanges", at = @At("RETURN"))
+    private void collectEquipmentChangesInject(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
+        MinecraftForge.EVENT_BUS.post(new LivingEntityAttributeChange(thisLivingEntity));
     }
 
     /**

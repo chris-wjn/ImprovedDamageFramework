@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import static net.cwjn.idf.data.ClientData.saveClientMappings;
 import static net.cwjn.idf.data.CommonData.*;
 
 @OnlyIn(Dist.CLIENT)
@@ -29,6 +30,9 @@ public class ClientPacketHandler {
         LOGICAL_PRESET_MAP = packet.presets;
         COMPAT_ITEMS = packet.compatItems;
         COMPAT_MODS = packet.compatMods;
+        if (Minecraft.getInstance().isLocalServer()) {
+            saveClientMappings();
+        }
         JSONHandler.updateItems();
     }
 

@@ -1,6 +1,7 @@
 package net.cwjn.idf.data;
 
 import net.cwjn.idf.ImprovedDamageFramework;
+import net.cwjn.idf.config.json.JSONHandler;
 import net.cwjn.idf.config.json.JSONUtil;
 import net.cwjn.idf.config.json.records.ArmourData;
 import net.cwjn.idf.config.json.records.ItemData;
@@ -18,9 +19,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import static net.cwjn.idf.data.CommonData.*;
 
@@ -59,11 +58,23 @@ public class ServerData {
         for (Map.Entry<ResourceLocation, ItemData> entry : LOGICAL_WEAPON_MAP_MULT.entrySet()) {
             sortedWeaponOp2Map.put(entry.getKey().toString(), entry.getValue());
         }
+        List<String> sortedCompatItems = new ArrayList<>();
+        for (ResourceLocation entry : COMPAT_ITEMS) {
+            if (!sortedCompatItems.contains(entry.toString())) sortedCompatItems.add(entry.toString());
+        }
+        List<String> sortedMods = new ArrayList<>();
+        for (String entry : COMPAT_MODS) {
+            if (!sortedMods.contains(entry)) sortedMods.add(entry);
+        }
         File configDir = Paths.get(FMLPaths.CONFIGDIR.get().toAbsolutePath().toString(), "ImprovedDamageFramework").toFile();
         JSONUtil.writeFile(new File(configDir, "armour_items_flat.json"), sortedArmourOp0Map);
         JSONUtil.writeFile(new File(configDir, "armour_items_multiply.json"), sortedArmourOp2Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_flat.json"), sortedWeaponOp0Map);
         JSONUtil.writeFile(new File(configDir, "weapon_items_multiply.json"), sortedWeaponOp2Map);
+        JSONUtil.writeFile(new File(configDir, "presets.json"), new TreeMap<>(LOGICAL_PRESET_MAP));
+        JSONUtil.writeFile(new File(configDir, "source_catcher.json"), new TreeMap<>(LOGICAL_SOURCE_MAP));
+        JSONUtil.writeFile(new File(JSONHandler.compatDir.toFile(), "compat_items.json"), sortedCompatItems);
+        JSONUtil.writeFile(new File(JSONHandler.compatDir.toFile(), "compat_mods.json"), sortedMods);
     }
 
 }
