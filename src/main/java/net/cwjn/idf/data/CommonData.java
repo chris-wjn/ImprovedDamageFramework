@@ -3,7 +3,7 @@ package net.cwjn.idf.data;
 import com.google.common.collect.Multimap;
 import net.cwjn.idf.attribute.IDFAttributes;
 import net.cwjn.idf.attribute.IDFElement;
-import net.cwjn.idf.config.json.config_data.ItemDataHolder;
+import net.cwjn.idf.json.config_data.ItemData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,7 +14,7 @@ import static net.cwjn.idf.attribute.IDFAttributes.*;
 
 public class CommonData {
 
-    public static List<ItemDataHolder> ITEM_DATA = new ArrayList<>();
+    public static List<ItemData> ITEM_DATA = new ArrayList<>();
     public static List<ResourceLocation> COMPAT_ITEMS = new ArrayList<>();
     public static List<String> COMPAT_MODS = new ArrayList<>();
     public static Map<String, Attribute> SCALABLE_ATTRIBUTES = new HashMap<>();
